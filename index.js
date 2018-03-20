@@ -16,7 +16,7 @@ firebase.auth()
 .then(initBotkit)
 
  function initBotkit() {
-   firebaseStorage = require('botkit-storage-firebase')(config, {
+   firebaseStorage = require('./botkit-storage-firebase')(config, {
      email: process.env.FIREBASE_EMAIL,
      password: process.env.FIREBASE_PASSWORD
    })

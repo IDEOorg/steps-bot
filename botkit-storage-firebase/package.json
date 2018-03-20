@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "botkit-storage-firebase",
+        "scope": null,
+        "escapedName": "botkit-storage-firebase",
+        "name": "botkit-storage-firebase",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/mzhong/Desktop/Projects/botbedstuy"
+    ]
+  ],
+  "_from": "botkit-storage-firebase@latest",
+  "_id": "botkit-storage-firebase@1.0.0",
+  "_inCache": true,
+  "_location": "/botkit-storage-firebase",
+  "_nodeVersion": "0.10.21",
+  "_npmUser": {
+    "name": "xoxco",
+    "email": "ben@xoxco.com"
+  },
+  "_npmVersion": "2.0.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "botkit-storage-firebase",
+    "scope": null,
+    "escapedName": "botkit-storage-firebase",
+    "name": "botkit-storage-firebase",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/botkit-storage-firebase/-/botkit-storage-firebase-1.0.0.tgz",
+  "_shasum": "ca98bd35b86c1ea5c1ccb1c0e469704b0fd08c3c",
+  "_shrinkwrap": null,
+  "_spec": "botkit-storage-firebase",
+  "_where": "/Users/mzhong/Desktop/Projects/botbedstuy",
+  "author": {
+    "name": "Cole Furfaro-Strode"
+  },
+  "bugs": {
+    "url": "https://github.com/howdyai/botkit-storage-firebase/issues"
+  },
+  "dependencies": {
+    "firebase": "^4.11.0"
+  },
+  "description": "Firebase driver for Botkit",
+  "devDependencies": {
+    "istanbul": "^0.4.1",
+    "jscs": "^2.8.0",
+    "mocha": "^2.3.4",
+    "proxyquire": "^1.7.3",
+    "should": "^8.0.2",
+    "should-sinon": "0.0.3",
+    "sinon": "^1.17.2"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "ca98bd35b86c1ea5c1ccb1c0e469704b0fd08c3c",
+    "tarball": "https://registry.npmjs.org/botkit-storage-firebase/-/botkit-storage-firebase-1.0.0.tgz"
+  },
+  "gitHead": "e44961e4d35576b9b76059051aae67305b37a7f1",
+  "homepage": "https://github.com/howdyai/botkit-storage-firebase#readme",
+  "keywords": [
+    "botkit",
+    "firebase"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "xoxco",
+      "email": "ben@xoxco.com"
+    }
+  ],
+  "name": "botkit-storage-firebase",
+  "optionalDependencies": {},
+  "readme": "# botkit-storage-firebase\n\nA Firebase storage module for Botkit.\n\n## Usage\n\nJust require `botkit-storage-firebase` and pass it a config with a `firebase_uri` option.\nThen pass the returned storage when creating your Botkit controller. Botkit will do the rest.\n\nMake sure everything you store has an `id` property, that's what you'll use to look it up later.\n\n```\nvar Botkit = require('botkit'),\n    firebaseStorage = require('botkit-storage-firebase')({firebase_uri: '...'}),\n    controller = Botkit.slackbot({\n        storage: firebaseStorage\n    });\n```\n\n```\n// then you can use the Botkit storage api, make sure you have an id property\nvar beans = {id: 'cool', beans: ['pinto', 'garbanzo']};\ncontroller.storage.teams.save(beans);\nbeans = controller.storage.teams.get('cool');\n\n```\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/howdyai/botkit-storage-firebase.git"
+  },
+  "scripts": {
+    "pretest": "jscs ./",
+    "test": "istanbul cover --report lcov --dir coverage/ _mocha ./tests --grep ./tests/*.js -- --colors"
+  },
+  "version": "1.0.0"
+}
