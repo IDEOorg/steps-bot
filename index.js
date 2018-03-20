@@ -45,7 +45,7 @@ firebase.auth()
 
    controller.hears(['hi', 'hello'], 'message_received', (bot, message) => {
      bot.startConversation(message, (err, convo) => {
-       convo.say('Hi, I am Oliver, an SMS bot! :D')
+       convo.say('Hi, I am Bob, an SMS bot! :D')
        convo.ask('What is your name?', (res, convo) => {
          convo.say(`Nice to meet you, ${res.text}!`)
          convo.next()
