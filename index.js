@@ -11,9 +11,7 @@ var config = {
 }
 firebase.initializeApp(config)
 
-firebase.auth()
-.signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD)
-.then(initBotkit)
+initBotkit()
 
  function initBotkit() {
    console.log(process.env)
@@ -23,6 +21,8 @@ firebase.auth()
      password: process.env.FIREBASE_PASSWORD
    })
    firebaseStorage.then(function (d) {
+     console.log('ddddddd')
+     console.log(d)
      setupBotkit(d)
    })
  }
