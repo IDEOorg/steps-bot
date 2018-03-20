@@ -11,7 +11,6 @@ module.exports = function(config, loginInfo) {
     if (!config) {
         throw new Error('firebase_uri is required.');
     }
-    firebase.initializeApp(config)
     return firebase.auth()
     .signInWithEmailAndPassword(loginInfo.email, loginInfo.password)
     .then(function () {
