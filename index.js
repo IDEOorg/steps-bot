@@ -42,20 +42,20 @@ initBotkit()
      controller.createWebhookEndpoints(controller.webserver, bot, function () {
        console.log('TwilioSMSBot is online!')
      })
-     controller.storage.users.save({id: 'bagel', foo:'bar'})
    })
 
-   controller.hears(['hi', 'hello'], 'message_received', (bot, message) => {
-     bot.startConversation(message, (err, convo) => {
-       convo.say('Hi, I am Bob, an SMS bot! :D')
-       convo.ask('What is your name?', (res, convo) => {
-         convo.say(`Nice to meet you, ${res.text}!`)
-         convo.next()
-       })
-     })
-   })
+   initScript(bot, controller);
+}
 
-   controller.hears('.*', 'message_received', (bot, message) => {
-     bot.reply(message, 'huh?')
-   })
- }
+function initScript (bot, controller) {
+  controller.hears('.*', 'message_received', (bot, message) => {
+    bot.createConversation(message, function (err, convo) {
+      convo.say('Hi there! It\'s Roo, your financial chatbot assistant\n\nCongratulations on taking that first step and seeing a financial counselor!');
+      convo.say('We\'ll be in touch tomorrow with your first task.')
+      convo.gotoThread('day1');
+    });
+    convo.addMessage({text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.'}, 'day1');
+  })
+
+  convo.activate();
+}
