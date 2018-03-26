@@ -53,9 +53,9 @@ function initScript (bot, controller) {
       convo.say('Hi there! It\'s Roo, your financial chatbot assistant\n\nCongratulations on taking that first step and seeing a financial counselor!');
       convo.say('We\'ll be in touch tomorrow with your first task.')
       convo.gotoThread('day1');
+      convo.addMessage({text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.'}, 'day1');
+      convo.activate();
     });
-    convo.addMessage({text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.'}, 'day1');
   })
 
-  convo.activate();
 }
