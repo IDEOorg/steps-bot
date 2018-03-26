@@ -58,7 +58,13 @@ function initScript (bot, controller) {
       //   convo.gotoThread('day1');
       //   convo.next();
       // });
-      convo.gotoThread('day1')
+      convo.addQuestion({text: 'We\'ll be in touch tomorrow with your first task.'},function(res, convo) {
+        convo.setTimeout(10000);
+        convo.onTimeout(function(convo) {
+          convo.gotoThread('day1');
+          convo.next();
+        });
+      },{},'default');
       convo.activate();
     });
   })
