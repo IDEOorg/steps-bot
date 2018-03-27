@@ -48,16 +48,17 @@ initBotkit()
 }
 
 function initScript (bot, controller) {
+  bot.say(
+    {
+        text: 'my message_text',
+        channel: '+1(650)-224-0108' // a valid facebook user id or phone number
+    }
+  );
   controller.hears('.*', 'message_received', (bot, message) => {
     bot.createConversation(message, function (err, convo) {
       convo.addMessage({text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.'}, 'day1');
       convo.say('Hi there! It\'s Roo, your financial chatbot assistant\n\nCongratulations on taking that first step and seeing a financial counselor!');
       convo.say('We\'ll be in touch tomorrow with your first task.');
-      // convo.setTimeout(10000);
-      // convo.onTimeout(function(convo) {
-      //   convo.gotoThread('day1');
-      //   convo.next();
-      // });
       convo.addQuestion({text: 'We\'ll be in touch tomorrow with your first task.'},function(res, convo) {
         convo.setTimeout(10000);
         convo.onTimeout(function(convo) {
@@ -68,5 +69,4 @@ function initScript (bot, controller) {
       convo.activate();
     });
   })
-
 }
