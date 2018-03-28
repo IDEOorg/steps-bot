@@ -48,12 +48,6 @@ initBotkit()
 }
 
 function initScript (bot, controller) {
-  bot.say(
-    {
-        text: 'my message_text',
-        channel: '+1(650)-224-0108' // a valid facebook user id or phone number
-    }
-  );
   controller.hears('.*', 'message_received', (bot, message) => {
     bot.createConversation(message, function (err, convo) {
       convo.addMessage({text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.'}, 'day1');
