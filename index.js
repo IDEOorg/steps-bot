@@ -11,29 +11,14 @@ var config = {
 }
 firebase.initializeApp(config)
 
-initBotkit()
+setupBotkit()
 
- function initBotkit() {
-   console.log(process.env)
-   console.log(config)
-   firebaseStorage = require('./botkit-storage-firebase')(config, {
-     email: process.env.FIREBASE_EMAIL,
-     password: process.env.FIREBASE_PASSWORD
-   })
-   firebaseStorage.then(function (d) {
-     console.log('ddddddd')
-     console.log(d)
-     setupBotkit(d)
-   })
- }
-
- function setupBotkit(storageModule) {
+ function setupBotkit() {
    const controller = Botkit.twiliosmsbot({
        account_sid: process.env.TWILIO_ACCOUNT_SID,
        auth_token: process.env.TWILIO_AUTH_TOKEN,
        twilio_number: process.env.TWILIO_NUMBER,
-       debug: true,
-       storage: storageModule
+       debug: true
    })
 
    const bot = controller.spawn({});
