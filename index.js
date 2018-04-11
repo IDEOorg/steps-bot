@@ -6,7 +6,7 @@ const RiveScript = require('rivescript');
 setupFirebase();
 const self = this;
 self.riveBot = setupRiveScript();
-self.userStatus = null;
+self.riveBot.setUservar('bagel', 'topic', 'intro');
 const controller = setupBotkitServer();
 // setInterval(() => {
 //   console.log('hey');
@@ -14,14 +14,8 @@ const controller = setupBotkitServer();
 
 controller.hears('.*', 'message_received', (bot, message) => {
   let response = null;
-  if (!self.userStatus) {
-    console.log(message.text);
-    response = self.riveBot.reply('bagel', message.text, self);
-    self.userStatus = 'newtask';
-  } else if (self.userStatus === 'newtask') {
-    console.log(message.text);
-    response = self.riveBot.reply('bagel', 'message', self);
-  }
+  console.log(message.text);
+  response = self.riveBot.reply('bagel', message.text, self);
   console.log(response);
   bot.reply(message, response);
   response = null;
