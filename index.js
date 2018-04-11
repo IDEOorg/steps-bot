@@ -14,9 +14,8 @@ const controller = setupBotkitServer();
 
 controller.hears('.*', 'message_received', (bot, message) => {
   if (!self.userStatus) {
-    console.log(message);
-    console.log(self);
-    self.riveBot.reply('bagel', message, self);
+    console.log(message.text);
+    self.riveBot.reply('bagel', message.text, self);
     self.userStatus = 'newtask';
   } else if (self.userStatus === 'newtask') {
     self.riveBot.reply('bagel', 'message', self);
