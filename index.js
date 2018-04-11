@@ -42,8 +42,10 @@ function setupBotkitServer() {
 
 function setupRiveScript() {
   const bot = new RiveScript();
-  bot.loadDirectory('chatscripts');
-  bot.sortReplies();
+  bot.loadDirectory('chatscripts', (batchNum) => {
+    console.log(batchNum);
+    bot.sortReplies();
+  });
   return bot;
 }
 
