@@ -11,7 +11,8 @@
   "dependencies": {
     "botkit": "^0.6.12",
     "dotenv": "^5.0.1",
-    "firebase": "^4.11.0"
+    "firebase": "^4.11.0",
+    "rivescript": "^1.19.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

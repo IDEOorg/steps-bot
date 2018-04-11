@@ -1,40 +1,57 @@
 require('dotenv').config();
 const Botkit = require('botkit');
 const firebase = require('firebase');
+const RiveScript = require('rivescript');
 
-const config = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: 'bedstuy-bdf4e.firebaseapp.com',
-  databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
-  projectId: 'bedstuy-bdf4e',
-  storageBucket: 'bedstuy-bdf4e.appspot.com'
-};
-firebase.initializeApp(config);
+setupFirebase();
+const self = this;
+self.riveBot = setupRiveScript();
+self.userStatus = null;
+const controller = setupBotkitServer();
+// setInterval(() => {
+//   console.log('hey');
+// }, 300000);
 
-setupBotkit();
+controller.hears('.*', 'message_received', (bot, message) => {
+  if (!self.userStatus) {
+    self.riveBot.reply('bagel', message, self);
+    self.userStatus = 'newtask';
+  } else if (self.userStatus === 'newtask') {
+    self.riveBot.reply('bagel', 'message', self);
+  }
+});
 
-function setupBotkit() {
-  const controller = Botkit.twiliosmsbot({
+function setupBotkitServer() {
+  const newController = Botkit.twiliosmsbot({
     account_sid: process.env.TWILIO_ACCOUNT_SID,
     auth_token: process.env.TWILIO_AUTH_TOKEN,
     twilio_number: process.env.TWILIO_NUMBER,
     debug: true
   });
 
-  const instance = controller.spawn({});
+  const instance = newController.spawn({});
 
-  controller.setupWebserver(process.env.PORT || 3000, () => {
-    controller.createWebhookEndpoints(controller.webserver, instance, () => {
+  newController.setupWebserver(process.env.PORT || 3000, () => {
+    newController.createWebhookEndpoints(newController.webserver, instance, () => {
       console.log('TwilioSMSBot is online!');
     });
   });
+}
 
-  controller.hears('.*', 'message_received', (bot, message) => {
-    bot.createConversation(message, (err, convo) => {
-      convo.addMessage({ text: 'Hi there! It\'s Roo, hope you\'re ready for your task. Let\'s get started.' }, 'day1');
-      convo.say('Hi there! It\'s Roo, your financial chatbot assistant\n\nCongratulations on taking that first step and seeing a financial counselor!');
-      convo.say('We\'ll be in touch tomorrow with your first task.');
-      convo.activate();
-    });
-  });
+function setupRiveScript() {
+  const bot = new RiveScript();
+  bot.loadDirectory('chatscripts');
+  bot.sortReplies();
+  return bot;
+}
+
+function setupFirebase() {
+  const config = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
+    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
+    projectId: 'bedstuy-bdf4e',
+    storageBucket: 'bedstuy-bdf4e.appspot.com'
+  };
+  firebase.initializeApp(config);
 }
