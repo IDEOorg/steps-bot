@@ -23,7 +23,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
     response = self.riveBot.reply('bagel', 'message', self);
   }
   console.log(response);
-  bot.reply(response);
+  bot.reply(message, response);
   response = null;
 });
 
