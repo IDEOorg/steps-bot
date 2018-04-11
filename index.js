@@ -13,13 +13,17 @@ const controller = setupBotkitServer();
 // }, 300000);
 
 controller.hears('.*', 'message_received', (bot, message) => {
+  let response = null;
   if (!self.userStatus) {
     console.log(message.text);
-    self.riveBot.reply('bagel', message.text, self);
+    response = self.riveBot.reply('bagel', message.text, self);
     self.userStatus = 'newtask';
   } else if (self.userStatus === 'newtask') {
-    self.riveBot.reply('bagel', 'message', self);
+    console.log(message.text);
+    response = self.riveBot.reply('bagel', 'message', self);
   }
+  bot.reply(response);
+  response = null;
 });
 
 function setupBotkitServer() {
