@@ -36,6 +36,7 @@ function setupBotkitServer() {
       console.log('TwilioSMSBot is online!');
     });
   });
+  return newController;
 }
 
 function setupRiveScript() {
