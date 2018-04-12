@@ -3,7 +3,7 @@ const Botkit = require('botkit');
 const firebase = require('firebase');
 const RiveScript = require('rivescript');
 
-setupFirebase();
+const database = setupFirebase();
 const self = this;
 self.riveBot = setupRiveScript();
 self.riveBot.setUservar('bagel', 'topic', 'intro');
@@ -13,6 +13,15 @@ const controller = setupBotkitServer();
 // }, 300000);
 
 controller.hears('.*', 'message_received', (bot, message) => {
+  const userId = message.user;
+  database.ref('users').child(userId).once('value', (snapshot) => {
+    if (!snapshot.exists()) {
+      database.ref(`users/${userId}`).set({
+        user: userId,
+        phone: userId
+      });
+    }
+  });
   let response = null;
   console.log(message.text);
   response = self.riveBot.reply('bagel', message.text, self);
@@ -57,4 +66,6 @@ function setupFirebase() {
     storageBucket: 'bedstuy-bdf4e.appspot.com'
   };
   firebase.initializeApp(config);
+  firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
+  return firebase.database();
 }
