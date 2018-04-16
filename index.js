@@ -16,7 +16,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
   // update chat log, timestamp, who sent message (bot or human), what message said
   // update next check in date
   const userIdRef = database.ref('users').child(userId);
-  const userIdPromise = userIdRef.on('value');
+  const userIdPromise = userIdRef.once('value');
   userIdPromise.then((snapshot) => {
     if (!snapshot.exists()) { // if new user, add to firebase
       database.ref(`users/${userId}`).set({
