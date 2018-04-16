@@ -15,11 +15,9 @@ controller.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
   // update chat log, timestamp, who sent message (bot or human), what message said
   // update next check in date
-  console.log(userId);
   const userIdRef = database.ref('users').child(userId);
   const userIdPromise = userIdRef.once('value');
   userIdPromise.then((snapshot) => {
-    console.log(snapshot);
     let userInfo = null;
     if (!snapshot.exists()) { // if new user, add to firebase
       userInfo = {
@@ -37,6 +35,8 @@ controller.hears('.*', 'message_received', (bot, message) => {
     self.riveBot.setUservar(userId, 'topic', topic);
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
+    // userIdRef.remove();
+    console.log(self.riveBot.getUservars(userId));
     const botResponseFormatted = parseResponse(botResponse);
     bot.reply(message, botResponseFormatted);
 

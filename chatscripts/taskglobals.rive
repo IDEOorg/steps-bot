@@ -7,4 +7,6 @@
   - No problem, we got this! Can you tell me a little bit more?{topic=help}
   + still working
   - Okay, great! If you need any help just text HELP, if you're done, text DONE.
+  + stop
+  - Ok, I'll stop texting. To start again type "initscript"<set stop=true>
 < topic
