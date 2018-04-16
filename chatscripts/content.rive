@@ -2,7 +2,7 @@
   + initscript
   - Hey there! It's me, Roo. Hope you're having a great day.<send>
   ^ Here's a short story that might interest you:
-  @ sendcontent
+  ^ {@ sendcontent}
 
   + sendcontent
   - ***soundcloud link***
