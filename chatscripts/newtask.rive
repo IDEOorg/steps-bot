@@ -1,14 +1,8 @@
-> topic newtask
+> topic newtask includes taskglobals
   + initscript
   - Hi there! It's Roo, hope you're ready for your task. Let's get started.<send>
+  ^ ^image("taskimage1")<send>
   ^ Good luck! We'll check back in with you in a few days.
-
-  + done
-  - You're done!
-  + help
-  - You need help!
-  + still working
-  - You're still working!
   + *
   - Could you say that again? I didn't quite understand you. How are you doing with completing your task? Text DONE, HELP, or STILL WORKING.
 < topic

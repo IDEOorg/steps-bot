@@ -1,0 +1,10 @@
+> topic taskglobals
+  + done
+  - ^image("taskimage1")<send>
+  ^ Wow! Great job! Take time to celebrate today. You deserve it.
+  ^ Your next task will be coming your way tomorrow. Talk soon!
+  + help
+  - No problem, we got this! Can you tell me a little bit more?{topic=help}
+  + still working
+  - Okay, great! If you need any help just text HELP, if you're done, text DONE.
+< topic

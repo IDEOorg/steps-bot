@@ -6,7 +6,6 @@ const RiveScript = require('rivescript');
 const database = setupFirebase();
 const self = this;
 self.riveBot = setupRiveScript();
-self.riveBot.setUservar('bagel', 'topic', 'intro');
 const controller = setupBotkitServer();
 // setInterval(() => {
 //   console.log('hey');
@@ -14,20 +13,33 @@ const controller = setupBotkitServer();
 
 controller.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
-  database.ref('users').child(userId).once('value', (snapshot) => {
-    if (!snapshot.exists()) {
+  // update chat log, timestamp, who sent message (bot or human), what message said
+  // update next check in date
+  const userIdRef = database.ref('users').child(userId);
+  const userIdPromise = userIdRef.on('value');
+  userIdPromise.then((snapshot) => {
+    if (!snapshot.exists()) { // if new user, add to firebase
       database.ref(`users/${userId}`).set({
         user: userId,
-        phone: userId
+        phone: userId,
+        topic: 'intro',
+        nextCheckInDate: null // fill this in
       });
     }
+    const { topic } = snapshot.val();
+    self.riveBot.setUservar(userId, 'topic', topic);
+    const userMessage = message.text;
+    const botResponse = self.riveBot.reply(userId, userMessage, self);
+    const botResponseFormatted = parseResponse(botResponse);
+    bot.reply(message, botResponseFormatted);
+
+    // update data
+    const newTopic = self.riveBot.getUservar(userId, 'topic');
+    const updates = {
+      topic: newTopic // new topic
+    };
+    userIdRef.update(updates);
   });
-  let response = null;
-  console.log(message.text);
-  response = self.riveBot.reply('bagel', message.text, self);
-  console.log(response);
-  bot.reply(message, response);
-  response = null;
 });
 
 function setupBotkitServer() {
@@ -68,4 +80,8 @@ function setupFirebase() {
   firebase.initializeApp(config);
   firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
+}
+
+function parseResponse(response) {
+  return response;
 }

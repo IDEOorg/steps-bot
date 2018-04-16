@@ -1,0 +1,6 @@
+> topic newtask
+  + *
+  - Ok! Looks like we'll need a counselor for this one. I'll send them a message and I'll get back to you tomorrow after I've heard from them.<send>
+  ^ While we're waiting to hear back from the counselor, here's a short story that might interest you:{topic=content}
+  @ sendcontent
+< topic

@@ -1,0 +1,10 @@
+> topic content
+  + initscript
+  - Hey there! It's me, Roo. Hope you're having a great day.<send>
+  ^ Here's a short story that might interest you:
+  @ sendcontent
+
+  + sendcontent
+  - ***soundcloud link***
+  ^ If you want to hear more of Tres and Tanya's story, text 1.
+< topic
