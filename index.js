@@ -2,6 +2,7 @@ require('dotenv').config();
 const Botkit = require('botkit');
 const firebase = require('firebase');
 const RiveScript = require('rivescript');
+const moment = require('moment');
 
 const database = setupFirebase();
 const self = this;
@@ -24,27 +25,38 @@ controller.hears('.*', 'message_received', (bot, message) => {
         user: userId,
         phone: userId,
         topic: 'intro',
+        nextTopic: null,
         nextCheckInDate: null // fill this in
       };
       database.ref(`users/${userId}`).set(userInfo);
     } else {
       userInfo = snapshot.val();
     }
-    const { topic } = userInfo;
-    console.log(topic);
-    self.riveBot.setUservar(userId, 'topic', topic);
+    const { currTopic } = userInfo;
+    self.riveBot.setUservar(userId, 'topic', currTopic);
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     // userIdRef.remove();
-    console.log(self.riveBot.getUservars(userId));
     const botResponseFormatted = parseResponse(botResponse);
     bot.reply(message, botResponseFormatted);
 
     // update data
-    const newTopic = self.riveBot.getUservar(userId, 'topic');
+    const {
+      topic,
+      days,
+      hours,
+      timeOfDay,
+      nextTopic
+    } = self.riveBot.getUservars(userId);
     const updates = {
-      topic: newTopic // new topic
     };
+    updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+    if (topic) {
+      updates.topic = topic;
+    }
+    if (nextTopic) {
+      updates.nextTopic = nextTopic;
+    }
     userIdRef.update(updates);
   });
 });
@@ -91,4 +103,26 @@ function setupFirebase() {
 
 function parseResponse(response) {
   return response;
+}
+
+function getNextCheckInDate(days, hours, timeOfDay) {
+  if (!days && !hours && !timeOfDay) {
+    return null;
+  }
+  let checkInDate = moment();
+  if (days) {
+    checkInDate = checkInDate.add(parseInt(days, 10), 'days');
+  }
+  if (hours) {
+    checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
+    return checkInDate.valueOf();
+  }
+  if (timeOfDay) {
+    if (timeOfDay.toUpperCase() === 'MORNING') {
+      checkInDate = checkInDate.hours(9).minutes(0).seconds(0);
+    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
+      checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
+    }
+  }
+  return checkInDate.valueOf();
 }
