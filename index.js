@@ -32,7 +32,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
     } else {
       userInfo = snapshot.val();
     }
-    const { currTopic } = userInfo;
+    const currTopic = userInfo.topic;
     self.riveBot.setUservar(userId, 'topic', currTopic);
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
