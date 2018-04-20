@@ -2,7 +2,7 @@
   + initscript
   - Hi there! It's Roo, your financial chatbot assistant.\n\n
   ^ Congratulations on taking that first step and seeing a financial counselor!<send>
-  ^ ^image("https://media.giphy.com/media/d3pWSdgsKTfpBamY/giphy.gif")<send>
+  ^ ^image("https://media.giphy.com/media/d3pWSdgsKTfpBamY/giphy.gif")<send>^image("https://media.giphy.com/media/d3pWSdgsKTfpBamY/wa.gif")few
   ^ We'll be in touch tomorrow with your first task.<set days=1><set timeOfDay=morning><set nextTopic=newtask>
   + bagel
   - Next task in <get days>. Topic is <get nextTopic>

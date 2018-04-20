@@ -37,8 +37,16 @@ controller.hears('.*', 'message_received', (bot, message) => {
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     // userIdRef.remove();
-    const botResponseFormatted = parseResponse(botResponse);
-    bot.reply(message, botResponseFormatted);
+    const formattedResponses = parseResponse(botResponse);
+    console.log(formattedResponses);
+    for (let i = 0; i < formattedResponses.length; i++) {
+      const response = formattedResponses[i];
+      if (typeof response === 'string') {
+        bot.reply(message, response);
+      } else if (typeof response === 'object') {
+        bot.reply(message, response);
+      }
+    }
 
     // update data
     const {
@@ -102,7 +110,27 @@ function setupFirebase() {
 }
 
 function parseResponse(response) {
-  return response;
+  const imageRegex = /\^image\("(.*?)"\)/g;
+  const sendRegex = /<send>/g;
+  const messages = response.split(sendRegex);
+  const finalMessages = [];
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    const imageTags = message.match(imageRegex);
+    const imageUrls = imageTags.map(tag => tag.replace(imageRegex, '$1'));
+    const textMessages = message.split(imageRegex);
+    for (let j = 0; j < textMessages.length; j++) {
+      if (textMessages[j] !== '') {
+        finalMessages.push(textMessages[j]);
+      }
+    }
+    for (let j = 0; j < imageUrls.length; j++) {
+      finalMessages.push({
+        mediaUrl: imageUrls[j]
+      });
+    }
+  }
+  return finalMessages;
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {
