@@ -119,17 +119,22 @@ function parseResponse(response) {
     console.log('message');
     console.log(message);
     const imageTags = message.match(imageRegex);
-    const imageUrls = imageTags.map(tag => tag.replace(imageRegex, '$1'));
+    let imageUrls = null;
+    if (imageTags) {
+      imageUrls = imageTags.map(tag => tag.replace(imageRegex, '$1'));
+    }
     const textMessages = message.split(imageRegex);
     for (let j = 0; j < textMessages.length; j++) {
       if (textMessages[j] !== '') {
         finalMessages.push(textMessages[j]);
       }
     }
-    for (let j = 0; j < imageUrls.length; j++) {
-      finalMessages.push({
-        mediaUrl: imageUrls[j]
-      });
+    if (imageUrls) {
+      for (let j = 0; j < imageUrls.length; j++) {
+        finalMessages.push({
+          mediaUrl: imageUrls[j]
+        });
+      }
     }
   }
   return finalMessages;
