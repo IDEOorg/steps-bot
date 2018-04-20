@@ -116,6 +116,7 @@ function parseResponse(response) {
   const finalMessages = [];
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
+    console.log(message);
     const imageTags = message.match(imageRegex);
     const imageUrls = imageTags.map(tag => tag.replace(imageRegex, '$1'));
     const textMessages = message.split(imageRegex);
