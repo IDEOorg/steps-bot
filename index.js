@@ -111,6 +111,7 @@ function setupFirebase() {
 
 function parseResponse(response) {
   const imageRegex = /\^image\("(.*?)"\)/g;
+  const imageRegexForSplit = /\^image\(".*"\)/g;
   const sendRegex = /<send>/g;
   const messages = response.split(sendRegex);
   const finalMessages = [];
@@ -123,7 +124,7 @@ function parseResponse(response) {
     if (imageTags) {
       imageUrls = imageTags.map(tag => tag.replace(imageRegex, '$1'));
     }
-    const textMessages = message.split(imageRegex);
+    const textMessages = message.split(imageRegexForSplit);
     for (let j = 0; j < textMessages.length; j++) {
       if (textMessages[j] !== '') {
         finalMessages.push(textMessages[j]);
