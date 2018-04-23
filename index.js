@@ -38,11 +38,11 @@ controller.hears('.*', 'message_received', (bot, message) => {
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     const formattedResponses = parseResponse(botResponse);
     console.log(formattedResponses);
-    console.log(message.channel);
     bot.startConversation(message, (err, convo) => {
+      console.log(convo);
       for (let i = 0; i < formattedResponses.length; i++) {
         const response = formattedResponses[i];
-        convo.say(response);
+        bot.say(response);
       }
     });
 
