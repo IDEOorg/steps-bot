@@ -42,6 +42,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
     bot.startConversation(message, (err, convo) => {
       for (let i = 0; i < formattedResponses.length; i++) {
         const response = formattedResponses[i];
+        console.log(response);
         convo.say(response);
       }
     });
