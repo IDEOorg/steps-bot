@@ -24,9 +24,9 @@ setTimeout(() => {
       const { nextCheckInDate } = userData;
       if (nextCheckInDate && nextCheckInDate < 1524560400852) {
         // send reply
-        console.log('checkIn');
         checkInBot.say({
-          text: 'todays task',
+          text: ' ',
+          mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg',
           channel: userId
         }, () => {});
       }
