@@ -24,11 +24,25 @@ setTimeout(() => {
       const { nextCheckInDate } = userData;
       if (nextCheckInDate && nextCheckInDate < 1524560400852) {
         // send reply
-        checkInBot.say({
-          text: ' ',
-          mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg',
-          channel: userId
-        }, () => {});
+        const { nextTopic } = userData;
+        self.riveBot.setUservar(userId, 'topic', nextTopic);
+        const botResponse = self.riveBot.reply(userId, 'initscript', self);
+        const formattedResponses = parseResponse(botResponse);
+        console.log(formattedResponses);
+        for (let j = 0; j < formattedResponses.length; j++) {
+          const response = formattedResponses[j];
+          let formattedResponse = null;
+          if (typeof response === 'string') {
+            formattedResponse = {
+              text: response,
+              channel: userId
+            };
+          } else {
+            formattedResponse = response;
+            formattedResponse.channel = userId;
+          }
+          checkInBot.say(formattedResponse, () => {});
+        }
       }
     }
   });
