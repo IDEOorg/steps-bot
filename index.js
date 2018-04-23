@@ -15,7 +15,7 @@ const controller = setupBotkitServer();
 // }, 300000);
 setTimeout(() => {
   usersRef.once('value').then((snapshot) => {
-    console.log(snapshot);
+    console.log(snapshot.val());
   });
 }, 5000);
 
