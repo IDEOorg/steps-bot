@@ -22,7 +22,7 @@ setTimeout(() => {
       const userId = users[i];
       const userData = usersData[userId];
       const { nextCheckInDate } = userData;
-      if (nextCheckInDate && nextCheckInDate < 1524560400852) {
+      if (nextCheckInDate && nextCheckInDate < 1524560400853) {
         // send reply
         const topicToShow = userData.nextTopic;
         self.riveBot.setUservar(userId, 'topic', topicToShow);
