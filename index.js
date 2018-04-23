@@ -15,7 +15,7 @@ const checkInBot = controller.spawn({});
 //   let currentTime = Date.now();
 //
 // }, 300000);
-setTimeout(() => {
+setInterval(() => {
   usersRef.once('value').then((snapshot) => {
     const usersData = snapshot.val();
     const users = Object.keys(usersData);
@@ -68,7 +68,7 @@ setTimeout(() => {
       }
     }
   });
-}, 4000);
+}, 300000);
 
 
 controller.hears('.*', 'message_received', (bot, message) => {
