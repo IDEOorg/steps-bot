@@ -41,7 +41,6 @@ controller.hears('.*', 'message_received', (bot, message) => {
 
     bot.startConversation(message, (err, convo) => {
       convo.say({
-        text: 'bagel',
         mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg'
       }, () => {});
     //   for (let i = 0; i < formattedResponses.length; i++) {
