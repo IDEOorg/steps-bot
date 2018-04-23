@@ -13,9 +13,12 @@ const controller = setupBotkitServer();
 //   let currentTime = Date.now();
 //
 // }, 300000);
-usersRef.once('value').then((snapshot) => {
-  console.log(snapshot);
-});
+setTimeout(() => {
+  usersRef.once('value').then((snapshot) => {
+    console.log(snapshot);
+  });
+}, 5000);
+
 
 controller.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
