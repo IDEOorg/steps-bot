@@ -5,18 +5,23 @@ const RiveScript = require('rivescript');
 const moment = require('moment');
 
 const database = setupFirebase();
+const usersRef = database.ref('users');
 const self = this;
 self.riveBot = setupRiveScript();
 const controller = setupBotkitServer();
 // setInterval(() => {
-//   console.log('hey');
+//   let currentTime = Date.now();
+//
 // }, 300000);
+usersRef.once('value').then((snapshot) => {
+  console.log(snapshot);
+});
 
 controller.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
   // update chat log, timestamp, who sent message (bot or human), what message said
   // update next check in date
-  const userIdRef = database.ref('users').child(userId);
+  const userIdRef = usersRef.child(userId);
   const userIdPromise = userIdRef.once('value');
   userIdPromise.then((snapshot) => {
     let userInfo = null;
