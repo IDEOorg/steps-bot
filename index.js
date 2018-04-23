@@ -40,16 +40,10 @@ controller.hears('.*', 'message_received', (bot, message) => {
     console.log(formattedResponses);
     console.log(message.channel);
     bot.startConversation(message, (err, convo) => {
-      convo.say({
-        text: '',
-        mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg',
-        channel: message.channel
-      }, () => {});
-    //   for (let i = 0; i < formattedResponses.length; i++) {
-    //     const response = formattedResponses[i];
-    //     console.log(response);
-    //     convo.say(response);
-    //   }
+      for (let i = 0; i < formattedResponses.length; i++) {
+        const response = formattedResponses[i];
+        convo.say(response);
+      }
     });
 
     // update data
@@ -137,6 +131,7 @@ function parseResponse(response) {
     if (imageUrls) {
       for (let j = 0; j < imageUrls.length; j++) {
         finalMessages.push({
+          text: ' ',
           mediaUrl: imageUrls[j]
         });
       }
