@@ -38,13 +38,10 @@ controller.hears('.*', 'message_received', (bot, message) => {
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     const formattedResponses = parseResponse(botResponse);
     console.log(formattedResponses);
-    bot.createConversation(message, (err, convo) => {
-      for (let i = 0; i < formattedResponses.length; i++) {
-        const response = formattedResponses[i];
-        convo.addMessage(response, 'default');
-      }
-      convo.activate();
-    });
+    for (let i = 0; i < formattedResponses.length; i++) {
+      const response = formattedResponses[i];
+      bot.reply(message, response);
+    }
 
     // update data
     const {
@@ -115,8 +112,6 @@ function parseResponse(response) {
   const finalMessages = [];
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
-    console.log('message');
-    console.log(message);
     const imageTags = message.match(imageRegex);
     let imageUrls = null;
     if (imageTags) {
