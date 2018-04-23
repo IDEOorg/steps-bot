@@ -9,15 +9,29 @@ const usersRef = database.ref('users');
 const self = this;
 self.riveBot = setupRiveScript();
 const controller = setupBotkitServer();
+const checkInBot = controller.spawn({});
 // setInterval(() => {
 //   let currentTime = Date.now();
 //
 // }, 300000);
 setTimeout(() => {
   usersRef.once('value').then((snapshot) => {
-    console.log(snapshot.val());
+    const usersData = snapshot.val();
+    const users = Object.keys(usersData);
+    for (let i = 0; i < users.length; i++) {
+      const userId = users[i];
+      const userData = usersData[userId];
+      const { nextCheckInDate } = userData;
+      if (nextCheckInDate && nextCheckInDate < 1524560400852) {
+        // send reply
+        checkInBot.say({
+          text: 'todays task',
+          channel: userId
+        });
+      }
+    }
   });
-}, 5000);
+}, 4000);
 
 
 controller.hears('.*', 'message_received', (bot, message) => {
