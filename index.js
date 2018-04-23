@@ -39,14 +39,12 @@ controller.hears('.*', 'message_received', (bot, message) => {
     // userIdRef.remove();
     const formattedResponses = parseResponse(botResponse);
     console.log(formattedResponses);
-    for (let i = 0; i < formattedResponses.length; i++) {
-      const response = formattedResponses[i];
-      if (typeof response === 'string') {
-        bot.reply(message, response);
-      } else if (typeof response === 'object') {
-        bot.reply(message, response);
+    bot.startConversation(message, (err, convo) => {
+      for (let i = 0; i < formattedResponses.length; i++) {
+        const response = formattedResponses[i];
+        convo.say(response);
       }
-    }
+    });
 
     // update data
     const {
