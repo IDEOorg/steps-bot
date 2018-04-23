@@ -24,10 +24,11 @@ setTimeout(() => {
       const { nextCheckInDate } = userData;
       if (nextCheckInDate && nextCheckInDate < 1524560400852) {
         // send reply
+        console.log('checkIn');
         checkInBot.say({
           text: 'todays task',
           channel: userId
-        });
+        }, () => {});
       }
     }
   });
