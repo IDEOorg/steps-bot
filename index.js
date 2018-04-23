@@ -38,18 +38,20 @@ controller.hears('.*', 'message_received', (bot, message) => {
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     const formattedResponses = parseResponse(botResponse);
     console.log(formattedResponses);
-
-    bot.startConversation(message, (err, convo) => {
-      convo.say({
-        text: ' ',
-        mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg'
-      }, () => {});
-    //   for (let i = 0; i < formattedResponses.length; i++) {
-    //     const response = formattedResponses[i];
-    //     console.log(response);
-    //     convo.say(response);
-    //   }
+    bot.reply(message, {
+      mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg'
     });
+    // bot.startConversation(message, (err, convo) => {
+    //   convo.say({
+    //     text: ' ',
+    //     mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg'
+    //   }, () => {});
+    // //   for (let i = 0; i < formattedResponses.length; i++) {
+    // //     const response = formattedResponses[i];
+    // //     console.log(response);
+    // //     convo.say(response);
+    // //   }
+    // });
 
     // update data
     const {
