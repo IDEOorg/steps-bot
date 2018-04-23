@@ -41,6 +41,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
     console.log(message.channel);
     bot.startConversation(message, (err, convo) => {
       convo.say({
+        text: '',
         mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg',
         channel: message.channel
       }, () => {});
