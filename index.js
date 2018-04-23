@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const Botkit = require('botkit');
 const firebase = require('firebase');
 const RiveScript = require('rivescript');
@@ -22,7 +23,7 @@ setTimeout(() => {
       const userId = users[i];
       const userData = usersData[userId];
       const { nextCheckInDate } = userData;
-      if (nextCheckInDate && nextCheckInDate < 1524560400853) {
+      if (nextCheckInDate && nextCheckInDate < Date.now()) {
         // send reply
         const topicToShow = userData.nextTopic;
         self.riveBot.setUservar(userId, 'topic', topicToShow);
@@ -76,6 +77,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
   // update next check in date
   const userIdRef = usersRef.child(userId);
   const userIdPromise = userIdRef.once('value');
+  const workplan = JSON.parse(fs.readFileSync('./chatscripts/workplan.json')).tasks;
   userIdPromise.then((snapshot) => {
     let userInfo = null;
     if (!snapshot.exists()) { // if new user, add to firebase
@@ -84,18 +86,20 @@ controller.hears('.*', 'message_received', (bot, message) => {
         phone: userId,
         topic: 'intro',
         nextTopic: null,
-        nextCheckInDate: null // fill this in
+        nextCheckInDate: null, // fill this in
+        workplan
       };
       database.ref(`users/${userId}`).set(userInfo);
     } else {
       userInfo = snapshot.val();
     }
+    const currTask = userInfo.workplan[0];
     const currTopic = userInfo.topic;
     self.riveBot.setUservar(userId, 'topic', currTopic);
+    self.riveBot.setUservar(userId, 'task', currTask);
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
     const formattedResponses = parseResponse(botResponse);
-    console.log(formattedResponses);
     for (let i = 0; i < formattedResponses.length; i++) {
       const response = formattedResponses[i];
       bot.reply(message, response);
@@ -107,7 +111,8 @@ controller.hears('.*', 'message_received', (bot, message) => {
       days,
       hours,
       timeOfDay,
-      nextTopic
+      nextTopic,
+      nextTask
     } = self.riveBot.getUservars(userId);
     const updates = {
     };
@@ -117,6 +122,10 @@ controller.hears('.*', 'message_received', (bot, message) => {
     }
     if (nextTopic) {
       updates.nextTopic = nextTopic;
+    }
+    if (nextTask) {
+      const newWorkPlan = userInfo.workplan.slice(1, userInfo.workplan.length);
+      updates.workplan = newWorkPlan;
     }
     userIdRef.update(updates);
   });
