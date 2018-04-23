@@ -1,6 +1,6 @@
 > topic taskglobals
   + done
-  - ^image("taskimage1")<send>
+  - ^image("https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg")<send>
   ^ Wow! Great job! Take time to celebrate today. You deserve it.
   ^ Your next task will be coming your way tomorrow. Talk soon!
   + help

@@ -24,8 +24,8 @@ setTimeout(() => {
       const { nextCheckInDate } = userData;
       if (nextCheckInDate && nextCheckInDate < 1524560400852) {
         // send reply
-        const { nextTopic } = userData;
-        self.riveBot.setUservar(userId, 'topic', nextTopic);
+        const topicToShow = userData.nextTopic;
+        self.riveBot.setUservar(userId, 'topic', topicToShow);
         const botResponse = self.riveBot.reply(userId, 'initscript', self);
         const formattedResponses = parseResponse(botResponse);
         console.log(formattedResponses);
@@ -43,6 +43,27 @@ setTimeout(() => {
           }
           checkInBot.say(formattedResponse, () => {});
         }
+        // update data
+        const {
+          topic,
+          days,
+          hours,
+          timeOfDay,
+          nextTopic
+        } = self.riveBot.getUservars(userId);
+        const updates = {
+          nextTopic: null,
+          nextCheckInDate: null
+        };
+        updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+        if (topic) {
+          updates.topic = topic;
+        }
+        if (nextTopic) {
+          updates.nextTopic = nextTopic;
+        }
+        const userIdRef = usersRef.child(userId);
+        userIdRef.update(updates);
       }
     }
   });
