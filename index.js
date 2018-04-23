@@ -131,7 +131,6 @@ function parseResponse(response) {
     if (imageUrls) {
       for (let j = 0; j < imageUrls.length; j++) {
         finalMessages.push({
-          text: ' ',
           mediaUrl: imageUrls[j]
         });
       }
