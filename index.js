@@ -36,15 +36,18 @@ controller.hears('.*', 'message_received', (bot, message) => {
     self.riveBot.setUservar(userId, 'topic', currTopic);
     const userMessage = message.text;
     const botResponse = self.riveBot.reply(userId, userMessage, self);
-    // userIdRef.remove();
     const formattedResponses = parseResponse(botResponse);
     console.log(formattedResponses);
+
     bot.startConversation(message, (err, convo) => {
-      for (let i = 0; i < formattedResponses.length; i++) {
-        const response = formattedResponses[i];
-        console.log(response);
-        convo.say(response);
-      }
+      convo.say({
+        mediaUrl: 'https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg'
+      });
+    //   for (let i = 0; i < formattedResponses.length; i++) {
+    //     const response = formattedResponses[i];
+    //     console.log(response);
+    //     convo.say(response);
+    //   }
     });
 
     // update data
