@@ -13,6 +13,7 @@
     "dotenv": "^5.0.1",
     "firebase": "^4.11.0",
     "moment": "^2.22.1",
+    "moment-timezone": "^0.5.16",
     "rivescript": "^1.19.0"
   },
   "devDependencies": {

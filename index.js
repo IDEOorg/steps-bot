@@ -3,7 +3,7 @@ const fs = require('fs');
 const Botkit = require('botkit');
 const firebase = require('firebase');
 const RiveScript = require('rivescript');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 const database = setupFirebase();
 const usersRef = database.ref('users');
@@ -220,5 +220,5 @@ function getNextCheckInDate(days, hours, timeOfDay) {
       checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
     }
   }
-  return checkInDate.valueOf();
+  return checkInDate.tz('America/New_York').valueOf();
 }
