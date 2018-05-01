@@ -8,5 +8,5 @@
   + still working
   - Okay, great! If you need any help just text HELP, if you're done, text DONE.
   + stop
-  - Ok, I'll stop texting. To start again text "initscript"<set stop=true>
+  - Ok, I'll stop texting. To start again text "start"<set stop=true>
 < topic

@@ -1,5 +1,5 @@
 > topic newtask includes taskglobals
-  + initscript
+  + start
   - Hi there! It's Roo, hope you're ready for your task. Let's get started.<send>
   ^ ^image("https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg")<send>
   ^ <get task><send>

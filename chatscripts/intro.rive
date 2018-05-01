@@ -1,5 +1,5 @@
 > topic intro
-  + initscript
+  + start
   - Hi there! It's Roo, your financial chatbot assistant.\n\n
   ^ Congratulations on taking that first step and seeing a financial counselor!<send>
   ^ ^image("https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg")<send>
