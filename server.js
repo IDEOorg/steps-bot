@@ -22,7 +22,7 @@ function routes(app, fbController, twilioController) {
 
     const bot = fbController.spawn({});
 
-    // Now, pass the webhook into be processed
+    // Now, pass the webhook in to be processed
     fbController.handleWebhookPayload(req, res, bot);
   });
   // Perform the FB webhook verification handshake with your verify token
@@ -40,7 +40,9 @@ function routes(app, fbController, twilioController) {
     res.send('ok');
     const bot = twilioController.spawn({});
     console.log('spawned');
-    twilioController.handleWebhookPayload(req, res, bot);
+    twilioController.createWebhookEndpoints(app, bot, () => {
+      console.log('TwilioSMSBot is online!');
+    });
     console.log('webhook');
   });
 }
