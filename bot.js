@@ -35,13 +35,14 @@ fbController.hears('.*', 'message_received', (bot, message) => {
 
 twilioController.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
-  const formattedResponses = getMessageResponsesAndUpdateFirebase(message, firebaseDatabase, userId, self);
+  const formattedResponsesPromise = getMessageResponsesAndUpdateFirebase(message, firebaseDatabase, userId, self);
   console.log('**************formattedResponses**********');
-  console.log(formattedResponses);
-  for (let i = 0; i < formattedResponses.length; i++) {
-    const response = formattedResponses[i];
-    bot.reply(message, response);
-  }
+  formattedResponsesPromise.then((responses) => {
+    for (let i = 0; i < responses.length; i++) {
+      const response = responses[i];
+      bot.reply(message, response);
+    }
+  });
 });
 
 function setupFirebase() {
