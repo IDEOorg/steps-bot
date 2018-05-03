@@ -13,7 +13,8 @@ self.riveBot = setupRiveScript();
 const fbController = Botkit.facebookbot({
   debug: true,
   verify_token: process.env.FB_VERIFY_TOKEN,
-  access_token: process.env.FB_PAGE_ACCESS_TOKEN
+  access_token: process.env.FB_PAGE_ACCESS_TOKEN,
+  require_delivery: true
 });
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
@@ -28,15 +29,19 @@ server(fbController, twilioController);
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
 fbController.hears('.*', 'message_received', (bot, message) => {
-  console.log(message);
-  console.log(message.user);
-  bot.reply(message, 'Hello World!');
+  const userId = message.user;
+  const formattedResponsesPromise = getMessageResponsesAndUpdateFirebase(message, firebaseDatabase, userId, self);
+  formattedResponsesPromise.then((responses) => {
+    for (let i = 0; i < responses.length; i++) {
+      const response = responses[i];
+      bot.reply(message, response);
+    }
+  });
 });
 
 twilioController.hears('.*', 'message_received', (bot, message) => {
   const userId = message.user;
   const formattedResponsesPromise = getMessageResponsesAndUpdateFirebase(message, firebaseDatabase, userId, self);
-  console.log('**************formattedResponses**********');
   formattedResponsesPromise.then((responses) => {
     for (let i = 0; i < responses.length; i++) {
       const response = responses[i];
