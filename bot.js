@@ -13,7 +13,7 @@ const usersRef = database.ref('users');
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
   debug: true,
-  verify_token: process.env.FB_PAGE_ACCESS_TOKEN,
+  verify_token: process.env.FB_VERIFY_TOKEN,
   access_token: process.env.FB_PAGE_ACCESS_TOKEN
 });
 const twilioController = Botkit.twiliosmsbot({
@@ -28,7 +28,7 @@ const twilioController = Botkit.twiliosmsbot({
 server(fbController, twilioController);
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
-fbController.hears('(.*)', 'message_received', (bot, message) => {
+fbController.hears('.*', 'message_received', (bot, message) => {
   bot.reply(message, 'Hello World!');
 });
 
