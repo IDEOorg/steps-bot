@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 
-export default function (fbController, twilioController) {
+module.exports = function server(fbController, twilioController) {
   const app = express();
   app.listen(process.env.PORT || 3000, null, () => {
   });
@@ -11,7 +11,7 @@ export default function (fbController, twilioController) {
 
   controller.webserver = app; // eslint-disable-line
   return app;
-}
+};
 
 function routes(app, fbController, twilioController) {
   app.post('/facebook/receive', (req, res) => {
