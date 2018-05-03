@@ -50,6 +50,68 @@ twilioController.hears('.*', 'message_received', (bot, message) => {
   });
 });
 
+setInterval(() => {
+  const usersRef = firebaseDatabase.ref('users');
+  usersRef.once('value').then((snapshot) => {
+    const usersData = snapshot.val();
+    const users = Object.keys(usersData);
+    for (let i = 0; i < users.length; i++) {
+      const userId = users[i];
+      const userData = usersData[userId];
+      const { nextCheckInDate } = userData;
+      if (nextCheckInDate && nextCheckInDate < Date.now()) {
+        // send reply
+        const topicToShow = userData.nextTopic;
+        self.riveBot.setUservar(userId, 'topic', topicToShow);
+        const botResponse = self.riveBot.reply(userId, 'start', self);
+        const formattedResponses = parseResponse(botResponse);
+        console.log(formattedResponses);
+        for (let j = 0; j < formattedResponses.length; j++) {
+          const response = formattedResponses[j];
+          let formattedResponse = null;
+          if (typeof response === 'string') {
+            formattedResponse = {
+              text: response,
+              channel: userId
+            };
+          } else {
+            formattedResponse = response;
+            formattedResponse.channel = userId;
+          }
+          let checkInBot = null;
+          if (userId && userId[0] === '+') {
+            checkInBot = twilioController.spawn({});
+          } else {
+            checkInBot = fbController.spawn({});
+          }
+          checkInBot.say(formattedResponse, () => {});
+        }
+        // update data
+        const {
+          topic,
+          days,
+          hours,
+          timeOfDay,
+          nextTopic
+        } = self.riveBot.getUservars(userId);
+        const updates = {
+          nextTopic: null,
+          nextCheckInDate: null
+        };
+        updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+        if (topic) {
+          updates.topic = topic;
+        }
+        if (nextTopic) {
+          updates.nextTopic = nextTopic;
+        }
+        const userIdRef = usersRef.child(userId);
+        userIdRef.update(updates);
+      }
+    }
+  });
+}, 300000);
+
 function setupFirebase() {
   const config = {
     apiKey: process.env.FIREBASE_API_KEY,
