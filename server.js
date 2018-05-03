@@ -9,7 +9,8 @@ module.exports = function server(fbController, twilioController) {
   // sets up webhook routes for Twilio and Facebook
   routes(app, fbController, twilioController);
 
-  controller.webserver = app; // eslint-disable-line
+  twilioController.webserver = app; // eslint-disable-line
+  fbController.webserver = app; // eslint-disable-line
   return app;
 };
 
