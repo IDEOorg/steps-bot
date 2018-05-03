@@ -93,8 +93,6 @@ twilioController.hears('.*', 'message_received', (bot, message) => {
   });
 });
 
-console.log(twilioController);
-
 function setupFirebase() {
   const config = {
     apiKey: process.env.FIREBASE_API_KEY,

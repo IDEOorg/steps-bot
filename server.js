@@ -36,7 +36,12 @@ function routes(app, fbController, twilioController) {
     }
   });
   app.post('/sms/receive', (req, res) => {
+    res.status(200);
+    res.send('ok');
     const bot = twilioController.spawn({});
+    console.log('spawned');
+    console.log(req);
     twilioController.handleWebhookPayload(req, res, bot);
+    console.log('webhook');
   });
 }
