@@ -1,76 +1,39 @@
 require('dotenv').config();
 const fs = require('fs');
 const Botkit = require('botkit');
+const server = require('./server.js');
 const firebase = require('firebase');
 const RiveScript = require('rivescript');
 const moment = require('moment-timezone');
 
 const database = setupFirebase();
-const usersRef = database.ref('users');
 const self = this;
 self.riveBot = setupRiveScript();
-const controller = setupBotkitServer();
-const checkInBot = controller.spawn({});
-// setInterval(() => {
-//   let currentTime = Date.now();
-//
-// }, 300000);
-setInterval(() => {
-  usersRef.once('value').then((snapshot) => {
-    const usersData = snapshot.val();
-    const users = Object.keys(usersData);
-    for (let i = 0; i < users.length; i++) {
-      const userId = users[i];
-      const userData = usersData[userId];
-      const { nextCheckInDate } = userData;
-      if (nextCheckInDate && nextCheckInDate < Date.now()) {
-        // send reply
-        const topicToShow = userData.nextTopic;
-        self.riveBot.setUservar(userId, 'topic', topicToShow);
-        const botResponse = self.riveBot.reply(userId, 'start', self);
-        const formattedResponses = parseResponse(botResponse);
-        console.log(formattedResponses);
-        for (let j = 0; j < formattedResponses.length; j++) {
-          const response = formattedResponses[j];
-          let formattedResponse = null;
-          if (typeof response === 'string') {
-            formattedResponse = {
-              text: response,
-              channel: userId
-            };
-          } else {
-            formattedResponse = response;
-            formattedResponse.channel = userId;
-          }
-          checkInBot.say(formattedResponse, () => {});
-        }
-        // update data
-        const {
-          topic,
-          days,
-          hours,
-          timeOfDay,
-          nextTopic
-        } = self.riveBot.getUservars(userId);
-        const updates = {
-          nextTopic: null,
-          nextCheckInDate: null
-        };
-        updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
-        if (topic) {
-          updates.topic = topic;
-        }
-        if (nextTopic) {
-          updates.nextTopic = nextTopic;
-        }
-        const userIdRef = usersRef.child(userId);
-        userIdRef.update(updates);
-      }
-    }
-  });
-}, 300000);
+const usersRef = database.ref('users');
+// Create the Botkit controller, which controls all instances of the bot.
+const fbController = Botkit.facebookbot({
+  debug: true,
+  verify_token: process.env.FB_PAGE_ACCESS_TOKEN,
+  access_token: process.env.FB_PAGE_ACCESS_TOKEN
+});
+const twilioController = Botkit.twiliosmsbot({
+  account_sid: process.env.TWILIO_ACCOUNT_SID,
+  auth_token: process.env.TWILIO_AUTH_TOKEN,
+  twilio_number: process.env.TWILIO_NUMBER,
+  debug: true
+});
+// Set up an Express-powered webserver to expose oauth and webhook endpoints
+// We are passing the controller object into our express server module
+// so we can extend it and process incoming message payloads
+server(fbController, twilioController);
 
-controller.hears('.*', 'message_received', (bot, message) => {
+// Wildcard hears response, will respond to all user input with 'Hello World!'
+fbController.hears('(.*)', 'message_received', (bot, message) => {
+  bot.reply(message, 'Hello World!');
+});
+
+twilioController.hears('.*', 'message_received', (bot, message) => {
+  console.log('heard twilio');
   const userId = message.user;
   // update chat log, timestamp, who sent message (bot or human), what message said
   // update next check in date
@@ -130,32 +93,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
   });
 });
 
-function setupBotkitServer() {
-  const newController = Botkit.twiliosmsbot({
-    account_sid: process.env.TWILIO_ACCOUNT_SID,
-    auth_token: process.env.TWILIO_AUTH_TOKEN,
-    twilio_number: process.env.TWILIO_NUMBER,
-    debug: true
-  });
-
-  const instance = newController.spawn({});
-
-  newController.setupWebserver(process.env.PORT || 3000, () => {
-    newController.createWebhookEndpoints(newController.webserver, instance, () => {
-      console.log('TwilioSMSBot is online!');
-    });
-  });
-  return newController;
-}
-
-function setupRiveScript() {
-  const bot = new RiveScript();
-  bot.loadDirectory('chatscripts', (batchNum) => {
-    console.log(batchNum);
-    bot.sortReplies();
-  });
-  return bot;
-}
+console.log(twilioController);
 
 function setupFirebase() {
   const config = {
@@ -168,6 +106,15 @@ function setupFirebase() {
   firebase.initializeApp(config);
   firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
+}
+
+function setupRiveScript() {
+  const bot = new RiveScript();
+  bot.loadDirectory('chatscripts', (batchNum) => {
+    console.log(batchNum);
+    bot.sortReplies();
+  });
+  return bot;
 }
 
 function parseResponse(response) {
