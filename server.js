@@ -40,7 +40,6 @@ function routes(app, fbController, twilioController) {
     res.send('ok');
     const bot = twilioController.spawn({});
     console.log('spawned');
-    console.log(req);
     twilioController.handleWebhookPayload(req, res, bot);
     console.log('webhook');
   });
