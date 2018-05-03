@@ -29,6 +29,8 @@ server(fbController, twilioController);
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
 fbController.hears('.*', 'message_received', (bot, message) => {
+  console.log(message);
+  console.log(message.user);
   bot.reply(message, 'Hello World!');
 });
 
