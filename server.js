@@ -35,14 +35,10 @@ function routes(app, fbController, twilioController) {
       }
     }
   });
-  app.post('/sms/receive', (req, res) => {
-    res.status(200);
-    res.send('ok');
-    const bot = twilioController.spawn({});
-    console.log('spawned');
-    twilioController.createWebhookEndpoints(app, bot, () => {
-      console.log('TwilioSMSBot is online!');
-    });
-    console.log('webhook');
+  const bot = twilioController.spawn({});
+  console.log('spawned');
+  twilioController.createWebhookEndpoints(app, bot, () => {
+    console.log('TwilioSMSBot is online!');
   });
+  console.log('webhook');
 }
