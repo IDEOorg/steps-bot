@@ -6,10 +6,9 @@ const firebase = require('firebase');
 const RiveScript = require('rivescript');
 const moment = require('moment-timezone');
 
-const database = setupFirebase();
+const firebaseDatabase = setupFirebase();
 const self = this;
 self.riveBot = setupRiveScript();
-const usersRef = database.ref('users');
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
   debug: true,
@@ -35,64 +34,14 @@ fbController.hears('.*', 'message_received', (bot, message) => {
 });
 
 twilioController.hears('.*', 'message_received', (bot, message) => {
-  console.log('heard twilio');
   const userId = message.user;
-  // update chat log, timestamp, who sent message (bot or human), what message said
-  // update next check in date
-  const userIdRef = usersRef.child(userId);
-  const userIdPromise = userIdRef.once('value');
-  const workplan = JSON.parse(fs.readFileSync('./chatscripts/workplan.json')).tasks;
-  userIdPromise.then((snapshot) => {
-    let userInfo = null;
-    if (!snapshot.exists()) { // if new user, add to firebase
-      userInfo = {
-        user: userId,
-        phone: userId,
-        topic: 'intro',
-        nextTopic: null,
-        nextCheckInDate: null, // fill this in
-        workplan
-      };
-      database.ref(`users/${userId}`).set(userInfo);
-    } else {
-      userInfo = snapshot.val();
-    }
-    const currTask = userInfo.workplan[0];
-    const currTopic = userInfo.topic;
-    self.riveBot.setUservar(userId, 'topic', currTopic);
-    self.riveBot.setUservar(userId, 'task', currTask);
-    const userMessage = message.text;
-    const botResponse = self.riveBot.reply(userId, userMessage, self);
-    const formattedResponses = parseResponse(botResponse);
-    for (let i = 0; i < formattedResponses.length; i++) {
-      const response = formattedResponses[i];
-      bot.reply(message, response);
-    }
-
-    // update data
-    const {
-      topic,
-      days,
-      hours,
-      timeOfDay,
-      nextTopic,
-      nextTask
-    } = self.riveBot.getUservars(userId);
-    const updates = {
-    };
-    updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
-    if (topic) {
-      updates.topic = topic;
-    }
-    if (nextTopic) {
-      updates.nextTopic = nextTopic;
-    }
-    if (nextTask) {
-      const newWorkPlan = userInfo.workplan.slice(1, userInfo.workplan.length);
-      updates.workplan = newWorkPlan;
-    }
-    userIdRef.update(updates);
-  });
+  const formattedResponses = getMessageResponsesAndUpdateFirebase(message, firebaseDatabase, userId, self);
+  console.log('**************formattedResponses**********');
+  console.log(formattedResponses);
+  for (let i = 0; i < formattedResponses.length; i++) {
+    const response = formattedResponses[i];
+    bot.reply(message, response);
+  }
 });
 
 function setupFirebase() {
@@ -115,6 +64,63 @@ function setupRiveScript() {
     bot.sortReplies();
   });
   return bot;
+}
+
+function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef) {
+  console.log('heard message');
+  const usersRef = database.ref('users');
+  // update chat log, timestamp, who sent message (bot or human), what message said
+  // update next check in date
+  const userIdRef = usersRef.child(userId);
+  const userIdPromise = userIdRef.once('value');
+  const workplan = JSON.parse(fs.readFileSync('./chatscripts/workplan.json')).tasks;
+  return userIdPromise.then((snapshot) => {
+    let userInfo = null;
+    if (!snapshot.exists()) { // if new user, add to firebase
+      userInfo = {
+        user: userId,
+        phone: userId,
+        topic: 'intro',
+        nextTopic: null,
+        nextCheckInDate: null, // fill this in
+        workplan
+      };
+      database.ref(`users/${userId}`).set(userInfo);
+    } else {
+      userInfo = snapshot.val();
+    }
+    const currTask = userInfo.workplan[0];
+    const currTopic = userInfo.topic;
+    selfRef.riveBot.setUservar(userId, 'topic', currTopic);
+    selfRef.riveBot.setUservar(userId, 'task', currTask);
+    const userMessage = message.text;
+    const botResponse = selfRef.riveBot.reply(userId, userMessage, self);
+    const formattedResponses = parseResponse(botResponse);
+    // update data
+    const {
+      topic,
+      days,
+      hours,
+      timeOfDay,
+      nextTopic,
+      nextTask
+    } = selfRef.riveBot.getUservars(userId);
+    const updates = {
+    };
+    updates.nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+    if (topic) {
+      updates.topic = topic;
+    }
+    if (nextTopic) {
+      updates.nextTopic = nextTopic;
+    }
+    if (nextTask) {
+      const newWorkPlan = userInfo.workplan.slice(1, userInfo.workplan.length);
+      updates.workplan = newWorkPlan;
+    }
+    userIdRef.update(updates);
+    return formattedResponses;
+  });
 }
 
 function parseResponse(response) {
