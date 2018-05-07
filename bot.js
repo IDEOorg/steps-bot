@@ -11,10 +11,10 @@ const self = this;
 self.riveBot = setupRiveScript();
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
-  debug: true,
   verify_token: process.env.FB_VERIFY_TOKEN,
   access_token: process.env.FB_PAGE_ACCESS_TOKEN,
-  require_delivery: true
+  require_delivery: true,
+  debug: true
 });
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
@@ -135,7 +135,6 @@ function setupRiveScript() {
 }
 
 function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef) {
-  console.log('heard message');
   const usersRef = database.ref('users');
   // update chat log, timestamp, who sent message (bot or human), what message said
   // update next check in date
@@ -151,7 +150,8 @@ function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef
         topic: 'intro',
         nextTopic: null,
         nextCheckInDate: null, // fill this in
-        workplan
+        workplan,
+        contentSeen: null
       };
       database.ref(`users/${userId}`).set(userInfo);
     } else {
@@ -159,8 +159,17 @@ function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef
     }
     const currTask = userInfo.workplan[0];
     const currTopic = userInfo.topic;
+    const contentSeen = { userInfo };
     selfRef.riveBot.setUservar(userId, 'topic', currTopic);
     selfRef.riveBot.setUservar(userId, 'task', currTask);
+    if (currTopic === 'content') {
+      for (let i = 0; i < 4; i++) {
+        const redirect = `sendcontent${i}`;
+        if (!contentSeen.includes(redirect)) {
+          selfRef.riveBot.setUservar(userId, 'nextContent', redirect);
+        }
+      }
+    }
     const userMessage = message.text;
     const botResponse = selfRef.riveBot.reply(userId, userMessage, self);
     const formattedResponses = parseResponse(botResponse);
@@ -171,7 +180,8 @@ function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef
       hours,
       timeOfDay,
       nextTopic,
-      nextTask
+      nextTask,
+      nextContent
     } = selfRef.riveBot.getUservars(userId);
     const updates = {
     };
@@ -185,6 +195,10 @@ function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef
     if (nextTask) {
       const newWorkPlan = userInfo.workplan.slice(1, userInfo.workplan.length);
       updates.workplan = newWorkPlan;
+    }
+    if (nextContent) {
+      updates.contentSeen = userInfo.contentSeen;
+      updates.contentSeen.push(nextContent);
     }
     userIdRef.update(updates);
     return formattedResponses;
