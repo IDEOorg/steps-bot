@@ -1,0 +1,5 @@
+> topic checkin
+  + start
+  - Greetings <get username>! Just checking in. How are things coming along?
+  - Hi <get username>! Hope you've been having a great day so far. How are things going with your latest list item?
+< topic

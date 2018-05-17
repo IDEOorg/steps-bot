@@ -1,0 +1,6 @@
+> topic introtask includes gibberish
+  + start
+  - <get username>, the tomorrow you want begins today! Here's the first item on your list.<send>
+  ^ ^template("generic", "<get tasknumurl>", "<get currenttask>", "{'Ok': 'ok', 'Got It': 'got'}")<send>
+  ^ You've got this! I'll check in on your progress soon. Good luck!
+< topic
