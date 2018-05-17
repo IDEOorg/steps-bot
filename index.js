@@ -76,7 +76,7 @@ controller.hears('.*', 'message_received', (bot, message) => {
   // update next check in date
   const userIdRef = usersRef.child(userId);
   const userIdPromise = userIdRef.once('value');
-  const workplan = JSON.parse(fs.readFileSync('./chatscripts/workplan.json')).tasks;
+  const workplan = JSON.parse(fs.readFileSync('./workplan.json')).tasks;
   userIdPromise.then((snapshot) => {
     let userInfo = null;
     if (!snapshot.exists()) { // if new user, add to firebase
