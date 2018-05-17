@@ -1,0 +1,10 @@
+> topic nexttask includes gibberish
+  + start
+  - Hey there! Reaching out to send you this hi-five! You are handling BUSINESS.<send>
+  ^ Here's the next item on your list.<send>
+  ^ ^template("generic", <get tasknumurl>, "<get currenttask>", "{'Ok': 'ok', 'Got It': 'got'}")<send>
+  ^ You rock! I'll check in on your progress soon.
+  - Hey, it's me again! Just wanted to let you know that you're phenomental (This list doesn't stand a chance.)<send>
+  ^ And here's your next item to complete.<send>
+  ^ You've got this! I'll check in on your progress soon.
+< topic
