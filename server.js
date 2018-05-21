@@ -15,7 +15,6 @@ module.exports = function server(fbController, twilioController) {
   routes(app, fbController, twilioController);
 
   twilioController.webserver = app; // eslint-disable-line
-  twilioController.setTickDelay(5000);
   fbController.webserver = app; // eslint-disable-line
   return app;
 };
