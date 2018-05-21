@@ -1,9 +1,9 @@
 > topic done
   + start
   - ^image("")
-  ^ THAT IS AMAZING!
+  ^ THAT IS AMAZING! ***FIREWORKS EMOJI.***
   ^ Congratulations, <get username>!!!<send>
-  ^ The road to financial health is not easy but you do NOT mess around!\nWay to bring your A Game!<send>
+  ^ The road to financial health is not easy but you do NOT mess around!\n\nWay to bring your A Game!<send>
   ^ Take some time to celebrate yourself today. You deserve it!<send>
-  ^ ^template("button", "I'll check back in tomorrow with the next item on your list.", "{'Sounds good': 'sg', 'I\'m ready for my next item now'}"
+  ^ ^template("button", "I'll check back in tomorrow with the next item on your list.", "{'Sounds good': 'sg', 'I\'m ready for my next item now': 'N'}"
 < topic
