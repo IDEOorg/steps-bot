@@ -1,7 +1,7 @@
 > topic introtask includes gibberish
   + start
   - Hello! As I mentioned yesterday, "the secret to getting ahead is getting started," so let's jump right in! Here is the first item from your work plan.<send>
-  ^ ^template("generic", "<get taskNumImgUrl>", "<get currentTask>", "{'Need some assistance': 'A', 'I\'m done': 'B'}")<send>
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{'Need some assistance': 'A', 'I\'m done': 'B'}`)<send>
   ^ Use the buttons above to ask for help or to let me know you've finished.<send>
   ^ You've got this! I'll check in on your progress soon. Good luck!<set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
 < topic

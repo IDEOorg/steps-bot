@@ -2,15 +2,14 @@
   + start
   - Hello, <get username>! Remember that the tomorrow you want begins today!<send>
   ^ Here's the next item from your work plan.<send>
-  ^ ^template("generic", "<get taskNumImgUrl>", "<get currentTask>", "{'I have questions.': 'A', 'I\'m finished!': 'B'}")<send>
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{'I have questions.': 'A', 'I\'m finished!': 'B'}`)<send>
   ^ You've got this! I'll check in on your progress soon. Good luck!
   - Hey there! Reaching out to send you this hi-five. HI-FIVE EMOJI. You are handling BUSINESS.
   ^ Here's the next item on your list.<send>
-  ^ ^template("generic", "<get taskNumImgUrl>", "<get currentTask>", "{'Need a little help...': 'A', 'All done!': 'B'}")<send>
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{'Need a little help...': 'A', 'All done!': 'B'}`)<send>
   ^ You rock! I'll check in on your progress soon.
   - Hey, it's me again! Just wanted to let you know that you're phenomenal (this list doesn't stand a chance).
   ^ And here's your next item to complete.<send>
-  ^ ^template("generic", "<get taskNumImgUrl>", "<get currentTask>", "{'Have a few questions...': 'A', 'I\'ve finished!': 'B'}")<send>
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{'Have a few questions...': 'A', 'I\'ve finished!': 'B'}`)<send>
   ^ You've got this! I'll check in on your progress soon.
 < topic
-         

@@ -1,14 +1,12 @@
 require('dotenv').config();
 const fs = require('fs');
+const bot = require('./bothelper');
 const Botkit = require('botkit');
 const server = require('./server.js');
 const firebase = require('firebase');
-const RiveScript = require('rivescript');
 const moment = require('moment-timezone');
 
 const firebaseDatabase = setupFirebase();
-const self = this;
-self.riveBot = setupRiveScript();
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
   verify_token: process.env.FB_VERIFY_TOKEN,
@@ -28,18 +26,18 @@ const twilioController = Botkit.twiliosmsbot({
 server(fbController, twilioController);
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
-fbController.hears('.*', 'message_received', (bot, message) => {
+fbController.hears('.*', 'message_received', (_, message) => {
   const userId = message.user;
   const userMessage = message.text;
-  const response = getResponse('fb', userId, userMessage);
-  sendReply(response);
+  const response = bot.getResponse('fb', userId, userMessage);
+  sendReply(response.messages);
   updateFirebase(response);
 });
 
-twilioController.hears('.*', 'message_received', (bot, message) => {
+twilioController.hears('.*', 'message_received', (_, message) => {
   const userId = message.user;
   const userMessage = message.text;
-  const response = getResponse('fb', userId, userMessage);
+  const response = bot.getResponse('fb', userId, userMessage);
   sendReply(response);
   updateFirebase(response);
 });
@@ -117,15 +115,6 @@ function setupFirebase() {
   firebase.initializeApp(config);
   firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
-}
-
-function setupRiveScript() {
-  const bot = new RiveScript();
-  bot.loadDirectory('chatscripts', (batchNum) => {
-    console.log(batchNum);
-    bot.sortReplies();
-  });
-  return bot;
 }
 
 function getMessageResponsesAndUpdateFirebase(message, database, userId, selfRef) {
