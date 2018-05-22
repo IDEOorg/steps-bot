@@ -30,7 +30,8 @@ function parseResponse(response) {
   const regex = {
     image: /\^image\("(.*?)"\)/g,
     imageForSplit: /\^image\(".*"\)/g,
-    template: /\^template\("(.*?)"\)/g
+    template: /\^template\("(.*?)"\)/g,
+    templateStrings: /`(.*?)`/g
   };
   const messages = response.split(sendRegex);
   const finalMessages = [];
@@ -87,17 +88,17 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     type: 'text',
     message: 'There was an error on our side. Type START and try again.'
   };
-  const templateArgs = message.replace(/\^template\((.*?)\)/g, '$1').match(/`(.*?)`/g);
+  const templateArgs = message.replace(regex.template, '$1').match(regex.templateStrings);
   if (templateArgs.length === 0) {
     return defaultErrorMessage;
   }
   const templateType = templateArgs[0];
   if (templateType === 'quickreply') {
     return {
-      type: 'quickreply',
+      type: templateType,
       buttons: templateArgs.slice(1)
     };
-  } else if (templateType === 'genericurl') {
+  } else if (templateType === 'genericurl' || templateType === 'generic') {
     if (templateArgs.length < 4) {
       return defaultErrorMessage;
     }
@@ -105,10 +106,22 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     const content = templateArgs[2];
     const buttons = JSON.stringify(templateArgs[3]);
     return {
-      type: 'genericurl',
+      type: templateType,
       imageUrl,
       content,
       buttons
     };
+  } else if (templateType === 'button') {
+    if (templateArgs.length < 3) {
+      return defaultErrorMessage;
+    }
+    const content = templateArgs[1];
+    const buttons = JSON.stringify(templateArgs[2]);
+    return {
+      type: templateType,
+      content,
+      buttons
+    };
   }
+  return defaultErrorMessage;
 }
