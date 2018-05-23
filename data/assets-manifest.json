@@ -1,0 +1,49 @@
+{
+  "baseUrl": "https://stepsroobot.herokuapp.com/",
+  "tasksDir": "static/images/tasks",
+  "done": {
+    "path": "static/images/done/",
+    "images": [
+      "celebration_congrats.gif",
+      "celebration_finishline.gif",
+      "celebration_hi5.gif",
+      "celebration_nail-it.gif",
+      "celebration_yay.gif"
+    ]
+  },
+  "help": {
+    "path": "static/images/help/",
+    "images": [
+      "Coach_Says.png"
+    ]
+  },
+  "checkin": {
+    "path": "static/images/checkin/",
+    "images": [
+      "check-in_hello.gif",
+      "check-in_hi.gif",
+      "check-in_hola.gif",
+      "check-in_sup.gif"
+    ]
+  },
+  "stories": {
+    "path": "static/images/stories/",
+    "images": [
+      "Stories.png"
+    ]
+  },
+  "tasks": {
+    "path": "static/images/tasks/",
+    "images": [
+      "1.png",
+      "2.png",
+      "3.png",
+      "4.png",
+      "5.png",
+      "6.png",
+      "7.png",
+      "8.png",
+      "9.png"
+    ]
+  }
+}

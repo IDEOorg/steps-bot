@@ -1,20 +1,65 @@
 require('dotenv').config();
 const RiveScript = require('rivescript');
+const firebase = require('firebase');
 
 const self = this;
 self.riveBot = setupRiveScript();
+const firebaseDatabase = setupFirebase();
 
-const getResponse = (platform, userId, userMessage) => {
-  self.riveBot.setUservar(userId, 'topic', 'checkin');
+async function getResponse(platform, userId, userMessage) {
+  getUserDataFromFirebase(userId);
+  self.riveBot.setUservar(userId, 'topic', 'content');
   const botResponse = self.riveBot.reply(userId, userMessage, self);
   const messages = parseResponse(botResponse);
   return {
     messages
   };
+}
+
+function getUserDataFromFirebase(userId) {
+  const usersRef = firebaseDatabase.ref('users');
+  const userIdRef = usersRef.child(userId).once('value');
+  return userIdRef.then((snapshot) => {
+    let userInfo = null;
+    if (!snapshot.exists()) { // if new user, add to firebase
+      userInfo = initNewUser(userId);
+    } else {
+      userInfo = snapshot.val();
+    }
+    return userInfo;
+  });
+}
+
+function initNewUser(userId) {
+  const userInfo = {
+    user: userId,
+    phone: userId,
+    topic: 'intro',
+    nextTopic: null,
+    workplan,
+    viewedMedia: [],
+    followUpCheckIns: {}
+  };
+  firebaseDatabase.ref(`users/${userId}`).set(userInfo);
+  return userInfo;
+}
+
+const setupFirebase = () => {
+  const config = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
+    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
+    projectId: 'bedstuy-bdf4e',
+    storageBucket: 'bedstuy-bdf4e.appspot.com'
+  };
+  firebase.initializeApp(config);
+  firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
+  return firebase.database();
 };
 
 module.exports = {
-  getResponse
+  getResponse,
+  setupFirebase
 };
 
 function setupRiveScript() {
@@ -30,7 +75,7 @@ function parseResponse(response) {
   const regex = {
     image: /\^image\("(.*?)"\)/g,
     imageForSplit: /\^image\(".*"\)/g,
-    template: /\^template\("(.*?)"\)/g,
+    template: /\^template\((.*?)\)/g,
     templateStrings: /`(.*?)`/g
   };
   const messages = response.split(sendRegex);
@@ -43,7 +88,7 @@ function parseResponse(response) {
     } else if (messageType === 'image') {
       prepareImageMessage(finalMessages, message, regex);
     } else if (messageType === 'template') {
-      prepareTemplateMessage(finalMessages, message);
+      prepareTemplateMessage(finalMessages, message, regex);
     }
   }
   return finalMessages;
@@ -88,24 +133,28 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     type: 'text',
     message: 'There was an error on our side. Type START and try again.'
   };
-  const templateArgs = message.replace(regex.template, '$1').match(regex.templateStrings);
+  let templateArgs = message.replace(regex.template, '$1').match(regex.templateStrings);
   if (templateArgs.length === 0) {
-    return defaultErrorMessage;
+    finalMessages.push(defaultErrorMessage);
+    return;
   }
+  templateArgs = templateArgs.map(arg => arg.replace(/`/g, ''));
   const templateType = templateArgs[0];
+  let messageToPush = null;
+  console.log(templateType);
   if (templateType === 'quickreply') {
-    return {
+    messageToPush = {
       type: templateType,
       buttons: templateArgs.slice(1)
     };
   } else if (templateType === 'genericurl' || templateType === 'generic') {
     if (templateArgs.length < 4) {
-      return defaultErrorMessage;
+      messageToPush = defaultErrorMessage;
     }
     const imageUrl = templateArgs[1];
     const content = templateArgs[2];
     const buttons = JSON.stringify(templateArgs[3]);
-    return {
+    messageToPush = {
       type: templateType,
       imageUrl,
       content,
@@ -113,15 +162,18 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     };
   } else if (templateType === 'button') {
     if (templateArgs.length < 3) {
-      return defaultErrorMessage;
+      messageToPush = defaultErrorMessage;
     }
     const content = templateArgs[1];
     const buttons = JSON.stringify(templateArgs[2]);
-    return {
+    messageToPush = {
       type: templateType,
       content,
       buttons
     };
+  } else {
+    console.log('hey');
+    messageToPush = defaultErrorMessage;
   }
-  return defaultErrorMessage;
+  finalMessages.push(messageToPush);
 }

@@ -3,7 +3,6 @@ const fs = require('fs');
 const bot = require('./bothelper');
 const Botkit = require('botkit');
 const server = require('./server.js');
-const firebase = require('firebase');
 const moment = require('moment-timezone');
 
 const firebaseDatabase = setupFirebase();
