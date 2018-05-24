@@ -21,7 +21,7 @@ async function sendReply(platform, userId, messages) {
 function formatMsgForFB(message) {
   if (message.type === 'text') {
     return {
-      text: message
+      text: message.message
     };
   }
   return {
