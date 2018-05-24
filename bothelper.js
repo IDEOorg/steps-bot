@@ -103,6 +103,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
+  const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.png'; // eslint-disable-line
   riveBot.setUservar(userId, 'topic', topic);
   riveBot.setUservar(userId, 'username', firstName);
@@ -116,6 +117,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   riveBot.setUservar(userId, 'celebrationImgUrl', celebrationImgUrl);
   riveBot.setUservar(userId, 'welcomeImgUrl', welcomeImgUrl);
   riveBot.setUservar(userId, 'taskNumImgUrl', taskNumUrl);
+  riveBot.setUservar(userId, 'checkinImgUrl', checkinImgUrl);
   riveBot.setUservar(userId, 'workplanLink', workplanUrl);
   riveBot.setUservar(userId, 'introVideoLink', assetUrls.videoUrl);
 }
@@ -202,7 +204,8 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   if (templateType === 'quickreply') {
     messageToPush = {
       type: templateType,
-      buttons: templateArgs.slice(1)
+      image: templateArgs[1],
+      buttons: templateArgs.slice(2)
     };
   } else if (templateType === 'genericurl' || templateType === 'generic') {
     if (templateArgs.length < 4) {

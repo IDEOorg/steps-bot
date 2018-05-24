@@ -4,12 +4,11 @@
   ^ ^template(`quickreply`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`)
   - Hey, <get username>!\n\n
   ^ How's progress on action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `Finished!`, `Need a little assistance...`, `Working on it.`)
+  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Need a little assistance...`, `Working on it.`)
   - <get username>! Checking in on you. How are things going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `Finished!`, `Have a few questions...`, `Working on it.`)
+  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Have a few questions...`, `Working on it.`)
   - Hi, <get username>! Hope you've been having a great day so far. How are things going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `Finished!`, `Have a few questions...`, `Working on it.`)
+  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Have a few questions...`, `Working on it.`)
   - Greetings, <get username>! Just reaching out for an update. Hows it going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `Finished!`, `I have a few questions...`, `Working on it.`)
-
+  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `I have a few questions...`, `Working on it.`)
 < topic

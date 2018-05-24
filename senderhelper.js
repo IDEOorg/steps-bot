@@ -10,7 +10,6 @@ async function sendReply(platform, userId, messages) {
   console.log(messages);
   if (platform === 'fb') {
     for (let i = 0; i < messages.length; i++) {
-      console.log('message ' + i);
       const message = messages[i];
       const formattedMessage = formatMsgForFB(message);
       await sendFBMessage(userId, formattedMessage); // eslint-disable-line
@@ -47,6 +46,13 @@ function formatMsgForFB(message) {
       };
     });
     return {
+      attachment: {
+        type: 'image',
+        payload: {
+          url: message.image,
+          is_reusable: true
+        }
+      },
       quick_replies: quickReplies
     };
   } else if (type === 'generic') {
