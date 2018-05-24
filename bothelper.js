@@ -8,6 +8,11 @@ const contentData = require('./data/content.json');
 const self = this;
 self.riveBot = setupRiveScript();
 
+module.exports = {
+  getResponse,
+  setupFirebase
+};
+
 async function getResponse(db, platform, userId, userMessage) {
   const userInfo = await getUserDataFromFirebase(db, userId);
   formatTasks(userInfo);
@@ -114,24 +119,6 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   riveBot.setUservar(userId, 'workplanLink', workplanUrl);
   riveBot.setUservar(userId, 'introVideoLink', assetUrls.videoUrl);
 }
-
-async function setupFirebase() {
-  const config = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
-    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
-    projectId: 'bedstuy-bdf4e',
-    storageBucket: 'bedstuy-bdf4e.appspot.com'
-  };
-  firebase.initializeApp(config);
-  await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
-  return firebase.database();
-}
-
-module.exports = {
-  getResponse,
-  setupFirebase
-};
 
 function setupRiveScript() {
   const bot = new RiveScript();
@@ -257,4 +244,17 @@ function getRandomItemFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
   return null;
+}
+
+async function setupFirebase() {
+  const config = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
+    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
+    projectId: 'bedstuy-bdf4e',
+    storageBucket: 'bedstuy-bdf4e.appspot.com'
+  };
+  firebase.initializeApp(config);
+  await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
+  return firebase.database();
 }

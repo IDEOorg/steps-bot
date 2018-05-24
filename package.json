@@ -2,9 +2,9 @@
   "name": "botbedstuy",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bot2.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node bot2.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,8 @@
     "firebase": "^4.11.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
     "rivescript": "^1.19.0"
   },
   "devDependencies": {
