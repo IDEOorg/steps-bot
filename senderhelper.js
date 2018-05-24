@@ -38,6 +38,16 @@ function formatMsgForFB(message) {
       payload.text = message.message;
     }
     return payload;
+  } else if (type === 'quickreply') {
+    const quickReplies = message.buttons.map((text) => { // eslint-disable-line
+      return {
+        content_type: 'text',
+        title: text
+      };
+    });
+    return {
+      quick_replies: quickReplies
+    };
   }
   return {
     text: 'This message should not be showing up and is an error on our part.'
