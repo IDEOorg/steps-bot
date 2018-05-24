@@ -97,8 +97,9 @@ function loadVarsToRiveBot(riveBot, userInfo) {
     }
   }
   if (contentIdChosen) {
-    contentText = contentData.content ? contentData.content : '';
-    contentUrl = contentData.url ? contentData.url : '';
+    const { content, url } = allContent[contentIdChosen];
+    contentText = content || '';
+    contentUrl = url || '';
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
@@ -213,7 +214,7 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     }
     const imageUrl = templateArgs[1];
     const content = templateArgs[2];
-    console.log(templateArgs[3]);
+    console.log(content);
     console.log('argggs');
     const buttons = JSON.parse(templateArgs[3]);
     messageToPush = {

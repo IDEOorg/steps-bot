@@ -13,7 +13,7 @@
   ^ ^template(`genericurl`, `<get storiesImgUrl>`, `<get content>`, `{"<get contentUrl>": "View Details"}`)<send>
   ^ I'll reach out again soon!
   - Hey, <get username>! Arthur Ashe once said, "Start where you are. Use what you have. Do what you can."<send>
-  - I know the road can feel long.\n\n
+  ^ I know the road can feel long.\n\n
   ^ Perhaps take a short break and check this out for a little motivation.
   ^ ^template(`genericurl`, `<get storiesImgUrl>`, `<get content>`, `{"<get contentUrl>": "View Details"}`)<send>
   ^ Keep at it!

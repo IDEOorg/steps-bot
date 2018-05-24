@@ -55,14 +55,25 @@ function formatMsgForFB(message) {
       },
       quick_replies: quickReplies
     };
-  } else if (type === 'generic') {
-    const buttons = Object.keys(message.buttons).map((title) => {
-      return {
-        type: 'postback',
-        title: message.buttons[title],
-        payload: title
-      };
-    });
+  } else if (type === 'generic' || type === 'genericurl') {
+    let buttons = null;
+    if (type === 'generic') {
+      buttons = Object.keys(message.buttons).map((title) => {
+        return {
+          type: 'postback',
+          title: message.buttons[title],
+          payload: title
+        };
+      });
+    } else if (type === 'genericurl') {
+      buttons = Object.keys(message.buttons).map((url) => {
+        return {
+          type: 'web_url',
+          title: message.buttons[url],
+          url
+        };
+      });
+    }
     return {
       attachment: {
         type: 'template',
@@ -78,6 +89,10 @@ function formatMsgForFB(message) {
         }
       }
     };
+  } else if (type === 'genericurl') {
+    return {
+
+    }
   }
   return {
     text: 'This message should not be showing up and is an error on our part.'
