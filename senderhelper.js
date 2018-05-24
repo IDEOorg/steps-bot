@@ -19,13 +19,28 @@ async function sendReply(platform, userId, messages) {
 }
 
 function formatMsgForFB(message) {
-  if (message.type === 'text') {
+  const { type } = message;
+  if (type === 'text') {
     return {
       text: message.message
     };
+  } else if (type === 'image') {
+    const payload = {
+      attachment: {
+        type: 'image',
+        payload: {
+          url: message.image,
+          is_reusable: true
+        }
+      }
+    };
+    if (message.message) {
+      payload.text = message.message;
+    }
+    return payload;
   }
   return {
-    text: 'invalid response sent'
+    text: 'This message should not be showing up and is an error on our part.'
   };
 }
 
