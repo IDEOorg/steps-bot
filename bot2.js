@@ -30,6 +30,8 @@ fbController.hears('.*', 'message_received', (_, message) => {
   const userId = message.user;
   const userMessage = message.text;
   const responses = bot.getResponse(firebaseDatabase, 'fb', userId, userMessage);
+  console.log('responses received');
+  console.log(responses);
   sender.sendReply('fb', userId, responses.messages);
   // updateFirebase(response);
 });
