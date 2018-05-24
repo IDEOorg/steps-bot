@@ -46,6 +46,7 @@ function formatMsgForFB(message) {
       };
     });
     return {
+      text: 'hey',
       quick_replies: quickReplies
     };
   }
