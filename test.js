@@ -1,5 +1,7 @@
 const bot = require('./bothelper');
 
-setTimeout(() => {
-  console.log(bot.getResponse('fb', '10', 'start'));
-}, 1000);
+bot.setupFirebase().then((db) => {
+  bot.getResponse(db, 'fb', '10', 'start').then((response) => {
+    console.log(response);
+  });
+});

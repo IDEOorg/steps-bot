@@ -1,20 +1,20 @@
 {
   "username": "Panera",
   "coachname": "Molly",
-  "workplan": [
-    {
+  "orgname": "Bed Stuy",
+  "workplan": {
+    "1": {
       "text": "Each month pay 1/5 or 1/3rd of the total credit card debt."
     },
-    {
+    "2": {
       "text": "Plan sell off of storage items."
     },
-    {
+    "3": {
       "text": "Each month pay 1/5 or 1/3rd of the total credit card debt."
     },
-    {
+    "4": {
       "text": "Contact student loan company to verify the status of the student loan."
     }
-  ],
-  "videolink": "https://www.panerabread.com/video",
-  "workplanlink": "https://www.panerabread.com/workplan"
+  },
+  "workplanLink": "https://www.panerabread.com/workplan"
 }

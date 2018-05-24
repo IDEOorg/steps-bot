@@ -1,6 +1,6 @@
 {
   "baseUrl": "https://stepsroobot.herokuapp.com/",
-  "tasksDir": "static/images/tasks",
+  "videoUrl": "https://www.panerabread.com/video",
   "done": {
     "path": "static/images/done/",
     "images": [
@@ -44,6 +44,12 @@
       "7.png",
       "8.png",
       "9.png"
+    ]
+  },
+  "welcome": {
+    "path": "static/images/welcome/",
+    "images": [
+      "welcome_hi.png"
     ]
   }
 }
