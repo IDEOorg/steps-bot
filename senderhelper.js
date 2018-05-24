@@ -59,8 +59,8 @@ function formatMsgForFB(message) {
     const buttons = message.buttons.map((title) => {
       return {
         type: 'postback',
-        title,
-        payload: message.buttons[title]
+        title: message.buttons[title],
+        payload: title
       };
     });
     return {

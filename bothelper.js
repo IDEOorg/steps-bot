@@ -213,6 +213,8 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     }
     const imageUrl = templateArgs[1];
     const content = templateArgs[2];
+    console.log(templateArgs[3]);
+    console.log('argggs');
     const buttons = JSON.parse(templateArgs[3]);
     messageToPush = {
       type: templateType,
