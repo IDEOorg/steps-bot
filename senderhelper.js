@@ -42,7 +42,8 @@ function formatMsgForFB(message) {
     const quickReplies = message.buttons.map((text) => { // eslint-disable-line
       return {
         content_type: 'text',
-        title: text
+        title: text,
+        payload: text
       };
     });
     return {
