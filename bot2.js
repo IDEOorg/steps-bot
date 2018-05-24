@@ -6,7 +6,6 @@ const firebase = require('firebase');
 const server = require('./server.js');
 // const moment = require('moment-timezone');
 
-const firebaseDatabase = setupFirebase();
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
   verify_token: process.env.FB_VERIFY_TOKEN,
@@ -25,23 +24,25 @@ const twilioController = Botkit.twiliosmsbot({
 // so we can extend it and process incoming message payloads
 server(fbController, twilioController);
 
-// Wildcard hears response, will respond to all user input with 'Hello World!'
-fbController.hears('.*', 'message_received', (_, message) => {
-  const userId = message.user;
-  const userMessage = message.text;
-  const responses = bot.getResponse(firebaseDatabase, 'fb', userId, userMessage);
-  console.log('responses received');
-  console.log(responses);
-  sender.sendReply('fb', userId, responses.messages);
-  // updateFirebase(response);
-});
+setupFirebase().then((db) => {
+  // Wildcard hears response, will respond to all user input with 'Hello World!'
+  fbController.hears('.*', 'message_received', (_, message) => {
+    const userId = message.user;
+    const userMessage = message.text;
+    const responses = bot.getResponse(db, 'fb', userId, userMessage);
+    console.log('responses received');
+    console.log(responses);
+    sender.sendReply('fb', userId, responses.messages);
+    // updateFirebase(response);
+  });
 
-twilioController.hears('.*', 'message_received', (_, message) => {
-  const userId = message.user;
-  const userMessage = message.text;
-  const responses = bot.getResponse(firebaseDatabase, 'sms', userId, userMessage);
-  sender.sendReply('sms', userId, responses);
-  // updateFirebase(response);
+  twilioController.hears('.*', 'message_received', (_, message) => {
+    const userId = message.user;
+    const userMessage = message.text;
+    const responses = bot.getResponse(db, 'sms', userId, userMessage);
+    sender.sendReply('sms', userId, responses);
+    // updateFirebase(response);
+  });
 });
 
 // function getNextCheckInDate(days, hours, timeOfDay) {
