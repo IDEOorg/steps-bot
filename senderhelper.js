@@ -90,6 +90,7 @@ function formatMsgForFB(message) {
       }
     };
   } else if (type === 'button') {
+    console.log('BUTTTTTTTTTTTTTTTTTTTTTTTTON');
     const buttons = Object.keys(message.buttons).map((action) => {
       return {
         type: 'postback',
@@ -97,6 +98,7 @@ function formatMsgForFB(message) {
         payload: action
       };
     });
+    console.log(buttons);
     return {
       attachment: {
         type: 'template',
