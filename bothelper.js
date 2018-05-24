@@ -115,7 +115,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   riveBot.setUservar(userId, 'storiesImgUrl', storiesImgUrl);
   riveBot.setUservar(userId, 'celebrationImgUrl', celebrationImgUrl);
   riveBot.setUservar(userId, 'welcomeImgUrl', welcomeImgUrl);
-  riveBot.setUservar(userId, 'taskNumUrl', taskNumUrl);
+  riveBot.setUservar(userId, 'taskNumImgUrl', taskNumUrl);
   riveBot.setUservar(userId, 'workplanLink', workplanUrl);
   riveBot.setUservar(userId, 'introVideoLink', assetUrls.videoUrl);
 }
@@ -210,7 +210,7 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     }
     const imageUrl = templateArgs[1];
     const content = templateArgs[2];
-    const buttons = JSON.stringify(templateArgs[3]);
+    const buttons = JSON.parse(templateArgs[3]);
     messageToPush = {
       type: templateType,
       imageUrl,
@@ -222,7 +222,7 @@ function prepareTemplateMessage(finalMessages, message, regex) {
       messageToPush = defaultErrorMessage;
     }
     const content = templateArgs[1];
-    const buttons = JSON.stringify(templateArgs[2]);
+    const buttons = JSON.parse(templateArgs[2]);
     messageToPush = {
       type: templateType,
       content,

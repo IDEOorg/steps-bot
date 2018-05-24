@@ -47,8 +47,30 @@ function formatMsgForFB(message) {
       };
     });
     return {
-      text: 'hey',
       quick_replies: quickReplies
+    };
+  } else if (type === 'generic') {
+    const buttons = message.buttons.map((title) => {
+      return {
+        type: 'postback',
+        title,
+        payload: message.buttons[title]
+      };
+    });
+    return {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [
+            {
+              title: message.content,
+              image_url: message.imageUrl,
+              buttons
+            }
+          ]
+        }
+      }
     };
   }
   return {
