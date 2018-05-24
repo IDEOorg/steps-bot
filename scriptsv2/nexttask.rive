@@ -8,7 +8,7 @@
   ^ Here's the next item on your list.<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need a little help...", "B": "All done!"}`)<send>
   ^ You rock! I'll check in on your progress soon.
-  - Hey, it's me again! Just wanted to let you know that you're phenomenal (this list doesn't stand a chance).
+  - Hey, it's me again! Just wanted to let you know that you're phenomenal (this list doesn't stand a chance). 
   ^ And here's your next item to complete.<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Have a few questions...", "B": "I've finished!"}`)<send>
   ^ You've got this! I'll check in on your progress soon.

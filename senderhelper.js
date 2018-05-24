@@ -56,7 +56,7 @@ function formatMsgForFB(message) {
       quick_replies: quickReplies
     };
   } else if (type === 'generic') {
-    const buttons = message.buttons.map((title) => {
+    const buttons = Object.keys(message.buttons).map((title) => {
       return {
         type: 'postback',
         title: message.buttons[title],
