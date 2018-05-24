@@ -176,17 +176,20 @@ function prepareImageMessage(finalMessages, message, regex) {
   const textMessages = message.split(regex.imageForSplit);
   let text = null;
   const image = imageUrls[0];
+  finalMessages.push({
+    type: 'image',
+    image
+  });
   for (let j = 0; j < textMessages.length; j++) {
     if (textMessages[j] !== '') {
       text = textMessages[j];
+      finalMessages.push({
+        type: 'text',
+        message: text
+      });
       break;
     }
   }
-  finalMessages.push({
-    type: 'image',
-    message: text,
-    image
-  });
 }
 
 function prepareTemplateMessage(finalMessages, message, regex) {

@@ -18,13 +18,16 @@ async function sendReply(platform, userId, messages) {
 }
 
 function formatMsgForFB(message) {
+  console.log(message);
+  console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTmessage.type');
+  console.log(message.type);
   const { type } = message;
   if (type === 'text') {
     return {
       text: message.message
     };
   } else if (type === 'image') {
-    const payload = {
+    return {
       attachment: {
         type: 'image',
         payload: {
@@ -33,10 +36,6 @@ function formatMsgForFB(message) {
         }
       }
     };
-    if (message.message) {
-      payload.text = message.message;
-    }
-    return payload;
   } else if (type === 'quickreply') {
     const quickReplies = message.buttons.map((text) => { // eslint-disable-line
       return {
