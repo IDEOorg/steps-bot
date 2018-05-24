@@ -89,10 +89,24 @@ function formatMsgForFB(message) {
         }
       }
     };
-  } else if (type === 'genericurl') {
+  } else if (type === 'button') {
+    const buttons = Object.keys(message.buttons).map((action) => {
+      return {
+        type: 'postback',
+        title: message.buttons[action],
+        payload: action
+      };
+    });
     return {
-
-    }
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'button',
+          text: message.content,
+          buttons
+        }
+      }
+    };
   }
   return {
     text: 'This message should not be showing up and is an error on our part.'
