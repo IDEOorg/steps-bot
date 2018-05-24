@@ -74,7 +74,6 @@ function loadVarsToRiveBot(riveBot, userInfo) {
     workplanUrl
   } = userInfo;
   const userId = user;
-  console.log(topic);
   let taskNum = null;
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
@@ -217,8 +216,6 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     }
     const imageUrl = templateArgs[1];
     const content = templateArgs[2];
-    console.log(content);
-    console.log('argggs');
     const buttons = JSON.parse(templateArgs[3]);
     messageToPush = {
       type: templateType,

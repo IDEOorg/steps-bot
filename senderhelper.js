@@ -6,8 +6,6 @@ module.exports = {
 };
 
 async function sendReply(platform, userId, messages) {
-  console.log('reply being sent');
-  console.log(messages);
   if (platform === 'fb') {
     for (let i = 0; i < messages.length; i++) {
       const message = messages[i];
@@ -18,9 +16,6 @@ async function sendReply(platform, userId, messages) {
 }
 
 function formatMsgForFB(message) {
-  console.log(message);
-  console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTmessage.type');
-  console.log(message.type);
   const { type } = message;
   if (type === 'text') {
     return {
@@ -89,7 +84,6 @@ function formatMsgForFB(message) {
       }
     };
   } else if (type === 'button') {
-    console.log('BUTTTTTTTTTTTTTTTTTTTTTTTTON');
     const buttons = Object.keys(message.buttons).map((action) => {
       return {
         type: 'postback',
@@ -97,7 +91,6 @@ function formatMsgForFB(message) {
         payload: action
       };
     });
-    console.log(buttons);
     return {
       attachment: {
         type: 'template',
