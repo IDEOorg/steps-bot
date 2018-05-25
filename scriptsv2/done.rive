@@ -15,4 +15,6 @@
   ^ Wonderful!!  **confetti emoji** I knew you'd get it done!<send>
   ^ The bigger the task, the sweeter the triumph. Enjoy the WIN!<send>
   ^ ^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"sg": "Sounds good!", "N": "I'm ready for my next item now."}`)
+  + sg
+  - Great! Chat soon.
 < topic
