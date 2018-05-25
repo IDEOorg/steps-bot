@@ -25,4 +25,8 @@
   + b
   - Wonderful. I'll check in soon!
   - Great. I'll check in soon!
+  + a
+  - {topic=done} {@ start}
+  + finished
+  - {topic=done} {@ start}
 < topic
