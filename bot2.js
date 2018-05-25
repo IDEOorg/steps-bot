@@ -42,6 +42,30 @@ setupFirebase().then((db) => {
     sender.sendReply('sms', userId, responses);
     // updateFirebase(response);
   });
+  setInterval(() => {
+    const usersRef = db.ref('users');
+    usersRef.once('value').then((snapshot) => {
+      const usersData = snapshot.val();
+      const users = Object.keys(usersData);
+      for (let i = 0; i < users.length; i++) {
+        const userId = users[i];
+        const futureCheckIns = usersData[userId].followUpCheckIns;
+        if (futureCheckIns) {
+          const checkInIds = Object.keys(futureCheckIns);
+          for (let j = 0; j < checkInIds.length; j++) {
+            const checkInId = checkInIds[j];
+            const {
+              date,
+              topic,
+              message
+            } = futureCheckIns[checkInId];
+            if (date < Date.now()) {
+              bot.getResponse(db, 'fb', userId, message);
+            }
+          }
+        }
+    });
+  }, 300000);
 });
 
 // function getNextCheckInDate(days, hours, timeOfDay) {
