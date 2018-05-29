@@ -14,6 +14,13 @@
     },
     "4": {
       "text": "Contact student loan company to verify the status of the student loan."
+    },
+    "5": {
+      "text": "Track your food expenses for this month.",
+      "recurring": {
+        "frequency": 1,
+        "duration": 30
+      }
     }
   },
   "workplanLink": "https://www.panerabread.com/workplan"
