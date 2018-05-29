@@ -1,7 +1,7 @@
 > topic done
   + start
   - ^image("<get celebrationImgUrl>")<send>
-  ^ THAT IS AMAZING! ***FIREWORKS EMOJI.***\n\n
+  ^ THAT IS AMAZING! 🎆\n
   ^ Congratulations, <get username>!!!<send>
   ^ The road to financial health is not easy but you do NOT mess around! Way to bring your A Game!\n\n
   ^ Take some time to celebrate yourself today. You deserve it!<send>
@@ -9,10 +9,10 @@
   - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!<send>
   ^ THAT'S how you own the day!<send>
-  ^ Congratulations!!! **confetti emoji** Do a dance, treat yourself to something, celebrate! You rocked it.<send>
+  ^ Congratulations!!! 🎊 Do a dance, treat yourself to something, celebrate! You rocked it.<send>
   ^ ^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"sg": "Sounds good!", "N": "I'm ready for my next item now."}`)
   - ^image("<get celebrationImgUrl>")<send>
-  ^ Wonderful!!  **confetti emoji** I knew you'd get it done!<send>
+  ^ Wonderful!! 🎉 I knew you'd get it done!<send>
   ^ The bigger the task, the sweeter the triumph. Enjoy the WIN!<send>
   ^ ^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"sg": "Sounds good!", "N": "I'm ready for my next item now."}`)
   + sg
