@@ -19,9 +19,9 @@ async function sendReply(platform, userId, messages) {
 function formatMsgForFB(message) {
   const { type } = message;
   if (type === 'text') {
-    console.log(encodeURI(message.message));
+    console.log(escape(message.message));
     return {
-      text: encodeURI(message.message)
+      text: escape(message.message)
     };
   } else if (type === 'image') {
     return {
