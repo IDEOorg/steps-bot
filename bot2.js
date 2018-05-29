@@ -31,7 +31,6 @@ setupFirebase().then((db) => {
     const userMessage = message.text;
     bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
       sender.sendReply('fb', userId, response.messages);
-      console.log()
       updateFirebase(db, response.variables);
     });
   });

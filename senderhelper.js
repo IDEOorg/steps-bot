@@ -1,5 +1,6 @@
 require('dotenv').config();
 const rp = require('request-promise');
+const utf8 = require('utf8');
 
 module.exports = {
   sendReply
@@ -19,7 +20,7 @@ function formatMsgForFB(message) {
   const { type } = message;
   if (type === 'text') {
     return {
-      text: message.message
+      text: utf8.encode(message.message)
     };
   } else if (type === 'image') {
     return {
