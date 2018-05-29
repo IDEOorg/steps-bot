@@ -31,40 +31,20 @@ setupFirebase().then((db) => {
     const userMessage = message.text;
     bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
       sender.sendReply('fb', userId, response.messages);
+      console.log()
+      updateFirebase(db, response.variables);
     });
-    // updateFirebase(response);
   });
 
   twilioController.hears('.*', 'message_received', (_, message) => {
     const userId = message.user;
     const userMessage = message.text;
-    const responses = bot.getResponse(db, 'sms', userId, userMessage);
-    sender.sendReply('sms', userId, responses);
-    // updateFirebase(response);
+    bot.getResponse(db, 'sms', userId, userMessage).then((response) => {
+      sender.sendReply('sms', userId, response.messages);
+      updateFirebase(db, response.variables);
+    });
   });
 });
-
-// function getNextCheckInDate(days, hours, timeOfDay) {
-//   if (!days && !hours && !timeOfDay) {
-//     return null;
-//   }
-//   let checkInDate = moment();
-//   if (days) {
-//     checkInDate = checkInDate.add(parseInt(days, 10), 'days');
-//   }
-//   if (hours) {
-//     checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
-//     return checkInDate.valueOf();
-//   }
-//   if (timeOfDay) {
-//     if (timeOfDay.toUpperCase() === 'MORNING') {
-//       checkInDate = checkInDate.hours(9).minutes(0).seconds(0);
-//     } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
-//       checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
-//     }
-//   }
-//   return checkInDate.tz('America/New_York').valueOf();
-// }
 
 async function setupFirebase() {
   const config = {
@@ -77,4 +57,29 @@ async function setupFirebase() {
   firebase.initializeApp(config);
   await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
+}
+
+function updateFirebase(db, variables) {
+
+}
+function getNextCheckInDate(days, hours, timeOfDay) {
+  if (!days && !hours && !timeOfDay) {
+    return null;
+  }
+  let checkInDate = moment();
+  if (days) {
+    checkInDate = checkInDate.add(parseInt(days, 10), 'days');
+  }
+  if (hours) {
+    checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
+    return checkInDate.valueOf();
+  }
+  if (timeOfDay) {
+    if (timeOfDay.toUpperCase() === 'MORNING') {
+      checkInDate = checkInDate.hours(9).minutes(0).seconds(0);
+    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
+      checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
+    }
+  }
+  return checkInDate.tz('America/New_York').valueOf();
 }

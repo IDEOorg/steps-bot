@@ -5,5 +5,5 @@
   ^ Congratulations, <get username>!!!<send>
   ^ The road to financial health is not easy but you do NOT mess around! Way to bring your A Game!\n\n
   ^ Take some time to celebrate yourself today. You deserve it!<send>
-  ^ ^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"sg": "Sounds good", "N": "I'm ready for my next item now"}`)
+  ^ ^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"sg": "Sounds good", "N": "I'm ready for my next item now"}`)<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
 < topic

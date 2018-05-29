@@ -17,11 +17,12 @@ async function getResponse(db, platform, userId, userMessage) {
   const userInfo = await getUserDataFromFirebase(db, userId);
   formatTasks(userInfo);
   loadVarsToRiveBot(self.riveBot, userInfo);
-  console.log(userMessage);
   const botResponse = self.riveBot.reply(userId, userMessage, self);
   const messages = parseResponse(botResponse);
+  console.log(self.riveBot.getUservars(userId));
   return {
-    messages
+    messages,
+    variables: self.riveBot.getUservars(userId)
   };
 }
 
