@@ -14,4 +14,8 @@
   ^ You've got this! I'll check in on your progress soon. {@ setvars}
   + setvars
   - <set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
+  + a
+  - {topic=help}{@ start}
+  + b
+  - {topic=done}{@ start}
 < topic

@@ -4,4 +4,8 @@
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
   ^ Use the buttons above to ask for help or to let me know you've finished.<send>
   ^ You've got this! I'll check in on your progress soon. Good luck!<set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
+  + a
+  - {topic=help}{@ start}
+  + b
+  - {topic=done}{@ start}
 < topic
