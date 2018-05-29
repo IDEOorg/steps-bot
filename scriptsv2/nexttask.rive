@@ -4,7 +4,7 @@
   ^ Here's the next item from your work plan.<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "I have questions.", "B": "I'm finished!"}`)<send>
   ^ You've got this! I'll check in on your progress soon. Good luck! {@ setvars}
-  - Hey there! Reaching out to send you this hi-five. HI-FIVE EMOJI. You are handling BUSINESS.<send>
+  - Hey there! Reaching out to send you this hi-five! \u270B You are handling BUSINESS.<send>
   ^ Here's the next item on your list.<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need a little help...", "B": "All done!"}`)<send>
   ^ You rock! I'll check in on your progress soon. {@ setvars}
