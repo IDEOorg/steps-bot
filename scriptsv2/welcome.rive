@@ -1,5 +1,5 @@
 > topic welcome
-  + start
+  + *
   - ^image("<get welcomeImgUrl>")<send>
   ^ <get username>!\n
   ^ You've begun your journey towards financial health! As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS!<send>
@@ -8,9 +8,5 @@
   ^ ^image("<get welcomeImgUrl>")<send>
   ^ And here's a link to your full work plan, i.e. a big picture of the small steps.\n<get workplanLink><send>
   ^ ^image("<get welcomeImgUrl>")<send>
-  ^ Lastly, you deserve a big round of applause for taking the first step today! I'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
-  + *
-  - Sorry. I'm a chatbot, so I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
-  ^ I'll be in touch tomorrow with instructions for the first action item on your work plan.\nI'll also provide some info on the types of texts I can understand, so that we are on the same page.<send>
-  ^ Talk to you tomorrow!
+  ^ Lastly, you deserve a big round of applause for taking the first step today! I'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!{topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
 < topic
