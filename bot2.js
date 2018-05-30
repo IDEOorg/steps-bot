@@ -86,8 +86,9 @@ async function setupFirebase() {
 }
 
 function updateFirebase(db, variables) {
-
+  console.log(variables);
 }
+
 function getNextCheckInDate(days, hours, timeOfDay) {
   if (!days && !hours && !timeOfDay) {
     return null;
