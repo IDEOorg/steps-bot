@@ -10,8 +10,20 @@ self.riveBot = setupRiveScript();
 
 module.exports = {
   getResponse,
-  setupFirebase
+  setupFirebase,
+  resetVariables
 };
+
+function resetVariables(userId) {
+  const { riveBot } = self;
+  riveBot.setUservar(userId, 'timeOfDay', null);
+  riveBot.setUservar(userId, 'days', null);
+  riveBot.setUservar(userId, 'hours', null);
+  riveBot.setUservar(userId, 'nextTopic', null);
+  riveBot.setUservar(userId, 'nextMessage', null);
+  riveBot.setUservar(userId, 'contentViewed', null);
+  riveBot.setUservar(userId, 'taskComplete', null);
+}
 
 async function getResponse(db, platform, userId, userMessage) {
   const userInfo = await getUserDataFromFirebase(db, userId);
