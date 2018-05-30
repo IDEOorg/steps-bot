@@ -66,20 +66,26 @@ function getNextCheckInDate(days, hours, timeOfDay) {
 
 async function updateUserCheckIns(checkInsRef, taskComplete) {
   if (taskComplete) {
-    await removeCheckInsHelper(checkInsRef);
+    const snapshot = await checkInsRef.once('value');
+    console.log('snapshot');
+    console.log(snapshot);
+    // snapshot.forEach((node) => {
+    //   const nodeKey = node.key;
+    //   const nodeSnapshot = await checkInsRef.child(nodeKey).once('value');
+    //   console.log('nodeSnapshot.value()');
+    //   console.log(nodeSnapshot.val());
+    //   if (!nodeSnapshot.val().recurring) {
+    //     checkInsRef.child(nodeKey).remove();
+    //   }
+    // });
   }
 }
-function removeCheckInsHelper(checkInsRef) {
-  checkInsRef.once('value', (snapshot) => {
-    snapshot.forEach((node) => {
-      const nodeKey = node.key;
-      checkInsRef.child(nodeKey).once('value', (nodeSnapshot) => {
-        console.log('nodeSnapshot.value()');
-        console.log(nodeSnapshot.val());
-        if (!nodeSnapshot.val().recurring) {
-          checkInsRef.child(nodeKey).remove();
-        }
-      });
-    });
-  });
+async function getNodeValue(node) {
+  const nodeKey = node.key;
+  const nodeSnapshot = await checkInsRef.child(nodeKey).once('value');
+  console.log('nodeSnapshot.value()');
+  console.log(nodeSnapshot.val());
+  if (!nodeSnapshot.val().recurring) {
+    checkInsRef.child(nodeKey).remove();
+  }
 }
