@@ -29,8 +29,8 @@ function updateFirebase(db, userId, variables) {
         const nodeKey = node.key;
         checkInsRef.child(nodeKey).once('value', (nodeSnapshot) => {
           console.log('nodeSnapshot.value()');
-          console.log(nodeSnapshot.value());
-          if (!nodeSnapshot.value().recurring) {
+          console.log(nodeSnapshot.val());
+          if (!nodeSnapshot.val().recurring) {
             checkInsRef.child(nodeKey).remove();
           }
         });
