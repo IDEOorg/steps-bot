@@ -5,7 +5,6 @@ const updater = require('./updater');
 const Botkit = require('botkit');
 const firebase = require('firebase');
 const server = require('./server.js');
-// const moment = require('moment-timezone');
 
 // Create the Botkit controller, which controls all instances of the bot.
 const fbController = Botkit.facebookbot({
