@@ -18,5 +18,5 @@
   ^ ^template(`genericurl`, `<get storiesImgUrl>`, `<get content>`, `{"<get contentUrl>": "View Details"}`)<send>
   ^ Keep at it! {@ setvars}
   + setvars
-  - <set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=start>
+  - <set contentViewed=true><set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=start>
 < topic

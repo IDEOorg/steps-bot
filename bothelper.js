@@ -110,6 +110,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   riveBot.setUservar(userId, 'coachName', coachName);
   riveBot.setUservar(userId, 'orgName', orgName);
   riveBot.setUservar(userId, 'taskNum', taskNum);
+  riveBot.setUservar(userId, 'contentId', contentIdChosen);
   riveBot.setUservar(userId, 'content', contentText);
   riveBot.setUservar(userId, 'contentUrl', contentUrl);
   riveBot.setUservar(userId, 'currentTask', currentTask);

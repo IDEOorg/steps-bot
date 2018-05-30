@@ -1,6 +1,7 @@
 require('dotenv').config();
 const bot = require('./bothelper');
 const sender = require('./senderhelper');
+const updater = require('./updater');
 const Botkit = require('botkit');
 const firebase = require('firebase');
 const server = require('./server.js');
@@ -33,7 +34,7 @@ setupFirebase().then((db) => {
     console.log(message);
     bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
       sender.sendReply('fb', userId, response.messages);
-      updateFirebase(db, response.variables);
+      updater.updateFirebase(db, userId, response.variables);
     });
   });
 
@@ -42,7 +43,7 @@ setupFirebase().then((db) => {
     const userMessage = message.text;
     bot.getResponse(db, 'sms', userId, userMessage).then((response) => {
       sender.sendReply('sms', userId, response.messages);
-      updateFirebase(db, response.variables);
+      updater.updateFirebase(db, userId, response.variables);
     });
   });
   // setInterval(() => {
@@ -83,32 +84,4 @@ async function setupFirebase() {
   firebase.initializeApp(config);
   await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
-}
-
-function updateFirebase(db, variables) {
-  console.log('varstart');
-  console.log(variables);
-  console.log('varend');
-}
-
-function getNextCheckInDate(days, hours, timeOfDay) {
-  if (!days && !hours && !timeOfDay) {
-    return null;
-  }
-  let checkInDate = moment();
-  if (days) {
-    checkInDate = checkInDate.add(parseInt(days, 10), 'days');
-  }
-  if (hours) {
-    checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
-    return checkInDate.valueOf();
-  }
-  if (timeOfDay) {
-    if (timeOfDay.toUpperCase() === 'MORNING') {
-      checkInDate = checkInDate.hours(9).minutes(0).seconds(0);
-    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
-      checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
-    }
-  }
-  return checkInDate.tz('America/New_York').valueOf();
 }
