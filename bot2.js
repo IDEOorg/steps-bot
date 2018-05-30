@@ -86,7 +86,9 @@ async function setupFirebase() {
 }
 
 function updateFirebase(db, variables) {
+  console.log('varstart');
   console.log(variables);
+  console.log('varend');
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {
