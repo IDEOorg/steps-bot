@@ -90,6 +90,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   let contentUrl = null;
   for (let i = 0; i < contentIds.length; i++) {
     const contentId = contentIds[i];
+    console.log(viewedMedia);
     if (!viewedMedia || !viewedMedia.includes(contentId)) {
       contentIdChosen = contentId;
       break;
