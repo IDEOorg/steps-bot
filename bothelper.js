@@ -143,7 +143,8 @@ function parseResponse(response) {
     image: /\^image\("(.*?)"\)/g,
     imageForSplit: /\^image\(".*"\)/g,
     template: /\^template\((.*?)\)/g,
-    templateStrings: /`(.*?)`/g
+    templateStrings: /`(.*?)`/g,
+    nonwhitespaceChars: /\S/
   };
   const messages = response.split(sendRegex);
   const finalMessages = [];
@@ -187,7 +188,7 @@ function prepareImageMessage(finalMessages, message, regex) {
     image
   });
   for (let j = 0; j < textMessages.length; j++) {
-    if (textMessages[j] !== '') {
+    if (textMessages[j] && regex.nonwhitespaceChars.test(textMessages[j])) {
       text = textMessages[j];
       finalMessages.push({
         type: 'text',
