@@ -20,7 +20,7 @@
   + n
   - {topic=nexttask} {@ start}
   + setvars
-  - <set taskcomplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=start>
+  - <set taskComplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=start>
   + *
   - Hmm. I can't quite understand your message.<send>
   ^ ^template(`button`, `Do you want to receive your next action item now?`, `{"X": "No, I'll wait until tomorrow.", "N": "Yep, send it over now."}`) {@ setvars}

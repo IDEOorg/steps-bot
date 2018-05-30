@@ -13,12 +13,29 @@ function updateFirebase(db, userId, variables) {
     nextTopic,
     nextMessage,
     contentViewed,
-    contentId
+    contentId,
+    taskComplete
   } = variables;
   const userRef = db.ref('users').child(userId);
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
   const update = {};
   update.topic = topic;
+  // this if-condition has to run before the follow up check ins bit runs
+  if (taskComplete) {
+    const checkInsRef = userRef.child('followUpCheckIns');
+    checkInsRef.once('value', (snapshot) => {
+      snapshot.forEach((node) => {
+        const nodeKey = node.key;
+        checkInsRef.child(nodeKey).once('value', (nodeSnapshot) => {
+          console.log('nodeSnapshot.value()');
+          console.log(nodeSnapshot.value());
+          if (!nodeSnapshot.value().recurring) {
+            checkInsRef.child(nodeKey).remove();
+          }
+        });
+      });
+    });
+  }
   if (nextCheckInDate) {
     const checkInKey = userRef.child('followUpCheckIns').push().key;
     update['/followUpCheckIns/' + checkInKey] = {
