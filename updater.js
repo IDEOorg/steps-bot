@@ -22,6 +22,7 @@ function updateFirebase(db, userId, variables) {
   update.topic = topic;
   // this if-condition has to run before the follow up check ins bit runs
   if (taskComplete) {
+    console.log('task complete');
     const checkInsRef = userRef.child('followUpCheckIns');
     checkInsRef.once('value', (snapshot) => {
       snapshot.forEach((node) => {
