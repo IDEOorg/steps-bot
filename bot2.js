@@ -26,7 +26,7 @@ server(fbController, twilioController);
 
 setupFirebase().then((db) => {
   // Wildcard hears response, will respond to all user input with 'Hello World!'
-  fbController.hears('.*', 'message_received', (_, message) => {
+  fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
     const userId = message.user;
     const userMessage = message.text;
     console.log('message********************************************');
