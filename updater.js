@@ -65,24 +65,13 @@ async function updateUserCheckIns(checkInsRef, taskComplete) {
   if (taskComplete) {
     const snapshot = await checkInsRef.once('value');
     console.log('snapshot');
-    console.log(snapshot.val());
-    // snapshot.forEach((node) => {
-    //   const nodeKey = node.key;
-    //   const nodeSnapshot = await checkInsRef.child(nodeKey).once('value');
-    //   console.log('nodeSnapshot.value()');
-    //   console.log(nodeSnapshot.val());
-    //   if (!nodeSnapshot.val().recurring) {
-    //     checkInsRef.child(nodeKey).remove();
-    //   }
-    // });
-  }
-}
-async function getNodeValue(node) {
-  const nodeKey = node.key;
-  const nodeSnapshot = await checkInsRef.child(nodeKey).once('value');
-  console.log('nodeSnapshot.value()');
-  console.log(nodeSnapshot.val());
-  if (!nodeSnapshot.val().recurring) {
-    checkInsRef.child(nodeKey).remove();
+    const nodes = snapshot.val();
+    const nodeKeys = Object.keys(nodes);
+    for (let i = 0; i < nodeKeys.length; i++) {
+      const nodeKey = nodeKeys[i];
+      if (!nodes[nodeKey].recurring) {
+        checkInsRef.child(nodeKey).remove();
+      }
+    }
   }
 }
