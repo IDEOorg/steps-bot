@@ -10,15 +10,19 @@
   ^ BOOM!! There it is, <get username>!<send>
   ^ THAT'S how you own the day!<send>
   ^ Congratulations!!! 🎊 Do a dance, treat yourself to something, celebrate! You rocked it.<send>
-  ^ ^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"sg": "Sounds good!", "N": "I'm ready for my next item now."}`) {@ setvars}
+  ^ ^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"X": "Sounds good!", "N": "I'm ready for my next item now."}`) {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! 🎉 I knew you'd get it done!<send>
   ^ The bigger the task, the sweeter the triumph. Enjoy the WIN!<send>
-  ^ ^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"sg": "Sounds good!", "N": "I'm ready for my next item now."}`) {@ setvars}
-  + sg
+  ^ ^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"X": "Sounds good!", "N": "I'm ready for my next item now."}`) {@ setvars}
+  + x
   - Great! Chat soon.
   + n
   - {topic=nexttask} {@ start}
   + setvars
-  - <set clearcheckins=true>
+  - <set taskcomplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=start>
+  + *
+  - Hmm. I can't quite understand your message.<send>
+  ^ ^template(`button`, `Do you want to receive your next action item now?`, `{"X": "No, I'll wait until tomorrow.", "N": "Yep, send it over now."}`) {@ setvars}
+
 < topic

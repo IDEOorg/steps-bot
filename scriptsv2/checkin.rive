@@ -1,4 +1,4 @@
-> topic checkin
+> topic checkin includes gibberish
   + start
   - Greetings <get username>! Just checking in. How are things coming along with action item <get taskNum>?<send>
   ^ ^template(`quickreply`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`) {@ setvars}
@@ -22,11 +22,17 @@
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "No thanks. I'm good."}`) {@ setvars}
   - *Still working* means you're getting it done! So, **hi five**!<send>
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "No thanks. I'm good."}`) {@ setvars}
+  + (a|some assistance|have a few questions)
+  - {topic=help} {@ start}
   + b
   - Wonderful. I'll check in soon!
   - Great. I'll check in soon!
-  + (a|finished)
+  + (c|finished)
   - {topic=done} {@ start}
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
+  + *
+  - I'm sorry. I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
+  ^ Do you need my assistance with action item <get taskNum>?<send>
+  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `No, I'm still working.`, `Yes, I have a few questions.`, `No, I'm already finished.`) {@ setvars}
 < topic
