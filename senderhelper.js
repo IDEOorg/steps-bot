@@ -1,6 +1,5 @@
 require('dotenv').config();
 const rp = require('request-promise');
-const utf8 = require('utf8');
 
 module.exports = {
   sendReply
@@ -19,7 +18,6 @@ async function sendReply(platform, userId, messages) {
 function formatMsgForFB(message) {
   const { type } = message;
   if (type === 'text') {
-    console.log(utf8.encode(message.message));
     return {
       text: message.message
     };

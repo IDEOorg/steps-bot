@@ -65,7 +65,6 @@ setInterval(() => {
         self.riveBot.setUservar(userId, 'topic', topicToShow);
         const botResponse = self.riveBot.reply(userId, 'start', self);
         const formattedResponses = parseResponse(botResponse);
-        console.log(formattedResponses);
         for (let j = 0; j < formattedResponses.length; j++) {
           const response = formattedResponses[j];
           let formattedResponse = null;

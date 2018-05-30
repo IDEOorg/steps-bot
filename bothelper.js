@@ -18,10 +18,7 @@ async function getResponse(db, platform, userId, userMessage) {
   formatTasks(userInfo);
   loadVarsToRiveBot(self.riveBot, userInfo);
   const botResponse = self.riveBot.reply(userId, userMessage, self);
-  console.log(botResponse);
   const messages = parseResponse(botResponse);
-  console.log('****************RESPONSE*************************aqaq')
-  console.log(self.riveBot.getUservars(userId));
   return {
     messages,
     variables: self.riveBot.getUservars(userId)
