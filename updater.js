@@ -65,7 +65,7 @@ async function updateUserCheckIns(checkInsRef, taskComplete) {
   if (taskComplete) {
     const snapshot = await checkInsRef.once('value');
     console.log('snapshot');
-    console.log(snapshot);
+    console.log(snapshot.val());
     // snapshot.forEach((node) => {
     //   const nodeKey = node.key;
     //   const nodeSnapshot = await checkInsRef.child(nodeKey).once('value');
