@@ -77,7 +77,7 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   let taskNum = null;
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
-    if (!tasks[i].complete) {
+    if (!tasks[i].complete && !tasks[i].recurring) {
       currentTask = tasks[i].text;
       taskNum = i + 1;
       break;

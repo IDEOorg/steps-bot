@@ -14,7 +14,8 @@ function updateFirebase(db, userId, variables) {
     nextMessage,
     contentViewed,
     contentId,
-    taskComplete
+    taskComplete,
+    taskNum
   } = variables;
   const userRef = db.ref('users').child(userId);
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
@@ -30,6 +31,12 @@ function updateFirebase(db, userId, variables) {
         message: nextMessage,
         topic: nextTopic
       };
+    }
+    if (taskComplete) {
+      const tasksRef = userRef.child('tasks');
+      tasksRef.child(taskNum).update({
+        complete: true
+      });
     }
     if (contentViewed) {
       const viewedMediaKey = userRef.child('viewedMedia').push().key;

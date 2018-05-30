@@ -7,7 +7,11 @@
       "text": "Each month pay 1/5 or 1/3rd of the total credit card debt."
     },
     "2": {
-      "text": "Plan sell off of storage items."
+      "text": "Track your food expenses for this month.",
+      "recurring": {
+        "frequency": 1,
+        "duration": 30
+      }
     },
     "3": {
       "text": "Each month pay 1/5 or 1/3rd of the total credit card debt."
@@ -16,11 +20,7 @@
       "text": "Contact student loan company to verify the status of the student loan."
     },
     "5": {
-      "text": "Track your food expenses for this month.",
-      "recurring": {
-        "frequency": 1,
-        "duration": 30
-      }
+      "text": "Plan sell off of storage items."
     }
   },
   "workplanLink": "https://www.panerabread.com/workplan"
