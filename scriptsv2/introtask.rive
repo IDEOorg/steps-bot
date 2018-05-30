@@ -1,4 +1,4 @@
-> topic introtask includes gibberish
+> topic introtask includes tempfastforward includes gibberish
   + start
   - Hello! As I mentioned yesterday, "the secret to getting ahead is getting started," so let's jump right in! Here is the first item from your work plan.<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>

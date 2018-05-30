@@ -1,4 +1,4 @@
-> topic done
+> topic done includes tempfastforward
   + start
   - ^image("<get celebrationImgUrl>")<send>
   ^ THAT IS AMAZING! 🎆\n

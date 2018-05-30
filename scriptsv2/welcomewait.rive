@@ -1,4 +1,4 @@
-> topic welcomewait
+> topic welcomewait includes tempfastforward
   + *
   - Sorry. I'm a chatbot, so I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
   ^ I'll be in touch tomorrow with instructions for the first action item on your work plan.\nI'll also provide some info on the types of texts I can understand, so that we are on the same page.<send>

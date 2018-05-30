@@ -1,0 +1,16 @@
+> topic tempfastforward
+  + checkintopic
+  - {topic=checkin}{@ start}
+  + contenttopic
+  - {topic=content}{@ start}
+  + donetopic
+  - {topic=done}{@ start}
+  + helptopic
+  - {topic=help}{@ start}
+  + introtasktopic
+  - {topic=introtask}{@ start}
+  + nexttasktopic
+  - {topic=nexttask}{@ start}
+  + welcometopic
+  - {topic=welcome}{@ start}
+< topic

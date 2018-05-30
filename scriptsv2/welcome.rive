@@ -1,4 +1,4 @@
-> topic welcome
+> topic welcome includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
   ^ <get username>!\n

@@ -1,4 +1,4 @@
-> topic checkin
+> topic checkin includes tempfastforward
   + start
   - Greetings <get username>! Just checking in. How are things coming along with action item <get taskNum>?<send>
   ^ ^template(`quickreply`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`) {@ setvars}
