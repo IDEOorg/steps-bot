@@ -21,38 +21,25 @@ function updateFirebase(db, userId, variables) {
   const update = {};
   update.topic = topic;
   // this if-condition has to run before the follow up check ins bit runs
-  if (taskComplete) {
-    console.log('task complete');
-    const checkInsRef = userRef.child('followUpCheckIns');
-    checkInsRef.once('value', (snapshot) => {
-      snapshot.forEach((node) => {
-        const nodeKey = node.key;
-        checkInsRef.child(nodeKey).once('value', (nodeSnapshot) => {
-          console.log('nodeSnapshot.value()');
-          console.log(nodeSnapshot.val());
-          if (!nodeSnapshot.val().recurring) {
-            checkInsRef.child(nodeKey).remove();
-          }
-        });
-      });
-    });
-  }
-  if (nextCheckInDate) {
-    const checkInKey = userRef.child('followUpCheckIns').push().key;
-    update['/followUpCheckIns/' + checkInKey] = {
-      time: nextCheckInDate,
-      message: nextMessage,
-      topic: nextTopic
-    };
-  }
-  if (contentViewed) {
-    const viewedMediaKey = userRef.child('viewedMedia').push().key;
-    update['/viewedMedia/' + viewedMediaKey] = contentId;
-  }
-  userRef.update(update);
-  console.log('varstart');
-  console.log(variables);
-  console.log('varend');
+  const checkInsRef = userRef.child('followUpCheckIns');
+  updateUserCheckIns(checkInsRef, taskComplete).then(() => {
+    if (nextCheckInDate) {
+      const checkInKey = userRef.child('followUpCheckIns').push().key;
+      update['/followUpCheckIns/' + checkInKey] = {
+        time: nextCheckInDate,
+        message: nextMessage,
+        topic: nextTopic
+      };
+    }
+    if (contentViewed) {
+      const viewedMediaKey = userRef.child('viewedMedia').push().key;
+      update['/viewedMedia/' + viewedMediaKey] = contentId;
+    }
+    userRef.update(update);
+    console.log('varstart');
+    console.log(variables);
+    console.log('varend');
+  });
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {
@@ -75,4 +62,24 @@ function getNextCheckInDate(days, hours, timeOfDay) {
     }
   }
   return checkInDate.tz('America/New_York').valueOf();
+}
+
+async function updateUserCheckIns(checkInsRef, taskComplete) {
+  if (taskComplete) {
+    await removeCheckInsHelper(checkInsRef);
+  }
+}
+function removeCheckInsHelper(checkInsRef) {
+  checkInsRef.once('value', (snapshot) => {
+    snapshot.forEach((node) => {
+      const nodeKey = node.key;
+      checkInsRef.child(nodeKey).once('value', (nodeSnapshot) => {
+        console.log('nodeSnapshot.value()');
+        console.log(nodeSnapshot.val());
+        if (!nodeSnapshot.val().recurring) {
+          checkInsRef.child(nodeKey).remove();
+        }
+      });
+    });
+  });
 }
