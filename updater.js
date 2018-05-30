@@ -36,9 +36,6 @@ function updateFirebase(db, userId, variables) {
       update['/viewedMedia/' + viewedMediaKey] = contentId;
     }
     userRef.update(update);
-    console.log('varstart');
-    console.log(variables);
-    console.log('varend');
   });
 }
 
