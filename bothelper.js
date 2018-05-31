@@ -228,6 +228,9 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   if (templateType === 'quickreply') {
     let introText = null;
     const introTextBits = message.split(regex.templateForSplit);
+    console.log('******************************************introTextBits');
+    console.log(introTextBits);
+    console.log(templateArgs);
     for (let i = 0; i < introTextBits.length; i++) {
       if (regex.nonwhitespaceChars.test(introTextBits[i])) {
         introText = introTextBits[i];
