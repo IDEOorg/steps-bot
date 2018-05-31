@@ -13,4 +13,8 @@
   - {topic=nexttask}{@ start}
   + welcometopic
   - {topic=welcome}{@ start}
+  + bug*
+  - Got it! Thanks for reporting!
+  + suggestion*
+  - Thank you for your suggestion!
 < topic
