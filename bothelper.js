@@ -228,20 +228,15 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   if (templateType === 'quickreply') {
     let introText = null;
     const introTextBits = message.split(regex.templateForSplit);
-    console.log('******************************************introTextBits');
-    console.log(introTextBits);
-    console.log(templateArgs);
     for (let i = 0; i < introTextBits.length; i++) {
       if (regex.nonwhitespaceChars.test(introTextBits[i] && i !== 1)) {
-        console.log(introTextBits[i]);
-        console.log('introTextBits[i]');
         introText = introTextBits[i];
         break;
       }
     }
     messageToPush = {
       type: templateType,
-      text: introText[1],
+      text: introText,
       buttons: templateArgs.slice(1)
     };
   } else if (templateType === 'genericurl' || templateType === 'generic') {
