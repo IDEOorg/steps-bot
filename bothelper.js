@@ -155,6 +155,7 @@ function parseResponse(response) {
     image: /\^image\("(.*?)"\)/g,
     imageForSplit: /\^image\(".*"\)/g,
     template: /\^template\((.*?)\)/g,
+    templateForSplit: /\^template\((.*)\)/g,
     templateStrings: /`(.*?)`/g,
     nonwhitespaceChars: /\S/
   };
@@ -225,10 +226,18 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   const templateType = templateArgs[0];
   let messageToPush = null;
   if (templateType === 'quickreply') {
+    let introText = null;
+    const introTextBits = message.split(regex.templateForSplit);
+    for (let i = 0; i < introTextBits.length; i++) {
+      if (regex.nonwhitespaceChars.test(introTextBits[i])) {
+        introText = introTextBits[i];
+        break;
+      }
+    }
     messageToPush = {
       type: templateType,
-      image: templateArgs[1],
-      buttons: templateArgs.slice(2)
+      text: introText[1],
+      buttons: templateArgs.slice(1)
     };
   } else if (templateType === 'genericurl' || templateType === 'generic') {
     if (templateArgs.length < 4) {

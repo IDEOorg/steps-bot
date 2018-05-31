@@ -1,16 +1,11 @@
 > topic checkin includes tempfastforward
   + start
-  - Greetings <get username>! Just checking in. How are things coming along with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`) {@ setvars}
+  - Greetings <get username>! Just checking in. How are things coming along with action item <get taskNum>? ^template(`quickreply`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`) {@ setvars}
   - Hey, <get username>!\n\n
-  ^ How's progress on action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Need a little assistance...`, `Working on it.`) {@ setvars}
-  - <get username>! Checking in on you. How are things going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
-  - Hi, <get username>! Hope you've been having a great day so far. How are things going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
-  - Greetings, <get username>! Just reaching out for an update. Hows it going with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `Finished!`, `I have a few questions...`, `Working on it.`) {@ setvars}
+  ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Need a little assistance...`, `Working on it.`) {@ setvars}
+  - <get username>! Checking in on you. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
+  - Hi, <get username>! Hope you've been having a great day so far. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
+  - Greetings, <get username>! Just reaching out for an update. Hows it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `I have a few questions...`, `Working on it.`) {@ setvars}
   + working on it
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
   ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "I could use some assistance now.", "B": "I'm good for now."}`) {@ setvars}

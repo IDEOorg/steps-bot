@@ -40,13 +40,7 @@ function formatMsgForFB(message) {
       };
     });
     return {
-      attachment: {
-        type: 'image',
-        payload: {
-          url: message.image,
-          is_reusable: true
-        }
-      },
+      text: message.text,
       quick_replies: quickReplies
     };
   } else if (type === 'generic' || type === 'genericurl') {
