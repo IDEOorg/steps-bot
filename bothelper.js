@@ -232,7 +232,9 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     console.log(introTextBits);
     console.log(templateArgs);
     for (let i = 0; i < introTextBits.length; i++) {
-      if (regex.nonwhitespaceChars.test(introTextBits[i])) {
+      if (regex.nonwhitespaceChars.test(introTextBits[i] && i !== 1)) {
+        console.log(introTextBits[i]);
+        console.log('introTextBits[i]');
         introText = introTextBits[i];
         break;
       }
