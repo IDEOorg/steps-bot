@@ -28,5 +28,5 @@
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + *
   - I'm sorry. I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
-  ^ Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `No, I'm still working.`, `Yes, I have a few questions.`, `No, I'm already finished.`) {@ setvars}
+  ^ Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Have a few questions.`, `Already finished.`) {@ setvars}
 < topic
