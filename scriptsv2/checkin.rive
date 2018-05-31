@@ -5,7 +5,7 @@
   ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Need a little assistance...`, `Working on it.`) {@ setvars}
   - <get username>! Checking in on you. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
   - Hi, <get username>! Hope you've been having a great day so far. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
-  - Greetings, <get username>! Just reaching out for an update. Hows it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `I have a few questions...`, `Working on it.`) {@ setvars}
+  - Greetings, <get username>! Just reaching out for an update. How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `I have a few questions...`, `Working on it.`) {@ setvars}
   + working on it
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
   ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "I could use some assistance now.", "B": "I'm good for now."}`) {@ setvars}
@@ -28,6 +28,5 @@
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + *
   - I'm sorry. I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
-  ^ Do you need my assistance with action item <get taskNum>?<send>
-  ^ ^template(`quickreply`, `<get checkinImgUrl>`, `No, I'm still working.`, `Yes, I have a few questions.`, `No, I'm already finished.`) {@ setvars}
+  ^ Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `No, I'm still working.`, `Yes, I have a few questions.`, `No, I'm already finished.`) {@ setvars}
 < topic
