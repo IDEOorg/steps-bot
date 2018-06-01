@@ -11,7 +11,8 @@ self.riveBot = setupRiveScript();
 module.exports = {
   getResponse,
   setupFirebase,
-  resetVariables
+  resetVariables,
+  setTopic
 };
 
 function resetVariables(userId) {
@@ -292,4 +293,8 @@ async function setupFirebase() {
   firebase.initializeApp(config);
   await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
+}
+
+function setTopic(userId, topic) {
+  self.riveBot.setUservar(userId, 'topic', topic);
 }
