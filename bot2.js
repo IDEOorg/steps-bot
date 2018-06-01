@@ -30,8 +30,6 @@ setupFirebase().then((db) => {
     const userId = message.user;
     const userMessage = message.text;
     bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
-      console.log('rrrrrrrrrrrrrrrrrresponse');
-      console.log(response);
       sender.sendReply('fb', userId, response.messages).then(() => {
         updater.updateFirebase(db, userId, response.variables);
         bot.resetVariables(userId);
@@ -64,12 +62,11 @@ setupFirebase().then((db) => {
               topic,
               message
             } = futureCheckIns[checkInId];
-            console.log('time, topic, message');
-            console.log(time, topic, message);
             if (time < Date.now()) {
+              console.log('time, topic, message');
+              console.log(time, topic, message);
               usersRef.child(userId).child('futureCheckIns').child(checkInId).remove();
-              bot.setTopic(userId, topic);
-              bot.getResponse(db, 'fb', userId, message).then((response) => {
+              bot.getResponse(db, 'fb', userId, message, topic).then((response) => {
                 sender.sendReply('fb', userId, response.messages).then(() => {
                   updater.updateFirebase(db, userId, response.variables);
                   bot.resetVariables(userId);

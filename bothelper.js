@@ -11,8 +11,7 @@ self.riveBot = setupRiveScript();
 module.exports = {
   getResponse,
   setupFirebase,
-  resetVariables,
-  setTopic
+  resetVariables
 };
 
 function resetVariables(userId) {
@@ -26,10 +25,13 @@ function resetVariables(userId) {
   riveBot.setUservar(userId, 'taskComplete', null);
 }
 
-async function getResponse(db, platform, userId, userMessage) {
+async function getResponse(db, platform, userId, userMessage, topic) {
   const userInfo = await getUserDataFromFirebase(db, userId);
   formatTasks(userInfo);
   loadVarsToRiveBot(self.riveBot, userInfo);
+  if (topic) {
+    self.riveBot.setUservar(userId, 'topic', topic);
+  }
   const botResponse = self.riveBot.reply(userId, userMessage, self);
   const messages = parseResponse(botResponse);
   return {
@@ -104,12 +106,9 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   for (let i = 0; i < contentIds.length; i++) {
     const contentId = contentIds[i];
     if (!viewedMedia) {
-      console.log(viewedMedia);
       contentIdChosen = contentId;
       break;
     } else if (!Object.values(viewedMedia).includes(contentId)) {
-      console.log(viewedMedia);
-      console.log(Object.values(viewedMedia));
       contentIdChosen = contentId;
       break;
     }
@@ -293,8 +292,4 @@ async function setupFirebase() {
   firebase.initializeApp(config);
   await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
   return firebase.database();
-}
-
-function setTopic(userId, topic) {
-  self.riveBot.setUservar(userId, 'topic', topic);
 }
