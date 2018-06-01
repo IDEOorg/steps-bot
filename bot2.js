@@ -77,7 +77,7 @@ setupFirebase().then((db) => {
         }
       }
     });
-  }, 300000);
+  }, 3600000);
 });
 
 async function setupFirebase() {
