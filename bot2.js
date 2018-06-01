@@ -65,7 +65,7 @@ setupFirebase().then((db) => {
             if (time < Date.now()) {
               console.log('time, topic, message');
               console.log(time, topic, message);
-              usersRef.child(userId).child('futureCheckIns').child(checkInId).remove();
+              usersRef.child(userId).child('followUpCheckIns').child(checkInId).remove();
               bot.getResponse(db, 'fb', userId, message, topic).then((response) => {
                 sender.sendReply('fb', userId, response.messages).then(() => {
                   updater.updateFirebase(db, userId, response.variables);
