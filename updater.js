@@ -60,9 +60,9 @@ function getNextCheckInDate(days, hours, timeOfDay) {
   }
   if (timeOfDay) {
     if (timeOfDay.toUpperCase() === 'MORNING') {
-      checkInDate = checkInDate.hours(9).minutes(0).seconds(0);
+      checkInDate = checkInDate.hours(14).minutes(0).seconds(0);
     } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
-      checkInDate = checkInDate.hours(14).minutes(30).seconds(0);
+      checkInDate = checkInDate.hours(18).minutes(30).seconds(0);
     }
   }
   return checkInDate.tz('America/New_York').valueOf();
