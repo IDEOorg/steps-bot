@@ -64,6 +64,7 @@ setupFirebase().then((db) => {
               topic,
               message
             } = futureCheckIns[checkInId];
+            console.log(time, topic, message);
             if (time < Date.now()) {
               usersRef.child(userId).child('futureCheckIns').child(checkInId).remove();
               bot.setTopic(userId, topic);
