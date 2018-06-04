@@ -26,5 +26,5 @@
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + *
-  - Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Yes, I have questions.`, `No, I'm finished.`) {@ setvars}
+  - Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Have some questions.`, `No, I'm finished.`) {@ setvars}
 < topic
