@@ -6,7 +6,7 @@
   - <get username>! Checking in. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
   - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
   - Greetings, <get username>! How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
-  + (a|have some questions|need some assistance)
+  + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ start}
   + (b|working on it)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
@@ -18,13 +18,13 @@
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
   - *Still working* means you're getting it done! So, **hi five**!<send>
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
-  + (c|finished)
+  + (c|no im finished|finished)
   - {topic=done} {@ start}
-  + d
+  + (d|still working)
   - Wonderful. I'll check in soon!
+  - Sounds good. I'll be back in touch soon.
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + *
-  - I'm sorry. I'm only able to understand certain messages.\nI want to help. So let's try this:<send>
-  ^ Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Have a few questions.`, `Already finished.`) {@ setvars}
+  - Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Yes, I have questions.`, `No, I'm finished.`) {@ setvars}
 < topic
