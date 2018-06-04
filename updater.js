@@ -14,6 +14,9 @@ function updateFirebase(db, userId, variables) {
     nextMessage,
     contentViewed,
     contentId,
+    resetHelp,
+    helpResponse,
+    sendHelpResponse,
     taskComplete,
     taskNum
   } = variables;
@@ -23,7 +26,7 @@ function updateFirebase(db, userId, variables) {
   update.topic = topic;
   // this if-condition has to run before the follow up check ins bit runs
   const checkInsRef = userRef.child('followUpCheckIns');
-  updateUserCheckIns(checkInsRef, taskComplete).then(() => {
+  updateUserCheckIns(checkInsRef, taskComplete, resetHelp).then(() => {
     if (nextCheckInDate) {
       const checkInKey = userRef.child('followUpCheckIns').push().key;
       update['/followUpCheckIns/' + checkInKey] = {
@@ -31,6 +34,14 @@ function updateFirebase(db, userId, variables) {
         message: nextMessage,
         topic: nextTopic
       };
+    }
+    if (helpResponse) {
+      update.helpResponse = helpResponse;
+    }
+    if (sendHelpResponse) {
+      // SEND RESPONSE
+      console.log('help response sent');
+      userRef.child('helpResponse').remove();
     }
     if (taskComplete) {
       const tasksRef = userRef.child('tasks');
@@ -68,15 +79,21 @@ function getNextCheckInDate(days, hours, timeOfDay) {
   return checkInDate.tz('America/New_York').valueOf();
 }
 
-async function updateUserCheckIns(checkInsRef, taskComplete) {
+async function updateUserCheckIns(checkInsRef, taskComplete, resetHelp) {
+  const snapshot = await checkInsRef.once('value');
+  const nodes = snapshot.val();
+  const nodeKeys = Object.keys(nodes);
   if (taskComplete) {
-    const snapshot = await checkInsRef.once('value');
-    console.log('snapshot');
-    const nodes = snapshot.val();
-    const nodeKeys = Object.keys(nodes);
     for (let i = 0; i < nodeKeys.length; i++) {
       const nodeKey = nodeKeys[i];
       if (!nodes[nodeKey].recurring) {
+        checkInsRef.child(nodeKey).remove();
+      }
+    }
+  } else if (resetHelp) {
+    for (let i = 0; i < nodeKeys.length; i++) {
+      const nodeKey = nodeKeys[i];
+      if (nodes[nodeKey].topic === 'help') {
         checkInsRef.child(nodeKey).remove();
       }
     }

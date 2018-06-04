@@ -1,9 +1,0 @@
-> topic newtask includes taskglobals
-  + start
-  - Hi there! It's Roo, hope you're ready for your task. Let's get started.<send>
-  ^ ^image("https://pbs.twimg.com/profile_images/610849424042885120/MEmIerGF_400x400.jpg")<send>
-  ^ <get task><send>
-  ^ Good luck! We'll check back in with you in a few days.
-  + *
-  - Could you say that again? I didn't quite understand you. How are you doing with completing your task? Text DONE, HELP, or STILL WORKING.
-< topic

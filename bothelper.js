@@ -23,6 +23,8 @@ function resetVariables(userId) {
   riveBot.setUservar(userId, 'nextMessage', null);
   riveBot.setUservar(userId, 'contentViewed', null);
   riveBot.setUservar(userId, 'taskComplete', null);
+  riveBot.setUservar(userId, 'resetHelp', null);
+  riveBot.setUservar(userId, 'helpResponse', null);
 }
 
 async function getResponse(db, platform, userId, userMessage, topic) {
@@ -67,10 +69,8 @@ function initNewUser(db, userId) {
     coachName,
     orgName,
     topic: 'welcome',
-    nextTopic: null,
     tasks,
     workplanUrl,
-    viewedMedia: null,
     followUpCheckIns: {}
   };
   db.ref(`users/${userId}`).set(userInfo);
