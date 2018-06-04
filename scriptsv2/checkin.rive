@@ -10,14 +10,14 @@
   - {topic=help} {@ start}
   + (b|working on it)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
-  ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance.", "D": "I'm good for now."}`) {@ setvars}
-  - ^template(`button`, `Keep pushing through! You've got this! Let me know if you need any help.`, `{"A": "Need some assistance.", "D": "I'm good for now."}`) {@ setvars}
+  ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`) {@ setvars}
+  - ^template(`button`, `Keep pushing through! You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "D": "I'm good for now."}`) {@ setvars}
   - Got it. Remember: If you think you can do it, you can.\nI know you can!<send>
-  ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   - *Still working* means you're getting it done! So, **hi five**!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   + (c|no im finished|finished)
   - {topic=done} {@ start}
   + (d|still working)
