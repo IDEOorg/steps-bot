@@ -1,6 +1,6 @@
 {
   "baseUrl": "https://stepsroobot.herokuapp.com/",
-  "videoUrl": "https://www.panerabread.com/video",
+  "videoUrl": "https://youtu.be/TzMEOxrtd4s",
   "done": {
     "path": "static/images/done/",
     "images": [
@@ -50,6 +50,8 @@
     "path": "static/images/welcome/",
     "images": [
       "welcome_hi.png"
-    ]
+    ],
+    "workplanUrl": "Workplan.png",
+    "clappingUrl": "hand_applause.gif"
   }
 }

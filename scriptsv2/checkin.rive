@@ -1,29 +1,27 @@
 > topic checkin includes tempfastforward
   + start
-  - Greetings <get username>! Just checking in. How are things coming along with action item <get taskNum>? ^template(`quickreply`, `I'm done!`, `Hmmm, have a few questions...`, `Working on it.`) {@ setvars}
+  - Greetings <get username>! How are things coming along with action item <get taskNum>? ^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`) {@ setvars}
   - Hey, <get username>!\n
-  ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Need a little assistance...`, `Working on it.`) {@ setvars}
-  - <get username>! Checking in on you. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
-  - Hi, <get username>! Hope you've been having a great day so far. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have a few questions...`, `Working on it.`) {@ setvars}
-  - Greetings, <get username>! Just reaching out for an update. How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `I have a few questions...`, `Working on it.`) {@ setvars}
-  + working on it
-  - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
-  ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "I could use some assistance now.", "B": "I'm good for now."}`) {@ setvars}
-  - "It always seems impossible until it's done." - Marianne Williamson\nKeep up the good work!<send>
-  ^ ^template(`button`, `You've got this! Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "I'm good for now."}`) {@ setvars}
-  - Got it. Remember: If you think you can do it, you can."\nI know you can!<send>
-  ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "No thanks. I'm good."}`) {@ setvars}
-  - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "No thanks. I'm good."}`) {@ setvars}
-  - *Still working* means you're getting it done! So, **hi five**!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "I could use some assistance now.", "B": "No thanks. I'm good."}`) {@ setvars}
-  + (a|have a few questions)
+  ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  - <get username>! Checking in. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  - Greetings, <get username>! How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  + (a|have some questions|need some assistance)
   - {topic=help} {@ start}
-  + (b|still working)
-  - Wonderful. I'll check in soon!
-  - Great. I'll check in soon!
-  + (c|already finished)
+  + (b|working on it)
+  - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
+  ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance.", "D": "I'm good for now."}`) {@ setvars}
+  - ^template(`button`, `Keep pushing through! You've got this! Let me know if you need any help.`, `{"A": "Need some assistance.", "D": "I'm good for now."}`) {@ setvars}
+  - Got it. Remember: If you think you can do it, you can.\nI know you can!<send>
+  ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
+  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  - *Still working* means you're getting it done! So, **hi five**!<send>
+  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance.", "D": "No thanks. I'm good."}`) {@ setvars}
+  + (c|finished)
   - {topic=done} {@ start}
+  + d
+  - Wonderful. I'll check in soon!
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + *

@@ -1,12 +1,12 @@
 > topic welcome includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
-  ^ <get username>!\n
-  ^ You've begun your journey towards financial health! As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS!<send>
-  ^ My name is Roo and I'm here to help you complete the action items you created with <get coachName> at <get orgName>.<send>
-  ^ Think of me as your financial coaching assistant! Together, we'll get it all done. Here's a video on exactly how I can support you.\n<get introVideoLink><send>
-  ^ ^image("<get welcomeImgUrl>")<send>
-  ^ And here's a link to your full work plan, i.e. a big picture of the small steps.\n<get workplanLink><send>
-  ^ ^image("<get welcomeImgUrl>")<send>
-  ^ Lastly, you deserve a big round of applause for taking the first step today! I'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!{topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
+  ^ Hello <get username>! It's Roo, your financial coaching assistant. You're on your way to financial health!<send>
+  ^ As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on completing your financial coaching appointment!<send>
+  ^ I'm here to help you complete the action items you created with <get coachName> at <get orgName>. Together, we'll get it all done.<send>
+  ^ Here's a video on exactly how I can support you.\n<get introVideoLink><send>
+  ^ ^image("<get workplanImgUrl>")<send>
+  ^ And here's a link to your full work plan. It's a big picture of the small steps you'll take.\n<get workplanLink><send>
+  ^ ^image("<get clappingImgUrl>")<send>
+  ^ Lastly, you deserve a big round of applause for starting today!\nI'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!{topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
 < topic
