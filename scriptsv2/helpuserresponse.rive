@@ -1,6 +1,6 @@
 > topic helpuserresponse includes tempfastforward
   + *
-  - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<star>"^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)<set helpResponse=<get star>>{@ setvars}
+  - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<star>"^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)<set helpResponse=<star>>
   + yes send that
   - Great, I'll send this message to <get coachName> right away and get back to you once I've heard from them.<set sendHelpResponse=true><set resetHelp=true>{@ setvars}
   + I have a few edits

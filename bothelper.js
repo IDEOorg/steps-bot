@@ -25,6 +25,7 @@ function resetVariables(userId) {
   riveBot.setUservar(userId, 'taskComplete', null);
   riveBot.setUservar(userId, 'resetHelp', null);
   riveBot.setUservar(userId, 'helpResponse', null);
+  riveBot.setUservar(userId, 'sendHelpResponse', null);
 }
 
 async function getResponse(db, platform, userId, userMessage, topic) {
