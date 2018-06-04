@@ -1,7 +1,7 @@
 > topic gibberish includes tempfastforward
   + *
   - Sorry <get username>.\nUnfortunately I can't understand your message.\nLet's try this a different way.<send>
-  ^ ^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"X": "No, I'm okay.", "A": "Yes, I have a few questions."}`)
+  ^ ^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"X": "No, I'm okay.", "A": "Have some questions."}`)
   + x
   - Okay, I'm here if you change your mind.
   + a
