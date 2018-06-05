@@ -16,7 +16,7 @@
   ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
-  - *Still working* means you're getting it done! So, **hi five**!<send>
+  - *Working on it* means you're getting it done! So, **hi five**!<send>
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   + (c|no im finished|finished)
   - {topic=done} {@ start}
