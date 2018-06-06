@@ -1,8 +1,13 @@
 > topic introtask includes tempfastforward includes gibberish
   + start
-  - Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
+  * <get platform> == fb => Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
   ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
   ^ Use the buttons above to ask for help or to let me know you've finished.<send>
+  ^ You've got this! I'll check in on your progress soon. Good luck!<set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
+  * <get platform> == sms => Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
+  ^ ^image("<get taskNumImgUrl>")<send>
+  ^ <get currentTask><send>
+  ^ If you need some assistance,\nText the letter A.\nIf you've finished, \nText the letter B.
   ^ You've got this! I'll check in on your progress soon. Good luck!<set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
   + a
   - {topic=help}{@ start}
