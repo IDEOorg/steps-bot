@@ -1,16 +1,22 @@
 require('dotenv').config();
 const rp = require('request-promise');
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioNumber = process.env.TWILIO_NUMBER;
+const twilioClient = require('twilio')(accountSid, authToken);
+
 module.exports = {
   sendReply
 };
 
 async function sendReply(platform, userId, messages) {
-  if (platform === 'fb') {
-    for (let i = 0; i < messages.length; i++) {
-      const message = messages[i];
-      const formattedMessage = formatMsgForFB(message);
-      await sendFBMessage(userId, formattedMessage); // eslint-disable-line
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    if (platform === 'fb') {
+      await sendFBMessage(userId, formatMsgForFB(message)); // eslint-disable-line
+    } else if (platform === 'sms') {
+      await sendSMSMessage(userId, formatMsgForSMS(message)); // eslint-disable-line
     }
   }
 }
@@ -101,6 +107,23 @@ function formatMsgForFB(message) {
   };
 }
 
+function formatMsgForSMS(message) {
+  const { type } = message;
+  if (type === 'text') {
+    return {
+      body: message.message
+    };
+  } else if (type === 'image') {
+    return {
+      body: message.message,
+      mediaUrl: message.image
+    };
+  }
+  return {
+    body: 'This message should not be showing up and is an error on our part.'
+  };
+}
+
 function sendFBMessage(userId, message) {
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -115,4 +138,13 @@ function sendFBMessage(userId, message) {
       message,
     }
   });
+}
+
+function sendSMSMessage(userId, message) {
+  const twilioMessage = Object.assign({
+    from: twilioNumber,
+    to: userId
+  }, message);
+
+  twilioClient.messages.create(twilioMessage);
 }

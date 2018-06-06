@@ -32,6 +32,7 @@ async function getResponse(db, platform, userId, userMessage, topic) {
   const userInfo = await getUserDataFromFirebase(db, userId);
   formatTasks(userInfo);
   loadVarsToRiveBot(self.riveBot, userInfo);
+  self.riveBot.setUservar(userId, 'platform', platform);
   if (topic) {
     self.riveBot.setUservar(userId, 'topic', topic);
   }
