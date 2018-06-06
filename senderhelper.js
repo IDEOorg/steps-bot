@@ -23,9 +23,9 @@ async function sendReply(platform, userId, messages) {
       //   console.log(result);
       // });
       if (message.type === 'image') {
-        await sleep(6000); // eslint-disable-line
+        await sleep(7000); // eslint-disable-line
       } else {
-        await sleep(300); // eslint-disable-line
+        await sleep(800); // eslint-disable-line
       }
     }
   }
