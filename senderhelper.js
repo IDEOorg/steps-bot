@@ -16,9 +16,13 @@ async function sendReply(platform, userId, messages) {
     if (platform === 'fb') {
       await sendFBMessage(userId, formatMsgForFB(message)); // eslint-disable-line
     } else if (platform === 'sms') {
-      await sendSMSMessage(userId, formatMsgForSMS(message)); // eslint-disable-line
+      const response = await sendSMSMessage(userId, formatMsgForSMS(message)); // eslint-disable-line
+      response.then((result) => {
+        console.log('resulttttt');
+        console.log(result);
+      });
       if (message.type === 'image') {
-        await sleep(7000); // eslint-disable-line
+        await sleep(6000); // eslint-disable-line
       } else {
         await sleep(300); // eslint-disable-line
       }
