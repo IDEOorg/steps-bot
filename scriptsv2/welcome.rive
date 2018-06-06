@@ -1,6 +1,7 @@
 > topic welcome includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
+  ^ ^image("https://stepsroobot.herokuapp.com/static/images/Alaska.png")<send>
   ^ Hello <get username>! It's Roo, your financial coaching assistant. You're on your way to financial health!<send>
   ^ As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on completing your financial coaching appointment!<send>
   ^ I'm here to help you complete the action items you created with <get coachName> at <get orgName>. Together, we'll get it all done.<send>
