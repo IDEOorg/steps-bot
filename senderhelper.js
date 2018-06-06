@@ -145,6 +145,7 @@ function sendSMSMessage(userId, message) {
     from: twilioNumber,
     to: userId
   }, message);
-
-  twilioClient.messages.create(twilioMessage);
+  console.log('message sent');
+  console.log(message);
+  return twilioClient.messages.create(twilioMessage);
 }
