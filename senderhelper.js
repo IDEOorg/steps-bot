@@ -153,7 +153,11 @@ function sendFBMessage(userId, message) {
 function sendSMSMessage(userId, message) {
   const twilioMessage = Object.assign({
     from: twilioNumber,
-    to: userId
+    to: userId,
+    statusCallback: (res) => {
+      console.log('avalon res');
+      console.log(res);
+    }
   }, message);
   console.log('message sent');
   console.log(message);
