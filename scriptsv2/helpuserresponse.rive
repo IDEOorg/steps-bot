@@ -1,5 +1,6 @@
 > topic helpuserresponse includes tempfastforward
   + *
   - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<star>"
-  ^ ^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)<set helpResponse=<star>>{topic=helpuserconfirm}
+  ^ <fb>^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)</fb>
+  ^ <set helpResponse=<star>>{topic=helpuserconfirm}
 < topic

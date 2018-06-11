@@ -23,7 +23,7 @@
   ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
-  + (b|working on it)
+  + (b|working on it|still working)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
   ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
   ^ <sms>You're doing great! If you need any help just text the letter A.</sms>
@@ -52,5 +52,8 @@
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
-  - Sorry, <get username>. I can't quite understand your message. Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Have some questions.`, `No, I'm finished.`) {@ setvars}
+  - Sorry, <get username>. I can't quite understand your message. Do you need my assistance with action item <get taskNum>?
+  ^ <fb>^template(`quickreply`, `Still working.`, `Have some questions.`, `No, I'm finished.`)</fb>
+  ^ <sms><send>If yes,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you're still working,\nText the letter D.</sms>
+  ^ {@ setvars}
 < topic
