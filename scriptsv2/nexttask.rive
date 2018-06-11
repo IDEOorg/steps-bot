@@ -2,15 +2,24 @@
   + startprompt
   - Hello, <get username>! Every action item you complete puts you that much closer to your financial goal.<send>
   ^ Here's the next one from your work plan.<send>
-  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "I have questions.", "B": "I'm finished!"}`)<send>
+  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "I have questions.", "B": "I'm finished!"}`)<send></fb>
+  ^ <sms>^image("<get taskNumImgUrl>")<send>
+  ^ <get currentTask><send>
+  ^ If you have a few questions,\nText the letter A.\nIf you're done,\nText the letter B.<send></sms>
   ^ You're incredible. I'll check back in soon. Good luck! {@ setvars}
   - Hey there! First thing's first, **hi-five**. ✋ You are handling BUSINESS.<send>
   ^ Here's the next action item on your list.<send>
-  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need a little help.", "B": "All done!"}`)<send>
+  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need a little help.", "B": "All done!"}`)<send></fb>
+  ^ <sms>^image("<get taskNumImgUrl>")<send>
+  ^ <get currentTask><send>
+  ^ If you could use a little help,\nText the letter A.\nIf you've completed the item,\nText the letter B.<send></sms>
   ^ You rock! I'll check in on your progress soon. {@ setvars}
   - Hey! Just wanted to let you know that you are PHENOMENAL. The action items on your work plan don't stand a chance!<send>
   ^ Here's your next action item to complete.<send>
-  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Have some questions.", "B": "I've finished!"}`)<send>
+  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Have some questions.", "B": "I've finished!"}`)<send></fb>
+  ^ <sms>^image("<get taskNumImgUrl>")<send>
+  ^ <get currentTask><send>
+  ^ If you have a few questions,\nText the letter A.\nIf you're done,\nText the letter B.<send></sms>
   ^ You've got this! I'll check in on your progress soon. {@ setvars}
   + setvars
   - <set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
