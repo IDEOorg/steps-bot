@@ -8,5 +8,5 @@
   ^ ^image("<get workplanImgUrl>")<send>
   ^ And here's a link to your full work plan. It's a big picture of the small steps you'll take.\n<get workplanLink><send>
   ^ ^image("<get clappingImgUrl>")<send>
-  ^ Lastly, you deserve a big round of applause for starting today!\nI'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!{topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=start>
+  ^ Lastly, you deserve a big round of applause for starting today!\nI'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!{topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=startprompt>
 < topic

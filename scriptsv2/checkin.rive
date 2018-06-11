@@ -1,5 +1,5 @@
 > topic checkin includes tempfastforward
-  + start
+  + startprompt
   - Greetings <get username>! How are things coming along with action item <get taskNum>? ^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`) {@ setvars}
   - Hey, <get username>!\n
   ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
@@ -7,7 +7,7 @@
   - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
   - Greetings, <get username>! How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
-  - {topic=help} {@ start}
+  - {topic=help} {@ startprompt}
   + (b|working on it)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
   ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`) {@ setvars}
@@ -19,12 +19,12 @@
   - *Working on it* means you're getting it done! So, **hi five**!<send>
   ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
   + (c|no im finished|finished)
-  - {topic=done} {@ start}
+  - {topic=done} {@ startprompt}
   + (d|still working)
   - Wonderful. I'll check in soon!
   - Sounds good. I'll be back in touch soon.
   + setvars
-  - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=start>
+  - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
   - Sorry, <get username>. I can't quite understand your message. Do you need my assistance with action item <get taskNum>? ^template(`quickreply`, `Still working.`, `Have some questions.`, `No, I'm finished.`) {@ setvars}
 < topic

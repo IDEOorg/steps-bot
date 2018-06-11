@@ -5,5 +5,5 @@
   + x
   - Okay, I'm here if you change your mind.
   + a
-  - {topic=help} {@ start}
+  - {topic=help} {@ startprompt}
 < topic

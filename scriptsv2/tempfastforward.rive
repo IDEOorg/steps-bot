@@ -1,18 +1,18 @@
 > topic tempfastforward
   + checkintopic
-  - {topic=checkin}{@ start}
+  - {topic=checkin}{@ startprompt}
   + contenttopic
-  - {topic=content}{@ start}
+  - {topic=content}{@ startprompt}
   + donetopic
-  - {topic=done}{@ start}
+  - {topic=done}{@ startprompt}
   + helptopic
-  - {topic=help}{@ start}
+  - {topic=help}{@ startprompt}
   + introtasktopic
-  - {topic=introtask}{@ start}
+  - {topic=introtask}{@ startprompt}
   + nexttasktopic
-  - {topic=nexttask}{@ start}
+  - {topic=nexttask}{@ startprompt}
   + welcometopic
-  - {topic=welcome}{@ start}
+  - {topic=welcome}{@ startprompt}
   + bug*
   - Got it! Thanks for reporting!
   + idea*

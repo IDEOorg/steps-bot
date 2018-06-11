@@ -1,5 +1,5 @@
 > topic content includes tempfastforward includes gibberish
-  + start
+  + startprompt
   - <get username>! I come bearing gifts.\n
   ^ 1. A few reminders:\n
   ^ - You are not your current circumstance.\n
@@ -17,5 +17,5 @@
   ^ ^template(`genericurl`, `<get storiesImgUrl>`, `<get content>`, `{"<get contentUrl>": "View Details"}`)<send>
   ^ Keep at it! {@ setvars}
   + setvars
-  - <set contentViewed=true><set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=start>
+  - <set contentViewed=true><set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
 < topic
