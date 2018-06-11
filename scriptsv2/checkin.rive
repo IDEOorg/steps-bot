@@ -1,11 +1,26 @@
 > topic checkin includes tempfastforward
   + startprompt
-  - Greetings <get username>! How are things coming along with action item <get taskNum>? ^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  - Greetings <get username>! How are things coming along with action item <get taskNum>?
+  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>If you need some assistance,\nText the letter A.\nIf you've finished (and can't be stopped!)\nText the letter B.\nIf you're still working on it,\nText the letter C.</sms>
+  ^ {@ setvars}
   - Hey, <get username>!\n
-  ^ How's progress on action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
-  - <get username>! Checking in. How are things going with action item <get taskNum>? ^template(`quickreply`,`Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
-  - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
-  - Greetings, <get username>! How's it going with action item <get taskNum>? ^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`) {@ setvars}
+  ^ How's progress on action item <get taskNum>?
+  ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>Have a few questions?\nText the letter A.\nAlready done?\nText the letter B.\nStill chipping away at it?\nText the letter C.</sms>
+  ^ {@ setvars}
+  - <get username>! Checking in. How are things going with action item <get taskNum>?
+  ^ <fb>^template(`quickreply`,`Finished!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>Have questions?\nText the letter A.\nFinished?\nText the letter B.\nNot quite there yet?\nText the letter C.</sms>
+  ^ {@ setvars}
+  - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>?
+  ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
+  ^ {@ setvars}
+  - Greetings, <get username>! How's it going with action item <get taskNum>?
+  ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)
+  ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
+  ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
   + (b|working on it)
