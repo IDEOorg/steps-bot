@@ -18,21 +18,32 @@
   ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
   ^ {@ setvars}
   - Greetings, <get username>! How's it going with action item <get taskNum>?
-  ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)
+  ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
   ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
   ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
   + (b|working on it)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
-  ^ ^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`) {@ setvars}
-  - ^template(`button`, `Keep pushing through! You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "D": "I'm good for now."}`) {@ setvars}
+  ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
+  ^ <sms>You're doing great! If you need any help just text the letter A.</sms>
+  ^ {@ setvars}
+  - The anticipation is often harder than the task, <get username>! Keep pushing through!
+  ^ <fb>^template(`button`, `You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
+  ^ <sms>You've got this! If you need some assistance just text the letter A.</sms>
+  ^ {@ setvars}
   - Got it. Remember: If you think you can do it, you can.\nI know you can!<send>
-  ^ ^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ <fb>^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
+  ^ <sms>Should you need help just text the letter A.</sms>
+  ^ {@ setvars}
   - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
+  ^ <sms>If you need my assistance just text the letter A.</sms>
+  ^ {@ setvars}
   - *Working on it* means you're getting it done! So, **hi five**!<send>
-  ^ ^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`) {@ setvars}
+  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
+  ^ <sms>Should you need me just text the letter A.</sms>
+  ^ {@ setvars}
   + (c|no im finished|finished)
   - {topic=done} {@ startprompt}
   + (d|still working)
