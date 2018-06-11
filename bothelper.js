@@ -37,7 +37,7 @@ async function getResponse(db, platform, userId, userMessage, topic) {
     self.riveBot.setUservar(userId, 'topic', topic);
   }
   const botResponse = self.riveBot.reply(userId, userMessage, self);
-  const messages = parseResponse(botResponse);
+  const messages = parseResponse(botResponse, platform);
   return {
     messages,
     variables: self.riveBot.getUservars(userId)
@@ -155,7 +155,7 @@ function setupRiveScript() {
   return bot;
 }
 
-function parseResponse(response) {
+function parseResponse(response, platform) {
   const sendRegex = /<send>/g;
   const regex = {
     image: /\^image\("(.*?)"\)/g,
@@ -163,8 +163,17 @@ function parseResponse(response) {
     template: /\^template\((.*?)\)/g,
     templateForSplit: /\^template\((.*)\)/g,
     templateStrings: /`(.*?)`/g,
+    sms: /<sms>(.*?)<\/sms>/g,
+    fb: /<fb>(.*?)<\/fb>/g,
     nonwhitespaceChars: /\S/
   };
+  if (platform === 'fb') {
+    response = response.replace(regex.sms);
+    response = response.replace(regex.fb, '$1');
+  } else if (platform === 'sms') {
+    response = response.replace(regex.fb);
+    response = response.replace(regex.sms, '$1');
+  }
   const messages = response.split(sendRegex);
   const finalMessages = [];
   for (let i = 0; i < messages.length; i++) {
