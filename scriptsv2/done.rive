@@ -5,16 +5,22 @@
   ^ Congratulations, <get username>!!!<send>
   ^ The road to financial health is not easy but you do NOT mess around! Way to bring your A Game!\n
   ^ Take some time to celebrate yourself today. You deserve it!<send>
-  ^ ^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"X": "Sounds good", "N": "Ready for it now."}`) {@ setvars}
+  ^ <fb>^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"X": "Sounds good", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!<send>
   ^ THAT'S how you own the day!<send>
   ^ Congratulations!!! 🎊🎊🎊\nDo a dance, treat yourself to something, celebrate! You rocked it.<send>
-  ^ ^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"X": "Sounds good!", "N": "Ready for it now."}`) {@ setvars}
+  ^ <fb>^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"X": "Sounds good!", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! Congrats, <get username>\n🎉🎉🎉\nI knew you'd get it done!<send>
   ^ The bigger the task, the sweeter the triumph. Enjoy the WIN!<send>
-  ^ ^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"X": "Sounds good!", "N": "Ready for it now."}`) {@ setvars}
+  ^ <fb>^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"X": "Sounds good!", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ {@ setvars}
   + x
   - Wonderful. Chat soon.
   - Great! Chat soon.
