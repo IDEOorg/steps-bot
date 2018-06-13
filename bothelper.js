@@ -163,8 +163,8 @@ function parseResponse(response, platform) {
     template: /\^template\((.*?)\)/g,
     templateForSplit: /\^template\((.*)\)/g,
     templateStrings: /`(.*?)`/g,
-    sms: /<sms>(.*?)<\/sms>/g,
-    fb: /<fb>(.*?)<\/fb>/g,
+    sms: /<sms>([\s\S]*?)<\/sms>/g,
+    fb: /<fb>([\s\S]*?)<\/fb>/g,
     nonwhitespaceChars: /\S/
   };
   if (platform === 'fb') {
