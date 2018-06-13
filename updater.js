@@ -86,8 +86,9 @@ async function updateUserCheckIns(checkInsRef, taskComplete, resetHelp) {
   console.log(snapshot);
   console.log('snapshot');
   const nodes = snapshot.val();
-  console.log(nodes);
-  console.log('nodes');
+  if (!nodes.length) {
+    return;
+  }
   const nodeKeys = Object.keys(nodes);
   if (taskComplete) {
     for (let i = 0; i < nodeKeys.length; i++) {
