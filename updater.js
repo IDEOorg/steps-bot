@@ -26,6 +26,8 @@ function updateFirebase(db, userId, variables) {
   update.topic = topic;
   // this if-condition has to run before the follow up check ins bit runs
   const checkInsRef = userRef.child('followUpCheckIns');
+  console.log(checkInsRef);
+  console.log('checkInsRef');
   updateUserCheckIns(checkInsRef, taskComplete, resetHelp).then(() => {
     if (nextCheckInDate) {
       const checkInKey = userRef.child('followUpCheckIns').push().key;
@@ -81,7 +83,11 @@ function getNextCheckInDate(days, hours, timeOfDay) {
 
 async function updateUserCheckIns(checkInsRef, taskComplete, resetHelp) {
   const snapshot = await checkInsRef.once('value');
+  console.log(snapshot);
+  console.log('snapshot');
   const nodes = snapshot.val();
+  console.log(nodes);
+  console.log('nodes');
   const nodeKeys = Object.keys(nodes);
   if (taskComplete) {
     for (let i = 0; i < nodeKeys.length; i++) {
