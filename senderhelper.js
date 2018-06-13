@@ -17,11 +17,6 @@ async function sendReply(platform, userId, messages) {
       await sendFBMessage(userId, formatMsgForFB(message)); // eslint-disable-line
     } else if (platform === 'sms') {
       const response = await sendSMSMessage(userId, formatMsgForSMS(message)); // eslint-disable-line
-      console.log(response);
-      // response.then((result) => {
-      //   console.log('resulttttt');
-      //   console.log(result);
-      // });
       if (message.type === 'image') {
         await sleep(7000); // eslint-disable-line
       } else {
@@ -155,8 +150,6 @@ function sendSMSMessage(userId, message) {
     from: twilioNumber,
     to: userId
   }, message);
-  console.log('message sent');
-  console.log(message);
   return twilioClient.messages.create(twilioMessage);
 }
 
