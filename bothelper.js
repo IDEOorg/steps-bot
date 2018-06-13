@@ -168,10 +168,13 @@ function parseResponse(response, platform) {
     nonwhitespaceChars: /\S/
   };
   if (platform === 'fb') {
-    response = response.replace(regex.sms);
+    response = response.replace(regex.sms, '');
+    console.log(response);
     response = response.replace(regex.fb, '$1');
+    console.log(response);
+    console.log('respoeeeeeeeeeeeeeeeeense');
   } else if (platform === 'sms') {
-    response = response.replace(regex.fb);
+    response = response.replace(regex.fb, '');
     response = response.replace(regex.sms, '$1');
   }
   const messages = response.split(sendRegex);
