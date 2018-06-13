@@ -160,9 +160,9 @@ function parseResponse(response, platform) {
   const regex = {
     image: /\^image\("(.*?)"\)/g,
     imageForSplit: /\^image\(".*"\)/g,
-    template: /\^template\((.*?)\)/g,
-    templateForSplit: /\^template\((.*)\)/g,
-    templateStrings: /`(.*?)`/g,
+    template: /\^template\(([\s\S]*?)\)/g,
+    templateForSplit: /\^template\(([\s\S]*)\)/g,
+    templateStrings: /`([\s\S]*?)`/g,
     sms: /<sms>([\s\S]*?)<\/sms>/g,
     fb: /<fb>([\s\S]*?)<\/fb>/g,
     nonwhitespaceChars: /\S/
