@@ -1,5 +1,724 @@
 {
   "tasks": [
-    
+    {
+      "title": "Find an additional job or source of income",
+      "category": "INCOME",
+      "description": "An additional job is an investment in yourself. It can help you to earn more money, gain experience in your field and learn new skills.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "DIFFICULT",
+      "date_created": null,
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Start by deciding what you want to do and what you are able to do. Which days and hours of the week are you available to work? Can you work in an office or do you need to work remotely? Are you willing to travel? How far?",
+          "note": null
+        },
+        {
+          "text": "Find your local American Job Center (also called OneStop centers or Career One Stop centers). Here is an online database to find one near you: https://www.careeronestop.org/localhelp/find-american-job-centers.aspx",
+          "note": "If you know the local center, this is where you can add the specific website instead of this national website."
+        },
+        {
+          "text": "Go to the website of your local center and sign up for their email list and/or mailing list to receive updates on job opportunities.",
+          "note": null
+        },
+        {
+          "text": "If possible, visit your local center in person and review the bulletin board for job opportunities.",
+          "note": null
+        },
+        {
+          "text": "Cast a wide net. Let friends, family, and professional contacts know that you are looking for additional work.",
+          "note": null
+        },
+        {
+          "text": "Be sure to review and revise your resume in case it is required for any jobs. Your local center may have help with this too.",
+          "note": null
+        },
+        {
+          "text": "If you are interested in starting your own business, SCORE is a national nonprofit that provides free business workshops and individual mentoring. You can find the nearest SCORE center here: https://www.score.org/",
+          "note": "If you know the local center, this is where you can add the specific website instead of this national website."
+        }
+      ]
+    },
+    {
+      "title": "Find and enroll in a training or certification program",
+      "category": "INCOME",
+      "description": "Free or low-cost training programs can help you earn a certification or degree that can lead to a higher income, more employment opportunities, and work that you enjoy.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "DIFFICULT",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Find your local American Job Center (also called OneStop centers or Career One Stop centers). Here is an online database to find one near you: https://www.careeronestop.org/localhelp/find-american-job-centers.aspx",
+          "note": "If you know the local center, this is where you can add the specific website instead of this national website."
+        },
+        {
+          "text": "Go to the website of your local center and sign up for their email list and/or mailing list to receive updates on programs.",
+          "note": null
+        },
+        {
+          "text": "Explore your local center’s website for programs, job fairs, training fairs, career workshops, and orientation dates.",
+          "note": null
+        },
+        {
+          "text": "Attend an orientation or fair and note the programs that you are eligible for and are interested in. Most events take place during the day, so if you are unable to attend, contact the center and request that the information is mailed to you.",
+          "note": null
+        },
+        {
+          "text": "Finally, select the training or certification program in which you’d like to enroll. And don’t hesitate to request a one-on-one with a career coach if you prefer personal assistance in choosing a program.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Ask to increase your hours at work",
+      "category": "INCOME",
+      "description": "If you want or need extra income, you might be able to get it from your current employment.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "MODERATE",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Schedule a time to speak with your manager, or ask to speak to them privately if you see that they are available.",
+          "note": null
+        },
+        {
+          "text": "Here is a sample script you can use: \"I have really enjoyed working here, and I want to thank you for the opportunity. I was wondering if there is any possibility of increasing my hours. If there is a need, I would love to offer my time.\"",
+          "note": null
+        },
+        {
+          "text": "Other possible ways to increase your hours can be offering to work extra shifts, volunteering for difficult to fill shifts, or filling in for people when they are sick or on vacation.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Ask for a raise at work",
+      "category": "INCOME",
+      "description": "If you want or need more income, you might be able to get it from current employment.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "MODERATE",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Read the employee handbook to learn about the process of getting a raise at your company.",
+          "note": null
+        },
+        {
+          "text": "Schedule a time to speak with your manager, or once you see that they are available ask if they can speak privately.",
+          "note": null
+        },
+        {
+          "text": "Here is a sample script you can use: \"I have really enjoyed working here, and I want to thank you for the opportunity. I've grown and accomplished a lot since I started working here. [List 3 lessons and/or accomplishments.] Given that I'm responsible for [list responsibilities] and have been with the company for [list time], I would like to see if there is a possibility for me to get a raise.\"",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Have other household members start contributing to household expenses",
+      "category": "",
+      "description": "If you want or need more income, you might be able to get it from other household members.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Discuss values/experiences/fears/goals around money with your other household members.",
+          "note": null
+        },
+        {
+          "text": "Complete a household budget with your other household members.",
+          "note": null
+        },
+        {
+          "text": "Identify a collective savings goal and the individual contributions needed to achieve that goal.",
+          "note": null
+        },
+        {
+          "text": "Monitor household expenses together for a week or month and determine if/how the current household income is sufficient to meet those expenses.",
+          "note": null
+        },
+        {
+          "text": "Identify times in the month when expenses are high and why.",
+          "note": null
+        },
+        {
+          "text": "Brainstorm with your other household members additional ways to earn income.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Take in a renter, roommate, or boarder to help with the cost of rent",
+      "category": "INCOME",
+      "description": "If you want or need more income to cover the cost of rent, consider taking in a renter, roommate or boarder.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Identify a room/space in your apartment or home that is available to rent.",
+          "note": null
+        },
+        {
+          "text": "Research the cost of other rentals in your geographic location to determine the price of your available space.",
+          "note": null
+        },
+        {
+          "text": "Create flyers, website listings, etc. to advertise the room/space for rent.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Talk with your partner about finding a job or additional source of income",
+      "category": "INCOME",
+      "description": "If you want or need more income, you may be able to get it from a partner if they begin earning additional income.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Discuss values/experiences/fears/goals around money with your partner.",
+          "note": null
+        },
+        {
+          "text": "Work out a household budget with them.",
+          "note": null
+        },
+        {
+          "text": "Track household expenses for a week or month with your partner.",
+          "note": null
+        },
+        {
+          "text": "Identify a common savings goal and the steps required to achieve that goal with your partner.",
+          "note": null
+        },
+        {
+          "text": "Discuss their interests in earning additional income to support the household.",
+          "note": null
+        },
+        {
+          "text": "Find job/career readiness workshops and one-on-one support through organizations such as United Way to assist your partner in updating their resume and submitting job applications.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Contact child support enforcement to collect on unpaid child support",
+      "category": "INCOME",
+      "description": "If you are not married to the father/mother of your child, collecting unpaid child support can support you in meeting your household expenses and other financial goals.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Establish parenthood (if not voluntarily acknowledged).",
+          "note": null
+        },
+        {
+          "text": "Be sure to contact your local child support office to learn more about the application process which varies by state: https://www.acf.hhs.gov/css/parents/how-do-you-get-child-support/applying-for-child-support",
+          "note": null
+        },
+        {
+          "text": "Ask your child support office how a child support order is enforced.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Contact your utility company and ask for Budget Billing in order to lower monthly payments",
+      "category": "EXPENSES",
+      "description": "Enrolling in Budget Billing with your utility company will make your monthly payments predictable. With Budget Billing, your monthly payment will be the average of your last 12 months of energy and electricty usage. Typically with this service, you pay less during the winter months, and more during the summer months.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Call your utility company and ask if they have Budget Billing as an option.",
+          "note": null
+        },
+        {
+          "text": "If they do and you qualify, enroll over the phone. It is important to note that you may either owe money or get a refund of the account balance at the end of the year depending on whether or not the Budget Billing amounts were an accurate estimate of your actual usage.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "Explore lower cost cell phone plans",
+      "category": "EXPENSES",
+      "description": "Shop around a bit to see if you can lower your phone bill. ",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Review your current phone statement to see which services you are actually using from your cell phone plan.",
+          "note": "If you know the local center, this is where you can add the specific website instead of this national website."
+        },
+        {
+          "text": "Cancel or reduce any services that you are not using. Some of these may be a landline, caller ID, call waiting, large data or packages.",
+          "note": null
+        },
+        {
+          "text": "If you need additional services, such as long distance calling, consider adding an unlimited long distance calling package to your cell phone plan. It may cost less than individual calls. Also consider using a free online service such as Skype, Google Hangouts, or Zoom. ",
+          "note": null
+        },
+        {
+          "text": "LifeLine is government assistance for phone or internet. You can find out if you qualify here: https://www.lifelinesupport.org/ls/do-i-qualify/default.aspx",
+          "note": "If you can check the client's eligibility for LifeLine for them, edit this step accordingly."
+        },
+        {
+          "text": "If you do qualify for LifeLine, follow the steps listed here to apply: https://www.lifelinesupport.org/ls/apply-for-lifeline/default.aspx.",
+          "note": null
+        },
+        {
+          "text": "If you do not qualify for LifeLine, compare other cell phone plans in your area using this online tool called WhistleOut: https://www.whistleout.com/CellPhones",
+          "note": null
+        },
+        {
+          "text": "If friends or family have cell phone plans, ask if you can join under a family plan, and split the costs.",
+          "note": null
+        },
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    },
+    {
+      "title": "",
+      "category": "",
+      "description": "",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "",
+          "note": null
+        }
+      ]
+    }
   ]
 }

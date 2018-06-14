@@ -8,8 +8,7 @@
       "celebration_finishline.gif",
       "celebration_hi5.gif",
       "celebration_nail-it.gif",
-      "celebration_yay.gif",
-      "CircleTest.png"
+      "celebration_yay.gif"
     ]
   },
   "help": {
@@ -50,7 +49,7 @@
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
-      "welcome_hi.png"
+      "welcome_hi.gif"
     ],
     "workplanUrl": "Workplan.png",
     "clappingUrl": "hand_applause.gif"
