@@ -130,12 +130,12 @@
     },
     {
       "title": "Have other household members start contributing to household expenses",
-      "category": "",
+      "category": "INCOME",
       "description": "If you want or need more income, you might be able to get it from other household members.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -173,7 +173,7 @@
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -199,7 +199,7 @@
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -237,7 +237,7 @@
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -263,7 +263,7 @@
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -285,7 +285,7 @@
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
@@ -317,405 +317,469 @@
         {
           "text": "If friends or family have cell phone plans, ask if you can join under a family plan, and split the costs.",
           "note": null
+        }
+      ]
+    },
+    {
+      "title": "Track income and spending one month",
+      "category": "EXPENSES",
+      "description": "Knowledge is power. It is the same with your finances. When you know how much money you have coming in and going out, and where it's going, you are able to make better choices. You have more information to decide what to do with money left after expenses, whether certain expenses need to be cut, or if you need to consider additional income to meet your goals. Find a tool that is easy and enjoyable enough to use regularly.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "EASY",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "If you want to use a computer or mobile device and link your accounts online, try: Mint, Personal Capital, or You Need a Budget (free for 34 days then $6.99/month). Link your online accounts (checking, savings, credit cards, student loans, etc.) to the app. The app will automatically categorize income and expenses. The app may let you manually enter expenses you paid for in cash.\nOR\nIf you want to use a computer or mobile device and manually enter transactions (and not link accounts online), try: Dollarbird, Goodbudget, Google sheets, Excel, or any note-taking tool. Search online for a expense tracking template, or create your own.\nOR\nIf you want to use paper and pencil, start a tracking notebook or list. Search online for a expense tracking template, or create your own.",
+          "note": "If you have a tracking tool you would recommend to the client, add it here."
         },
         {
-          "text": "",
+          "text": "Set an alarm to check the app regularly and see if the expense categories are correct. Make edits if necessary.",
+          "note": null
+        },
+        {
+          "text": "After one month, review your income and expenses. Ask yourself if there are any expenses you can cut or lower. Also, determine if you need or want to earn more income.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Create a list of ideas on how you can reduce expenses for your household",
+      "category": "EXPENSES",
+      "description": "Knowing how much money is coming in and out (and where it's going) is power. With this knowledge, you can identify what expenses you/your household can reduce.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Monitor all expenses for a week or a month to determine how much money is spent by you or those in your household.",
+          "note": null
+        },
+        {
+          "text": "Identify the expenses that can be lowered or eliminated. If the goal is to reduce food expenses, for example, consider meal prepping and packing lunches instead of buying out. Perhaps use coupons or buy in bulk for regularly purchased items.",
+          "note": null
+        },
+        {
+          "text": "Discuss the pros and cons of cutting back on certain expenses as a household.",
+          "note": null
+        },
+        {
+          "text": "Ask each member of the household to establish at least one goal related to reducing expenses. Come up with a fun way to measure progress towards that goal.",
+          "note": null
+        },
+        {
+          "text": "Identify ways to celebrate your household's goals around reducing expenses. Cook a meal together, have a movie or game night. Make less spending enjoyable.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Apply for local housing assistance",
+      "category": "EXPENSES",
+      "description": "Housing assistance programs can support you in finding an affordable home, or help achieve your other financial goals.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Contact a public housing agency by visiting: https://www.hud.gov/topics/rental_assistance)",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Review cable plan and explore lower cost options",
+      "category": "EXPENSES",
+      "description": "If you want to reduce your cable expenses, consider the following strategies.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Review your cable bill, then your overall budget to identify the amount you can reasonably afford to pay for cable.",
+          "note": null
+        },
+        {
+          "text": "Identify extra features or channels (such as HBO, Showtime, DVR, etc.) that you can eliminate.",
+          "note": null
+        },
+        {
+          "text": "Research smaller cable packages (e.g. one with fewer channels).",
+          "note": null
+        },
+        {
+          "text": "Explore opportunities to bundle your services (e.g. phone, internet and cable) with your current provider to save costs.",
+          "note": null
+        },
+        {
+          "text": "Explore other service providers and promotions in your area. Inquire about possible cancellation fees you would have to incur to change providers.",
+          "note": null
+        },
+        {
+          "text": "Contact your cable provider and negotiate the cost of your service.",
+          "note": null
+        },
+        {
+          "text": "If none of these options work, cancel your cable service or identify ways to reduce other expenses so that you are able to afford your cable costs.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Apply for local energy assistance program(s)",
+      "category": "EXPENSES",
+      "description": "Local energy assistance programs can help you reduce your heating and cooling costs, moving you closer to your ultimate financial goals.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Visit the following link to find out if you qualify for The Low Income Home Energy Assistance Programs: https://www.benefits.gov/benefits/benefit-details/623",
+          "note": null
+        },
+        {
+          "text": "Submit an application for the programs you qualify for here: https://www.acf.hhs.gov/ocs/liheap-state-and-territory-contact-listing",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Look into refinancing car loan",
+      "category": "EXPENSES",
+      "description": "If you want to reduce your car payment expenses, consider the following strategies.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Review your most recent statement to get a clear understanding of your current auto loan. Pinpoint your monthly payment, interest, remaining balance, loan term, etc.",
+          "note": null
+        },
+        {
+          "text": "Order a free credit report to ensure that all of your car payments have been reported correctly. Also check to make sure that you don't have any outstanding items.",
+          "note": null
+        },
+        {
+          "text": "Research car loan and refinancing options in your area and apply to those that interest you. Submit applications within a 15-day period to control the amount of points your credit score will drop as a result of inquiries that will be conducted.",
+          "note": null
+        },
+        {
+          "text": "If you're approved, assess the amount of money you will save (if any) by refinancing your car (https://www.nerdwallet.com/blog/loans/auto-loans/refinance-calculator-2/) and determine if refinancing is your best option.",
+          "note": null
+        },
+        {
+          "text": "If you choose to move forward with refinancing your car, decide between keeping your existing loan term or shortening/lengthening it. Then submit an application with the new lender.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Find a home with lower rent",
+      "category": "EXPENSES",
+      "description": "If you want to reduce your housing costs, consider the following strategies.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "DIFFICULT",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Identify the amount you can reasonably afford to pay for rent.",
+          "note": null
+        },
+        {
+          "text": "Explore affordable renting options in your area here: https://www.usa.gov/finding-home)",
+          "note": null
+        },
+        {
+          "text": "Conduct apartment/housing research in your area.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Complete your tax return for free with your local VITA (Volunteer Income Tax Assistance) free tax prep site",
+      "category": "EXPENSES",
+      "description": "Get your taxes done for free at your local VITA free tax prep site. Use the money you save, along with what you receive in a refund, to assist in your financial goals.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Find VITA sites in your area by visiting: https://irs.treasury.gov/freetaxprep/",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Access and download your credit report online from all three credit bureaus",
+      "category": "CREDIT",
+      "description": "Whether it's to improve your credit score or to simply monitor your report to ensure that all information is accurate, you should request a copy of your credit report at least once a year.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Go to www.annualcreditreport.com and click \"Request your free credit reports.\" Request a credit report from each of the bureaus: Transunion, Equifax, and Experian.",
+          "note": null
+        },
+        {
+          "text": "Download or save each credit report as a PDF.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Request one credit report by mail from each of the three credit bureaus",
+      "category": "CREDIT",
+      "description": "Whether it's to improve your credit score or to simply monitor your report to ensure that all information is accurate, you should request a copy of your credit report at least once a year.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Complete, print, and mail the following form to the address provided on the site: https://www.annualcreditreport.com/manualRequestForm.action",
+          "note": null
+        },
+        {
+          "text": "You should receive your credit reports in the mail within 2-3 weeks.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Review your credit report(s)",
+      "category": "CREDIT",
+      "description": "Reviewing your credit report is the first step in improving or maintaining your credit history and score. It's also important to review your credit report regularly to ensure that the information is accurate.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Review the personal information, credit history, inquiries, and public records sections of your credit report. Here's some help to understand each section: https://www.experian.com/blogs/ask-experian/how-to-read-an-experian-credit-report/.",
+          "note": null
+        },
+        {
+          "text": "As you review the report, take notes on any possible errors and write down any questions you may have.",
+          "note": null
+        },
+        {
+          "text": "If there are any errors, consider disputing the error through the credit bureau(s). You can do this online or by mailing in a dispute letter. Here are instructions: https://www.consumer.ftc.gov/articles/0151-disputing-errors-credit-reports.",
+          "note": "If your organization has its own resources for disputing credit report errors, this is where you can share those with the client."
+        },
+        {
+          "text": "If you find any accounts in collections or see any infromation that you would like to dispute, contact a pro bono (free) consumer debt attorney for assistance: https://www.lawhelp.org/find-help/.",
+          "note": "If you know the local referral, this is where you can add the specific website instead of this national website."
+        },
+        {
+          "text": "If you would like help reviewing your credit reports, schedule a meeting with your financial coach.",
+          "note": "If you have a scheduling link, this is where you can add one for the client to make an appointment with a financial coach."
+        }
+      ]
+    },
+    {
+      "title": "Dispute errors on credit reports",
+      "category": "CREDIT",
+      "description": "Disputing errors on credit reports can help you clean up your credit report and increase your credit score.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "MODERATE",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": null,
+      "steps": [
+        {
+          "text": "Go to www.annualcreditreport.come and click \"Request your free credit reports.\" Enter your personal information and request one credit report from Transunion, Equifax and Experian.",
+          "note": null
+        },
+        {
+          "text": "Download and save each credit report as a PDF file or print each credit report for your reference.",
+          "note": null
+        },
+        {
+          "text": "If there are any errors, consider disputing the error through the credit bureau(s). You can do this online or by mailing in a dispute letter. Here are instructions: https://www.consumer.ftc.gov/articles/0151-disputing-errors-credit-reports.",
+          "note": null
+        },
+        {
+          "text": "If you find any accounts in collections or see any infromation that you would like to dispute, contact a pro bono (free) consumer debt attorney for assistance: https://www.lawhelp.org/find-help/.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Make on-time payments on all active lines of credit",
+      "category": "CREDIT",
+      "description": "Making on-time payments on all active lines of credit will help you maintain or increase your credit score and establish a positive credit history.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Create a list of all active credit lines and their payment due dates.",
+          "note": null
+        },
+        {
+          "text": "Assess if these due dates are compatible with the times you receive your income(s). If not, contact your creditors to negotiate payment dates.",
+          "note": null
+        },
+        {
+          "text": "Find a way to keep track of your payment dates (such as calendar reminders) or consider automatic payment options.",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Explore entering into an income-based student loan repayment plan for your federal student loans",
+      "category": "DEBT",
+      "description": "Altering your student loan repayment plan options to meet your current financial circumstances can support you in paying back your debt (and keep your credit score up) while not incurring other financial difficulties.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "FInd out if you qualify for income-based student loan repayment options here: http://www.ibrinfo.org/can.vp.html",
+          "note": null
+        },
+        {
+          "text": "Visit this link to submit an application to alter your student loan repayment plan: https://studentloans.gov/myDirectLoan/index.action",
           "note": null
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Create a debt repayment plan",
+      "category": "DEBT",
+      "description": "If you have the means to put some of your income toward your debt, the following steps can help you prioritize the allocation of those funds to become debt-free faster.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "List all of your debts. For each debt, include the lender, balance, minimum payment, interest rate, and monthly due date.",
           "note": null
+        },
+        {
+          "text": "If your credit score has improved since you've opened your credit cards, try asking for a lower Annual Percentage Rate (APR) on each of your credit cards. This could reduce your monthly payments and the total amount of interest you will pay for credit card debt. Here is a script for negotiating interest rates on credit cards: http://www.creditcards.com/credit-card-news/script-negotiate-better-credit-card-deal-1267.php",
+          "note": null
+        },
+        {
+          "text": "List all income and expenses (including minimum monthly debt payments), and determine how much you have available every month to pay toward your debt. List all savings and decide how much you would like to contribute toward paying down your debt. Tip: Prioritize payments toward the highest interest rate debts.",
+          "note": null
+        },
+        {
+          "text": "For debts that are credit cards, personal loans, auto loans, home loans, and private student loans, enter information into a debt repayment calculator to calculate when the debt will be paid off under your current repayment schedule. A free online tool is www.powerpay.org. You can change the repayment plan and see how quickly your debt will be paid off with extra payments.",
+          "note": "Recommend a calculator."
+        },
+        {
+          "text": "For federal student loan debts, log into the Repayment Estimator (https://studentloans.gov/myDirectLoan/mobile/repayment/repaymentEstimator.action) to find the best repayment plan for you. You may be eligible for an income-driven repayment plan, based on your adjusted gross income, state, and household size.",
+          "note": "Include here a free local student loan counseling service that accepts referrals, such as American Student Assistance (www.asa.org)."
+        },
+        {
+          "text": "For federal tax debt, find a Low-Income Tax Clinic, to access pro bono (free) attorneys who may be able to help you lower the debt or enter into a repayment plan that works for you. You can find a LITC near you here: https://taxpayeradvocate.irs.gov/about/litc",
+          "note": null
+        },
+        {
+          "text": "For collection or judgment accounts, seek a pro bono (free) consumer debt attorney for assistance: https://www.lawhelp.org/find-help/. They may also advise on whether or not you would be a candidate for bankruptcy.",
+          "note": "Recommend a local referral."
+        },
+        {
+          "text": "Adjust your monthly income and expenses list, and include any minimum and extra payments toward debt as an expense. If possible, set automatic extra payments toward debts.",
+          "note": null
+        },
+        {
+          "text": "If you would like help creating a debt repayment plan, here are three options:\nSchedule a meeting with your financial coach.\nOR\nTalk to a credit counselor. The National Federation of Credit Counselors (NFCC) agency assists borrowers who are having difficulty paying their debt. If you can't pay your bills on time consistently each month, then you may want to get personalized advice from a counselor. Talk to a counselor to understand what your options are. There may be a fee for these services. You can find an NFCC member agency here: https://www.nfcc.org/\nOR\nVisit a local credit union, ideally a Community Development Credit Union. You may be able to refinance credit card debt, auto loans, or other consumer debt, into loans with lower interest rates at a credit union. This could save you money on interest payments each month and make more room in your budget. Some CDCUs also offer financial counseling to help you reach your financial goals. You can find your nearest CDCU here: http://www.cdcu.coop/membership/membership-directory/",
+          "note": "For scheduling, insert a scheduling link for the client to make an appointment with a financial coach. Or if your organization refers out for this type of support, include the referral here. If you know any local providers that would be better, insert them here."
         }
       ]
     },
     {
-      "title": "",
-      "category": "",
-      "description": "",
+      "title": "Consider enrolling in a debt management plan",
+      "category": "DEBT",
+      "description": "If you are having difficulty making minimum payments on your debts, a debt management program (DMP) may help you get out of debt faster. They will work with you to decrease your interest rates and create a repayment plan to get out of debt within 3-5 years. There will be an initial fee and monthly fee to remain in the DMP. Avoid \"debt settlement\" companies.",
       "status": "ACTIVE",
       "created_by": null,
       "user_id": null,
-      "difficulty": "",
+      "difficulty": "MODERATE",
       "date_created": "",
       "date_completed": null,
       "recurring": null,
       "steps": [
         {
-          "text": "",
+          "text": "Any DMP will require you to close almost all of your credit card accounts. Decide if you are willing to do that.",
           "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
+        },
         {
-          "text": "",
+          "text": "Find a reputable DMP using this online search tool: https://www.justice.gov/ust/list-credit-counseling-agencies-approved-pursuant-11-usc-111.",
+          "note": "If you know the local referral, this is where you can add the specific website instead of this national website."
+        },
+        {
+          "text": "List all of your debts. For each debt, include the lender, balance, minimum payment, interest rate, and monthly due date. You will need this information before you start working with the DMP.",
           "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
+        },
         {
-          "text": "",
+          "text": "List all income and expenses (including minimum monthly debt payments), and determine how much you have available every month to pay toward your debt. List all savings and decide how much you would like to contribute toward paying down debt. You will need this information before you start working with the DMP.",
           "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
+        },
         {
-          "text": "",
+          "text": "Call the DMP for your initial session. They will review your budget and debts to determine if you can benefit from a DMP.",
           "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
+        },
         {
-          "text": "",
-          "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
-        {
-          "text": "",
-          "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
-        {
-          "text": "",
-          "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
-        {
-          "text": "",
-          "note": null
-        }
-      ]
-    },
-    {
-      "title": "",
-      "category": "",
-      "description": "",
-      "status": "ACTIVE",
-      "created_by": null,
-      "user_id": null,
-      "difficulty": "",
-      "date_created": "",
-      "date_completed": null,
-      "recurring": null,
-      "steps": [
-        {
-          "text": "",
+          "text": "If you decide to enroll, negotiate any hardship discounts to decrease the initial or monthly fees for enrolling in the DMP.",
           "note": null
         }
       ]

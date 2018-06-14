@@ -1,0 +1,44 @@
+{
+  "media": [
+    {
+      "task_id": null,
+      "title": "Allene's Story",
+      "category": "",
+      "description": "",
+      "url": "https://readymag.com/u32761257/1083521/",
+      "image": "",
+      "published_by": "GET ORG ID",
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Gail's Story",
+      "category": "",
+      "description": "",
+      "url": "https://readymag.com/u32761257/1083437/",
+      "image": "",
+      "published_by": "GET ORG ID",
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Gemyra's Story",
+      "category": "",
+      "description": "",
+      "url": "https://readymag.com/u32761257/1083531/",
+      "image": "",
+      "published_by": "GET ORG ID",
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Todrick's Story",
+      "category": "",
+      "description": "",
+      "url": "https://readymag.com/u32761257/1083545/",
+      "image": "",
+      "published_by": "GET ORG ID",
+      "type": "STORY"
+    }
+  ]
+}
