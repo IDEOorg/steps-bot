@@ -1,7 +1,7 @@
 require('dotenv').config();
 const RiveScript = require('rivescript');
-const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
+const api = require('./apihelper');
 
 const self = this;
 self.riveBot = setupRiveScript();
@@ -31,7 +31,7 @@ async function getResponse(platform, userId, userMessage, topic) {
     // user doesn't exist in db
     // TODO handle user doesn't exist in db
   }
-  const tasks = getTasks(userInfo.id);
+  const tasks = api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   loadVarsToRiveBot(self.riveBot, userInfo, platform);
   self.riveBot.setUservar(userId, 'platform', platform);
@@ -48,14 +48,10 @@ async function getResponse(platform, userId, userMessage, topic) {
 
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(userId) {
-  let clients = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/clients'
-  });
-  clients = JSON.parse(clients);
+  const clients = api.getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (client.phone === userId && client.coach_id !== null) {
+    if (client.phone === userId) {
       return client;
     }
   }
@@ -72,8 +68,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
   let {
     topic
   } = userInfo;
-  const orgName = await getOrgName(userInfo.org_id);
-  const coachName = await getCoachName(userInfo.coach_id);
+  const orgName = await api.getOrgName(userInfo.org_id);
+  const coachName = await api.getCoachName(userInfo.coach_id);
   let viewedMedia = null;
   let userId = null;
   if (topic === null) {
@@ -114,10 +110,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  topic = 'content';
   if (topic === 'content') {
-    viewedMedia = await getViewedMediaIds(userInfo.id);
-    const allContent = await getAllMedia();
+    viewedMedia = await api.getViewedMediaIds(userInfo.id);
+    const allContent = await api.getAllMedia();
     for (let i = 0; i < allContent.length; i++) {
       const content = allContent[i];
       if (!viewedMedia || !viewedMedia.includes(content.id)) {
@@ -290,60 +285,6 @@ function prepareTemplateMessage(finalMessages, message, regex) {
     messageToPush = defaultErrorMessage;
   }
   finalMessages.push(messageToPush);
-}
-
-async function getTasks(id) {
-  let tasks = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/tasks'
-  });
-  tasks = JSON.parse(tasks);
-  return tasks;
-}
-
-async function getOrgName(id) {
-  let org = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/orgs/' + id.toString()
-  });
-  org = JSON.parse(org);
-  if (org) {
-    return org.name;
-  }
-  return null;
-}
-
-async function getCoachName(id) {
-  let coach = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/coaches/' + id.toString()
-  });
-  coach = JSON.parse(coach);
-  if (coach) {
-    return coach.first_name;
-  }
-  return null;
-}
-async function getAllMedia() {
-  let listOfMedia = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/media'
-  });
-  listOfMedia = JSON.parse(listOfMedia);
-  return listOfMedia.filter((media) => {
-    return media.type === 'STORY' || media.type === 'GENERAL_EDUCATION';
-  });
-}
-
-async function getViewedMediaIds(id) {
-  let viewedMedia = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
-  });
-  viewedMedia = JSON.parse(viewedMedia);
-  return viewedMedia.map((media) => {
-    return media.id;
-  });
 }
 
 function getRandomItemFromArray(array) {
