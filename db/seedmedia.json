@@ -83,7 +83,7 @@
     {
       "task_id": null,
       "title": "5 facts about credit cards",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A quick read that exposes the myths of how credit cards work.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/credit/5-facts-about-credit-cards",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -93,7 +93,7 @@
     {
       "task_id": null,
       "title": "Your guide to credit terms",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A quick read explaining how to read your credit report.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/credit/credit-score-key-terms",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -103,7 +103,7 @@
     {
       "task_id": null,
       "title": "Top 3 credit score questions",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video explaining how to build and maintain a healthy credit score.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/credit/credit-score-key-terms",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -113,7 +113,7 @@
     {
       "task_id": null,
       "title": "Building your credit with a secured credit card",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short article to help you build your credit.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/credit/build-credit-with-a-secured-credit-card",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -123,7 +123,7 @@
     {
       "task_id": null,
       "title": "Negotiating with creditors",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video with tips on how to negotiate.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/debt/debt-negotiation-tips",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -133,7 +133,7 @@
     {
       "task_id": null,
       "title": "Strategies for paying down debts",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video for understanding your options and choosing a debt payoff plans.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/debt/strategies-for-paying-debts",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -143,7 +143,7 @@
     {
       "task_id": null,
       "title": "10 ways to earn extra cash",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short article with ideas for increasing your income.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/10-ways-to-make-extra-money",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -153,7 +153,7 @@
     {
       "task_id": null,
       "title": "How to save money every day",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video with ideas on how to increase savings.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/how-to-save-money-tips",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -163,7 +163,7 @@
     {
       "task_id": null,
       "title": "Ways to save on your monthly bills",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video with ideas on how reduce your monthly spending.",
       "url": "https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/easy-ways-to-save-money",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -173,7 +173,7 @@
     {
       "task_id": null,
       "title": "Know your rights when a debt collector calls",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A short video article explaining how to deal with collection agents.",
       "url": "https://s3.amazonaws.com/steps-application-public/media_assets/know_your_rights_when_a_debt_collector_calls.pdf",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -183,7 +183,7 @@
     {
       "task_id": null,
       "title": "Spending tracking worksheet",
-      "category": "TASK_RESOURSE",
+      "category": "TASK_RESOURCE",
       "description": "A form for tracking your spending in different categories.",
       "url": "https://s3.amazonaws.com/steps-application-public/media_assets/spending_tracking_worksheet.pdf",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
