@@ -10,14 +10,12 @@ const server = require('./server.js');
 const fbController = Botkit.facebookbot({
   verify_token: process.env.FB_VERIFY_TOKEN,
   access_token: process.env.FB_PAGE_ACCESS_TOKEN,
-  require_delivery: true,
-  debug: true
+  require_delivery: true
 });
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
   auth_token: process.env.TWILIO_AUTH_TOKEN,
-  twilio_number: process.env.TWILIO_NUMBER,
-  debug: true
+  twilio_number: process.env.TWILIO_NUMBER
 });
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 // We are passing the controller object into our express server module
@@ -46,12 +44,17 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     });
   });
 });
-setInterval(() => {
-  const users = getAllClients();
+// setInterval(() => {
+updateAllClients();
+// }, 1800000);
+
+async function updateAllClients() {
+  const users = await getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
     const eligibleCheckIns = [];
+    console.log(user);
     if (checkIns) {
       for (let j = checkIns.length - 1; j >= 0; j--) {
         const checkIn = checkIns[j];
@@ -80,9 +83,9 @@ setInterval(() => {
       }
     }
   }
-}, 1800000);
+}
 
 async function getAllClients() {
-  const users = await api.getAllClients();
-  return users;
+  const clients = await api.getAllClients();
+  return clients;
 }

@@ -42,13 +42,14 @@ async function getResponse(platform, userPlatformId, userMessage, topic) {
       }]
     };
   }
-  const tasks = api.getClientTasks(userInfo.id);
+  const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  loadVarsToRiveBot(self.riveBot, userInfo, platform);
-  self.riveBot.setUservar(userPlatformId, 'platform', platform);
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
+  console.log(self.riveBot.getUservars(userPlatformId));
+  console.log('self.riveBot.getUservars(userPlatformId)');
   const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
@@ -59,7 +60,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic) {
 
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
-  const clients = api.getAllClients();
+  const clients = await api.getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
     if (platform === 'sms' && client.phone === userPlatformId) {
@@ -85,9 +86,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
   const orgName = await api.getOrgName(userInfo.org_id);
   const coachName = await api.getCoachName(userInfo.coach_id);
   let viewedMedia = null;
-  let userId = null;
+  let userPlatformId = null;
   if (topic === null) {
-    userId = userInfo.phone;
+    userPlatformId = userInfo.phone;
     if (userPlatform === 'FBOOK') {
       topic = 'setupfb'; // TODO write rivescript
     } else {
@@ -100,9 +101,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
     if (!userInfo.fb_id) {
       // TODO first fb message
     }
-    userId = userInfo.fb_id;
+    userPlatformId = userInfo.fb_id;
   } else { // is SMS
-    userId = userInfo.phone;
+    userPlatformId = userInfo.phone;
   }
 
   let taskNum = 0;
@@ -144,24 +145,26 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
   const clappingImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.clappingUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.png'; // eslint-disable-line
-  riveBot.setUservar(userId, 'topic', topic);
-  riveBot.setUservar(userId, 'username', firstName);
-  riveBot.setUservar(userId, 'coachName', coachName);
-  riveBot.setUservar(userId, 'orgName', orgName);
-  riveBot.setUservar(userId, 'taskNum', taskNum);
-  riveBot.setUservar(userId, 'contentId', contentIdChosen);
-  riveBot.setUservar(userId, 'content', contentText);
-  riveBot.setUservar(userId, 'contentUrl', contentUrl);
-  riveBot.setUservar(userId, 'currentTask', currentTask);
-  riveBot.setUservar(userId, 'storiesImgUrl', storiesImgUrl);
-  riveBot.setUservar(userId, 'celebrationImgUrl', celebrationImgUrl);
-  riveBot.setUservar(userId, 'welcomeImgUrl', welcomeImgUrl);
-  riveBot.setUservar(userId, 'workplanImgUrl', workplanImgUrl);
-  riveBot.setUservar(userId, 'clappingImgUrl', clappingImgUrl);
-  riveBot.setUservar(userId, 'taskNumImgUrl', taskNumUrl);
-  riveBot.setUservar(userId, 'checkinImgUrl', checkinImgUrl);
-  riveBot.setUservar(userId, 'workplanLink', workplanUrl);
-  riveBot.setUservar(userId, 'introVideoLink', assetUrls.videoUrl);
+  riveBot.setUservar(userPlatformId, 'topic', topic);
+  riveBot.setUservar(userPlatformId, 'username', firstName);
+  riveBot.setUservar(userPlatformId, 'coachName', coachName);
+  riveBot.setUservar(userPlatformId, 'orgName', orgName);
+  riveBot.setUservar(userPlatformId, 'taskNum', taskNum);
+  riveBot.setUservar(userPlatformId, 'contentId', contentIdChosen);
+  riveBot.setUservar(userPlatformId, 'content', contentText);
+  riveBot.setUservar(userPlatformId, 'contentUrl', contentUrl);
+  riveBot.setUservar(userPlatformId, 'currentTask', currentTask);
+  riveBot.setUservar(userPlatformId, 'storiesImgUrl', storiesImgUrl);
+  riveBot.setUservar(userPlatformId, 'celebrationImgUrl', celebrationImgUrl);
+  riveBot.setUservar(userPlatformId, 'welcomeImgUrl', welcomeImgUrl);
+  riveBot.setUservar(userPlatformId, 'workplanImgUrl', workplanImgUrl);
+  riveBot.setUservar(userPlatformId, 'clappingImgUrl', clappingImgUrl);
+  riveBot.setUservar(userPlatformId, 'taskNumImgUrl', taskNumUrl);
+  riveBot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
+  riveBot.setUservar(userPlatformId, 'workplanLink', workplanUrl);
+  riveBot.setUservar(userPlatformId, 'introVideoLink', assetUrls.videoUrl);
+  self.riveBot.setUservar(userPlatformId, 'platform', platform);
+  self.riveBot.setUservar(userPlatformId, 'id', userPlatformId);
 }
 
 function setupRiveScript() {

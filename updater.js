@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
 
 module.exports = {
-  updateFirebase
+  updateUserToDB
 };
 
 function updateUserToDB(userId, variables) {
