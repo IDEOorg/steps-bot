@@ -330,7 +330,10 @@
       "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
-      "recurring": null,
+      "recurring": {
+        "frequency": 1,
+        "duration": 30
+      },
       "steps": [
         {
           "text": "If you want to use a computer or mobile device and link your accounts online, try: Mint, Personal Capital, or You Need a Budget (free for 34 days then $6.99/month). Link your online accounts (checking, savings, credit cards, student loans, etc.) to the app. The app will automatically categorize income and expenses. The app may let you manually enter expenses you paid for in cash.\nOR\nIf you want to use a computer or mobile device and manually enter transactions (and not link accounts online), try: Dollarbird, Goodbudget, Google sheets, Excel, or any note-taking tool. Search online for a expense tracking template, or create your own.\nOR\nIf you want to use paper and pencil, start a tracking notebook or list. Search online for a expense tracking template, or create your own.",
@@ -541,6 +544,22 @@
       ]
     },
     {
+      "title": "Lower food costs. Get food from a Share Food Network to supplement paying for groceries, or look into food pantries (www.foodpantries.org)",
+      "category": "EXPENSES",
+      "description": "Lower food costs.",
+      "status": "ACTIVE",
+      "created_by": null,
+      "user_id": null,
+      "difficulty": "MODERATE",
+      "date_created": "",
+      "date_completed": null,
+      "recurring": {
+        "frequency": 7,
+        "duration": 30
+      },
+      "steps": null
+    },
+    {
       "title": "Access and download your credit report online from all three credit bureaus",
       "category": "CREDIT",
       "description": "Whether it's to improve your credit score or to simply monitor your report to ensure that all information is accurate, you should request a copy of your credit report at least once a year.",
@@ -658,7 +677,10 @@
       "difficulty": "EASY",
       "date_created": "",
       "date_completed": null,
-      "recurring": null,
+      "recurring": {
+        "frequency": 30,
+        "duration": 62
+      },
       "steps": [
         {
           "text": "Create a list of all active credit lines and their payment due dates.",
