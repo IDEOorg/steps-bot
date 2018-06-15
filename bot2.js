@@ -1,6 +1,7 @@
 require('dotenv').config();
 const bot = require('./bothelper');
 const sender = require('./senderhelper');
+const api = require('./apihelper');
 const updater = require('./updater');
 const Botkit = require('botkit');
 const server = require('./server.js');
@@ -22,6 +23,9 @@ const twilioController = Botkit.twiliosmsbot({
 // We are passing the controller object into our express server module
 // so we can extend it and process incoming message payloads
 server(fbController, twilioController);
+api.getAllUsers().then((users) => {
+  console.log(users);
+});
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
 fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
@@ -44,33 +48,42 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   });
 });
 setInterval(() => {
-  const usersRef = db.ref('users');
-  usersRef.once('value').then((snapshot) => {
-    const usersData = snapshot.val();
-    const users = Object.keys(usersData);
-    for (let i = 0; i < users.length; i++) {
-      const userId = users[i];
-      const futureCheckIns = usersData[userId].followUpCheckIns;
-      if (futureCheckIns) {
-        const checkInIds = Object.keys(futureCheckIns);
-        for (let j = 0; j < checkInIds.length; j++) {
-          const checkInId = checkInIds[j];
-          const {
-            time,
-            topic,
-            message
-          } = futureCheckIns[checkInId];
-          if (time < Date.now()) {
-            usersRef.child(userId).child('followUpCheckIns').child(checkInId).remove();
-            bot.getResponse('fb', userId, message, topic).then((response) => {
-              sender.sendReply('fb', userId, response.messages).then(() => {
-                updater.updateFirebase(db, userId, response.variables);
-                bot.resetVariables(userId);
-              });
-            });
-          }
+  const users = getAllUsers();
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    const checkIns = user.checkin_times;
+    const eligibleCheckIns = [];
+    if (checkIns) {
+      for (let j = checkIns.length - 1; j >= 0; j--) {
+        const checkIn = checkIns[j];
+        if (checkIn.time < Date.now()) {
+          eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
       }
+      // TODO PUT request for user await for it to finish
+      let platform = null;
+      let userId = null;
+      if (user.platform === 'FBOOK') {
+        platform = 'fb';
+        userId = user.fb_id;
+      } else { // sms
+        platform = 'sms';
+        userId = user.phone;
+      }
+      for (let j = 0; j < eligibleCheckIns.length; j++) {
+        const checkIn = eligibleCheckIns[j];
+        bot.getResponse(platform, userId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
+          sender.sendReply(platform, userId, response.messages).then(() => {
+            updater.updateFirebase(db, userId, response.variables);
+            bot.resetVariables(userId);
+          });
+        });
+      }
     }
-  });
+  }
 }, 3600000);
+
+async function getAllUsers() {
+  const users = await api.getAllUsers();
+  return users;
+}

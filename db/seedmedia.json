@@ -39,6 +39,46 @@
       "image": "",
       "published_by": null,
       "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Godfrey's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Godfrey.",
+      "url": "https://soundcloud.com/roothebot/godfrey",
+      "image": "",
+      "published_by": null,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Nicole's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Nicole.",
+      "url": "https://soundcloud.com/roothebot/nicole",
+      "image": "",
+      "published_by": null,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Nyree's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Nyree.",
+      "url": "https://soundcloud.com/roothebot/nyree",
+      "image": "",
+      "published_by": null,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Tamika's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Tamika.",
+      "url": "https://soundcloud.com/roothebot/tamika",
+      "image": "",
+      "published_by": null,
+      "type": "STORY"
     }
   ]
 }

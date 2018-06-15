@@ -4,7 +4,7 @@ module.exports = {
   updateFirebase
 };
 
-function updateFirebase(db, userId, variables) {
+function updateFirebase(userId, variables) {
   const {
     topic,
     days,
@@ -40,6 +40,7 @@ function updateFirebase(db, userId, variables) {
     }
     if (sendHelpResponse) {
       // SEND RESPONSE
+      // TODO Mepler where the email is sent helpResponse contains what user typed
       userRef.child('helpResponse').remove();
     }
     if (taskComplete) {
