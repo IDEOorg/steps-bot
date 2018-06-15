@@ -26,22 +26,24 @@ server(fbController, twilioController);
 
 // Wildcard hears response, will respond to all user input with 'Hello World!'
 fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
-  const userId = message.user;
+  const userPlatformId = message.user;
   const userMessage = message.text;
-  bot.getResponse('fb', userId, userMessage).then((response) => {
-    sender.sendReply('fb', userId, response.messages).then(() => {
-      updater.updateFirebase(db, userId, response.variables);
-      bot.resetVariables(userId);
+  bot.getResponse('fb', userPlatformId, userMessage).then((response) => {
+    sender.sendReply('fb', userPlatformId, response.messages).then(() => {
+      updater.updateUserToDB(userPlatformId, response.variables);
+      bot.resetVariables(userPlatformId);
     });
   });
 });
 
 twilioController.hears('.*', 'message_received', (_, message) => {
-  const userId = message.user;
+  const userPlatformId = message.user;
   const userMessage = message.text;
-  bot.getResponse('sms', userId, userMessage).then((response) => {
-    sender.sendReply('sms', userId, response.messages);
-    updater.updateFirebase(db, userId, response.variables);
+  bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
+    sender.sendReply('sms', userPlatformId, response.messages).then(() => {
+      updater.updateUserToDB(userPlatformId, response.variables);
+      bot.resetVariables(userPlatformId);
+    });
   });
 });
 setInterval(() => {
@@ -59,26 +61,26 @@ setInterval(() => {
       }
       // TODO PUT request for user await for it to finish
       let platform = null;
-      let userId = null;
+      let userPlatformId = null;
       if (user.platform === 'FBOOK') {
         platform = 'fb';
-        userId = user.fb_id;
+        userPlatformId = user.fb_id;
       } else { // sms
         platform = 'sms';
-        userId = user.phone;
+        userPlatformId = user.phone;
       }
       for (let j = 0; j < eligibleCheckIns.length; j++) {
         const checkIn = eligibleCheckIns[j];
-        bot.getResponse(platform, userId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
-          sender.sendReply(platform, userId, response.messages).then(() => {
-            updater.updateFirebase(db, userId, response.variables);
-            bot.resetVariables(userId);
+        bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
+          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
+            updater.updateUserToDB(userPlatformId, response.variables);
+            bot.resetVariables(userPlatformId);
           });
         });
       }
     }
   }
-}, 3600000);
+}, 1800000);
 
 async function getAllClients() {
   const users = await api.getAllClients();

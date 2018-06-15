@@ -11,47 +11,61 @@ module.exports = {
   resetVariables
 };
 
-function resetVariables(userId) {
+function resetVariables(userPlatformId) {
   const { riveBot } = self;
-  riveBot.setUservar(userId, 'timeOfDay', null);
-  riveBot.setUservar(userId, 'days', null);
-  riveBot.setUservar(userId, 'hours', null);
-  riveBot.setUservar(userId, 'nextTopic', null);
-  riveBot.setUservar(userId, 'nextMessage', null);
-  riveBot.setUservar(userId, 'contentViewed', null);
-  riveBot.setUservar(userId, 'taskComplete', null);
-  riveBot.setUservar(userId, 'resetHelp', null);
-  riveBot.setUservar(userId, 'helpResponse', null);
-  riveBot.setUservar(userId, 'sendHelpResponse', null);
+  riveBot.setUservar(userPlatformId, 'timeOfDay', null);
+  riveBot.setUservar(userPlatformId, 'days', null);
+  riveBot.setUservar(userPlatformId, 'hours', null);
+  riveBot.setUservar(userPlatformId, 'nextTopic', null);
+  riveBot.setUservar(userPlatformId, 'nextMessage', null);
+  riveBot.setUservar(userPlatformId, 'contentViewed', null);
+  riveBot.setUservar(userPlatformId, 'taskComplete', null);
+  riveBot.setUservar(userPlatformId, 'resetHelp', null);
+  riveBot.setUservar(userPlatformId, 'helpResponse', null);
+  riveBot.setUservar(userPlatformId, 'sendHelpResponse', null);
 }
 
-async function getResponse(platform, userId, userMessage, topic) {
-  const userInfo = await getUserDataFromDB(userId);
+async function getResponse(platform, userPlatformId, userMessage, topic) {
+  const userInfo = await getUserDataFromDB(platform, userPlatformId);
   if (!userInfo) {
     // user doesn't exist in db
-    // TODO handle user doesn't exist in db
+    let errMessage = null;
+    if (platform === 'sms') {
+      errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
+    } else {
+      errMessage = 'Sorry, we didn\'t recognize the Facebook ID you sent this from. If you believe this is a mistake, contact your coach.';
+    }
+    return {
+      messages: [{
+        type: 'text',
+        message: errMessage
+      }]
+    };
   }
   const tasks = api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   loadVarsToRiveBot(self.riveBot, userInfo, platform);
-  self.riveBot.setUservar(userId, 'platform', platform);
+  self.riveBot.setUservar(userPlatformId, 'platform', platform);
   if (topic) {
-    self.riveBot.setUservar(userId, 'topic', topic);
+    self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
-  const botResponse = self.riveBot.reply(userId, userMessage, self);
+  const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
     messages,
-    variables: self.riveBot.getUservars(userId)
+    variables: self.riveBot.getUservars(userPlatformId)
   };
 }
 
 // if there's a user, return api/client/id data, otherwise return null
-async function getUserDataFromDB(userId) {
+async function getUserDataFromDB(platform, userPlatformId) {
   const clients = api.getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (client.phone === userId) {
+    if (platform === 'sms' && client.phone === userPlatformId) {
+      return client;
+    }
+    if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
   }

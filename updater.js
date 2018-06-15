@@ -4,7 +4,7 @@ module.exports = {
   updateFirebase
 };
 
-function updateFirebase(userId, variables) {
+function updateUserToDB(userId, variables) {
   const {
     topic,
     days,
