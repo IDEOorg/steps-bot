@@ -1,7 +1,4 @@
 const bot = require('./bothelper');
 
-bot.setupFirebase().then((db) => {
-  bot.getResponse(db, 'fb', '10', 'startprompt').then((response) => {
-    console.log(response);
-  });
+bot.getResponse('fb', '+13176794537', 'startprompt', 'content').then((response) => {
 });

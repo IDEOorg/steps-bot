@@ -1,16 +1,13 @@
 require('dotenv').config();
 const RiveScript = require('rivescript');
-const firebase = require('firebase');
+const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
-const userData = require('./data/data.json');
-const contentData = require('./data/content.json');
 
 const self = this;
 self.riveBot = setupRiveScript();
 
 module.exports = {
   getResponse,
-  setupFirebase,
   resetVariables
 };
 
@@ -28,10 +25,15 @@ function resetVariables(userId) {
   riveBot.setUservar(userId, 'sendHelpResponse', null);
 }
 
-async function getResponse(db, platform, userId, userMessage, topic) {
-  const userInfo = await getUserDataFromFirebase(db, userId);
-  formatTasks(userInfo);
-  loadVarsToRiveBot(self.riveBot, userInfo);
+async function getResponse(platform, userId, userMessage, topic) {
+  const userInfo = await getUserDataFromDB(userId);
+  if (!userInfo) {
+    // user doesn't exist in db
+    // TODO handle user doesn't exist in db
+  }
+  const tasks = getTasks(userInfo.id);
+  userInfo.tasks = tasks;
+  loadVarsToRiveBot(self.riveBot, userInfo, platform);
   self.riveBot.setUservar(userId, 'platform', platform);
   if (topic) {
     self.riveBot.setUservar(userId, 'topic', topic);
@@ -44,81 +46,87 @@ async function getResponse(db, platform, userId, userMessage, topic) {
   };
 }
 
-function getUserDataFromFirebase(firebaseDatabase, userId) {
-  const usersRef = firebaseDatabase.ref('users');
-  const userIdRef = usersRef.child(userId).once('value');
-  return userIdRef.then((snapshot) => {
-    let userInfo = null;
-    if (!snapshot.exists()) { // if new user, add to firebase
-      userInfo = initNewUser(firebaseDatabase, userId);
-    } else {
-      userInfo = snapshot.val();
-    }
-    return userInfo;
+// if there's a user, return api/client/id data, otherwise return null
+async function getUserDataFromDB(userId) {
+  let clients = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/clients'
   });
+  clients = JSON.parse(clients);
+  for (let i = 0; i < clients.length; i++) {
+    const client = clients[i];
+    if (client.phone === userId && client.coach_id !== null) {
+      return client;
+    }
+  }
+  return null;
 }
 
-function initNewUser(db, userId) {
-  const firstName = userData.username;
-  const tasks = userData.workplan;
-  const workplanUrl = userData.workplanLink;
-  const coachName = userData.coachname;
-  const orgName = userData.orgname;
-  const userInfo = {
-    user: userId,
-    phone: userId,
-    firstName,
-    coachName,
-    orgName,
-    topic: 'welcome',
-    tasks,
-    workplanUrl,
-    followUpCheckIns: {}
-  };
-  db.ref(`users/${userId}`).set(userInfo);
-  return userInfo;
-}
-
-function loadVarsToRiveBot(riveBot, userInfo) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform) {
+  const firstName = userInfo.first_name;
+  const workplanUrl = '8th plan'; // TODO blocked
   const {
-    user,
-    topic,
-    firstName,
-    coachName,
-    orgName,
     tasks,
-    viewedMedia,
-    workplanUrl
   } = userInfo;
-  const userId = user;
-  let taskNum = null;
+  const userPlatform = userInfo.platform;
+  let {
+    topic
+  } = userInfo;
+  const orgName = await getOrgName(userInfo.org_id);
+  const coachName = await getCoachName(userInfo.coach_id);
+  let viewedMedia = null;
+  let userId = null;
+  if (topic === null) {
+    userId = userInfo.phone;
+    if (userPlatform === 'FBOOK') {
+      topic = 'setupfb'; // TODO write rivescript
+    } else {
+      topic = 'welcome';
+    }
+  } else if (userPlatform === 'FBOOK') {
+    if (platform === 'sms') { // user has registered fb account but sends SMS
+      // TODO do nothing
+    }
+    if (!userInfo.fb_id) {
+      // TODO first fb message
+    }
+    userId = userInfo.fb_id;
+  } else { // is SMS
+    userId = userInfo.phone;
+  }
+
+  let taskNum = 0;
+  let incompleteTaskFound = false;
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
+    if (!tasks[i].recurring) {
+      taskNum = i + 1;
+    }
     if (!tasks[i].complete && !tasks[i].recurring) {
       currentTask = tasks[i].text;
-      taskNum = i + 1;
+      incompleteTaskFound = true;
       break;
     }
   }
-  const allContent = contentData.content;
-  const contentIds = Object.keys(allContent);
+  // TODO handle all tasks completed scenario
+  // console.log(incompleteTaskFound);
+
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  for (let i = 0; i < contentIds.length; i++) {
-    const contentId = contentIds[i];
-    if (!viewedMedia) {
-      contentIdChosen = contentId;
-      break;
-    } else if (!Object.values(viewedMedia).includes(contentId)) {
-      contentIdChosen = contentId;
-      break;
+  topic = 'content';
+  if (topic === 'content') {
+    viewedMedia = await getViewedMediaIds(userInfo.id);
+    const allContent = await getAllMedia();
+    for (let i = 0; i < allContent.length; i++) {
+      const content = allContent[i];
+      if (!viewedMedia || !viewedMedia.includes(content.id)) {
+        contentIdChosen = content.id;
+        contentText = content.title;
+        contentUrl = content.url;
+        break;
+      }
     }
-  }
-  if (contentIdChosen) {
-    const { content, url } = allContent[contentIdChosen];
-    contentText = content || '';
-    contentUrl = url || '';
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
@@ -284,9 +292,58 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   finalMessages.push(messageToPush);
 }
 
-function formatTasks(userInfo) {
-  const taskIds = Object.keys(userInfo.tasks);
-  userInfo.tasks = taskIds.map(id => userInfo.tasks[id]);
+async function getTasks(id) {
+  let tasks = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/clients/' + id.toString() + '/tasks'
+  });
+  tasks = JSON.parse(tasks);
+  return tasks;
+}
+
+async function getOrgName(id) {
+  let org = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/orgs/' + id.toString()
+  });
+  org = JSON.parse(org);
+  if (org) {
+    return org.name;
+  }
+  return null;
+}
+
+async function getCoachName(id) {
+  let coach = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/coaches/' + id.toString()
+  });
+  coach = JSON.parse(coach);
+  if (coach) {
+    return coach.first_name;
+  }
+  return null;
+}
+async function getAllMedia() {
+  let listOfMedia = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/media'
+  });
+  listOfMedia = JSON.parse(listOfMedia);
+  return listOfMedia.filter((media) => {
+    return media.type === 'STORY' || media.type === 'GENERAL_EDUCATION';
+  });
+}
+
+async function getViewedMediaIds(id) {
+  let viewedMedia = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
+  });
+  viewedMedia = JSON.parse(viewedMedia);
+  return viewedMedia.map((media) => {
+    return media.id;
+  });
 }
 
 function getRandomItemFromArray(array) {
@@ -294,17 +351,4 @@ function getRandomItemFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
   return null;
-}
-
-async function setupFirebase() {
-  const config = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
-    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
-    projectId: 'bedstuy-bdf4e',
-    storageBucket: 'bedstuy-bdf4e.appspot.com'
-  };
-  firebase.initializeApp(config);
-  await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
-  return firebase.database();
 }
