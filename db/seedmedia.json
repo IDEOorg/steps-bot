@@ -3,41 +3,41 @@
     {
       "task_id": null,
       "title": "Allene's Story",
-      "category": "",
-      "description": "",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Allene.",
       "url": "https://readymag.com/u32761257/1083521/",
-      "image": "",
-      "published_by": "GET ORG ID",
+      "image": "https://pbs.twimg.com/profile_images/790677007650594816/7Kpv3AFh_400x400.jpg",
+      "published_by": null,
       "type": "STORY"
     },
     {
       "task_id": null,
       "title": "Gail's Story",
-      "category": "",
-      "description": "",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Gail.",
       "url": "https://readymag.com/u32761257/1083437/",
-      "image": "",
-      "published_by": "GET ORG ID",
+      "image": "https://pbs.twimg.com/profile_images/790677007650594816/7Kpv3AFh_400x400.jpg",
+      "published_by": null,
       "type": "STORY"
     },
     {
       "task_id": null,
       "title": "Gemyra's Story",
-      "category": "",
-      "description": "",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Gemyra.",
       "url": "https://readymag.com/u32761257/1083531/",
       "image": "",
-      "published_by": "GET ORG ID",
+      "published_by": null,
       "type": "STORY"
     },
     {
       "task_id": null,
       "title": "Todrick's Story",
-      "category": "",
-      "description": "",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Todrick.",
       "url": "https://readymag.com/u32761257/1083545/",
       "image": "",
-      "published_by": "GET ORG ID",
+      "published_by": null,
       "type": "STORY"
     }
   ]
