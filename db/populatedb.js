@@ -26,7 +26,7 @@ async function populateDB() {
   const coachId = coach.id.id;
 
   // create templated tasks
-  const tasks = seedTasksData.tasks;
+  const tasks = seedTasksData.tasks; // eslint-disable-line
   for (let i = 0; i < tasks.length; i++) {
     const taskData = tasks[i];
     taskData.date_created = new Date();
