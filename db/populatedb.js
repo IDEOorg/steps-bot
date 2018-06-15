@@ -37,7 +37,6 @@ async function populateDB() {
       json: true // Automatically stringifies the body to JSON
     });
   }
-  console.log(tasks.length);
   const taskOptions = [
     [0, 18],
     [],
