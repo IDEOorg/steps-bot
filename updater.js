@@ -19,7 +19,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     helpMessage,
     sendHelpMessage,
     taskComplete,
-    taskNum
+    taskNum // most likely unnecessary
   } = variables;
   const allClients = api.getAllClients();
   let client = null;
@@ -32,6 +32,15 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (!client) {
     return;
+  }
+  const { tasks } = client;
+  let currentTask = null;
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i];
+    if (!task.recurring && task.status === 'ACTIVE') {
+      currentTask = task;
+      break;
+    }
   }
   const clientCheckInTimes = client.checkInTimes;
   if (resetHelp) {
@@ -54,24 +63,15 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     client.tempHelpMessage = helpMessage; // TODO waiting on 8th light to add tempHelpMessage field
   }
   if (sendHelpMessage) {
-    const tasks = client.tasks;
-    let taskClientIsStuckOn = null;
-    for (let i = 0; i < tasks.length; i++) { // could also use the Request task_id here to get the task/steps but that's one extra api request
-      const task = tasks[i];
-      if (!task.recurring && task.status === 'ACTIVE') {
-        taskClientIsStuckOn = task;
-        break;
-      }
-    }
     const requests = await api.getUserRequests(client.id);
     let request = null;
     for (let i = 0; i < requests.length; i++) {
-      if (requests[i].task_id === taskClientIsStuckOn.id) {
+      if (requests[i].task_id === currentTask.id) {
         request = requests[i];
       }
     }
     if (!request) {
-      request = await api.createRequest(client.id, taskClientIsStuckOn.id);
+      request = await api.createRequest(client.id, currentTask.id);
     }
     const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, helpMessage);
     const coach = await api.getCoach(client.coach_id);
@@ -79,16 +79,20 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     client.tempHelpMessage = null;
   }
   if (taskComplete) {
-    const tasksRef = userRef.child('tasks');
-    tasksRef.child(taskNum).update({
-      complete: true
-    });
+    for (let i = 0; i < tasks.length; i++) {
+      const task = tasks[i];
+      if (task.id === currentTask.id) {
+        task.status = 'COMPLETED';
+        break;
+      }
+    }
   }
-  if (contentViewed) {
-    const viewedMediaKey = userRef.child('viewedMedia').push().key;
-    update['/viewedMedia/' + viewedMediaKey] = contentId;
-  }
-  userRef.update(update);
+  // TODO add next check in time
+  // if (contentViewed) { // TODO implement content viewed part
+  //   const viewedMediaKey = userRef.child('viewedMedia').push().key;
+  //   update['/viewedMedia/' + viewedMediaKey] = contentId;
+  // }
+  api.updateUser(client.id, client);
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {

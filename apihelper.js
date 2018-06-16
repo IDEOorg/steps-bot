@@ -11,7 +11,8 @@ module.exports = {
   getViewedMediaIds,
   createRequest,
   getUserRequests,
-  createMessage
+  createMessage,
+  updateUser
 };
 
 async function getAllClients() {
@@ -121,4 +122,13 @@ async function createMessage(requestId, clientId, coachId, helpMessage) {
     }
   });
   return JSON.parse(message);
+}
+
+async function updateUser(userId, userData) {
+  const user = await rp({
+    method: 'PUT',
+    uri: assetUrls.url + '/clients/' + userId,
+    body: userData
+  });
+  return JSON.parse(user);
 }
