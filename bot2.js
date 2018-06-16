@@ -28,8 +28,9 @@ fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userMessage = message.text;
   bot.getResponse('fb', userPlatformId, userMessage).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, 'fb', response.variables);
-      bot.resetVariables(userPlatformId);
+      updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
+        bot.resetVariables(userPlatformId);
+      });
     });
   });
 });
@@ -39,8 +40,9 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   const userMessage = message.text;
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
     sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, 'sms', response.variables);
-      bot.resetVariables(userPlatformId);
+      updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
+        bot.resetVariables(userPlatformId);
+      });
     });
   });
 });
@@ -77,8 +79,9 @@ async function updateAllClients() {
         const checkIn = eligibleCheckIns[j];
         bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
           sender.sendReply(platform, userPlatformId, response.messages).then(() => {
-            updater.updateUserToDB(userPlatformId, platform, response.variables);
-            bot.resetVariables(userPlatformId);
+            updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+              bot.resetVariables(userPlatformId);
+            });
           });
         });
       }

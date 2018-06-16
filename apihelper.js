@@ -5,9 +5,13 @@ module.exports = {
   getAllClients,
   getOrgName,
   getCoachName,
+  getCoach,
   getClientTasks,
   getAllMedia,
-  getViewedMediaIds
+  getViewedMediaIds,
+  createRequest,
+  getUserRequests,
+  createMessage
 };
 
 async function getAllClients() {
@@ -42,6 +46,13 @@ async function getCoachName(id) {
   return null;
 }
 
+async function getCoach(id) {
+  const coach = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/coaches/' + id.toString()
+  });
+  return JSON.parse(coach);
+}
 
 async function getClientTasks(id) {
   let tasks = await rp({
@@ -63,7 +74,6 @@ async function getAllMedia() {
   });
 }
 
-
 async function getViewedMediaIds(id) {
   let viewedMedia = await rp({
     method: 'GET',
@@ -73,4 +83,42 @@ async function getViewedMediaIds(id) {
   return viewedMedia.map((media) => {
     return media.id;
   });
+}
+
+async function createRequest(userId, taskId) {
+  const request = await rp({
+    method: 'POST',
+    uri: assetUrls.url + '/requests',
+    body: {
+      status: 'NEEDS_ASSISTANCE',
+      user_id: userId,
+      task_id: taskId
+    }
+  });
+  return JSON.parse(request);
+}
+
+async function getUserRequests(userId) {
+  const requests = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/clients/' + userId + '/requests'
+  });
+  return JSON.parse(requests);
+}
+
+async function createMessage(requestId, clientId, coachId, helpMessage) {
+  const message = await rp({
+    method: 'POST',
+    uri: assetUrls.url + '/messages',
+    body: {
+      text: helpMessage,
+      to_user: coachId,
+      from_user: clientId,
+      media_id: null,
+      request_id: requestId,
+      timestamp: new Date(),
+      responses: null
+    }
+  });
+  return JSON.parse(message);
 }

@@ -1,6 +1,6 @@
 > topic helpuserconfirm includes tempfastforward includes gibberish
   + yes send that
-  - Great, I'll send this message to <get coachName> right away and get back to you once I've heard from them.<set sendHelpResponse=true><set resetHelp=true>{@ setvars}
+  - Great, I'll send this message to <get coachName> right away and get back to you once I've heard from them.<set sendHelpMessage=true><set resetHelp=true>{@ setvars}
   + i have a few edits
   - No problem at all. Just send me your full revised message (with as many details as possible) so I can contact <get coachName> and get some answers.<set resetHelp=true><set hours=8><set nextTopic=help><set nextMessage=pinguser>{topic=helpuserresponse}
   + never mind

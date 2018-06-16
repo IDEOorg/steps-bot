@@ -21,8 +21,8 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'contentViewed', null);
   riveBot.setUservar(userPlatformId, 'taskComplete', null);
   riveBot.setUservar(userPlatformId, 'resetHelp', null);
-  riveBot.setUservar(userPlatformId, 'helpResponse', null);
-  riveBot.setUservar(userPlatformId, 'sendHelpResponse', null);
+  riveBot.setUservar(userPlatformId, 'helpMessage', null);
+  riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic) {
