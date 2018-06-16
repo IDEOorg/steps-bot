@@ -29,6 +29,7 @@ setupFirebase().then((db) => {
   fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
     const userId = message.user;
     const userMessage = message.text;
+    console.log(message);
     bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
       sender.sendReply('fb', userId, response.messages).then(() => {
         updater.updateFirebase(db, userId, response.variables);
