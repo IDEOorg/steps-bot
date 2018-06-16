@@ -18,8 +18,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     resetHelp,
     helpMessage,
     sendHelpMessage,
-    taskComplete,
-    taskNum // most likely unnecessary
+    taskComplete
   } = variables;
   const allClients = api.getAllClients();
   let client = null;
@@ -86,7 +85,13 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     api.markMediaAsViewed(client.id, parseInt(contentId, 10));
   }
 
-  // TODO add next check in time
+  client.topic = topic;
+  client.checkin_times.push({
+    topic: nextTopic,
+    message: nextMessage,
+    time: nextCheckInDate
+  });
+  // update user
   api.updateUser(client.id, client);
 }
 
