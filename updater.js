@@ -33,7 +33,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   if (!client) {
     return;
   }
-  const { tasks } = client;
+  const { tasks } = await api.getClientTasks(client.id);
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
@@ -75,17 +75,12 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     }
     const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, helpMessage);
     const coach = await api.getCoach(client.coach_id);
-    sendHelpEmailToCoach(client, coach, helpMessage, requestMessage.timestamp, request);
+    sendHelpEmailToCoach(client, coach, helpMessage, requestMessage.timestamp, request, currentTask);
     client.tempHelpMessage = null;
   }
   if (taskComplete) {
-    for (let i = 0; i < tasks.length; i++) {
-      const task = tasks[i];
-      if (task.id === currentTask.id) {
-        task.status = 'COMPLETED';
-        break;
-      }
-    }
+    currentTask.status = 'COMPLETED';
+    api.updateTask(currentTask.id, currentTask);
   }
   // TODO add next check in time
   // if (contentViewed) { // TODO implement content viewed part
@@ -117,14 +112,14 @@ function getNextCheckInDate(days, hours, timeOfDay) {
   return checkInDate.tz('America/New_York').valueOf();
 }
 
-function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request) {
+function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request, currentTask) {
   const clientId = client.id;
   const clientFirstName = client.first_name;
   const clientLastName = client.last_name;
   const coachId = coach.id; // can also do client.coach_id
   const coachEmail = coach.email;
-  const taskTitle = taskClientIsStuckOn.title;
-  const taskSteps = taskClientIsStuckOn.steps; // [{text: 'step', note: 'usually null'}]
+  const taskTitle = currentTask.title;
+  const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
   // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
   // TODO MEPLER IMPLEMENT SENDING THE EMAIL
 }

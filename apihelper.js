@@ -12,7 +12,8 @@ module.exports = {
   createRequest,
   getUserRequests,
   createMessage,
-  updateUser
+  updateUser,
+  updateTask
 };
 
 async function getAllClients() {
@@ -131,4 +132,13 @@ async function updateUser(userId, userData) {
     body: userData
   });
   return JSON.parse(user);
+}
+
+async function updateTask(id, taskData) {
+  const task = await rp({
+    method: 'PUT',
+    uri: assetUrls.url + '/tasks/' + id,
+    body: taskData
+  });
+  return JSON.parse(task);
 }
