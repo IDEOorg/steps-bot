@@ -42,6 +42,16 @@
     },
     {
       "task_id": null,
+      "title": "Robert's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Godfrey.",
+      "url": "https://soundcloud.com/roothebot/robert",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_robert_600_900.jpg",
+      "published_by": null,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
       "title": "Godfrey's Story",
       "category": "STORY",
       "description": "Learn how financial coaching helped Godfrey.",
@@ -186,6 +196,26 @@
       "category": "TASK_RESOURCE",
       "description": "A form for tracking your spending in different categories.",
       "url": "https://s3.amazonaws.com/steps-application-public/media_assets/spending_tracking_worksheet.pdf",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
+      "published_by": null,
+      "type": "LINK"
+    },
+    {
+      "task_id": null,
+      "title": "Steps to better money management",
+      "category": "GENERAL_EDUCATION",
+      "description": "A short video with strategies for your financial future.",
+      "url": "https://www.youtube.com/watch?v=CU4l_rs50Kk",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
+      "published_by": null,
+      "type": "LINK"
+    },
+    {
+      "task_id": null,
+      "title": "5 steps for making financial decisions",
+      "category": "GENERAL_EDUCATION",
+      "description": "A short article with tips for smart money choices.",
+      "url": "https://s3.amazonaws.com/steps-application-public/media_assets/5_steps_for_making_financial_decisions.pdf",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
       "published_by": null,
       "type": "LINK"
