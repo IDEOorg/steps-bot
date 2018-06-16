@@ -53,7 +53,7 @@
     {
       "task_id": null,
       "title": "Godfrey's Story",
-      "category": "STORY",
+      "category": "PODCAST",
       "description": "Learn how financial coaching helped Godfrey.",
       "url": "https://soundcloud.com/roothebot/godfrey",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/godfrey_600_900.jpg",
@@ -63,7 +63,7 @@
     {
       "task_id": null,
       "title": "Nicole's Story",
-      "category": "STORY",
+      "category": "PODCAST",
       "description": "Learn how financial coaching helped Nicole.",
       "url": "https://soundcloud.com/roothebot/nicole",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nicole_600_900.jpg",
@@ -73,7 +73,7 @@
     {
       "task_id": null,
       "title": "Nyree's Story",
-      "category": "STORY",
+      "category": "PODCAST",
       "description": "Learn how financial coaching helped Nyree.",
       "url": "https://soundcloud.com/roothebot/nyree",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nyree_600_900.jpg",
@@ -83,7 +83,7 @@
     {
       "task_id": null,
       "title": "Tamika's Story",
-      "category": "STORY",
+      "category": "PODCAST",
       "description": "Learn how financial coaching helped Tamika.",
       "url": "https://soundcloud.com/roothebot/tamika",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_tamika_600_900.jpg",
@@ -93,7 +93,7 @@
     {
       "task_id": null,
       "title": "Steps to better money management",
-      "category": "GENERAL_EDUCATION",
+      "category": "LINK",
       "description": "A short video with strategies for your financial future.",
       "url": "https://www.youtube.com/watch?v=CU4l_rs50Kk",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
@@ -103,7 +103,7 @@
     {
       "task_id": null,
       "title": "5 steps for making financial decisions",
-      "category": "GENERAL_EDUCATION",
+      "category": "LINK",
       "description": "A short article with tips for smart money choices.",
       "url": "https://s3.amazonaws.com/steps-application-public/media_assets/5_steps_for_making_financial_decisions.pdf",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
