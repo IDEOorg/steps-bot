@@ -20,6 +20,9 @@ module.exports = function server(fbController, twilioController) {
 };
 
 function routes(app, fbController, twilioController) {
+  app.get('/helpresponse', (req, res) => {
+    console.log(req);
+  });
   app.post('/facebook/receive', (req, res) => {
     // respond to FB that the webhook has been received.
     res.status(200);
