@@ -113,7 +113,8 @@ async function populateDB() {
             image: taskTetheredPiece.image,
             published_by: orgId,
             type: taskTetheredPiece.type
-          }
+          },
+          json: true
         });
       }
     }
