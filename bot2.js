@@ -26,7 +26,9 @@ server(fbController, twilioController);
 fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
-  bot.getResponse('fb', userPlatformId, userMessage).then((response) => {
+  // get message payload here for new users
+  const fbNewUserId = null;
+  bot.getResponse('fb', userPlatformId, userMessage, fbNewUserId).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
         bot.resetVariables(userPlatformId);
@@ -57,7 +59,6 @@ async function updateAllClients() {
     const user = users[i];
     const checkIns = user.checkin_times;
     const eligibleCheckIns = [];
-    console.log(user);
     if (checkIns) {
       for (let j = checkIns.length - 1; j >= 0; j--) {
         const checkIn = checkIns[j];

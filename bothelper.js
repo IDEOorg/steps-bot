@@ -25,7 +25,7 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic) {
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
   const userInfo = await getUserDataFromDB(platform, userPlatformId);
   if (!userInfo) {
     // user doesn't exist in db
@@ -44,12 +44,10 @@ async function getResponse(platform, userPlatformId, userMessage, topic) {
   }
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform);
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, fbNewUserId);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
-  console.log(self.riveBot.getUservars(userPlatformId));
-  console.log('self.riveBot.getUservars(userPlatformId)');
   const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
@@ -73,7 +71,7 @@ async function getUserDataFromDB(platform, userPlatformId) {
   return null;
 }
 
-async function loadVarsToRiveBot(riveBot, userInfo, platform) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   const firstName = userInfo.first_name;
   const workplanUrl = '8th plan'; // TODO blocked
   const {
@@ -90,7 +88,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
   if (topic === null) {
     userPlatformId = userInfo.phone;
     if (userPlatform === 'FBOOK') {
-      topic = 'setupfb'; // TODO write rivescript
+      topic = 'setupfb';
     } else {
       topic = 'welcome';
     }
@@ -100,6 +98,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform) {
     }
     if (!userInfo.fb_id) {
       // TODO first fb message
+      topic = 'welcome'; // change it from setup
+
     }
     userPlatformId = userInfo.fb_id;
   } else { // is SMS
