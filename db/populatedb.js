@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const seedData = require('./seed.json');
 const seedMediaData = require('./seedmedia.json');
+const seedMediaTetheredData = require('./seedmediatethered.json');
 const seedTasksData = require('./seedtasks.json');
 
 const url = 'http://localhost:3001';
@@ -21,7 +22,7 @@ async function populateDB() {
     method: 'POST',
     uri: url + '/api/coaches',
     body: coachData,
-    json: true // Automatically stringifies the body to JSON
+    json: true
   });
   const coachId = coach.id.id;
 
@@ -34,7 +35,7 @@ async function populateDB() {
       method: 'POST',
       uri: url + '/api/tasks',
       body: taskData,
-      json: true // Automatically stringifies the body to JSON
+      json: true
     });
   }
   const taskOptions = [
@@ -59,7 +60,7 @@ async function populateDB() {
       method: 'POST',
       uri: url + '/api/clients',
       body: userData,
-      json: true // Automatically stringifies the body to JSON
+      json: true
     });
 
     const userTaskIds = taskOptions[Math.floor(Math.random() * taskOptions.length)];
@@ -72,7 +73,7 @@ async function populateDB() {
         method: 'POST',
         uri: url + '/api/tasks',
         body: userTaskData,
-        json: true // Automatically stringifies the body to JSON
+        json: true
       });
     }
   }
@@ -85,7 +86,36 @@ async function populateDB() {
       method: 'POST',
       uri: url + '/api/media',
       body: mediaData,
-      json: true // Automatically stringifies the body to JSON
+      json: true
     });
+  }
+
+  const taskTetheredMedia = seedMediaTetheredData.media;
+  let allTasks = await rp({
+    method: 'GET',
+    uri: url + '/api/tasks'
+  });
+  allTasks = JSON.parse(allTasks);
+  for (let i = 0; i < allTasks.length; i++) {
+    const task = allTasks[i];
+    for (let j = 0; j < taskTetheredMedia.length; j++) {
+      const taskTetheredPiece = taskTetheredMedia[j];
+      if (task.title.includes(taskTetheredPiece.queryTitle)) {
+        rp({
+          method: 'POST',
+          uri: url + '/api/media',
+          body: {
+            task_id: task.id,
+            title: taskTetheredPiece.title,
+            category: taskTetheredPiece.category,
+            description: taskTetheredPiece.description,
+            url: taskTetheredPiece.url,
+            image: taskTetheredPiece.image,
+            published_by: orgId,
+            type: taskTetheredPiece.type
+          }
+        });
+      }
+    }
   }
 }
