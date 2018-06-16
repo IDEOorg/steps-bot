@@ -4,7 +4,7 @@ module.exports = {
   updateUserToDB
 };
 
-function updateUserToDB(userId, variables) {
+function updateUserToDB(userPlatformId, platform, variables) {
   const {
     topic,
     days,

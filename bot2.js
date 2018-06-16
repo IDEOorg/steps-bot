@@ -28,7 +28,7 @@ fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userMessage = message.text;
   bot.getResponse('fb', userPlatformId, userMessage).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, response.variables);
+      updater.updateUserToDB(userPlatformId, 'fb', response.variables);
       bot.resetVariables(userPlatformId);
     });
   });
@@ -39,7 +39,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   const userMessage = message.text;
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
     sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, response.variables);
+      updater.updateUserToDB(userPlatformId, 'sms', response.variables);
       bot.resetVariables(userPlatformId);
     });
   });
@@ -50,6 +50,7 @@ updateAllClients();
 
 async function updateAllClients() {
   const users = await getAllClients();
+  // TODO handle scenario where user has fb platform but hasn't signed up on messenger yet.
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
@@ -76,7 +77,7 @@ async function updateAllClients() {
         const checkIn = eligibleCheckIns[j];
         bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
           sender.sendReply(platform, userPlatformId, response.messages).then(() => {
-            updater.updateUserToDB(userPlatformId, response.variables);
+            updater.updateUserToDB(userPlatformId, platform, response.variables);
             bot.resetVariables(userPlatformId);
           });
         });
