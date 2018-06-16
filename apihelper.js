@@ -13,7 +13,8 @@ module.exports = {
   getUserRequests,
   createMessage,
   updateUser,
-  updateTask
+  updateTask,
+  markMediaAsViewed
 };
 
 async function getAllClients() {
@@ -141,4 +142,12 @@ async function updateTask(id, taskData) {
     body: taskData
   });
   return JSON.parse(task);
+}
+
+async function markMediaAsViewed(clientId, mediaId) {
+  const media = await rp({
+    method: 'POST',
+    uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId
+  });
+  return JSON.parse(media);
 }

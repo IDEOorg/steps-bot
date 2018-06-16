@@ -82,11 +82,11 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     currentTask.status = 'COMPLETED';
     api.updateTask(currentTask.id, currentTask);
   }
+  if (contentViewed) {
+    api.markMediaAsViewed(client.id, parseInt(contentId, 10));
+  }
+
   // TODO add next check in time
-  // if (contentViewed) { // TODO implement content viewed part
-  //   const viewedMediaKey = userRef.child('viewedMedia').push().key;
-  //   update['/viewedMedia/' + viewedMediaKey] = contentId;
-  // }
   api.updateUser(client.id, client);
 }
 
