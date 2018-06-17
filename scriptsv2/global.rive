@@ -3,6 +3,6 @@
   - You will not receive any more messages. To opt back in, message the word "START".
   + plan
   - Here's a link to your full work plan.\n<get workplanLink>
-  + help
+  + coach
   - {topic=help} {@startprompt}
 < topic
