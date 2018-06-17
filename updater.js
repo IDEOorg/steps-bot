@@ -8,6 +8,7 @@ module.exports = {
 async function updateUserToDB(userPlatformId, platform, variables) {
   console.log('************************variables*****************');
   console.log(variables);
+  console.log(userPlatformId);
   const {
     topic,
     days,
@@ -34,7 +35,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   if (!client) {
     return;
   }
-  const { tasks } = await api.getClientTasks(client.id);
+  console.log('tempclient found');
+  const tasks = await api.getClientTasks(client.id);
+  console.log(tasks);
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
@@ -43,6 +46,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       break;
     }
   }
+  console.log('*************currentTask**************');
+  console.log(currentTask);
   const clientCheckInTimes = client.checkInTimes;
   if (resetHelp) {
     client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
@@ -55,6 +60,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     });
   }
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+  console.log('********next check in date*************');
+  console.log(nextCheckInDate);
   if (nextCheckInDate) {
     client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.recurring;
