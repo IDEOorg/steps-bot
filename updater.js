@@ -38,6 +38,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   let client = null;
   for (let i = 0; i < allClients.length; i++) {
     const tempClient = allClients[i];
+    if (tempClient.phone[0] !== '+') {
+      tempClient.phone = '+1' + tempClient.phone;
+    }
     if ((platform === 'fb' && tempClient.fb_id === userPlatformId) || (platform === 'sms' && tempClient.phone === userPlatformId)) {
       client = tempClient;
       break;
