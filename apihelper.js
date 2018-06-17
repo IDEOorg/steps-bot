@@ -85,6 +85,8 @@ async function getViewedMediaIds(id) {
     method: 'GET',
     uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
   });
+  console.log('viia');
+  console.log(viewedMedia);
   viewedMedia = JSON.parse(viewedMedia);
   return viewedMedia.map((media) => {
     return media.id;

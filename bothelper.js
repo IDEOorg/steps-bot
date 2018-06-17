@@ -130,11 +130,13 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   // TODO format task to Rafa's specs
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
-
+  console.log('*****************processing content******************')
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
   if (topic === 'content') {
+    console.log('userInfo.id');
+    console.log(userInfo.id);
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
     console.log('viewedmedia.............');
     console.log(viewedMedia);
