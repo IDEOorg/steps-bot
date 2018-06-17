@@ -220,10 +220,12 @@ function getMessageType(message, regex) {
 }
 
 function prepareTextMessage(finalMessages, message) {
-  finalMessages.push({
-    type: 'text',
-    message
-  });
+  if (message.length) {
+    finalMessages.push({
+      type: 'text',
+      message
+    });
+  }
 }
 
 function prepareImageMessage(finalMessages, message, regex) {
