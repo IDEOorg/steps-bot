@@ -65,12 +65,19 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
+      console.log('localize');
+      console.log(userMessage, topic);
       userInfo.checkin_times.splice(soonestCheckInIndex, 1);
+      console.log(userInfo.checkin_times);
+      console.log('userInfo.checkin_times');
       await api.updateUser(userInfo.id, userInfo).then(() => {
         console.log('check in time removed after fast forward');
       });
     }
   }
+  console.log('tooooooopical');
+  console.log(topic);
+  console.log(userMessage);
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   if (topic) {
