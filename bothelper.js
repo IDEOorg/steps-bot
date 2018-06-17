@@ -151,13 +151,19 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       break;
     }
   }
+  // TODO handle all tasks completed scenario
+  if (currentTask === null) {
+    for (let i = 0; i < tasks.length; i++) {
+      const task = tasks[i];
+      task.status = 'ACTIVE';
+      await api.updateTask(task.id, task); // eslint-disable-line
+    }
+  }
 
   currentTaskSteps = currentTaskSteps.map((step, i) => {
     return `▪️ Step ${i + 1}: ${step.text}`;
   });
   currentTaskSteps = currentTaskSteps.join('\n\n');
-  // TODO handle all tasks completed scenario
-  // console.log(incompleteTaskFound);
 
   let contentIdChosen = null;
   let contentText = null;
