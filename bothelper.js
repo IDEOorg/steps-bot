@@ -99,7 +99,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
     if (!userInfo.fb_id) {
       // TODO first fb message
       topic = 'welcome'; // change it from setup
-
     }
     userPlatformId = userInfo.fb_id;
   } else { // is SMS
@@ -109,6 +108,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   let taskNum = 0;
   let incompleteTaskFound = false;
   let currentTask = null;
+  console.log('******************************tasks***********************************');
+  console.log(tasks);
   for (let i = 0; i < tasks.length; i++) {
     if (!tasks[i].recurring) {
       taskNum = i + 1;
@@ -119,6 +120,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
       break;
     }
   }
+  console.log('currentTask');
+  console.log(currentTask);
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
 
