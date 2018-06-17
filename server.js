@@ -49,6 +49,5 @@ function routes(app, fbController, twilioController) {
   });
   const bot = twilioController.spawn({});
   twilioController.createWebhookEndpoints(app, bot, () => {
-    console.log('TwilioSMSBot is online!');
   });
 }
