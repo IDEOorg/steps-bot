@@ -70,6 +70,8 @@ async function getAllMedia() {
   let listOfMedia = await rp({
     method: 'GET',
     uri: assetUrls.url + '/media'
+  }).catch((e) => {
+    console.log(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
   console.log('listOfMedia');
@@ -84,6 +86,8 @@ async function getViewedMediaIds(id) {
   let viewedMedia = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
+  }).catch((e) => {
+    console.log(e);
   });
   console.log('viia');
   console.log(viewedMedia);
@@ -103,6 +107,8 @@ async function createRequest(userId, taskId) {
       task_id: taskId
     },
     json: true
+  }).catch((e) => {
+    console.log(e);
   });
   return JSON.parse(request);
 }
@@ -139,6 +145,8 @@ async function updateUser(userId, userData) {
     uri: assetUrls.url + '/clients/' + userId,
     body: userData,
     json: true
+  }).catch((e) => {
+    console.log(e);
   });
   return user;
 }
@@ -157,6 +165,8 @@ async function markMediaAsViewed(clientId, mediaId) {
   const media = await rp({
     method: 'POST',
     uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId
+  }).catch((e) => {
+    console.log(e);
   });
   return JSON.parse(media);
 }
