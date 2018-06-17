@@ -164,10 +164,12 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       currentTaskDescription = tasks[0].description;
     } else {
       currentTask = 'We are still waiting on the coach to upload your work plan.';
+      currentTaskDescription = '';
+      currentTaskSteps = [];
     }
   }
 
-  if (currentTaskDescription.length !== 0) {
+  if (currentTaskDescription && currentTaskDescription.length !== 0) {
     currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
   }
 
