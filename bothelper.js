@@ -106,8 +106,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   }
 
   let taskNum = 0;
-  let incompleteTaskFound = false;
   let currentTask = null;
+  let currentTaskDescription = null;
+  let currentTaskSteps = null;
   console.log('******************************tasks***********************************');
   // TODO switch from firebase to postgres syntax
   for (let i = 0; i < tasks.length; i++) {
@@ -115,14 +116,20 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
     if (!tasks[i].recurring) {
       taskNum = i + 1;
     }
-    if (!tasks[i].complete && !tasks[i].recurring) {
-      currentTask = tasks[i].text;
-      incompleteTaskFound = true;
+    if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+      currentTask = tasks[i].title;
+      currentTaskSteps = tasks[i].steps;
+      currentTaskDescription = tasks[i].description;
       break;
     }
   }
-  console.log('currentTask');
-  console.log(currentTask);
+
+  let formattedTaskSteps = currentTaskSteps.map((step, i) => {
+    return `▪️ Step ${i + 1}: ${step.text}`;
+  });
+  formattedTaskSteps = formattedTaskSteps.join('\n\n');
+  // TODO only get text from steps
+  // TODO format task to Rafa's specs
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
 

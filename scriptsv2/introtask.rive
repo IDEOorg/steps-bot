@@ -3,9 +3,11 @@
   - Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
   ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
   ^ Use the buttons above to ask for help or to let me know you've finished.<send></fb>
-  ^ <sms>^image("<get taskNumImgUrl>")<send>
-  ^ <get currentTask><send>
-  ^ If you need some assistance,\nText the letter A.\nIf you've finished, \nText the letter B.</sms>
+  ^ <sms>^image("<get taskNumImgUrl>")<send></sms>
+  ^ 👉<get currentTask>👈<send>
+  ^ ▪️ Why it matters:\n<get currentTaskDescription><send>
+  ^ <get currentTaskSteps><send>
+  ^ <sms>If you need some assistance,\nText the letter A.\nIf you've finished, \nText the letter B.</sms>
   ^ You've got this! I'll check in on your progress soon. Good luck!{@ setvars}
   + a
   - {topic=help}{@ startprompt}
