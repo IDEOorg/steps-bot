@@ -44,10 +44,10 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform, fbNewUserId);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
   const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
@@ -71,7 +71,7 @@ async function getUserDataFromDB(platform, userPlatformId) {
   return null;
 }
 
-async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNewUserId) {
   const firstName = userInfo.first_name;
   const workplanUrl = '8th plan'; // TODO blocked
   const {
@@ -132,10 +132,11 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   // console.log(incompleteTaskFound);
   console.log('*****************processing content******************');
   console.log(userInfo.id);
+  console.log(topic);
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  if (topic === 'content') {
+  if (topic === 'content' || userMessage === 'contenttopic' || userMessage === 'ff') {
     console.log('userInfo.id');
     console.log(userInfo.id);
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
