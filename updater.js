@@ -74,7 +74,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
   console.log('********next check in date*************');
-  console.log(nextCheckInDate);
   if (nextCheckInDate) {
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       if (checkInTime.recurring) {

@@ -112,7 +112,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   console.log('******************************tasks***********************************');
   // TODO switch from firebase to postgres syntax
   for (let i = 0; i < tasks.length; i++) {
-    console.log(tasks[i]);
     if (!tasks[i].recurring) {
       taskNum = i + 1;
     }
@@ -137,9 +136,13 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   let contentUrl = null;
   if (topic === 'content') {
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
+    console.log('viewedmedia.............');
+    console.log(viewedMedia);
     const allContent = await api.getAllMedia();
     for (let i = 0; i < allContent.length; i++) {
       const content = allContent[i];
+      console.log('content.............');
+      console.log(content);
       if (!viewedMedia || !viewedMedia.includes(content.id)) {
         contentIdChosen = content.id;
         contentText = content.title;

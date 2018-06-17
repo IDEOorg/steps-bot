@@ -72,8 +72,11 @@ async function getAllMedia() {
     uri: assetUrls.url + '/media'
   });
   listOfMedia = JSON.parse(listOfMedia);
+  console.log('listOfMedia');
+  console.log(listOfMedia);
+  console.log('listOfMedia');
   return listOfMedia.filter((media) => {
-    return media.type === 'STORY' || media.type === 'GENERAL_EDUCATION';
+    return media.task_id === null && (media.type === 'STORY' || media.type === 'GENERAL_EDUCATION');
   });
 }
 
