@@ -20,20 +20,20 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete
   } = variables;
-  console.log({
-    topic,
-    days,
-    hours,
-    timeOfDay,
-    nextTopic,
-    nextMessage,
-    contentViewed,
-    contentId,
-    resetHelp,
-    helpMessage,
-    sendHelpMessage,
-    taskComplete
-  });
+  // console.log({
+  //   topic,
+  //   days,
+  //   hours,
+  //   timeOfDay,
+  //   nextTopic,
+  //   nextMessage,
+  //   contentViewed,
+  //   contentId,
+  //   resetHelp,
+  //   helpMessage,
+  //   sendHelpMessage,
+  //   taskComplete
+  // });
   const allClients = await api.getAllClients();
   let client = null;
   for (let i = 0; i < allClients.length; i++) {
