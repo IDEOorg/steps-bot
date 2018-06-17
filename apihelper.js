@@ -162,11 +162,15 @@ async function updateTask(id, taskData) {
 }
 
 async function markMediaAsViewed(clientId, mediaId) {
+  console.log('clientId,mm');
+  console.log(clientId);
+  console.log(mediaId);
   const media = await rp({
     method: 'POST',
     uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId
   }).catch((e) => {
     // console.log(e);
   });
+  console.log(media);
   return JSON.parse(media);
 }
