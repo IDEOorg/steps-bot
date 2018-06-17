@@ -5,7 +5,7 @@
   ^ Use the buttons above to ask for help or to let me know you've finished.<send></fb>
   ^ <sms>^image("<get taskNumImgUrl>")<send></sms>
   ^ 👉<get currentTask>👈<send>
-  ^ ▪️ Why it matters:\n<get currentTaskDescription><send>
+  ^ <get currentTaskDescription><send>
   ^ <get currentTaskSteps><send>
   ^ At any point you can message "COACH" to contact your coach, "PLAN" to see your work plan, or "STOP" to stop receiving messages.<send>
   ^ <sms>If you need some assistance, text the letter "A".\nIf you've finished, text the letter "B".</sms>

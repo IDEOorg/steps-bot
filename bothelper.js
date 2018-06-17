@@ -158,9 +158,17 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       task.status = 'ACTIVE';
       await api.updateTask(task.id, task); // eslint-disable-line
     }
-    currentTask = tasks[0].title;
-    currentTaskSteps = tasks[0].steps;
-    currentTaskDescription = tasks[0].description;
+    if (tasks.length !== 0) {
+      currentTask = tasks[0].title;
+      currentTaskSteps = tasks[0].steps;
+      currentTaskDescription = tasks[0].description;
+    } else {
+      currentTask = 'We are still waiting on the coach to upload your work plan.';
+    }
+  }
+
+  if (currentTaskDescription.length !== 0) {
+    currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
   }
 
   currentTaskSteps = currentTaskSteps.map((step, i) => {
