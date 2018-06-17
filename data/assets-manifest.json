@@ -5,11 +5,8 @@
   "done": {
     "path": "static/images/done/",
     "images": [
-      "celebration_congrats.gif",
-      "celebration_finishline.gif",
-      "celebration_hi5.gif",
-      "celebration_nail-it.gif",
-      "celebration_yay.gif"
+      "celebration_swish.gif",
+      "celebration_firework.gif"
     ]
   },
   "help": {
@@ -21,10 +18,8 @@
   "checkin": {
     "path": "static/images/checkin/",
     "images": [
-      "check-in_hello.gif",
-      "check-in_hi.gif",
-      "check-in_hola.gif",
-      "check-in_sup.gif"
+      "check_in_blinds.gif",
+      "check_in_sunglasses.gif"
     ]
   },
   "stories": {
@@ -52,7 +47,7 @@
     "images": [
       "welcome_hi.gif"
     ],
-    "workplanUrl": "Workplan.png",
-    "clappingUrl": "hand_applause.gif"
+    "workplanImgUrl": "Workplan.png",
+    "introCelebrateUrl": "intro_celebrate.gif"
   }
 }

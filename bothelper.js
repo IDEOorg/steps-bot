@@ -159,8 +159,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
-  const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanUrl;
-  const clappingImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.clappingUrl;
+  const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
+  const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.png'; // eslint-disable-line
   riveBot.setUservar(userPlatformId, 'topic', topic);
@@ -180,7 +180,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   riveBot.setUservar(userPlatformId, 'celebrationImgUrl', celebrationImgUrl);
   riveBot.setUservar(userPlatformId, 'welcomeImgUrl', welcomeImgUrl);
   riveBot.setUservar(userPlatformId, 'workplanImgUrl', workplanImgUrl);
-  riveBot.setUservar(userPlatformId, 'clappingImgUrl', clappingImgUrl);
+  riveBot.setUservar(userPlatformId, 'introCelebrateImgUrl', introCelebrateImgUrl);
   riveBot.setUservar(userPlatformId, 'taskNumImgUrl', taskNumUrl);
   riveBot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
   riveBot.setUservar(userPlatformId, 'workplanLink', workplanUrl);
