@@ -27,8 +27,8 @@ function routes(app, fbController, twilioController) {
   });
   app.post('/facebook/receive', (req, res) => {
     // respond to FB that the webhook has been received.
-    console.log(req.body.entry[0]);
     console.log(req.body.entry[0].messaging);
+    console.log(req.body.entry[0].messaging.referral);
     res.status(200);
     res.send('ok');
 
