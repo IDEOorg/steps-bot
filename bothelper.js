@@ -8,7 +8,8 @@ self.riveBot = setupRiveScript();
 
 module.exports = {
   getResponse,
-  resetVariables
+  resetVariables,
+  getUserDataFromDB
 };
 
 function resetVariables(userPlatformId) {
@@ -41,6 +42,27 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         message: errMessage
       }]
     };
+  }
+  if (userMessage.toLowerCase().trim() === 'ff') {
+    const checkInTimes = userInfo.checkin_times;
+    let soonestTime = Number.MAX_VALUE;
+    let soonestCheckInIndex = null;
+    for (let i = 0; i < checkInTimes.length; i++) {
+      const checkInTime = checkInTimes[i];
+      const { time } = checkInTime;
+      if (time !== null && time < soonestTime) {
+        soonestTime = time;
+        soonestCheckInIndex = i;
+      }
+    }
+    if (soonestCheckInIndex !== null) {
+      userMessage = checkInTimes[soonestCheckInIndex].message;
+      topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
+      userInfo.checkin_times.splice(soonestCheckInIndex, 1);
+      await api.updateUser(userInfo.id, userInfo).then(() => {
+        console.log('check in time removed after fast forward');
+      });
+    }
   }
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
