@@ -77,6 +77,20 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
+  if (tasks.length === 0 && self.riveBot.getUservar(userPlatformId, 'topic') !== 'welcome') {
+    self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
+    return {
+      messages: [
+        {
+          type: 'text',
+          message: 'We\'re still waiting on your coach to upload your list of tasks. Check back some other time.'
+        }
+      ],
+      variables: {
+        topic: 'introtask'
+      }
+    };
+  }
   const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
@@ -163,9 +177,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       currentTaskSteps = tasks[0].steps;
       currentTaskDescription = tasks[0].description;
     } else {
-      currentTask = 'We are still waiting on the coach to upload your work plan.';
-      currentTaskDescription = '';
-      currentTaskSteps = [];
+      currentTask = null;
+      currentTaskDescription = null;
+      currentTaskSteps = null;
     }
   }
 
@@ -173,10 +187,12 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
   }
 
-  currentTaskSteps = currentTaskSteps.map((step, i) => {
-    return `▪️ Step ${i + 1}: ${step.text}`;
-  });
-  currentTaskSteps = currentTaskSteps.join('\n\n');
+  if (currentTaskSteps !== null) {
+    currentTaskSteps = currentTaskSteps.map((step, i) => {
+      return `▪️ Step ${i + 1}: ${step.text}`;
+    });
+    currentTaskSteps = currentTaskSteps.join('\n\n');
+  }
 
   let contentIdChosen = null;
   let contentText = null;
