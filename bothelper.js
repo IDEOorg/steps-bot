@@ -136,7 +136,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  if (topic === 'content' || userMessage === 'contenttopic' || userMessage === 'ff') {
+  let formattedUserMessage = userMessage.toLowerCase().trim();
+  if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
     console.log('userInfo.id');
     console.log(userInfo.id);
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
