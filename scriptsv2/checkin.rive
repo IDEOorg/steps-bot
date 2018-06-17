@@ -1,4 +1,4 @@
-> topic checkin includes tempfastforward
+> topic checkin includes global includes tempfastforward
   + startprompt
   - Greetings <get username>! How are things coming along with action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>

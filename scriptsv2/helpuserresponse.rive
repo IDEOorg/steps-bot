@@ -1,4 +1,4 @@
-> topic helpuserresponse includes tempfastforward
+> topic helpuserresponse includes global includes tempfastforward
   + *
   - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<star>"
   ^ <fb>^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)</fb>

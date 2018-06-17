@@ -1,4 +1,4 @@
-> topic content includes tempfastforward includes gibberish
+> topic content includes global includes tempfastforward includes gibberish
   + startprompt
   - ^image("<get storiesImgUrl>")<send>
   ^ <get username>! I come bearing gifts.\n

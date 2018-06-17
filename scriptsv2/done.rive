@@ -1,4 +1,4 @@
-> topic done includes tempfastforward
+> topic done includes global includes tempfastforward
   + startprompt
   - ^image("<get celebrationImgUrl>")<send>
   ^ THAT IS AMAZING!\n

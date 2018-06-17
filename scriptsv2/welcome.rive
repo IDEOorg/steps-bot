@@ -1,4 +1,4 @@
-> topic welcome includes tempfastforward
+> topic welcome includes global includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
   ^ Hello <get username>! It's Roo, your financial coaching assistant. You're on your way to financial health!<send>
