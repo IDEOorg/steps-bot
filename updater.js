@@ -6,6 +6,8 @@ module.exports = {
 };
 
 async function updateUserToDB(userPlatformId, platform, variables) {
+  console.log('************************variables*****************');
+  console.log(variables);
   const {
     topic,
     days,
