@@ -129,16 +129,13 @@ async function createMessage(requestId, clientId, coachId, helpMessage) {
 }
 
 async function updateUser(userId, userData) {
-  console.log(userData);
-  console.log('userData');
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
     body: userData,
     json: true
   });
-  console.log(user);
-  return JSON.parse(user);
+  return user;
 }
 
 async function updateTask(id, taskData) {
