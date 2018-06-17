@@ -1,9 +1,9 @@
 require('dotenv').config();
 const bot = require('./bothelper');
 const sender = require('./senderhelper');
+const api = require('./apihelper');
 const updater = require('./updater');
 const Botkit = require('botkit');
-const firebase = require('firebase');
 const server = require('./server.js');
 
 // Create the Botkit controller, which controls all instances of the bot.
@@ -23,71 +23,75 @@ const twilioController = Botkit.twiliosmsbot({
 // so we can extend it and process incoming message payloads
 server(fbController, twilioController);
 
-setupFirebase().then((db) => {
-  // Wildcard hears response, will respond to all user input with 'Hello World!'
-  fbController.on('message_received,facebook_postback,facebook_referral', (_, message) => {
-    console.log(_);
-    console.log(message);
-    const userId = message.user;
-    const userMessage = message.text;
-    bot.getResponse(db, 'fb', userId, userMessage).then((response) => {
-      sender.sendReply('fb', userId, response.messages).then(() => {
-        updater.updateFirebase(db, userId, response.variables);
-        bot.resetVariables(userId);
+// Wildcard hears response, will respond to all user input with 'Hello World!'
+fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
+  const userPlatformId = message.user;
+  const userMessage = message.text;
+  // get message payload here for new users
+  const fbNewUserId = null;
+  bot.getResponse('fb', userPlatformId, userMessage, fbNewUserId).then((response) => {
+    sender.sendReply('fb', userPlatformId, response.messages).then(() => {
+      updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
+        bot.resetVariables(userPlatformId);
       });
     });
   });
-
-  twilioController.hears('.*', 'message_received', (_, message) => {
-    const userId = message.user;
-    const userMessage = message.text;
-    bot.getResponse(db, 'sms', userId, userMessage).then((response) => {
-      sender.sendReply('sms', userId, response.messages);
-      updater.updateFirebase(db, userId, response.variables);
-    });
-  });
-  setInterval(() => {
-    const usersRef = db.ref('users');
-    usersRef.once('value').then((snapshot) => {
-      const usersData = snapshot.val();
-      const users = Object.keys(usersData);
-      for (let i = 0; i < users.length; i++) {
-        const userId = users[i];
-        const futureCheckIns = usersData[userId].followUpCheckIns;
-        if (futureCheckIns) {
-          const checkInIds = Object.keys(futureCheckIns);
-          for (let j = 0; j < checkInIds.length; j++) {
-            const checkInId = checkInIds[j];
-            const {
-              time,
-              topic,
-              message
-            } = futureCheckIns[checkInId];
-            if (time < Date.now()) {
-              usersRef.child(userId).child('followUpCheckIns').child(checkInId).remove();
-              bot.getResponse(db, 'fb', userId, message, topic).then((response) => {
-                sender.sendReply('fb', userId, response.messages).then(() => {
-                  updater.updateFirebase(db, userId, response.variables);
-                  bot.resetVariables(userId);
-                });
-              });
-            }
-          }
-        }
-      }
-    });
-  }, 3600000);
 });
 
-async function setupFirebase() {
-  const config = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
-    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
-    projectId: 'bedstuy-bdf4e',
-    storageBucket: 'bedstuy-bdf4e.appspot.com'
-  };
-  firebase.initializeApp(config);
-  await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
-  return firebase.database();
+twilioController.hears('.*', 'message_received', (_, message) => {
+  const userPlatformId = message.user;
+  const userMessage = message.text;
+  bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
+    sender.sendReply('sms', userPlatformId, response.messages).then(() => {
+      updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
+        bot.resetVariables(userPlatformId);
+      });
+    });
+  });
+});
+// setInterval(() => {
+// updateAllClients();
+// }, 1800000);
+
+async function updateAllClients() {
+  const users = await getAllClients();
+  // TODO handle scenario where user has fb platform but hasn't signed up on messenger yet.
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    const checkIns = user.checkin_times;
+    const eligibleCheckIns = [];
+    if (checkIns) {
+      for (let j = checkIns.length - 1; j >= 0; j--) {
+        const checkIn = checkIns[j];
+        if (checkIn.time < Date.now()) {
+          eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
+        }
+      }
+      // TODO PUT request for user await for it to finish
+      let platform = null;
+      let userPlatformId = null;
+      if (user.platform === 'FBOOK') {
+        platform = 'fb';
+        userPlatformId = user.fb_id;
+      } else { // sms
+        platform = 'sms';
+        userPlatformId = user.phone;
+      }
+      for (let j = 0; j < eligibleCheckIns.length; j++) {
+        const checkIn = eligibleCheckIns[j];
+        bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
+          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
+            updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+              bot.resetVariables(userPlatformId);
+            });
+          });
+        });
+      }
+    }
+  }
+}
+
+async function getAllClients() {
+  const clients = await api.getAllClients();
+  return clients;
 }

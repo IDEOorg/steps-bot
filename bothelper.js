@@ -1,124 +1,142 @@
 require('dotenv').config();
 const RiveScript = require('rivescript');
-const firebase = require('firebase');
 const assetUrls = require('./data/assets-manifest.json');
-const userData = require('./data/data.json');
-const contentData = require('./data/content.json');
+const api = require('./apihelper');
 
 const self = this;
 self.riveBot = setupRiveScript();
 
 module.exports = {
   getResponse,
-  setupFirebase,
   resetVariables
 };
 
-function resetVariables(userId) {
+function resetVariables(userPlatformId) {
   const { riveBot } = self;
-  riveBot.setUservar(userId, 'timeOfDay', null);
-  riveBot.setUservar(userId, 'days', null);
-  riveBot.setUservar(userId, 'hours', null);
-  riveBot.setUservar(userId, 'nextTopic', null);
-  riveBot.setUservar(userId, 'nextMessage', null);
-  riveBot.setUservar(userId, 'contentViewed', null);
-  riveBot.setUservar(userId, 'taskComplete', null);
-  riveBot.setUservar(userId, 'resetHelp', null);
-  riveBot.setUservar(userId, 'helpResponse', null);
-  riveBot.setUservar(userId, 'sendHelpResponse', null);
+  riveBot.setUservar(userPlatformId, 'timeOfDay', null);
+  riveBot.setUservar(userPlatformId, 'days', null);
+  riveBot.setUservar(userPlatformId, 'hours', null);
+  riveBot.setUservar(userPlatformId, 'nextTopic', null);
+  riveBot.setUservar(userPlatformId, 'nextMessage', null);
+  riveBot.setUservar(userPlatformId, 'contentViewed', null);
+  riveBot.setUservar(userPlatformId, 'taskComplete', null);
+  riveBot.setUservar(userPlatformId, 'resetHelp', null);
+  riveBot.setUservar(userPlatformId, 'helpMessage', null);
+  riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
 }
 
-async function getResponse(db, platform, userId, userMessage, topic) {
-  const userInfo = await getUserDataFromFirebase(db, userId);
-  formatTasks(userInfo);
-  loadVarsToRiveBot(self.riveBot, userInfo);
-  self.riveBot.setUservar(userId, 'platform', platform);
-  if (topic) {
-    self.riveBot.setUservar(userId, 'topic', topic);
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
+  const userInfo = await getUserDataFromDB(platform, userPlatformId);
+  if (!userInfo) {
+    // user doesn't exist in db
+    let errMessage = null;
+    if (platform === 'sms') {
+      errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
+    } else {
+      errMessage = 'Sorry, we didn\'t recognize the Facebook ID you sent this from. If you believe this is a mistake, contact your coach.';
+    }
+    return {
+      messages: [{
+        type: 'text',
+        message: errMessage
+      }]
+    };
   }
-  const botResponse = self.riveBot.reply(userId, userMessage, self);
+  const tasks = await api.getClientTasks(userInfo.id);
+  userInfo.tasks = tasks;
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, fbNewUserId);
+  if (topic) {
+    self.riveBot.setUservar(userPlatformId, 'topic', topic);
+  }
+  const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
     messages,
-    variables: self.riveBot.getUservars(userId)
+    variables: self.riveBot.getUservars(userPlatformId)
   };
 }
 
-function getUserDataFromFirebase(firebaseDatabase, userId) {
-  const usersRef = firebaseDatabase.ref('users');
-  const userIdRef = usersRef.child(userId).once('value');
-  return userIdRef.then((snapshot) => {
-    let userInfo = null;
-    if (!snapshot.exists()) { // if new user, add to firebase
-      userInfo = initNewUser(firebaseDatabase, userId);
-    } else {
-      userInfo = snapshot.val();
+// if there's a user, return api/client/id data, otherwise return null
+async function getUserDataFromDB(platform, userPlatformId) {
+  const clients = await api.getAllClients();
+  for (let i = 0; i < clients.length; i++) {
+    const client = clients[i];
+    if (platform === 'sms' && client.phone === userPlatformId) {
+      return client;
     }
-    return userInfo;
-  });
+    if (platform === 'fb' && client.fb_id === userPlatformId) {
+      return client;
+    }
+  }
+  return null;
 }
 
-function initNewUser(db, userId) {
-  const firstName = userData.username;
-  const tasks = userData.workplan;
-  const workplanUrl = userData.workplanLink;
-  const coachName = userData.coachname;
-  const orgName = userData.orgname;
-  const userInfo = {
-    user: userId,
-    phone: userId,
-    firstName,
-    coachName,
-    orgName,
-    topic: 'welcome',
-    tasks,
-    workplanUrl,
-    followUpCheckIns: {}
-  };
-  db.ref(`users/${userId}`).set(userInfo);
-  return userInfo;
-}
-
-function loadVarsToRiveBot(riveBot, userInfo) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
+  const firstName = userInfo.first_name;
+  const workplanUrl = '8th plan'; // TODO blocked
   const {
-    user,
-    topic,
-    firstName,
-    coachName,
-    orgName,
     tasks,
-    viewedMedia,
-    workplanUrl
   } = userInfo;
-  const userId = user;
-  let taskNum = null;
+  const userPlatform = userInfo.platform;
+  let {
+    topic
+  } = userInfo;
+  const orgName = await api.getOrgName(userInfo.org_id);
+  const coachName = await api.getCoachName(userInfo.coach_id);
+  let viewedMedia = null;
+  let userPlatformId = null;
+  if (topic === null) {
+    userPlatformId = userInfo.phone;
+    if (userPlatform === 'FBOOK') {
+      topic = 'setupfb';
+    } else {
+      topic = 'welcome';
+    }
+  } else if (userPlatform === 'FBOOK') {
+    if (platform === 'sms') { // user has registered fb account but sends SMS
+      // TODO do nothing
+    }
+    if (!userInfo.fb_id) {
+      // TODO first fb message
+      topic = 'welcome'; // change it from setup
+
+    }
+    userPlatformId = userInfo.fb_id;
+  } else { // is SMS
+    userPlatformId = userInfo.phone;
+  }
+
+  let taskNum = 0;
+  let incompleteTaskFound = false;
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
+    if (!tasks[i].recurring) {
+      taskNum = i + 1;
+    }
     if (!tasks[i].complete && !tasks[i].recurring) {
       currentTask = tasks[i].text;
-      taskNum = i + 1;
+      incompleteTaskFound = true;
       break;
     }
   }
-  const allContent = contentData.content;
-  const contentIds = Object.keys(allContent);
+  // TODO handle all tasks completed scenario
+  // console.log(incompleteTaskFound);
+
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  for (let i = 0; i < contentIds.length; i++) {
-    const contentId = contentIds[i];
-    if (!viewedMedia) {
-      contentIdChosen = contentId;
-      break;
-    } else if (!Object.values(viewedMedia).includes(contentId)) {
-      contentIdChosen = contentId;
-      break;
+  if (topic === 'content') {
+    viewedMedia = await api.getViewedMediaIds(userInfo.id);
+    const allContent = await api.getAllMedia();
+    for (let i = 0; i < allContent.length; i++) {
+      const content = allContent[i];
+      if (!viewedMedia || !viewedMedia.includes(content.id)) {
+        contentIdChosen = content.id;
+        contentText = content.title;
+        contentUrl = content.url;
+        break;
+      }
     }
-  }
-  if (contentIdChosen) {
-    const { content, url } = allContent[contentIdChosen];
-    contentText = content || '';
-    contentUrl = url || '';
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
@@ -127,24 +145,26 @@ function loadVarsToRiveBot(riveBot, userInfo) {
   const clappingImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.clappingUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.png'; // eslint-disable-line
-  riveBot.setUservar(userId, 'topic', topic);
-  riveBot.setUservar(userId, 'username', firstName);
-  riveBot.setUservar(userId, 'coachName', coachName);
-  riveBot.setUservar(userId, 'orgName', orgName);
-  riveBot.setUservar(userId, 'taskNum', taskNum);
-  riveBot.setUservar(userId, 'contentId', contentIdChosen);
-  riveBot.setUservar(userId, 'content', contentText);
-  riveBot.setUservar(userId, 'contentUrl', contentUrl);
-  riveBot.setUservar(userId, 'currentTask', currentTask);
-  riveBot.setUservar(userId, 'storiesImgUrl', storiesImgUrl);
-  riveBot.setUservar(userId, 'celebrationImgUrl', celebrationImgUrl);
-  riveBot.setUservar(userId, 'welcomeImgUrl', welcomeImgUrl);
-  riveBot.setUservar(userId, 'workplanImgUrl', workplanImgUrl);
-  riveBot.setUservar(userId, 'clappingImgUrl', clappingImgUrl);
-  riveBot.setUservar(userId, 'taskNumImgUrl', taskNumUrl);
-  riveBot.setUservar(userId, 'checkinImgUrl', checkinImgUrl);
-  riveBot.setUservar(userId, 'workplanLink', workplanUrl);
-  riveBot.setUservar(userId, 'introVideoLink', assetUrls.videoUrl);
+  riveBot.setUservar(userPlatformId, 'topic', topic);
+  riveBot.setUservar(userPlatformId, 'username', firstName);
+  riveBot.setUservar(userPlatformId, 'coachName', coachName);
+  riveBot.setUservar(userPlatformId, 'orgName', orgName);
+  riveBot.setUservar(userPlatformId, 'taskNum', taskNum);
+  riveBot.setUservar(userPlatformId, 'contentId', contentIdChosen);
+  riveBot.setUservar(userPlatformId, 'content', contentText);
+  riveBot.setUservar(userPlatformId, 'contentUrl', contentUrl);
+  riveBot.setUservar(userPlatformId, 'currentTask', currentTask);
+  riveBot.setUservar(userPlatformId, 'storiesImgUrl', storiesImgUrl);
+  riveBot.setUservar(userPlatformId, 'celebrationImgUrl', celebrationImgUrl);
+  riveBot.setUservar(userPlatformId, 'welcomeImgUrl', welcomeImgUrl);
+  riveBot.setUservar(userPlatformId, 'workplanImgUrl', workplanImgUrl);
+  riveBot.setUservar(userPlatformId, 'clappingImgUrl', clappingImgUrl);
+  riveBot.setUservar(userPlatformId, 'taskNumImgUrl', taskNumUrl);
+  riveBot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
+  riveBot.setUservar(userPlatformId, 'workplanLink', workplanUrl);
+  riveBot.setUservar(userPlatformId, 'introVideoLink', assetUrls.videoUrl);
+  self.riveBot.setUservar(userPlatformId, 'platform', platform);
+  self.riveBot.setUservar(userPlatformId, 'id', userPlatformId);
 }
 
 function setupRiveScript() {
@@ -284,27 +304,9 @@ function prepareTemplateMessage(finalMessages, message, regex) {
   finalMessages.push(messageToPush);
 }
 
-function formatTasks(userInfo) {
-  const taskIds = Object.keys(userInfo.tasks);
-  userInfo.tasks = taskIds.map(id => userInfo.tasks[id]);
-}
-
 function getRandomItemFromArray(array) {
   if (array.length) {
     return array[Math.floor(Math.random() * array.length)];
   }
   return null;
-}
-
-async function setupFirebase() {
-  const config = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: 'bedstuy-bdf4e.firebaseapp.com',
-    databaseURL: 'https://bedstuy-bdf4e.firebaseio.com',
-    projectId: 'bedstuy-bdf4e',
-    storageBucket: 'bedstuy-bdf4e.appspot.com'
-  };
-  firebase.initializeApp(config);
-  await firebase.auth().signInWithEmailAndPassword(process.env.FIREBASE_EMAIL, process.env.FIREBASE_PASSWORD);
-  return firebase.database();
 }

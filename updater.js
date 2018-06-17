@@ -1,10 +1,11 @@
 const moment = require('moment-timezone');
+const api = require('./apihelper');
 
 module.exports = {
-  updateFirebase
+  updateUserToDB
 };
 
-function updateFirebase(db, userId, variables) {
+async function updateUserToDB(userPlatformId, platform, variables) {
   const {
     topic,
     days,
@@ -15,45 +16,83 @@ function updateFirebase(db, userId, variables) {
     contentViewed,
     contentId,
     resetHelp,
-    helpResponse,
-    sendHelpResponse,
-    taskComplete,
-    taskNum
+    helpMessage,
+    sendHelpMessage,
+    taskComplete
   } = variables;
-  const userRef = db.ref('users').child(userId);
+  const allClients = api.getAllClients();
+  let client = null;
+  for (let i = 0; i < allClients.length; i++) {
+    const tempClient = allClients[i];
+    if ((platform === 'fb' && tempClient.fb_id === userPlatformId) || (platform === 'sms' && tempClient.phone === userPlatformId)) {
+      client = tempClient;
+      break;
+    }
+  }
+  if (!client) {
+    return;
+  }
+  const { tasks } = await api.getClientTasks(client.id);
+  let currentTask = null;
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i];
+    if (!task.recurring && task.status === 'ACTIVE') {
+      currentTask = task;
+      break;
+    }
+  }
+  const clientCheckInTimes = client.checkInTimes;
+  if (resetHelp) {
+    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
+      return checkInTime.topic !== 'help';
+    });
+  }
+  if (taskComplete) {
+    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
+      return checkInTime.recurring;
+    });
+  }
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
-  const update = {};
-  update.topic = topic;
-  // this if-condition has to run before the follow up check ins bit runs
-  const checkInsRef = userRef.child('followUpCheckIns');
-  updateUserCheckIns(checkInsRef, taskComplete, resetHelp).then(() => {
-    if (nextCheckInDate) {
-      const checkInKey = userRef.child('followUpCheckIns').push().key;
-      update['/followUpCheckIns/' + checkInKey] = {
-        time: nextCheckInDate,
-        message: nextMessage,
-        topic: nextTopic
-      };
+  if (nextCheckInDate) {
+    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
+      return checkInTime.recurring;
+    });
+  }
+  if (helpMessage) {
+    client.tempHelpMessage = helpMessage; // TODO waiting on 8th light to add tempHelpMessage field
+  }
+  if (sendHelpMessage) {
+    const requests = await api.getUserRequests(client.id);
+    let request = null;
+    for (let i = 0; i < requests.length; i++) {
+      if (requests[i].task_id === currentTask.id) {
+        request = requests[i];
+      }
     }
-    if (helpResponse) {
-      update.helpResponse = helpResponse;
+    if (!request) {
+      request = await api.createRequest(client.id, currentTask.id);
     }
-    if (sendHelpResponse) {
-      // SEND RESPONSE
-      userRef.child('helpResponse').remove();
-    }
-    if (taskComplete) {
-      const tasksRef = userRef.child('tasks');
-      tasksRef.child(taskNum).update({
-        complete: true
-      });
-    }
-    if (contentViewed) {
-      const viewedMediaKey = userRef.child('viewedMedia').push().key;
-      update['/viewedMedia/' + viewedMediaKey] = contentId;
-    }
-    userRef.update(update);
+    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, helpMessage);
+    const coach = await api.getCoach(client.coach_id);
+    sendHelpEmailToCoach(client, coach, helpMessage, requestMessage.timestamp, request, currentTask);
+    client.tempHelpMessage = null;
+  }
+  if (taskComplete) {
+    currentTask.status = 'COMPLETED';
+    api.updateTask(currentTask.id, currentTask);
+  }
+  if (contentViewed) {
+    api.markMediaAsViewed(client.id, parseInt(contentId, 10));
+  }
+
+  client.topic = topic;
+  client.checkin_times.push({
+    topic: nextTopic,
+    message: nextMessage,
+    time: nextCheckInDate
   });
+  // update user
+  api.updateUser(client.id, client);
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {
@@ -78,26 +117,14 @@ function getNextCheckInDate(days, hours, timeOfDay) {
   return checkInDate.tz('America/New_York').valueOf();
 }
 
-async function updateUserCheckIns(checkInsRef, taskComplete, resetHelp) {
-  const snapshot = await checkInsRef.once('value');
-  const nodes = snapshot.val();
-  if (!nodes) {
-    return;
-  }
-  const nodeKeys = Object.keys(nodes);
-  if (taskComplete) {
-    for (let i = 0; i < nodeKeys.length; i++) {
-      const nodeKey = nodeKeys[i];
-      if (!nodes[nodeKey].recurring) {
-        checkInsRef.child(nodeKey).remove();
-      }
-    }
-  } else if (resetHelp) {
-    for (let i = 0; i < nodeKeys.length; i++) {
-      const nodeKey = nodeKeys[i];
-      if (nodes[nodeKey].topic === 'help') {
-        checkInsRef.child(nodeKey).remove();
-      }
-    }
-  }
+function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request, currentTask) {
+  const clientId = client.id;
+  const clientFirstName = client.first_name;
+  const clientLastName = client.last_name;
+  const coachId = coach.id; // can also do client.coach_id
+  const coachEmail = coach.email;
+  const taskTitle = currentTask.title;
+  const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
+  // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
+  // TODO MEPLER IMPLEMENT SENDING THE EMAIL
 }
