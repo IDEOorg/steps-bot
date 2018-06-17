@@ -158,6 +158,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       task.status = 'ACTIVE';
       await api.updateTask(task.id, task); // eslint-disable-line
     }
+    currentTask = tasks[0].title;
+    currentTaskSteps = tasks[0].steps;
+    currentTaskDescription = tasks[0].description;
   }
 
   currentTaskSteps = currentTaskSteps.map((step, i) => {
