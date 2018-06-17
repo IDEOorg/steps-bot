@@ -57,33 +57,26 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         soonestCheckInIndex = i;
       }
     }
-    console.log('soonestTime');
-    console.log(soonestTime);
-    console.log(soonestCheckInIndex);
-    console.log('soonestTime');
 
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
-      console.log('localize');
-      console.log(userMessage, topic);
       userInfo.checkin_times.splice(soonestCheckInIndex, 1);
+      userInfo.topic = topic;
       console.log(userInfo.checkin_times);
       console.log('userInfo.checkin_times');
-      await api.updateUser(userInfo.id, userInfo).then(() => {
+      await api.updateUser(userInfo.id, userInfo).then((response) => {
+        console.log(response);
         console.log('check in time removed after fast forward');
       });
     }
   }
-  console.log('tooooooopical');
-  console.log(topic);
-  console.log(userMessage);
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
   const botResponse = self.riveBot.reply(userPlatformId, userMessage, self);
   const messages = parseResponse(botResponse, platform);
   return {
