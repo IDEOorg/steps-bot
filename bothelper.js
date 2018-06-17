@@ -87,7 +87,11 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         }
       ],
       variables: {
-        topic: 'introtask'
+        topic: 'introtask',
+        days: 1,
+        timeOfDay: 'morning',
+        nextTopic: 'introtask',
+        nextMessage: 'startprompt',
       }
     };
   }
