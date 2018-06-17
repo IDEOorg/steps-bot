@@ -124,11 +124,10 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
     }
   }
 
-  let formattedTaskSteps = currentTaskSteps.map((step, i) => {
+  currentTaskSteps = currentTaskSteps.map((step, i) => {
     return `▪️ Step ${i + 1}: ${step.text}`;
   });
-  formattedTaskSteps = formattedTaskSteps.join('\n\n');
-  // TODO only get text from steps
+  currentTaskSteps = currentTaskSteps.join('\n\n');
   // TODO format task to Rafa's specs
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
@@ -165,6 +164,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   riveBot.setUservar(userPlatformId, 'content', contentText);
   riveBot.setUservar(userPlatformId, 'contentUrl', contentUrl);
   riveBot.setUservar(userPlatformId, 'currentTask', currentTask);
+  riveBot.setUservar(userPlatformId, 'currentTaskSteps', currentTaskSteps);
+  riveBot.setUservar(userPlatformId, 'currentTaskDescription', currentTaskDescription);
   riveBot.setUservar(userPlatformId, 'storiesImgUrl', storiesImgUrl);
   riveBot.setUservar(userPlatformId, 'celebrationImgUrl', celebrationImgUrl);
   riveBot.setUservar(userPlatformId, 'welcomeImgUrl', welcomeImgUrl);
