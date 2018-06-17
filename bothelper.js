@@ -140,6 +140,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     console.log('userInfo.id');
     console.log(userInfo.id);
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
+    // handle case where user has viewed all media
     console.log('viewedmedia.............');
     console.log(viewedMedia);
     const allContent = await api.getAllMedia();
