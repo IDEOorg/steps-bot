@@ -74,9 +74,6 @@ async function getAllMedia() {
     // // console.log(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
-  console.log('listOfMedia');
-  console.log(listOfMedia);
-  console.log('listOfMedia');
   return listOfMedia.filter((media) => {
     return media.task_id === null && (media.type === 'STORY' || media.type === 'GENERAL_EDUCATION');
   });
@@ -89,8 +86,6 @@ async function getViewedMediaIds(id) {
   }).catch((e) => {
     // console.log(e);
   });
-  console.log('viia');
-  console.log(viewedMedia);
   viewedMedia = JSON.parse(viewedMedia);
   return viewedMedia.map((media) => {
     return media.id;
@@ -162,9 +157,6 @@ async function updateTask(id, taskData) {
 }
 
 async function markMediaAsViewed(clientId, mediaId) {
-  console.log('clientId,mm');
-  console.log(clientId);
-  console.log(mediaId);
   const media = await rp({
     method: 'POST',
     uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId

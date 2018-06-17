@@ -47,6 +47,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     const checkInTimes = userInfo.checkin_times;
     let soonestTime = Number.MAX_VALUE;
     let soonestCheckInIndex = null;
+    console.log('checkInTimes');
+    console.log(checkInTimes);
     for (let i = 0; i < checkInTimes.length; i++) {
       const checkInTime = checkInTimes[i];
       const { time } = checkInTime;
@@ -55,6 +57,11 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         soonestCheckInIndex = i;
       }
     }
+    console.log('soonestTime');
+    console.log(soonestTime);
+    console.log(soonestCheckInIndex);
+    console.log('soonestTime');
+
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
@@ -151,9 +158,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   currentTaskSteps = currentTaskSteps.join('\n\n');
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
-  console.log('*****************processing content******************');
-  console.log(userInfo.id);
-  console.log(topic);
+
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
@@ -162,9 +167,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   const formattedUserMessage = userMessage.toLowerCase().trim();
   if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
-    // handle case where user has viewed all media
-    console.log('viewedmedia.............');
-    console.log(viewedMedia);
+    // TODO handle case where user has viewed all media
     const allContent = await api.getAllMedia();
     for (let i = 0; i < allContent.length; i++) {
       const content = allContent[i];
