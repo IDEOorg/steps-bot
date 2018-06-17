@@ -109,8 +109,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, fbNewUserId) {
   let incompleteTaskFound = false;
   let currentTask = null;
   console.log('******************************tasks***********************************');
-  console.log(tasks);
+  // TODO switch from firebase to postgres syntax
   for (let i = 0; i < tasks.length; i++) {
+    console.log(tasks[i]);
     if (!tasks[i].recurring) {
       taskNum = i + 1;
     }
