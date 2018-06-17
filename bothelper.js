@@ -74,7 +74,7 @@ async function getUserDataFromDB(platform, userPlatformId) {
 
 async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNewUserId) {
   const firstName = userInfo.first_name;
-  const workplanUrl = '8th plan'; // TODO blocked
+  const workplanUrl = `https://www.helloroo.org/clients/${userInfo.id}/tasks`;
   const {
     tasks,
   } = userInfo;
@@ -94,6 +94,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       topic = 'welcome';
     }
   } else if (userPlatform === 'FBOOK') {
+    console.log(fbNewUserId);
     if (platform === 'sms') { // user has registered fb account but sends SMS
       // TODO do nothing
     }
@@ -110,8 +111,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   let currentTask = null;
   let currentTaskDescription = null;
   let currentTaskSteps = null;
-  console.log('******************************tasks***********************************');
-  // TODO switch from firebase to postgres syntax
   for (let i = 0; i < tasks.length; i++) {
     if (!tasks[i].recurring) {
       taskNum = i + 1;
@@ -128,7 +127,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     return `▪️ Step ${i + 1}: ${step.text}`;
   });
   currentTaskSteps = currentTaskSteps.join('\n\n');
-  // TODO format task to Rafa's specs
   // TODO handle all tasks completed scenario
   // console.log(incompleteTaskFound);
   console.log('*****************processing content******************');
@@ -141,8 +139,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   let contentDescription = null;
   const formattedUserMessage = userMessage.toLowerCase().trim();
   if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
-    console.log('userInfo.id');
-    console.log(userInfo.id);
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
     // handle case where user has viewed all media
     console.log('viewedmedia.............');
