@@ -42,6 +42,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
+    console.log(response);
     sender.sendReply('sms', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
         bot.resetVariables(userPlatformId);
