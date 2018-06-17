@@ -6,8 +6,7 @@ module.exports = {
 };
 
 async function updateUserToDB(userPlatformId, platform, variables) {
-  console.log('************************variables*****************');
-  console.log(variables);
+  console.log('************************platform id*****************');
   console.log(userPlatformId);
   const {
     topic,
@@ -23,7 +22,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete
   } = variables;
-  const allClients = api.getAllClients();
+  const allClients = await api.getAllClients();
   let client = null;
   for (let i = 0; i < allClients.length; i++) {
     const tempClient = allClients[i];
