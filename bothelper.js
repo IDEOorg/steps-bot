@@ -33,7 +33,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     if (platform === 'sms') {
       errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
     } else {
-      errMessage = 'Sorry, we didn\'t recognize the Facebook ID you sent this from. If you believe this is a mistake, contact your coach.';
+      errMessage = 'Sorry, we didn\'t recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.';
     }
     return {
       messages: [{
