@@ -34,9 +34,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   if (!client) {
     return;
   }
-  console.log('tempclient found');
   const tasks = await api.getClientTasks(client.id);
-  console.log(tasks);
   let currentTask = null;
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
@@ -45,30 +43,39 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       break;
     }
   }
-  console.log('*************currentTask**************');
-  console.log(currentTask);
-  const clientCheckInTimes = client.checkInTimes;
+  console.log('*************client info**************');
+  console.log(client);
+  if (client.checkin_times === null) {
+    client.checkin_times = [];
+  }
+  const clientCheckInTimes = client.checkin_times;
   if (resetHelp) {
-    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
+    client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.topic !== 'help';
     });
   }
   if (taskComplete) {
-    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
-      return checkInTime.recurring;
+    client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
+      if (checkInTime.recurring) {
+        return true;
+      }
+      return false;
     });
   }
   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
   console.log('********next check in date*************');
   console.log(nextCheckInDate);
   if (nextCheckInDate) {
-    client.checkInTimes = clientCheckInTimes.filter((checkInTime) => {
-      return checkInTime.recurring;
+    client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
+      if (checkInTime.recurring) {
+        return true;
+      }
+      return false;
     });
   }
-  if (helpMessage) {
-    client.tempHelpMessage = helpMessage; // TODO waiting on 8th light to add tempHelpMessage field
-  }
+  // if (helpMessage) { // TODO 8th light no temphelpmessage
+  //   client.temp_help_message = helpMessage; // TODO waiting on 8th light to add tempHelpMessage field
+  // }
   if (sendHelpMessage) {
     const requests = await api.getUserRequests(client.id);
     let request = null;
