@@ -11,8 +11,7 @@ const fbController = Botkit.facebookbot({
   verify_token: process.env.FB_VERIFY_TOKEN,
   access_token: process.env.FB_PAGE_ACCESS_TOKEN,
   require_delivery: true,
-  receive_via_postback: true,
-  debug: true
+  receive_via_postback: true
 });
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
@@ -26,7 +25,10 @@ server(fbController, twilioController);
 
 setupFirebase().then((db) => {
   // Wildcard hears response, will respond to all user input with 'Hello World!'
-  fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
+  fbController.hears('.*', 'facebook_postback', (_, message) => {
+    console.log(_);
+    console.log('_testtttttttttttttttttttt');
+    console.log(message);
     const userId = message.user;
     const userMessage = message.text;
     console.log(message);
