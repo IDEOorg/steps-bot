@@ -10,7 +10,8 @@ const server = require('./server.js');
 const fbController = Botkit.facebookbot({
   verify_token: process.env.FB_VERIFY_TOKEN,
   access_token: process.env.FB_PAGE_ACCESS_TOKEN,
-  require_delivery: true
+  require_delivery: true,
+  receive_via_postback: true
 });
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
