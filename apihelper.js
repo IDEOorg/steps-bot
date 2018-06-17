@@ -153,7 +153,7 @@ async function updateTask(id, taskData) {
     body: taskData,
     json: true
   });
-  return JSON.parse(task);
+  return task;
 }
 
 async function markMediaAsViewed(clientId, mediaId) {
