@@ -43,12 +43,13 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       break;
     }
   }
-  console.log('*************client info**************');
-  console.log(client);
+  console.log(client.checkin_times);
   if (client.checkin_times === null) {
     client.checkin_times = [];
   }
   const clientCheckInTimes = client.checkin_times;
+  console.log(clientCheckInTimes);
+  console.log('clientCheckInTimes');
   if (resetHelp) {
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.topic !== 'help';
