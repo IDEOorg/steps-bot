@@ -16,7 +16,7 @@
   ^ 👉<get currentTask>👈<send>
   ^ ▪️ Why it matters:\n<get currentTaskDescription><send>
   ^ <get currentTaskSteps><send>
-  ^ If you could use a little help, text the letter "A".\nIf you've completed the item,text the letter "B".<send></sms>
+  ^ If you could use a little help, text the letter "A".\nIf you've completed the item, text the letter "B".<send></sms>
   ^ You rock! I'll check in on your progress soon. {@ setvars}
   - Hey! Just wanted to let you know that you are PHENOMENAL. The action items on your work plan don't stand a chance!<send>
   ^ Here's your next action item to complete.<send>
