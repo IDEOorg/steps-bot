@@ -136,7 +136,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   let contentIdChosen = null;
   let contentText = null;
   let contentUrl = null;
-  let formattedUserMessage = userMessage.toLowerCase().trim();
+  let contentImgUrl = null;
+  let contentDescription = null;
+  const formattedUserMessage = userMessage.toLowerCase().trim();
   if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
     console.log('userInfo.id');
     console.log(userInfo.id);
@@ -147,12 +149,12 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     const allContent = await api.getAllMedia();
     for (let i = 0; i < allContent.length; i++) {
       const content = allContent[i];
-      console.log('content.............');
-      console.log(content);
       if (!viewedMedia || !viewedMedia.includes(content.id)) {
         contentIdChosen = content.id;
         contentText = content.title;
         contentUrl = content.url;
+        contentImgUrl = content.image;
+        contentDescription = content.description;
         break;
       }
     }
@@ -171,6 +173,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   riveBot.setUservar(userPlatformId, 'taskNum', taskNum);
   riveBot.setUservar(userPlatformId, 'contentId', contentIdChosen);
   riveBot.setUservar(userPlatformId, 'content', contentText);
+  riveBot.setUservar(userPlatformId, 'contentDescription', contentDescription);
+  riveBot.setUservar(userPlatformId, 'contentImgUrl', contentImgUrl);
   riveBot.setUservar(userPlatformId, 'contentUrl', contentUrl);
   riveBot.setUservar(userPlatformId, 'currentTask', currentTask);
   riveBot.setUservar(userPlatformId, 'currentTaskSteps', currentTaskSteps);
