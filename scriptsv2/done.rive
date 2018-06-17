@@ -1,9 +1,9 @@
 > topic done includes tempfastforward
   + startprompt
   - ^image("<get celebrationImgUrl>")<send>
-  ^ THAT IS AMAZING! 🎆\n
+  ^ THAT IS AMAZING!\n
   ^ Congratulations, <get username>!!!<send>
-  ^ The road to financial health is not easy but you do NOT mess around! Way to bring your A Game!\n
+  ^ The road to financial health is not easy but you do NOT mess around! Way to bring your "A" Game!\n
   ^ Take some time to celebrate yourself today. You deserve it!<send>
   ^ <fb>^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"X": "Sounds good", "N": "Ready for it now."}`)</fb>
   ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
