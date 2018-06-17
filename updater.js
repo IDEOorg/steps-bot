@@ -6,8 +6,6 @@ module.exports = {
 };
 
 async function updateUserToDB(userPlatformId, platform, variables) {
-  console.log('************************platform id*****************');
-  console.log(userPlatformId);
   const {
     topic,
     days,
@@ -22,6 +20,20 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete
   } = variables;
+  console.log({
+    topic,
+    days,
+    hours,
+    timeOfDay,
+    nextTopic,
+    nextMessage,
+    contentViewed,
+    contentId,
+    resetHelp,
+    helpMessage,
+    sendHelpMessage,
+    taskComplete
+  });
   const allClients = await api.getAllClients();
   let client = null;
   for (let i = 0; i < allClients.length; i++) {
@@ -43,7 +55,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       break;
     }
   }
-  console.log(client.checkin_times);
   if (client.checkin_times === null) {
     client.checkin_times = [];
   }
