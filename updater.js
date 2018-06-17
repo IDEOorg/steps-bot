@@ -112,11 +112,13 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
 
   client.topic = topic;
-  client.checkin_times.push({
-    topic: nextTopic,
-    message: nextMessage,
-    time: nextCheckInDate
-  });
+  if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {
+    client.checkin_times.push({
+      topic: nextTopic,
+      message: nextMessage,
+      time: nextCheckInDate
+    });
+  }
   // update user
   api.updateUser(client.id, client).then(() => {
     console.log('updated client ' + client.id);
