@@ -1,5 +1,5 @@
 {
-  "url": "http://localhost:3001/api",
+  "url": "https://steps-admin.herokuapp.com/api",
   "baseUrl": "https://stepsroobot.herokuapp.com/",
   "videoUrl": "https://youtu.be/WpHtdkKQz8Q",
   "done": {
