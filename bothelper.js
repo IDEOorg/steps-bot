@@ -164,8 +164,12 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       taskNum = i + 1;
     }
     if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+      let steps = tasks[i].steps; // eslint-disable-line
+      if (steps === null) {
+        steps = [];
+      }
       currentTask = tasks[i].title;
-      currentTaskSteps = tasks[i].steps;
+      currentTaskSteps = steps;
       currentTaskDescription = tasks[i].description;
       break;
     }
@@ -178,8 +182,12 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       await api.updateTask(task.id, task); // eslint-disable-line
     }
     if (tasks.length !== 0) {
+      let steps = tasks[0].steps; // eslint-disable-line
+      if (steps === null) {
+        steps = [];
+      }
       currentTask = tasks[0].title;
-      currentTaskSteps = tasks[0].steps;
+      currentTaskSteps = steps;
       currentTaskDescription = tasks[0].description;
     } else {
       currentTask = null;
