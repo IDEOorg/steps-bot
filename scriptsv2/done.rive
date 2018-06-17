@@ -5,23 +5,23 @@
   ^ Congratulations, <get username>!!!<send>
   ^ The road to financial health is not easy but you do NOT mess around! Way to bring your "A" Game!\n
   ^ Take some time to celebrate yourself today. You deserve it!<send>
-  ^ <fb>^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"X": "Sounds good", "N": "Ready for it now."}`)</fb>
-  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ <fb>^template(`button`, `I'll check back in tomorrow with the next item on your list.`, `{"G": "Sounds good", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter "N".</sms>
   ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!<send>
   ^ THAT'S how you own the day!<send>
   ^ Congratulations!!! 🎊🎊🎊\nDo a dance, treat yourself to something, celebrate! You rocked it.<send>
-  ^ <fb>^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"X": "Sounds good!", "N": "Ready for it now."}`)</fb>
-  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ <fb>^template(`button`, `The next item on your list will be coming your way tomorrow.`, `{"G": "Sounds good!", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter "N".</sms>
   ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! Congrats, <get username>\n🎉🎉🎉\nI knew you'd get it done!<send>
   ^ The bigger the task, the sweeter the triumph. Enjoy the WIN!<send>
-  ^ <fb>^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"X": "Sounds good!", "N": "Ready for it now."}`)</fb>
-  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter N.</sms>
+  ^ <fb>^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"G": "Sounds good!", "N": "Ready for it now."}`)</fb>
+  ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, Text the letter "N".</sms>
   ^ {@ setvars}
-  + x
+  + g
   - Wonderful. Chat soon.
   - Great! Chat soon.
   + n
@@ -30,8 +30,8 @@
   - <set taskComplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
   - I'm a bit unclear on your last response.<send>
-  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"X": "No, I'll wait until tomorrow.", "N": "Yep, send it over now."}`)</fb>
-  ^ <sms>Would you like to receive your next action item now?\nIf yes,\nText the letter N.\nIf no,\nText the letter X.</sms>
+  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "No, I'll wait until tomorrow.", "N": "Yep, send it over now."}`)</fb>
+  ^ <sms>Would you like to receive your next action item now? If yes, text the letter "N". If no, text the letter "G".</sms>
   ^ {@ setvars}
 
 < topic

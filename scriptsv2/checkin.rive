@@ -2,51 +2,51 @@
   + startprompt
   - Greetings <get username>! How are things coming along with action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
-  ^ <sms><send>If you need some assistance,\nText the letter A.\nIf you've finished (and can't be stopped!)\nText the letter B.\nIf you're still working on it,\nText the letter C.</sms>
+  ^ <sms><send>If you need some assistance text the letter "A".\nIf you've finished (and can't be stopped!) text the letter "B".\nIf you're still working on it, text the letter "C".</sms>
   ^ {@ setvars}
   - Hey, <get username>!\n
   ^ How's progress on action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
-  ^ <sms><send>Have a few questions?\nText the letter A.\nAlready done?\nText the letter B.\nStill chipping away at it?\nText the letter C.</sms>
+  ^ <sms><send>Have a few questions? Text the letter "A".\nAlready done? Text the letter "B".\nStill chipping away at it? Text the letter "C".</sms>
   ^ {@ setvars}
   - <get username>! Checking in. How are things going with action item <get taskNum>?
   ^ <fb>^template(`quickreply`,`Finished!`, `Have some questions.`, `Working on it.`)</fb>
-  ^ <sms><send>Have questions?\nText the letter A.\nFinished?\nText the letter B.\nNot quite there yet?\nText the letter C.</sms>
+  ^ <sms><send>Have questions? Text the letter "A".\nFinished? Text the letter "B".\nNot quite there yet? Text the letter "C".</sms>
   ^ {@ setvars}
   - Hi, <get username>! Hope you've been having a great day. How are things going with action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
-  ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
+  ^ <sms><send>If you'd like my assistance, text the letter "A".\nIf you're already done, text the letter "B".\nIf you want me to check back later, text the letter "C".</sms>
   ^ {@ setvars}
   - Greetings, <get username>! How's it going with action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `Finished!`, `Have some questions.`, `Working on it.`)</fb>
-  ^ <sms><send>If you'd like my assistance,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you want me to check back later,\nText the letter C.</sms>
+  ^ <sms><send>If you'd like my assistance, text the letter "A".\nIf you're already done, text the letter "B".\nIf you want me to check back later, text the letter "C".</sms>
   ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
-  + (b|working on it|still working)
+  + (b|no im finished|finished)
+  - {topic=done} {@ startprompt}
+  + (c|working on it|still working)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
   ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
-  ^ <sms>You're doing great! If you need any help just text the letter A.</sms>
+  ^ <sms>You're doing great! If you need any help just text the letter "A".</sms>
   ^ {@ setvars}
   - The anticipation is often harder than the task, <get username>! Keep pushing through!
-  ^ <fb>^template(`button`, `You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
-  ^ <sms>You've got this! If you need some assistance just text the letter A.</sms>
+  ^ <fb>^template(`button`, `You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <sms>You've got this! If you need some assistance just text the letter "A".</sms>
   ^ {@ setvars}
   - Got it. Remember: If you think you can do it, you can.\nI know you can!<send>
-  ^ <fb>^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
-  ^ <sms>Should you need help just text the letter A.</sms>
+  ^ <fb>^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "G": "No thanks. I'm good."}`)</fb>
+  ^ <sms>Should you need help just text the letter "A".</sms>
   ^ {@ setvars}
   - Great! It isn't the pace that matters. It's staying in the race.\nKeep going!<send>
-  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
-  ^ <sms>If you need my assistance just text the letter A.</sms>
+  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "G": "No thanks. I'm good."}`)</fb>
+  ^ <sms>If you need my assistance just text the letter "A".</sms>
   ^ {@ setvars}
   - *Working on it* means you're getting it done! So, **hi five**!<send>
-  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "D": "No thanks. I'm good."}`)</fb>
-  ^ <sms>Should you need me just text the letter A.</sms>
+  ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "G": "No thanks. I'm good."}`)</fb>
+  ^ <sms>Should you need me just text the letter "A".</sms>
   ^ {@ setvars}
-  + (c|no im finished|finished)
-  - {topic=done} {@ startprompt}
-  + (d|still working)
+  + (g|still working)
   - Wonderful. I'll check in soon!
   - Sounds good. I'll be back in touch soon.
   + setvars
@@ -54,6 +54,6 @@
   + *
   - Sorry, <get username>. I can't quite understand your message. Do you need my assistance with action item <get taskNum>?
   ^ <fb>^template(`quickreply`, `Still working.`, `Have some questions.`, `No, I'm finished.`)</fb>
-  ^ <sms><send>If yes,\nText the letter A.\nIf you're already done,\nText the letter B.\nIf you're still working,\nText the letter D.</sms>
+  ^ <sms><send>If yes, text the letter "A".\nIf you're already done, text the letter "B".\nIf you're still working, text the letter "C".</sms>
   ^ {@ setvars}
 < topic

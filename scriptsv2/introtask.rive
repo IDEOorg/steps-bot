@@ -8,7 +8,7 @@
   ^ ▪️ Why it matters:\n<get currentTaskDescription><send>
   ^ <get currentTaskSteps><send>
   ^ At any point you can message "COACH" to contact your coach, "PLAN" to see your work plan, or "STOP" to stop receiving messages.<send>
-  ^ <sms>If you need some assistance,\nText the letter A.\nIf you've finished, \nText the letter B.</sms>
+  ^ <sms>If you need some assistance, text the letter "A".\nIf you've finished, text the letter "B".</sms>
   ^ You've got this! I'll check in on your progress soon. Good luck!{@ setvars}
   + a
   - {topic=help}{@ startprompt}
