@@ -96,7 +96,8 @@ async function createRequest(userId, taskId) {
       status: 'NEEDS_ASSISTANCE',
       user_id: userId,
       task_id: taskId
-    }
+    },
+    json: true
   });
   return JSON.parse(request);
 }
@@ -121,7 +122,8 @@ async function createMessage(requestId, clientId, coachId, helpMessage) {
       request_id: requestId,
       timestamp: new Date(),
       responses: null
-    }
+    },
+    json: true
   });
   return JSON.parse(message);
 }
@@ -130,7 +132,8 @@ async function updateUser(userId, userData) {
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
-    body: userData
+    body: userData,
+    json: true
   });
   return JSON.parse(user);
 }
@@ -139,7 +142,8 @@ async function updateTask(id, taskData) {
   const task = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/tasks/' + id,
-    body: taskData
+    body: taskData,
+    json: true
   });
   return JSON.parse(task);
 }

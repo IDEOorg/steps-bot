@@ -48,8 +48,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     client.checkin_times = [];
   }
   const clientCheckInTimes = client.checkin_times;
-  console.log(clientCheckInTimes);
-  console.log('clientCheckInTimes');
   if (resetHelp) {
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.topic !== 'help';
@@ -108,7 +106,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     time: nextCheckInDate
   });
   // update user
-  api.updateUser(client.id, client);
+  api.updateUser(client.id, client).then(() => {
+    console.log('updated client ' + client.id);
+  });
 }
 
 function getNextCheckInDate(days, hours, timeOfDay) {
