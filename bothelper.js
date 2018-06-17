@@ -78,7 +78,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
-  if (tasks.length === 0 && (currTopic !== 'welcome' || currTopic !== 'welcomewait')) {
+  if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
     self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
     return {
       messages: [
