@@ -4,7 +4,7 @@ const seedMediaData = require('./seedmedia.json');
 const seedMediaTetheredData = require('./seedmediatethered.json');
 const seedTasksData = require('./seedtasks.json');
 
-const url = 'http://localhost:3001';
+const url = 'https://steps-admin.herokuapp.com';
 
 populateDB();
 
