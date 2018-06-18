@@ -71,6 +71,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
+  console.log('TTTTTOPIC');
+  console.log(topic);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
