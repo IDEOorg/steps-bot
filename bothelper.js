@@ -28,7 +28,6 @@ function resetVariables(userPlatformId) {
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
   const BOT_ID = 41;
   const userInfo = await api.getUserDataFromDB(platform, userPlatformId);
-  await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (!userInfo) {
     // user doesn't exist in db
     let errMessage = null;
@@ -44,6 +43,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       }]
     };
   }
+  await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;
     let soonestTime = Number.MAX_VALUE;
