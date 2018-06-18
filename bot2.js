@@ -29,7 +29,7 @@ fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userMessage = message.text;
   // get message payload here for new users
   const fbNewUserId = userPlatformId;
-  bot.getResponse('fb', userPlatformId, userMessage, fbNewUserId).then((response) => {
+  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserId).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
         bot.resetVariables(userPlatformId);
