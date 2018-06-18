@@ -26,6 +26,8 @@ function resetVariables(userPlatformId) {
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
+  console.log('THE TOPIC SUBMITTED IS');
+  console.log(topic);
   const BOT_ID = 41;
   let userInfo = null;
   userInfo = await api.getUserDataFromDB(platform, userPlatformId);
@@ -44,6 +46,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     userInfo = await api.createMockFBUser(userPlatformId);
     userInfo.topic = 'welcome';
   }
+  console.log('userInfo.topic');
+  console.log(userInfo.topic);
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;
