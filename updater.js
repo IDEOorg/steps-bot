@@ -85,7 +85,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     });
   }
   if (helpMessage) {
-    client.temp_help_message = helpMessage;
+    client.temp_help_response = helpMessage;
   }
   if (sendHelpMessage) {
     const requests = await api.getUserRequests(client.id);
@@ -98,14 +98,14 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     if (!request) {
       request = await api.createRequest(client.id, currentTask.id);
     }
-    console.log('client.temp_help_message');
-    console.log(client.temp_help_message);
-    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_message);
+    console.log('client.temp_help_response');
+    console.log(client.temp_help_response);
+    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response);
     console.log('****************requestMessage**************');
     console.log(requestMessage);
     const coach = await api.getCoach(client.coach_id);
-    sendHelpEmailToCoach(client, coach, client.temp_help_message, requestMessage.timestamp, request, currentTask);
-    client.temp_help_message = null;
+    sendHelpEmailToCoach(client, coach, client.temp_help_response, requestMessage.timestamp, request, currentTask);
+    client.temp_help_response = null;
   }
   if (taskComplete) {
     currentTask.status = 'COMPLETED';
