@@ -13,8 +13,4 @@
   - {topic=nexttask}{@ startprompt}
   + welcometopic
   - {topic=welcome}{@ startprompt}
-  + bug*
-  - Got it! Thanks for reporting!
-  + idea*
-  - Thank you for your suggestion!
 < topic
