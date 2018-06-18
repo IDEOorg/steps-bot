@@ -6,6 +6,7 @@ module.exports = {
 };
 
 async function updateUserToDB(userPlatformId, platform, variables) {
+  const BOT_ID = 41;
   const {
     topic,
     days,
@@ -63,7 +64,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   const clientCheckInTimes = client.checkin_times;
   if (resetHelp) {
-    client.temp_help_response = null;
+    if (!sendHelpMessage) {
+      client.temp_help_response = null;
+    }
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.topic !== 'help';
     });
@@ -101,7 +104,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     }
     console.log('client.temp_help_response');
     console.log(client.temp_help_response);
-    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response);
+    const requestMessage = await api.createMessage(request.id, client.id, BOT_ID, client.temp_help_response);
     console.log('****************requestMessage**************');
     console.log(requestMessage);
     const coach = await api.getCoach(client.coach_id);

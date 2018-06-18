@@ -116,7 +116,7 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
-async function createMessage(requestId, clientId, coachId, messageToSend) {
+async function createMessage(requestId, clientId, otherId, messageToSend) {
   console.log('messageToSend');
   console.log(messageToSend);
   const message = await rp({
@@ -124,7 +124,7 @@ async function createMessage(requestId, clientId, coachId, messageToSend) {
     uri: assetUrls.url + '/messages',
     body: {
       text: messageToSend,
-      to_user: coachId,
+      to_user: otherId,
       from_user: clientId,
       media_id: null,
       request_id: requestId,
