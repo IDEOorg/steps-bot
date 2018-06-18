@@ -20,20 +20,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete
   } = variables;
-  // console.log({
-  //   topic,
-  //   days,
-  //   hours,
-  //   timeOfDay,
-  //   nextTopic,
-  //   nextMessage,
-  //   contentViewed,
-  //   contentId,
-  //   resetHelp,
-  //   helpMessage,
-  //   sendHelpMessage,
-  //   taskComplete
-  // });
+  
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
     return;
@@ -90,11 +77,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     if (!request) {
       request = await api.createRequest(client.id, currentTask.id);
     }
-    console.log('client.temp_help_response');
-    console.log(client.temp_help_response);
     const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response);
     console.log('****************requestMessage**************');
-    console.log(requestMessage);
     const coach = await api.getCoach(client.coach_id);
     sendHelpEmailToCoach(client, coach, client.temp_help_response, requestMessage.timestamp, request, currentTask);
     client.temp_help_response = null;
@@ -115,8 +99,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       time: nextCheckInDate
     });
   }
-  console.log('*******************************client firm you***********************');
-  console.log(client.temp_help_response);
 
   // update user
   api.updateUser(client.id, client).then(() => {

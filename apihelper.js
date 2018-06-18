@@ -208,9 +208,6 @@ async function getUserDataFromDB(platform, userPlatformId) {
 async function createMockTasks(id) {
   const tasks = seedTasksData.tasks;
   for (let i = 0; i < 7; i++) {
-    console.log(i);
-    console.log(tasks[i]);
-    console.log(id);
     const taskData = tasks[i];
     taskData.date_created = new Date();
     taskData.user_id = id;

@@ -15,8 +15,6 @@ module.exports = {
 
 async function sendReply(platform, userPlatformId, messages) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
-  console.log('clients foreverrrrrr');
-  console.log(client);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     let formattedMsg = null;

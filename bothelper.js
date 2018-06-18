@@ -65,10 +65,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       userInfo.topic = topic;
       console.log(userInfo.checkin_times);
       console.log('userInfo.checkin_times');
-      await api.updateUser(userInfo.id, userInfo).then((response) => {
-        console.log(response);
-        console.log('check in time removed after fast forward');
-      });
+      await api.updateUser(userInfo.id, userInfo);
     }
   }
   const tasks = await api.getClientTasks(userInfo.id);
@@ -116,6 +113,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   } = userInfo;
   const orgName = await api.getOrgName(userInfo.org_id);
   const coachName = await api.getCoachName(userInfo.coach_id);
+  console.log('*******************topic*********************');
+  console.log(topic);
   let viewedMedia = null;
   let userPlatformId = null;
   if (topic === null) {
@@ -216,6 +215,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
+  console.log('testing the submitted topic');
+  console.log(topic);
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
