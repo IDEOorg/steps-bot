@@ -14,7 +14,8 @@ module.exports = {
   createMessage,
   updateUser,
   updateTask,
-  markMediaAsViewed
+  markMediaAsViewed,
+  getUserDataFromDB
 };
 
 async function getAllClients() {
@@ -117,8 +118,6 @@ async function getUserRequests(userId) {
 }
 
 async function createMessage(requestId, clientId, otherId, messageToSend) {
-  console.log('messageToSend');
-  console.log(messageToSend);
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
@@ -167,4 +166,20 @@ async function markMediaAsViewed(clientId, mediaId) {
     // console.log(e);
   });
   return media;
+}
+
+// if there's a user, return api/client/id data, otherwise return null
+async function getUserDataFromDB(platform, userPlatformId) {
+  const clients = await getAllClients();
+  for (let i = 0; i < clients.length; i++) {
+    const client = clients[i];
+    if (platform === 'sms' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+      client.phone = userPlatformId;
+      return client;
+    }
+    if (platform === 'fb' && client.fb_id === userPlatformId) {
+      return client;
+    }
+  }
+  return null;
 }

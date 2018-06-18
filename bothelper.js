@@ -8,8 +8,7 @@ self.riveBot = setupRiveScript();
 
 module.exports = {
   getResponse,
-  resetVariables,
-  getUserDataFromDB
+  resetVariables
 };
 
 function resetVariables(userPlatformId) {
@@ -27,7 +26,7 @@ function resetVariables(userPlatformId) {
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
-  const userInfo = await getUserDataFromDB(platform, userPlatformId);
+  const userInfo = await api.getUserDataFromDB(platform, userPlatformId);
   if (!userInfo) {
     // user doesn't exist in db
     let errMessage = null;
@@ -47,8 +46,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     const checkInTimes = userInfo.checkin_times;
     let soonestTime = Number.MAX_VALUE;
     let soonestCheckInIndex = null;
-    console.log('checkInTimes');
-    console.log(checkInTimes);
     for (let i = 0; i < checkInTimes.length; i++) {
       const checkInTime = checkInTimes[i];
       const { time } = checkInTime;
@@ -102,22 +99,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     messages,
     variables: self.riveBot.getUservars(userPlatformId)
   };
-}
-
-// if there's a user, return api/client/id data, otherwise return null
-async function getUserDataFromDB(platform, userPlatformId) {
-  const clients = await api.getAllClients();
-  for (let i = 0; i < clients.length; i++) {
-    const client = clients[i];
-    if (platform === 'sms' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
-      client.phone = userPlatformId;
-      return client;
-    }
-    if (platform === 'fb' && client.fb_id === userPlatformId) {
-      return client;
-    }
-  }
-  return null;
 }
 
 async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNewUserId) {

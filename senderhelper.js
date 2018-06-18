@@ -1,26 +1,33 @@
 require('dotenv').config();
 const rp = require('request-promise');
 
+const api = require('./apihelper');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 const twilioClient = require('twilio')(accountSid, authToken);
+const BOT_ID = 41;
 
 module.exports = {
   sendReply
 };
 
-async function sendReply(platform, userId, messages) {
+async function sendReply(platform, userPlatformId, messages) {
+  const client = api.getUserDataFromDB(platform, userPlatformId);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
+    let formattedMsg = null;
     if (platform === 'fb') {
-      await sendFBMessage(userId, formatMsgForFB(message)); // eslint-disable-line
+      formattedMsg = formatMsgForFB(message);
+      await sendFBMessage(userPlatformId, formattedMsg); // eslint-disable-line
     } else if (platform === 'sms') {
-      const response = await sendSMSMessage(userId, formatMsgForSMS(message)); // eslint-disable-line
+      formattedMsg = formatMsgForSMS(message);
+      const response = await sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
       if (message.type === 'image') {
         await sleep(3000); // eslint-disable-line
       } else {
         await sleep(1000); // eslint-disable-line
+        api.createMessage(null, client.id, BOT_ID, formattedMsg.body);
       }
     }
   }
