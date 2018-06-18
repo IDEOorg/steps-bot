@@ -1,11 +1,12 @@
 require('dotenv').config();
 const rp = require('request-promise');
 
-const api = require('./apihelper');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 const twilioClient = require('twilio')(accountSid, authToken);
+const api = require('./apihelper');
+
 const BOT_ID = 41;
 
 module.exports = {
@@ -13,7 +14,9 @@ module.exports = {
 };
 
 async function sendReply(platform, userPlatformId, messages) {
-  const client = api.getUserDataFromDB(platform, userPlatformId);
+  const client = await api.getUserDataFromDB(platform, userPlatformId);
+  console.log('clients foreverrrrrr');
+  console.log(client);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     let formattedMsg = null;
@@ -27,7 +30,7 @@ async function sendReply(platform, userPlatformId, messages) {
         await sleep(3000); // eslint-disable-line
       } else {
         await sleep(1000); // eslint-disable-line
-        api.createMessage(null, client.id, BOT_ID, formattedMsg.body);
+        api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
       }
     }
   }
