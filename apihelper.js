@@ -18,7 +18,7 @@ module.exports = {
   markMediaAsViewed,
   getUserDataFromDB,
   createMockTasks,
-  createFBUser
+  createMockFBUser
 };
 
 async function getAllClients() {
@@ -221,7 +221,7 @@ async function createMockTasks(id) {
 }
 
 
-async function createFBUser(userPlatformId) {
+async function createMockFBUser(userPlatformId) {
   const userData = {
     first_name: 'Friend',
     last_name: 'Friend',
