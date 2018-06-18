@@ -105,7 +105,7 @@ async function createRequest(userId, taskId) {
   }).catch((e) => {
     // console.log(e);
   });
-  return JSON.parse(request);
+  return request;
 }
 
 async function getUserRequests(userId) {
@@ -131,7 +131,7 @@ async function createMessage(requestId, clientId, coachId, helpMessage) {
     },
     json: true
   });
-  return JSON.parse(message);
+  return message;
 }
 
 async function updateUser(userId, userData) {
@@ -159,10 +159,10 @@ async function updateTask(id, taskData) {
 async function markMediaAsViewed(clientId, mediaId) {
   const media = await rp({
     method: 'POST',
-    uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId
+    uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
+    json: true
   }).catch((e) => {
     // console.log(e);
   });
-  console.log(media);
-  return JSON.parse(media);
+  return media;
 }
