@@ -1,5 +1,6 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
+const seedTasksData = require('./db/seedtasks.json');
 
 module.exports = {
   getAllClients,
@@ -15,7 +16,9 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
-  getUserDataFromDB
+  getUserDataFromDB,
+  createMockTasks,
+  createFBUser
 };
 
 async function getAllClients() {
@@ -191,7 +194,7 @@ async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (platform === 'sms' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+    if (platform === 'sms' && client.phone !== null && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
       client.phone = userPlatformId;
       return client;
     }
@@ -200,4 +203,55 @@ async function getUserDataFromDB(platform, userPlatformId) {
     }
   }
   return null;
+}
+
+async function createMockTasks(id) {
+  const tasks = seedTasksData;
+  for (let i = 0; i < 7; i++) {
+    const taskData = tasks[i];
+    taskData.date_created = new Date();
+    taskData.user_id = id;
+    await rp({ // eslint-disable-line
+      method: 'POST',
+      uri: assetUrls.url + '/tasks',
+      body: taskData,
+      json: true
+    });
+  }
+}
+
+
+async function createFBUser(userPlatformId) {
+  const userData = {
+    first_name: 'Friend',
+    last_name: 'Friend',
+    email: 'test123@ideo.org',
+    phone: null,
+    coach_id: 2,
+    org_id: 3,
+    color: 'blue',
+    goals: [
+      'Buy a house'
+    ],
+    status: 'WORKING',
+    updated: new Date(),
+    platform: 'SMS',
+    image: null,
+    follow_up_date: '2018-07-18T12:14:58.914Z',
+    plan_url: null,
+    checkin_times: [],
+    topic: null,
+    fb_id: userPlatformId,
+    temp_help_response: null
+  };
+  const user = await rp({
+    method: 'POST',
+    uri: assetUrls.url + '/clients',
+    body: userData,
+    json: true
+  }).catch((e) => {
+    console.log(e);
+  });
+  await createMockTasks(user.id);
+  return user;
 }
