@@ -34,18 +34,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   //   sendHelpMessage,
   //   taskComplete
   // });
-  const allClients = await api.getAllClients();
-  let client = null;
-  for (let i = 0; i < allClients.length; i++) {
-    const tempClient = allClients[i];
-    if (tempClient.phone[0] !== '+') {
-      tempClient.phone = '+1' + tempClient.phone;
-    }
-    if ((platform === 'fb' && tempClient.fb_id === userPlatformId) || (platform === 'sms' && tempClient.phone === userPlatformId)) {
-      client = tempClient;
-      break;
-    }
-  }
+  const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
     return;
   }
