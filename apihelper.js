@@ -118,6 +118,8 @@ async function getUserRequests(userId) {
 }
 
 async function createMessage(requestId, clientId, otherId, messageToSend) {
+  console.log('requestId, clientId, otherId, messageToSend');
+  console.log(requestId, clientId, otherId, messageToSend);
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
