@@ -131,6 +131,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     }
   } else if (userPlatform === 'FBOOK') {
     console.log(fbNewUserId);
+    userPlatformId = fbNewUserId;
     if (platform === 'sms') { // user has registered fb account but sends SMS
       // TODO do nothing
     }

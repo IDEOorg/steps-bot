@@ -235,7 +235,7 @@ async function createMockFBUser(userPlatformId) {
     ],
     status: 'WORKING',
     updated: new Date(),
-    platform: 'SMS',
+    platform: 'FBOOK',
     image: null,
     follow_up_date: '2018-07-18T12:14:58.914Z',
     plan_url: null,
