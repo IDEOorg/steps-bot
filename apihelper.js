@@ -116,12 +116,14 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
-async function createMessage(requestId, clientId, coachId, helpMessage) {
+async function createMessage(requestId, clientId, coachId, messageToSend) {
+  console.log('messageToSend');
+  console.log(messageToSend);
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
     body: {
-      text: helpMessage,
+      text: messageToSend,
       to_user: coachId,
       from_user: clientId,
       media_id: null,
