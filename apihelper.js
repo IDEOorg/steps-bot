@@ -22,6 +22,8 @@ async function getAllClients() {
   const clients = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients'
+  }).catch((e) => {
+    console.log(e);
   });
   return JSON.parse(clients);
 }
@@ -30,6 +32,8 @@ async function getOrgName(id) {
   let org = await rp({
     method: 'GET',
     uri: assetUrls.url + '/orgs/' + id.toString()
+  }).catch((e) => {
+    console.log(e);
   });
   org = JSON.parse(org);
   if (org) {
@@ -42,6 +46,8 @@ async function getCoachName(id) {
   let coach = await rp({
     method: 'GET',
     uri: assetUrls.url + '/coaches/' + id.toString()
+  }).catch((e) => {
+    console.log(e);
   });
   coach = JSON.parse(coach);
   if (coach) {
@@ -54,6 +60,8 @@ async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
     uri: assetUrls.url + '/coaches/' + id.toString()
+  }).catch((e) => {
+    console.log(e);
   });
   return JSON.parse(coach);
 }
@@ -62,6 +70,8 @@ async function getClientTasks(id) {
   let tasks = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients/' + id.toString() + '/tasks'
+  }).catch((e) => {
+    console.log(e);
   });
   tasks = JSON.parse(tasks);
   return tasks;
@@ -72,7 +82,7 @@ async function getAllMedia() {
     method: 'GET',
     uri: assetUrls.url + '/media'
   }).catch((e) => {
-    // // console.log(e);
+    console.log(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
   return listOfMedia.filter((media) => {
@@ -85,7 +95,7 @@ async function getViewedMediaIds(id) {
     method: 'GET',
     uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
   }).catch((e) => {
-    // console.log(e);
+    console.log(e);
   });
   viewedMedia = JSON.parse(viewedMedia);
   return viewedMedia.map((media) => {
@@ -104,7 +114,7 @@ async function createRequest(userId, taskId) {
     },
     json: true
   }).catch((e) => {
-    // console.log(e);
+    console.log(e);
   });
   return request;
 }
@@ -113,6 +123,8 @@ async function getUserRequests(userId) {
   const requests = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients/' + userId + '/requests'
+  }).catch((e) => {
+    console.log(e);
   });
   return JSON.parse(requests);
 }
@@ -133,6 +145,8 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
       responses: null
     },
     json: true
+  }).catch((e) => {
+    console.log(e);
   });
   return message;
 }
@@ -144,7 +158,7 @@ async function updateUser(userId, userData) {
     body: userData,
     json: true
   }).catch((e) => {
-    // console.log(e);
+    console.log(e);
   });
   return user;
 }
@@ -155,6 +169,8 @@ async function updateTask(id, taskData) {
     uri: assetUrls.url + '/tasks/' + id,
     body: taskData,
     json: true
+  }).catch((e) => {
+    console.log(e);
   });
   return task;
 }
@@ -165,7 +181,7 @@ async function markMediaAsViewed(clientId, mediaId) {
     uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
     json: true
   }).catch((e) => {
-    // console.log(e);
+    console.log(e);
   });
   return media;
 }
