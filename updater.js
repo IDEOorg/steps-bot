@@ -123,6 +123,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       time: nextCheckInDate
     });
   }
+  console.log('*******************************client firm you***********************');
+  console.log(client.temp_help_response);
+
   // update user
   api.updateUser(client.id, client).then(() => {
     console.log('updated client ' + client.id);
