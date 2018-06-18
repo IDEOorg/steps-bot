@@ -229,6 +229,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       }
     }
   }
+  if (topic === 'helpuserresponse') {
+    riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
+  }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);

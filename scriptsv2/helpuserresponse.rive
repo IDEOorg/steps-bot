@@ -1,6 +1,7 @@
 > topic helpuserresponse includes global includes tempfastforward
   + *
-  - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<star>"
+  - Gotcha. Just to confirm, you'd like to send the following message to <get coachName>: "<get helpMessage>"
   ^ <fb>^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)</fb>
-  ^ <set helpMessage=<star>>{topic=helpuserconfirm}
+  ^ <sms><send>If you want me to send this to your coach, text the letter "S".\nIf you want to edit your response before I send it, text the letter "E".\nNo longer need help? Text the letter "N".</sms>
+  ^ {topic=helpuserconfirm}
 < topic
