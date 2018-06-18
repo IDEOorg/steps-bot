@@ -63,6 +63,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   const clientCheckInTimes = client.checkin_times;
   if (resetHelp) {
+    client.temp_help_response = null;
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       return checkInTime.topic !== 'help';
     });
