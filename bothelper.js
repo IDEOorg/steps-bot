@@ -74,6 +74,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   console.log('TTTTTOPIC');
   console.log(topic);
   if (topic) {
+    console.log('if condition went through');
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
