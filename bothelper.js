@@ -251,8 +251,11 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   riveBot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
   riveBot.setUservar(userPlatformId, 'workplanLink', workplanUrl);
   riveBot.setUservar(userPlatformId, 'introVideoLink', assetUrls.videoUrl);
-  self.riveBot.setUservar(userPlatformId, 'platform', platform);
-  self.riveBot.setUservar(userPlatformId, 'id', userPlatformId);
+  riveBot.setUservar(userPlatformId, 'platform', platform);
+  riveBot.setUservar(userPlatformId, 'id', userPlatformId);
+  console.log("riveBot.getUservar(userPlatformId, 'topic')");
+  console.log(userPlatformId);
+  console.log(riveBot.getUservar(userPlatformId, 'topic'));
 }
 
 function setupRiveScript() {
