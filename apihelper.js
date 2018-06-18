@@ -117,16 +117,16 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
-async function createMessage(requestId, clientId, otherId, messageToSend) {
+async function createMessage(requestId, fromId, toId, messageToSend) {
   console.log('requestId, clientId, otherId, messageToSend');
-  console.log(requestId, clientId, otherId, messageToSend);
+  console.log(requestId, fromId, toId, messageToSend);
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
     body: {
       text: messageToSend,
-      to_user: otherId,
-      from_user: clientId,
+      to_user: toId,
+      from_user: fromId,
       media_id: null,
       request_id: requestId,
       timestamp: new Date(),
