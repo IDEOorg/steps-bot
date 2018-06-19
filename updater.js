@@ -23,7 +23,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete
   } = variables;
-  
+
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
     return;
@@ -141,7 +141,7 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
   const taskTitle = currentTask.title;
   const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
   // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
-  
+
   // TODO MEPLER IMPLEMENT SENDING THE EMAIL
   const url = 'https://helloroo.org/clients';
   const steps = taskSteps.map(step => {
@@ -174,9 +174,9 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
                     <td colspan="2" style="padding:15px">
                         <p style="margin-top:0">
                           ${coachFirstName},
-                        </p>  
+                        </p>
 
-                        <p style="margin-bottom:45px">Your client ${clientFirstName} ${clientLastName} has requested help from Roo the chatbot. 
+                        <p style="margin-bottom:45px">Your client ${clientFirstName} ${clientLastName} has requested help from Roo the chatbot.
                         </p>
 
                         <div class="cta-button" style="background: #00bf8d;border-radius: 25px;-webkit-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);
@@ -187,12 +187,12 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
                           </a>
                         </div>
 
-                        <p style="margin-top:45px"><strong>Help text</strong> 
+                        <p style="margin-top:45px"><strong>Help text</strong>
                           <!-- <em>(${currentTask.updated || currentTask.timestamp})</em> -->
                         </p>
-                        
+
                         <p>${helpMessage}</p>
-                        
+
                         <strong>Current Action Item</strong>
                         <p>${taskTitle}</p>
 
@@ -206,14 +206,15 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
               <div>
             </body>
             </html>`
+  };
 
   sgMail.send(msg)
     .then(() => {
       console.log(`email sent to ${coachEmail}`);
     })
-    .catch(((err) => {
+    .catch((err) => {
       console.error(err.toString());
       // const {message, code, response} = error;
       // const {headers, body} = response;
-    });;
+    });
 }
