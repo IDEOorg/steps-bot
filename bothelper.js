@@ -26,8 +26,6 @@ function resetVariables(userPlatformId) {
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
-  console.log('THE TOPIC SUBMITTED IS');
-  console.log(topic);
   const BOT_ID = 41;
   let userInfo = null;
   userInfo = await api.getUserDataFromDB(platform, userPlatformId);
@@ -46,8 +44,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     userInfo = await api.createMockFBUser(userPlatformId);
     userInfo.topic = 'welcome';
   }
-  console.log('userInfo.topic');
-  console.log(userInfo.topic);
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;
@@ -67,23 +63,16 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
       userInfo.checkin_times.splice(soonestCheckInIndex, 1);
       userInfo.topic = topic;
-      console.log(userInfo.checkin_times);
-      console.log('userInfo.checkin_times');
       await api.updateUser(userInfo.id, userInfo);
     }
   }
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
-  console.log('TTTTTOPIC');
-  console.log(topic);
   if (topic) {
-    console.log('if condition went through');
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
-  console.log('currTopic');
-  console.log(currTopic);
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
     self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
     return {
@@ -225,8 +214,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  console.log('testing the submitted topic');
-  console.log(topic);
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
