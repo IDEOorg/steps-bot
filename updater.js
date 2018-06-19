@@ -135,7 +135,6 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
   const clientId = client.id;
   const clientFirstName = client.first_name;
   const clientLastName = client.last_name;
-  const coachId = coach.id; // can also do client.coach_id
   const coachFirstName = coach.first_name;
   const coachEmail = coach.email;
   const taskTitle = currentTask.title;
@@ -144,8 +143,8 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
 
   // TODO MEPLER IMPLEMENT SENDING THE EMAIL
   const url = 'https://helloroo.org/clients';
-  const steps = taskSteps.map(step => {
-    `<li>${step.text}</li>`
+  const steps = taskSteps.map((step) => {
+    return `<li>${step.text}</li>`;
   });
 
   const msg = {
