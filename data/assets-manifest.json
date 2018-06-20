@@ -6,7 +6,9 @@
     "path": "static/images/done/",
     "images": [
       "celebration_swish.gif",
-      "celebration_firework.gif"
+      "celebration_firework.gif",
+      "celebration_party.gif",
+      "celebration_space.gif"
     ]
   },
   "help": {
@@ -19,13 +21,15 @@
     "path": "static/images/checkin/",
     "images": [
       "check_in_blinds.gif",
-      "check_in_sunglasses.gif"
+      "check_in_sunglasses.gif",
+      "check_in_light.gif",
+      "check_in_fence.gif"
     ]
   },
   "stories": {
     "path": "static/images/stories/",
     "images": [
-      "Stories.png"
+      "Learn.gif"
     ]
   },
   "tasks": {
