@@ -29,7 +29,7 @@
   "stories": {
     "path": "static/images/stories/",
     "images": [
-      "Learn.gif"
+      "welcome_hi.gif"
     ]
   },
   "tasks": {
@@ -49,7 +49,7 @@
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
-      "welcome_hi.gif"
+      "Learn.gif"
     ],
     "workplanImgUrl": "Workplan.png",
     "introCelebrateUrl": "intro_celebrate.gif"
