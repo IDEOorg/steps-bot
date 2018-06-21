@@ -1,6 +1,7 @@
 > topic testing123 includes tempfastforward
   + startprompt
-  - ^image("<get test1>")<send>
+  - bagels
+  ^ ^image("<get test1>")<send>
   ^ ^image("<get test2>")<send>
   ^ ^image("<get test3>")<send>
   ^ ^image("<get test4>")<send>
