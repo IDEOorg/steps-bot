@@ -27,12 +27,12 @@ async function sendReply(platform, userPlatformId, messages) {
     } else if (platform === 'sms') {
       formattedMsg = formatMsgForSMS(message);
       sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
-      if (message.type === 'image') {
-        await sleep(1100); // eslint-disable-line
-      } else {
-        await sleep(1100); // eslint-disable-line
-        api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
-      }
+      // if (message.type === 'image') {
+      //   await sleep(1100); // eslint-disable-line
+      // } else {
+      //   await sleep(1100); // eslint-disable-line
+      //   api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
+      // }
     }
   }
 }
