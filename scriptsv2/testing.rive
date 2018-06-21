@@ -6,5 +6,6 @@
   ^ ^image("<get test3>")<send>
   ^ ^image("<get test4>")<send>
   ^ ^image("<get test5>")<send>
-  ^ ^image("<get test6>")
+  ^ ^image("<get test6>")<send>
+  ^ ^image("<get test7>")
 < topic

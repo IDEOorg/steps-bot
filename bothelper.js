@@ -224,6 +224,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test4);
     riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test5);
     riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test6);
+    riveBot.setUservar(userPlatformId, 'test7', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test7);
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
