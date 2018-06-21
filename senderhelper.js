@@ -26,7 +26,7 @@ async function sendReply(platform, userPlatformId, messages) {
       await sendFBMessage(userPlatformId, formattedMsg); // eslint-disable-line
     } else if (platform === 'sms') {
       formattedMsg = formatMsgForSMS(message);
-      const response = await sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
+      sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
       if (message.type === 'image') {
         await sleep(1100); // eslint-disable-line
       } else {
