@@ -216,7 +216,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   console.log('TOPIC OF THE DAY IS');
   console.log(topic);
   console.log('TOPIC OF THE DAY IS');
-  if (topic === 'testing') {
+  if (formattedUserMessage === 'testingtopic') {
     console.log('testing123 initiated....');
     riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
     riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);
