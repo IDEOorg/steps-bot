@@ -123,7 +123,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       topic = 'welcome';
     }
   } else if (userPlatform === 'FBOOK') {
-    console.log(fbNewUserId);
     userPlatformId = fbNewUserId;
     if (platform === 'sms') { // user has registered fb account but sends SMS
       // TODO do nothing
@@ -215,12 +214,13 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
   if (topic === 'testing123') {
-    riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test1);
-    riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test2);
-    riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test3);
-    riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test4);
-    riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test5);
-    riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test6);
+    console.log('testing123 initiated....');
+    riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
+    riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);
+    riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test3);
+    riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test4);
+    riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test5);
+    riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test6);
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
@@ -253,9 +253,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   riveBot.setUservar(userPlatformId, 'introVideoLink', assetUrls.videoUrl);
   riveBot.setUservar(userPlatformId, 'platform', platform);
   riveBot.setUservar(userPlatformId, 'id', userPlatformId);
-  console.log("riveBot.getUservar(userPlatformId, 'topic')");
-  console.log(userPlatformId);
-  console.log(riveBot.getUservar(userPlatformId, 'topic'));
 }
 
 function setupRiveScript() {
