@@ -213,7 +213,10 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  if (topic === 'testing123') {
+  console.log('TOPIC OF THE DAY IS');
+  console.log(topic);
+  console.log('TOPIC OF THE DAY IS');
+  if (topic === 'testing') {
     console.log('testing123 initiated....');
     riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
     riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);

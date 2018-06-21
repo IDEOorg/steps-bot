@@ -14,5 +14,5 @@
   + welcometopic
   - {topic=welcome}{@ startprompt}
   + testingtopic
-  - {topic=testing123}{@ startprompt}
+  - {topic=testing}{@ startprompt}
 < topic
