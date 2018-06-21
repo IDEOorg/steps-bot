@@ -1,11 +1,11 @@
 > topic testing includes tempfastforward
   + startprompt
   - bagels
-  ^ ^image("<get test7>")<send>
-  ^ ^image("<get test6>")<send>
-  ^ ^image("<get test5>")<send>
-  ^ ^image("<get test4>")<send>
-  ^ ^image("<get test3>")<send>
+  ^ ^image("<get test1>")<send>
   ^ ^image("<get test2>")<send>
-  ^ ^image("<get test1>")
+  ^ ^image("<get test3>")<send>
+  ^ ^image("<get test4>")<send>
+  ^ ^image("<get test5>")<send>
+  ^ ^image("<get test6>")<send>
+  ^ ^image("<get test7>")
 < topic
