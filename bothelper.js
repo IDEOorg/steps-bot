@@ -214,6 +214,14 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
+  if (topic === 'testing123') {
+    riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test1);
+    riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test2);
+    riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test3);
+    riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test4);
+    riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test5);
+    riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.baseUrl.testing.path + assetUrls.baseUrl.testing.test6);
+  }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);

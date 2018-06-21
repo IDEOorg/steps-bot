@@ -27,10 +27,10 @@
   ^ <get currentTaskSteps><send>
   ^ If you have a few questions, text the letter "A".\nIf you're done, text the letter "B".<send></sms>
   ^ You've got this! I'll check in on your progress soon. {@ setvars}
-  + setvars
-  - <set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + a
   - {topic=help}{@ startprompt}
   + b
   - {topic=done}{@ startprompt}
+  + setvars
+  ^ <set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
 < topic

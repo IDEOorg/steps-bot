@@ -53,5 +53,14 @@
     ],
     "workplanImgUrl": "Workplan.png",
     "introCelebrateUrl": "intro_celebrate.gif"
+  },
+  "testing": {
+    "path": "static/images/testing/",
+    "test1": "01_A_Hello_v01_1.gif",
+    "test2": "01_A_Hello_v01.gif",
+    "test3": "02_A_Light_v02_1.gif",
+    "test4": "02_A_Light_v02.gif",
+    "test5": "04_Coach_v01_1.gif",
+    "test6": "04_Coach_v01.gif",
   }
 }
