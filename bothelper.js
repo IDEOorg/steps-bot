@@ -232,7 +232,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
   const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
-  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.png'; // eslint-disable-line
+  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.gif'; // eslint-disable-line
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
   riveBot.setUservar(userPlatformId, 'coachName', coachName);
