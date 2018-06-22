@@ -16,10 +16,7 @@ module.exports = {
 async function sendReply(platform, userPlatformId, messages) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   for (let i = 0; i < messages.length; i++) {
-    console.log('messages');
-    console.log(messages);
     const message = messages[i];
-    console.log(message);
     let formattedMsg = null;
     if (platform === 'fb') {
       formattedMsg = formatMsgForFB(message);

@@ -74,7 +74,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, fbNewUserId);
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic, fbNewUserId);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
@@ -105,7 +105,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   };
 }
 
-async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNewUserId) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic, fbNewUserId) {
   const firstName = userInfo.first_name;
   const workplanUrl = `https://www.helloroo.org/clients/${userInfo.id}/tasks`;
   const {
@@ -115,10 +115,11 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   let {
     topic
   } = userInfo;
+  if (forceTopic) {
+    topic = forceTopic;
+  }
   const orgName = await api.getOrgName(userInfo.org_id);
   const coachName = await api.getCoachName(userInfo.coach_id);
-  console.log('*******************topic*********************');
-  console.log(topic);
   let viewedMedia = null;
   let userPlatformId = null;
   if (topic === null) {
@@ -209,7 +210,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       if (!viewedMedia || !viewedMedia.includes(content.id)) {
         contentIdChosen = content.id;
         contentText = content.title;
-        contentUrl = buildContentUrl(content, userInfo); // eslint will throw an error here but it's okay because we break the loop
+        contentUrl = await buildContentUrl(content, userInfo); // eslint-disable-line
         contentImgUrl = content.image;
         contentDescription = content.description;
         break;
@@ -219,11 +220,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  console.log('TOPIC OF THE DAY IS');
-  console.log(topic);
-  console.log('TOPIC OF THE DAY IS');
   if (formattedUserMessage === 'testingtopic') {
-    console.log('testing123 initiated....');
     riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
     riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);
     riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test3);
@@ -430,6 +427,5 @@ async function buildContentUrl(content, user) {
   }
 
   // trackMediaSent(content, user); // to be implemented
-
-  return bitlyUrl;
+  return bitlyUrl.url;
 }
