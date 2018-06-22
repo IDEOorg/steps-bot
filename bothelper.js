@@ -236,6 +236,11 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
     riveBot.setUservar(userPlatformId, 'test13', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test13);
     riveBot.setUservar(userPlatformId, 'test14', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test14);
     riveBot.setUservar(userPlatformId, 'test15', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test15);
+    riveBot.setUservar(userPlatformId, 'test16', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test16);
+    riveBot.setUservar(userPlatformId, 'test17', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test17);
+    riveBot.setUservar(userPlatformId, 'test18', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test18);
+    riveBot.setUservar(userPlatformId, 'test19', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test19);
+    riveBot.setUservar(userPlatformId, 'test20', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test20);
   }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
