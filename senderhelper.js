@@ -28,7 +28,7 @@ async function sendReply(platform, userPlatformId, messages) {
       formattedMsg = formatMsgForSMS(message);
       sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
       if (message.type === 'image') {
-        await sleep(9100); // eslint-disable-line
+        await sleep(5100); // eslint-disable-line
       } else {
         await sleep(1100); // eslint-disable-line
         api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
