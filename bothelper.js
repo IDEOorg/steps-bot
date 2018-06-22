@@ -6,7 +6,7 @@ const api = require('./apihelper');
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
 
-const token = PROCESS.ENV.BITLY_TOKEN; // see mepler if you don't have this in your .env file
+const token = process.env.BITLY_TOKEN; // see mepler if you don't have this in your .env file
 const bitly = new BitlyClient(token);
 
 const self = this;
