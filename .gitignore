@@ -2,3 +2,4 @@
 node_modules
 db/seed.json
 test.js
+*~
