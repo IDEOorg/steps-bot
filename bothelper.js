@@ -408,7 +408,7 @@ function getRandomItemFromArray(array) {
   return null;
 }
 
-const serverUrl = 'https://peaceful-island-50843.herokuapp.com';
+const serverUrl = 'https://stepsroobot.herokuapp.com';
 async function buildContentUrl(content, user) {
   // redirect (on this server) URL is wrapped in a bit.ly link with the content.id, content.url, and user.id
   // user clicks bit.ly link and is taken to redirect URL
