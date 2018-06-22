@@ -1,11 +1,8 @@
 > topic testing includes tempfastforward
   + startprompt
-  - bagels
-  ^ ^image("<get test1>")<send>
-  ^ ^image("<get test2>")<send>
-  ^ ^image("<get test3>")<send>
-  ^ ^image("<get test4>")<send>
-  ^ ^image("<get test5>")<send>
-  ^ ^image("<get test6>")<send>
-  ^ ^image("<get test7>")
+  - Hi, Alex! Every journey begins with a single step. Here's the first one from your work plan:<send>
+  ^ ^image("https://stepsroobot.herokuapp.com/static/images/tasks/1.gif")<send>
+  ^ Each month pay 1/5 or 1/3rd of the total credit card debt.<send>
+  ^ If you need some assistance, text the letter "A".\nIf you've finished, text the letter "B".<send>
+  ^ You've got this! I'll check in on your progress soon. Good luck!
 < topic
