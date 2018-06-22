@@ -423,7 +423,7 @@ async function buildContentUrl(content, user) {
   try {
     bitlyUrl = await bitly.shorten(redirectUrl);
   } catch (err) {
-    console.err(err);
+    console.error(err);
   }
 
   // trackMediaSent(content, user); // to be implemented
