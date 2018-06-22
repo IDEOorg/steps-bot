@@ -8,13 +8,14 @@
       "celebration_swish.gif",
       "celebration_firework.gif",
       "celebration_party.gif",
+      "celebration_pompom.gif",
       "celebration_space.gif"
     ]
   },
   "help": {
     "path": "static/images/help/",
     "images": [
-      "Coach_Says.png"
+      "Coach_Says.gif"
     ]
   },
   "checkin": {
@@ -23,7 +24,8 @@
       "check_in_blinds.gif",
       "check_in_sunglasses.gif",
       "check_in_light.gif",
-      "check_in_fence.gif"
+      "check_in_fence.gif",
+      "check_in_binoculars.gif"
     ]
   },
   "stories": {
