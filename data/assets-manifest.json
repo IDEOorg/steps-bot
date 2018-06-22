@@ -58,6 +58,20 @@
   },
   "testing": {
     "path": "static/images/testing/",
-    "test4": "Learn.gif"
+    "test1": "celebration_firework.gif",
+    "test2": "celebration_party.gif",
+    "test3": "celebration_pompom.gif",
+    "test4": "celebration_space.gif",
+    "test5": "celebration_swish.gif",
+    "test6": "check_in_binoculars.gif",
+    "test7": "check_in_blinds.gif",
+    "test8": "check_in_fence.gif",
+    "test9": "check_in_light.gif",
+    "test10": "check_in_sunglasses.gif",
+    "test11": "Coach_Says.gif",
+    "test12": "intro_celebrate.gif",
+    "test13": "Learn.gif",
+    "test14": "Stories.gif",
+    "test15": "welcome_hi.gif"
   }
 }

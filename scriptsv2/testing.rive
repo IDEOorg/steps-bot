@@ -8,5 +8,13 @@
   ^ ^image("<get test5>")<send>
   ^ ^image("<get test6>")<send>
   ^ ^image("<get test7>")<send>
+  ^ ^image("<get test8>")<send>
+  ^ ^image("<get test9>")<send>
+  ^ ^image("<get test10>")<send>
+  ^ ^image("<get test11>")<send>
+  ^ ^image("<get test12>")<send>
+  ^ ^image("<get test13>")<send>
+  ^ ^image("<get test14>")<send>
+  ^ ^image("<get test15>")
 
 < topic
