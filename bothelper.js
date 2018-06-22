@@ -3,6 +3,12 @@ const RiveScript = require('rivescript');
 const assetUrls = require('./data/assets-manifest.json');
 const api = require('./apihelper');
 
+// Bitly used for tracking Media links - uses v3 of the Bitly API
+const { BitlyClient } = require('bitly');
+
+const token = PROCESS.ENV.BITLY_TOKEN; // see mepler if you don't have this in your .env file
+const bitly = new BitlyClient(token);
+
 const self = this;
 self.riveBot = setupRiveScript();
 
@@ -210,7 +216,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, fbNew
       if (!viewedMedia || !viewedMedia.includes(content.id)) {
         contentIdChosen = content.id;
         contentText = content.title;
-        contentUrl = content.url;
+        contentUrl = buildContentUrl(content, userInfo); // eslint will throw an error here but it's okay because we break the loop
         contentImgUrl = content.image;
         contentDescription = content.description;
         break;
@@ -399,4 +405,27 @@ function getRandomItemFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
   return null;
+}
+
+const serverUrl = 'https://peaceful-island-50843.herokuapp.com';
+async function buildContentUrl(content, user) {
+  // redirect (on this server) URL is wrapped in a bit.ly link with the content.id, content.url, and user.id
+  // user clicks bit.ly link and is taken to redirect URL
+  // the "view" is recorded in analytics with the params in the bit.ly link
+  // user is redirected to content.url
+
+  // create redirect Url to send them to our sever for tracking before being sent to final destination
+  const redirectUrl = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`;
+
+  // wrap redirect url in a bitly link
+  let bitlyUrl = null;
+  try {
+    bitlyUrl = await bitly.shorten(redirectUrl);
+  } catch (err) {
+    console.err(err);
+  }
+
+  // trackMediaSent(content, user); // to be implemented
+
+  return bitlyUrl;
 }

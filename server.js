@@ -45,6 +45,13 @@ function routes(app, fbController, twilioController) {
       }
     }
   });
+
+
+  app.get('/redirect', (req, res) => {
+    // trackMediaClicked(); // to be implemented
+    res.redirect(req.query.contentUrl);
+  });
+
   const bot = twilioController.spawn({});
   twilioController.createWebhookEndpoints(app, bot, () => {
   });
