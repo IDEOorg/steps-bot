@@ -35,15 +35,15 @@
   "tasks": {
     "path": "static/images/tasks/",
     "images": [
-      "1.png",
-      "2.png",
-      "3.png",
-      "4.png",
-      "5.png",
-      "6.png",
-      "7.png",
-      "8.png",
-      "9.png"
+      "1.gif",
+      "2.gif",
+      "3.gif",
+      "4.gif",
+      "5.gif",
+      "6.gif",
+      "7.gif",
+      "8.gif",
+      "9.gif"
     ]
   },
   "welcome": {
