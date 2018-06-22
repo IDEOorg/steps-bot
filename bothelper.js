@@ -414,7 +414,9 @@ async function buildContentUrl(content, user) {
   // user clicks bit.ly link and is taken to redirect URL
   // the "view" is recorded in analytics with the params in the bit.ly link
   // user is redirected to content.url
-
+  if (content === null) {
+    return null;
+  }
   // create redirect Url to send them to our sever for tracking before being sent to final destination
   const redirectUrl = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`;
 
