@@ -14,14 +14,21 @@ exports.trackMediaSent = function trackMediaSent(content, user) {
   });
 };
 
-exports.trackMediaClicked = function trackMediaClicked(contentId, contentUrl, userId) {
+exports.trackMediaClicked = function trackMediaClicked(req) {
+  // query string = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`
   keen.recordEvent('mediaClicked', {
-    mediaId: contentId,
-    mediaUrl: contentUrl,
-    userId,
+    mediaId: req.query.contentId,
+    mediaUrl: req.query.contentUrl,
+    userId: req.query.userId,
   });
 };
 
+/*
+await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
+line 53 of bothelper.js I believe (edited)
+
+and createMessage is in apihelper.js
+*/
 exports.trackClientResponse = function trackClientResponse() {
   keen.recordEvent('clientResponse', {
     userId: null,
