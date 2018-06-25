@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const { trackMediaClicked } = require('./tracker');
 
 module.exports = function server(fbController, twilioController) {
   const app = express();
@@ -48,7 +49,7 @@ function routes(app, fbController, twilioController) {
 
 
   app.get('/redirect', (req, res) => {
-    // trackMediaClicked(); // to be implemented
+    trackMediaClicked(req);
     res.redirect(req.query.contentUrl);
   });
 
