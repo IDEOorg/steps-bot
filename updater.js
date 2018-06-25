@@ -213,7 +213,12 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
     })
     .catch((err) => {
       console.error(err.toString());
-      // const {message, code, response} = error;
-      // const {headers, body} = response;
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: `Coach notification email error - ${Date.now()}`,
+        text: `Unable to send help request notification email to ${coachEmail} on behalf of 
+              ${client.first_name} ${client.last_name}\n Here's the error: ${err.toString()}`,
+      });
     });
 }
