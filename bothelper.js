@@ -2,6 +2,7 @@ require('dotenv').config();
 const RiveScript = require('rivescript');
 const assetUrls = require('./data/assets-manifest.json');
 const api = require('./apihelper');
+const sgMail = require('@sendgrid/mail');
 
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
@@ -427,6 +428,12 @@ async function buildContentUrl(content, user) {
     bitlyUrl = await bitly.shorten(redirectUrl);
   } catch (err) {
     console.error(err);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: `Bitly error - ${Date.now()}`,
+      text: `Unable to creat Bitly link for ${content.url}. \n Here is the error: ${err}`,
+    });
   }
 
   trackMediaSent(content, user);
