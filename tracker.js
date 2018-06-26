@@ -6,6 +6,7 @@ const keen = new KeenTracking({
   writeKey: process.env.KEEN_WRITE_KEY,
 });
 
+// see `buildContentUrl()` in bothelper.js
 exports.trackMediaSent = function trackMediaSent(content, user) {
   keen.recordEvent('mediaSent', {
     mediaId: content.id,
@@ -14,6 +15,7 @@ exports.trackMediaSent = function trackMediaSent(content, user) {
   });
 };
 
+// see ` app.get('/redirect'...` in server.js
 exports.trackMediaClicked = function trackMediaClicked(req) {
   // query string = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`
   keen.recordEvent('mediaClicked', {
@@ -23,16 +25,11 @@ exports.trackMediaClicked = function trackMediaClicked(req) {
   });
 };
 
-/*
-await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
-line 53 of bothelper.js I believe (edited)
-
-and createMessage is in apihelper.js
-*/
-exports.trackClientResponse = function trackClientResponse() {
+// see createMessage in apihelper.js
+exports.trackClientResponse = function trackClientResponse(userId, topic, text) {
   keen.recordEvent('clientResponse', {
-    userId: null,
-    topic: null,
-    text: null,
+    userId,
+    topic,
+    text,
   });
 };
