@@ -15,7 +15,7 @@ exports.trackMediaSent = function trackMediaSent(content, user) {
   });
 };
 
-// see ` app.get('/redirect'...` in server.js
+// see app.get('/redirect', ...) in server.js
 exports.trackMediaClicked = function trackMediaClicked(req) {
   // query string = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`
   keen.recordEvent('mediaClicked', {
@@ -25,8 +25,8 @@ exports.trackMediaClicked = function trackMediaClicked(req) {
   });
 };
 
-// see createMessage in apihelper.js
-exports.trackClientResponse = function trackClientResponse(userId, topic, text) {
+// see buildContentUrl() in bothelper.js
+exports.trackClientResponse = function trackClientResponse() {
   keen.recordEvent('clientResponse', {
     userId,
     topic,
