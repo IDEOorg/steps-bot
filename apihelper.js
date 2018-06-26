@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
 const seedTasksData = require('./db/seedtasks.json');
-const { trackClientResponse } = require('./tracker');
+const { trackMessageSent } = require('./tracker');
 
 module.exports = {
   getAllClients,
@@ -157,7 +157,7 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
   });
 
   const topicString = topic || 'noTopic';
-  trackClientResponse(body);
+  trackMessageSent(body);
 
   return message;
 }
