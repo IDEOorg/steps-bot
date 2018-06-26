@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
 const seedTasksData = require('./db/seedtasks.json');
+const { trackClientResponse } = require('./tracker');
 
 module.exports = {
   getAllClients,
@@ -18,8 +19,11 @@ module.exports = {
   markMediaAsViewed,
   getUserDataFromDB,
   createMockTasks,
-  createMockFBUser
+  createMockFBUser,
+  botId,
 };
+
+const botId = 0;
 
 async function getAllClients() {
   const clients = await rp({
@@ -149,6 +153,12 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
   }).catch((e) => {
     console.log(e);
   });
+
+  const topicString = topic || 'noTopic';
+  if (fromId !== botId) {
+    trackClientResponse(fromId, topicString, messageToSend);
+  }
+
   return message;
 }
 
