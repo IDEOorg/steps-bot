@@ -155,9 +155,7 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
   });
 
   const topicString = topic || 'noTopic';
-  if (fromId !== botId) {
-    trackClientResponse(fromId, topicString, messageToSend);
-  }
+  trackClientResponse(fromId, topicString, messageToSend);
 
   return message;
 }
