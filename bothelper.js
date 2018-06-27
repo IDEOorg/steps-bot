@@ -35,6 +35,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   const BOT_ID = 41;
   let userInfo = null;
   userInfo = await api.getUserDataFromDB(platform, userPlatformId);
+  console.log('userInfo');
+  console.log(userInfo);
   if (!userInfo) {
     // user doesn't exist in db
     let errMessage = null;
@@ -48,6 +50,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
     userInfo = await api.createMockFBUser(userPlatformId);
+    console.log('mock fb user');
     userInfo.topic = 'welcome';
   }
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
@@ -72,6 +75,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       await api.updateUser(userInfo.id, userInfo);
     }
   }
+  console.log('hey hey');
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic, fbNewUserId);
