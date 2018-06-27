@@ -51,7 +51,7 @@
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
-      "Learn.gif"
+      "welcome_hi2.gif"
     ],
     "workplanImgUrl": "Workplan.png",
     "introCelebrateUrl": "intro_celebrate.gif"
