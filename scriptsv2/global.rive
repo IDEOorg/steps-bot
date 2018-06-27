@@ -1,8 +1,8 @@
 > topic global
   + stop
-  - You will not receive any more messages. To opt back in, message the word "START".
+  - You will not receive any more messages. To opt back in, send a message.
   + plan
   - Here's a link to your full work plan.\n<get workplanLink>
-  + coach
+  + (coach|help)
   - {topic=help} {@startprompt}
 < topic
