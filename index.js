@@ -22,7 +22,7 @@ function fbEndpoint(req, res) {
   res.send('ok');
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
-  const userPlatformId = messageObject.sender.id;
+  const userPlatformId = body.entry[0].id;
   let userMessage = null;
   let fbNewUserPhone = null;
   if (messageObject.text) {
