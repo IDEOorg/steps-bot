@@ -15,6 +15,8 @@ module.exports = {
 
 async function sendReply(platform, userPlatformId, messages) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
+  console.log('messages*************************');
+  console.log(messages);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     let formattedMsg = null;
@@ -32,6 +34,7 @@ async function sendReply(platform, userPlatformId, messages) {
         api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
       }
     }
+    break;
   }
 }
 
