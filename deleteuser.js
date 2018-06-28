@@ -2,7 +2,7 @@ const rp = require('request-promise');
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(160);
+deleteUser(164);
 
 async function deleteUser(id) {
   const media = await rp({

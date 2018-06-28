@@ -21,9 +21,15 @@ const twilioController = Botkit.twiliosmsbot({
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 // We are passing the controller object into our express server module
 // so we can extend it and process incoming message payloads
-server(fbController, twilioController);
+server(fbEndpoint, twilioController);
 
-// Wildcard hears response, will respond to all user input with 'Hello World!'
+function fbEndpoint(req, res) {
+  const body = req.body;
+  console.log(body.entry);
+  console.log(body.entry[0].messaging[0]);
+  res.status(200);
+  res.send('ok');
+}
 fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
