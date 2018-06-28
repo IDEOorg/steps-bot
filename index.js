@@ -18,6 +18,8 @@ const twilioController = Botkit.twiliosmsbot({
 server(fbEndpoint, twilioController);
 
 function fbEndpoint(req, res) {
+  res.status(200);
+  res.send('ok');
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
   const userPlatformId = messageObject.sender.id;
@@ -33,13 +35,13 @@ function fbEndpoint(req, res) {
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log(response);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
-        bot.resetVariables(userPlatformId);
-      });
+      if (response.variables) {
+        updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
+          bot.resetVariables(userPlatformId);
+        });
+      }
     });
   });
-  res.status(200);
-  res.send('ok');
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {
