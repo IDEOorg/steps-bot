@@ -24,20 +24,16 @@ function fbEndpoint(req, res) {
   const messageObject = body.entry[0].messaging[0];
   console.log(messageObject);
   const userPlatformId = messageObject.sender.id;
-  console.log('sender id');
-  console.log(userPlatformId);
   let userMessage = null;
   let fbNewUserPhone = null;
   if (messageObject.message) {
     userMessage = messageObject.message.text;
-  } else if (messageObject.title) {
-    userMessage = messageObject.title;
+  } else if (messageObject.postback) {
+    userMessage = messageObject.postback.title;
     fbNewUserPhone = messageObject.postback.referral.ref;
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop
   }
-  console.log('fbNewUserPhone');
-  console.log(fbNewUserPhone);
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log('response0');
