@@ -29,6 +29,7 @@ fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
   const userMessage = message.text;
   // get message payload here for new users
   const fbNewUserId = userPlatformId;
+  console.log(message);
   console.log('awesome');
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserId).then((response) => {
     console.log(response);

@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 require('dotenv').config();
 
-const apiUrl = 'https://graph.facebook.com/v2.9/me/thread_settings';
+const apiUrl = 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + process.env.FB_PAGE_ACCESS_TOKEN;
 
 /**
  * adds the "Get Started" button from a Facebook page
@@ -9,38 +9,42 @@ const apiUrl = 'https://graph.facebook.com/v2.9/me/thread_settings';
  * @param  {String} payload - the user defined payload for the webhook
  * @return {Object} - the promise for the request
  */
-const addGetStarted = (accessToken, payload) =>
+console.log(process.env.FB_PAGE_ACCESS_TOKEN);
+
+const addGetStarted = payload =>
   rp({
     uri: apiUrl,
-    qs: { access_token: accessToken },
     method: 'POST',
     body: {
-      setting_type: 'call_to_actions',
-      thread_state: 'new_thread',
-      call_to_actions: [
-        {
-          payload,
-        },
-      ],
+      get_started: {
+        payload
+      }
     },
     json: true,
   }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
 
-/**
- * removes the "Get Started" button from a Facebook page
- * @param  {String} accessToken - the access token for the Facebook page
- * @return {Object} - the promise for the request
- */
-// const removeGetStarted = accessToken =>
-//   rp({
-//     uri: apiUrl,
-//     qs: { access_token: accessToken },
-//     method: 'DELETE',
-//     body: {
-//       setting_type: 'call_to_actions',
-//       thread_state: 'new_thread',
-//     },
-//     json: true,
-//   }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
+const deleteGetStarted = () =>
+  rp({
+    uri: apiUrl,
+    method: 'DELETE',
+    body: {
+      fields: [
+        'get_started'
+      ]
+    },
+    json: true,
+  }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
 
-addGetStarted(process.env.FB_PAGE_ACCESS_TOKEN, 'getstarted');
+const checkGetStarted = payload =>
+  rp({
+    uri: apiUrl,
+    method: 'GET',
+    body: {
+      get_started: {
+        payload
+      }
+    },
+    json: true,
+  }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
+addGetStarted('getstarted');
+// checkGetStarted();
