@@ -50,7 +50,7 @@ async function deleteUser(id) {
           method: 'DELETE',
           uri: url + '/media/' + m.id
         }).catch((e) => {
-          // console.log(e);
+          console.log(e);
         });
       }
     }

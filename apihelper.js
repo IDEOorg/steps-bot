@@ -17,8 +17,7 @@ module.exports = {
   updateTask,
   markMediaAsViewed,
   getUserDataFromDB,
-  createMockTasks,
-  createMockFBUser
+  createMockTasks
 };
 
 async function getAllClients() {
@@ -216,40 +215,4 @@ async function createMockTasks(id) {
       json: true
     });
   }
-}
-
-
-async function createMockFBUser(userPlatformId) {
-  const userData = {
-    first_name: 'Friend',
-    last_name: 'Friend',
-    email: 'test123@ideo.org',
-    phone: null,
-    coach_id: 2,
-    org_id: 3,
-    color: 'blue',
-    goals: [
-      'Buy a house'
-    ],
-    status: 'WORKING',
-    updated: new Date(),
-    platform: 'FBOOK',
-    image: null,
-    follow_up_date: '2018-07-18T12:14:58.914Z',
-    plan_url: null,
-    checkin_times: [],
-    topic: null,
-    fb_id: userPlatformId,
-    temp_help_response: null
-  };
-  const user = await rp({
-    method: 'POST',
-    uri: assetUrls.url + '/clients',
-    body: userData,
-    json: true
-  }).catch((e) => {
-    console.log(e);
-  });
-  await createMockTasks(user.id);
-  return user;
 }

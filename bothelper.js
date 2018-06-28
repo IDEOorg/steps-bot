@@ -31,12 +31,17 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
   const BOT_ID = 41;
   let userInfo = null;
-  userInfo = await api.getUserDataFromDB(platform, userPlatformId);
-  console.log('userInfo');
-  console.log(userInfo);
+  if (fbNewUserPhone) {
+    userInfo = await api.getUserDataFromDB(platform, fbNewUserPhone);
+    if (userInfo) {
+      userInfo.topic = 'welcome';
+    }
+  } else {
+    userInfo = await api.getUserDataFromDB(platform, userPlatformId);
+  }
   if (!userInfo) {
     // user doesn't exist in db
     let errMessage = null;
@@ -48,10 +53,15 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
           message: errMessage
         }]
       };
+    } else if (platform === 'fb') {
+      errMessage = 'Sorry, we didn\'t recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.';
+      return {
+        messages: [{
+          type: 'text',
+          message: errMessage
+        }]
+      };
     }
-    userInfo = await api.createMockFBUser(userPlatformId);
-    console.log('mock fb user');
-    userInfo.topic = 'welcome';
   }
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (userMessage.toLowerCase().trim() === 'ff') {
@@ -66,7 +76,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         soonestCheckInIndex = i;
       }
     }
-
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
@@ -75,10 +84,9 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       await api.updateUser(userInfo.id, userInfo);
     }
   }
-  console.log('hey hey');
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic, fbNewUserId);
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
@@ -109,7 +117,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   };
 }
 
-async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic, fbNewUserId) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic) {
   const firstName = userInfo.first_name;
   const workplanUrl = `https://www.helloroo.org/clients/${userInfo.id}/tasks`;
   const {
@@ -134,7 +142,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
       topic = 'welcome';
     }
   } else if (userPlatform === 'FBOOK') {
-    userPlatformId = fbNewUserId;
     if (platform === 'sms') { // user has registered fb account but sends SMS
       // TODO do nothing
     }

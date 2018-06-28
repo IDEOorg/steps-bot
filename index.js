@@ -7,12 +7,6 @@ const Botkit = require('botkit');
 const server = require('./server.js');
 
 // Create the Botkit controller, which controls all instances of the bot.
-const fbController = Botkit.facebookbot({
-  verify_token: process.env.FB_VERIFY_TOKEN,
-  access_token: process.env.FB_PAGE_ACCESS_TOKEN,
-  require_delivery: true,
-  receive_via_postback: true
-});
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
   auth_token: process.env.TWILIO_AUTH_TOKEN,
@@ -25,19 +19,19 @@ server(fbEndpoint, twilioController);
 
 function fbEndpoint(req, res) {
   const body = req.body;
-  console.log(body.entry);
   console.log(body.entry[0].messaging[0]);
-  res.status(200);
-  res.send('ok');
-}
-fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
-  const userPlatformId = message.user;
-  const userMessage = message.text;
+  const userPlatformId = body.entry[0].id;
+  let userMessage = null;
+  let fbNewUserPhone = null;
+  const messageObject = body.entry[0].messaging[0];
+  if (messageObject.text) {
+    userMessage = messageObject.text;
+  } else if (messageObject.title) {
+    userMessage = messageObject.title;
+    fbNewUserPhone = userPlatformId;
+  }
   // get message payload here for new users
-  const fbNewUserId = userPlatformId;
-  console.log(message);
-  console.log('awesome');
-  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserId).then((response) => {
+  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log(response);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
@@ -45,7 +39,9 @@ fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
       });
     });
   });
-});
+  res.status(200);
+  res.send('ok');
+}
 
 twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
