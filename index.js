@@ -22,7 +22,8 @@ function fbEndpoint(req, res) {
   res.send('ok');
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
-  const userPlatformId = messageObject.sender.id;
+  console.log(messageObject);
+  const userPlatformId = messageObject.id;
   console.log('sender id');
   console.log(userPlatformId);
   let userMessage = null;
