@@ -13,7 +13,7 @@ module.exports = {
   sendReply
 };
 
-async function sendReply(platform, userPlatformId, messages) {
+async function sendReply(platform, fsad, messages) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   console.log('messages*************************');
   console.log(messages);
