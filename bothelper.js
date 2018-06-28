@@ -32,6 +32,13 @@ function resetVariables(userPlatformId) {
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
+  console.log('hey43');
+  console.log(platform);
+  console.log(userPlatformId);
+  console.log(userMessage);
+  console.log(topic);
+  console.log(fbNewUserPhone);
+  console.log('ending332');
   const BOT_ID = 41;
   let userInfo = null;
   if (fbNewUserPhone) {
@@ -63,6 +70,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
   }
+  console.log('should never reach this stage');
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;

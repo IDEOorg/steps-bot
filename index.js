@@ -22,7 +22,9 @@ function fbEndpoint(req, res) {
   res.send('ok');
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
-  const userPlatformId = body.entry[0].id;
+  const userPlatformId = messageObject.sender.id;
+  console.log('sender id');
+  console.log(userPlatformId);
   let userMessage = null;
   let fbNewUserPhone = null;
   if (messageObject.text) {
@@ -31,10 +33,15 @@ function fbEndpoint(req, res) {
     userMessage = messageObject.title;
     fbNewUserPhone = messageObject.postback.referral.ref;
   }
+  console.log('fbNewUserPhone');
+  console.log(fbNewUserPhone);
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
+    console.log('response0');
     console.log(response);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
+      console.log('response1');
+      console.log(response);
       if (response.variables) {
         updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
           bot.resetVariables(userPlatformId);
