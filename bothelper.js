@@ -31,7 +31,7 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
+async function getResponse(platform, breakfads, userMessage, topic, fbNewUserPhone) {
   console.log('hey43');
   console.log(platform);
   console.log(userPlatformId);
