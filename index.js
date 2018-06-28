@@ -28,7 +28,7 @@ function fbEndpoint(req, res) {
     userMessage = messageObject.text;
   } else if (messageObject.title) {
     userMessage = messageObject.title;
-    fbNewUserPhone = userPlatformId;
+    fbNewUserPhone = messageObject.postback.referral.ref;
   }
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
