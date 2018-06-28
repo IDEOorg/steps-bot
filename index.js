@@ -20,6 +20,8 @@ server(fbEndpoint, twilioController);
 function fbEndpoint(req, res) {
   const body = req.body;
   console.log(body.entry[0].messaging[0]);
+  console.log('body.entry[0].id');
+  console.log(body.entry[0].id);
   const userPlatformId = body.entry[0].id;
   let userMessage = null;
   let fbNewUserPhone = null;
