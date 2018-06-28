@@ -30,7 +30,7 @@ function fbEndpoint(req, res) {
     fbNewUserPhone = messageObject.postback.referral.ref;
   }
   // get message payload here for new users
-  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
+  bot.getResponse('fb', userPlatfrmId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log(response);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
