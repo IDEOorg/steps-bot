@@ -29,7 +29,7 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'resetHelp', null);
   riveBot.setUservar(userPlatformId, 'helpMessage', null);
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
-  riveBot.setUservar(userPlatformId, 'setFacebookId', null);
+  riveBot.setUservar(userPlatformId, 'newFacebookId', null);
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
@@ -97,7 +97,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
   if (fbNewUserPhone) {
-    self.riveBot.setUservar(userPlatformId, 'setFacebookId', true);
+    self.riveBot.setUservar(userPlatformId, 'newFacebookId', userPlatformId);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {

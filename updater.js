@@ -22,13 +22,13 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     helpMessage,
     sendHelpMessage,
     taskComplete,
-    setFacebookId
+    newFacebookId
   } = variables;
   console.log('aya variables');
   console.log(userPlatformId);
   console.log(variables);
-  console.log('setFacebookId variable');
-  console.log(setFacebookId);
+  console.log('newFacebookId variable');
+  console.log(newFacebookId);
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
@@ -99,8 +99,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   if (contentViewed) {
     api.markMediaAsViewed(client.id, parseInt(contentId, 10));
   }
-  if (setFacebookId) {
-    client.fb_id = userPlatformId;
+  if (newFacebookId) {
+    client.fb_id = newFacebookId;
   }
 
   client.topic = topic;
