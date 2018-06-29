@@ -2,24 +2,6 @@ const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
 const { trackMessageSent } = require('./tracker');
 
-module.exports = {
-  getAllClients,
-  getOrgName,
-  getCoachName,
-  getCoach,
-  getClientTasks,
-  getAllMedia,
-  getViewedMediaIds,
-  createRequest,
-  getUserRequests,
-  createMessage,
-  updateUser,
-  updateTask,
-  markMediaAsViewed,
-  getUserDataFromDB,
-  botId
-};
-
 const botId = 41;
 
 async function getAllClients() {
@@ -133,7 +115,7 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
-async function createMessage(requestId, fromId, toId, messageToSend) {
+async function createMessage(requestId, fromId, toId, messageToSend, topic) {
   const body = {
     text: messageToSend,
     to_user: toId,
@@ -215,3 +197,21 @@ async function getUserDataFromDB(platform, userPlatformId) {
   }
   return null;
 }
+
+module.exports = {
+  getAllClients,
+  getOrgName,
+  getCoachName,
+  getCoach,
+  getClientTasks,
+  getAllMedia,
+  getViewedMediaIds,
+  createRequest,
+  getUserRequests,
+  createMessage,
+  updateUser,
+  updateTask,
+  markMediaAsViewed,
+  getUserDataFromDB,
+  botId
+};
