@@ -65,6 +65,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   console.log('should never reach this stage');
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
+
+  // fast forward script start
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;
     let soonestTime = Number.MAX_VALUE;
@@ -85,6 +87,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       await api.updateUser(userInfo.id, userInfo);
     }
   }
+  // fast forward script end
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic);
@@ -145,10 +148,11 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   } else if (userPlatform === 'FBOOK') {
     if (platform === 'sms') { // user has registered fb account but sends SMS
       // TODO do nothing
+      topic = 'setupfb';
     }
     if (!userInfo.fb_id) {
       // TODO first fb message
-      topic = 'welcome'; // change it from setup
+      topic = 'welcome';
     }
     userPlatformId = userInfo.fb_id;
   } else { // is SMS
