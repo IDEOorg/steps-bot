@@ -21,7 +21,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     resetHelp,
     helpMessage,
     sendHelpMessage,
-    taskComplete
+    taskComplete,
+    setFacebookId
   } = variables;
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
@@ -92,6 +93,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (contentViewed) {
     api.markMediaAsViewed(client.id, parseInt(contentId, 10));
+  }
+  if (setFacebookId) {
+    client.fb_id = userPlatformId;
   }
 
   client.topic = topic;
