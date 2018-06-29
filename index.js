@@ -42,7 +42,8 @@ function fbEndpoint(req, res) {
       console.log('response1');
       console.log(response);
       if (response.variables) {
-        updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
+        const idToUpdate = fbNewUserPhone || userPlatformId;
+        updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
           bot.resetVariables(userPlatformId);
         });
       }
