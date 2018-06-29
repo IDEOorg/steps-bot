@@ -51,10 +51,10 @@
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
-      "welcome_hi2.gif"
+      "01_A_Hello_v01.gif"
     ],
     "workplanImgUrl": "Workplan.png",
-    "introCelebrateUrl": "intro_celebrate.gif"
+    "introCelebrateUrl": "01_C_FirstCelebrate_v01.gif"
   },
   "testing": {
     "path": "static/images/testing/",
