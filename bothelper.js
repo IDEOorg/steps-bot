@@ -39,6 +39,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     userInfo = await api.getUserDataFromDB(platform, fbNewUserPhone);
     if (userInfo) {
       userInfo.topic = 'welcome';
+      userInfo.fb_id = userPlatformId;
     }
   } else {
     userInfo = await api.getUserDataFromDB(platform, userPlatformId);
