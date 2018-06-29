@@ -5,6 +5,10 @@
   "done": {
     "path": "static/images/done/",
     "images": [
+      "03_A_Swish_v01.gif",
+      "03_B_Party_v01.gif",
+      "03_C_Firework_v02.gif",
+      "03_D_PomPom_v01.gif",
       "space_v4.gif"
     ]
   },
@@ -17,7 +21,11 @@
   "checkin": {
     "path": "static/images/checkin/",
     "images": [
-      "sunglasses_v2.gif"
+      "02_A_Light_v03.gif",
+      "02_B_Fence_v01.gif",
+      "sunglasses_v2.gif",
+      "02_D_Blinds_v01.gif",
+      "02_E_Binoculars_v02.gif"
     ]
   },
   "stories": {
