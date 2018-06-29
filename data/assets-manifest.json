@@ -9,7 +9,7 @@
       "03_B_Party_v01.gif",
       "03_C_Firework_v02.gif",
       "03_D_PomPom_v01.gif",
-      "03_E_Space_v02.gif"
+      "03_E_Space_v01.gif"
     ]
   },
   "help": {
@@ -53,30 +53,7 @@
     "images": [
       "01_A_Hello_v01.gif"
     ],
-    "workplanImgUrl": "Workplan.png",
+    "workplanImgUrl": "01_B_Map_v01.gif",
     "introCelebrateUrl": "01_C_FirstCelebrate_v01.gif"
-  },
-  "testing": {
-    "path": "static/images/testing/",
-    "test1": "01_A_Hello_v01.gif",
-    "test2": "01_B_Map_v01.gif",
-    "test3": "01_C_FirstCelebrate_v01.gif",
-    "test4": "02_A_Light_v03.gif",
-    "test5": "02_B_Fence_v01.gif",
-    "test6": "02_C_Sunglasses_v01.gif",
-    "test7": "02_D_Blinds_v01.gif",
-    "test8": "02_E_Binoculars_v02.gif",
-    "test9": "03_A_Swish_v01.gif",
-    "test10": "03_B_Party_v01.gif",
-    "test11": "03_C_Firework_v02.gif",
-    "test12": "03_D_PomPom_v01.gif",
-    "test13": "03_E_Space_v02.gif",
-    "test14": "04_Coach_v02.gif",
-    "test15": "04_DailyAction_v02.gif",
-    "test16": "04_Learn_v02.gif",
-    "test17": "04_Number1.gif",
-    "test18": "04_Number2.gif",
-    "test19": "04_Number3.gif",
-    "test20": "celebration_swish.gif"
   }
 }

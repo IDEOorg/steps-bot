@@ -239,28 +239,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  if (formattedUserMessage === 'testingtopic') {
-    riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
-    riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);
-    riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test3);
-    riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test4);
-    riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test5);
-    riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test6);
-    riveBot.setUservar(userPlatformId, 'test7', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test7);
-    riveBot.setUservar(userPlatformId, 'test8', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test8);
-    riveBot.setUservar(userPlatformId, 'test9', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test9);
-    riveBot.setUservar(userPlatformId, 'test10', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test10);
-    riveBot.setUservar(userPlatformId, 'test11', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test11);
-    riveBot.setUservar(userPlatformId, 'test12', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test12);
-    riveBot.setUservar(userPlatformId, 'test13', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test13);
-    riveBot.setUservar(userPlatformId, 'test14', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test14);
-    riveBot.setUservar(userPlatformId, 'test15', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test15);
-    riveBot.setUservar(userPlatformId, 'test16', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test16);
-    riveBot.setUservar(userPlatformId, 'test17', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test17);
-    riveBot.setUservar(userPlatformId, 'test18', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test18);
-    riveBot.setUservar(userPlatformId, 'test19', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test19);
-    riveBot.setUservar(userPlatformId, 'test20', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test20);
-  }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
