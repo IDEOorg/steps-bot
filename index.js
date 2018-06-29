@@ -30,7 +30,7 @@ function fbEndpoint(req, res) {
     userMessage = messageObject.message.text;
   } else if (messageObject.postback) {
     userMessage = messageObject.postback.title;
-    fbNewUserPhone = messageObject.postback.referral.ref;
+    fbNewUserPhone = '+1' + messageObject.postback.referral.ref;
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop
   }
