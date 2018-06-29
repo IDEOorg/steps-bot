@@ -1,6 +1,5 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
-const seedTasksData = require('./db/seedtasks.json');
 
 module.exports = {
   getAllClients,
@@ -16,8 +15,7 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
-  getUserDataFromDB,
-  createMockTasks
+  getUserDataFromDB
 };
 
 async function getAllClients() {
@@ -206,19 +204,4 @@ async function getUserDataFromDB(platform, userPlatformId) {
     }
   }
   return null;
-}
-
-async function createMockTasks(id) {
-  const tasks = seedTasksData.tasks;
-  for (let i = 0; i < 7; i++) {
-    const taskData = tasks[i];
-    taskData.date_created = new Date();
-    taskData.user_id = id;
-    await rp({ // eslint-disable-line
-      method: 'POST',
-      uri: assetUrls.url + '/tasks',
-      body: taskData,
-      json: true
-    });
-  }
 }

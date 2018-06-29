@@ -65,7 +65,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
   }
-  console.log('should never reach this stage');
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
 
   // fast forward script start
@@ -128,7 +127,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
 
 async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic) {
   const firstName = userInfo.first_name;
-  const workplanUrl = `https://www.helloroo.org/clients/${userInfo.id}/tasks`;
+  const workplanUrl = 'https://www.helloroo.org/my-tasks';
   const {
     tasks,
   } = userInfo;
