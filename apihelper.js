@@ -152,6 +152,9 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
 }
 
 async function updateUser(userId, userData) {
+  console.log('updateUser func');
+  console.log(userId);
+  console.log(userData);
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
