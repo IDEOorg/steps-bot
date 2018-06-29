@@ -69,8 +69,8 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 // }, 1800000);
 
 async function updateAllClients() {
+  const isUpdateMessage = true;
   const users = await getAllClients();
-  // TODO handle scenario where user has fb platform but hasn't signed up on messenger yet.
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
@@ -96,7 +96,7 @@ async function updateAllClients() {
         const checkIn = eligibleCheckIns[j];
         // arguments for below function are wrong
         bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
-          sender.sendReply(platform, userPlatformId, response.messages, true).then(() => {
+          sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
             updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
               bot.resetVariables(userPlatformId);
             });

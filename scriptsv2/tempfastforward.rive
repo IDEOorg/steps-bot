@@ -13,6 +13,8 @@
   - {topic=nexttask}{@ startprompt}
   + welcometopic
   - {topic=welcome}{@ startprompt}
+  + welcomenexttopic
+  - {topic=welcomenext}{@ startprompt}
   + testingtopic
   - {topic=testing}{@ startprompt}
 < topic
