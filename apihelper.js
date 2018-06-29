@@ -1,9 +1,5 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
-<<<<<<< HEAD
-const seedTasksData = require('./db/seedtasks.json');
-=======
->>>>>>> 1477ac223d9ab82b5725720013ad3b60e8931a27
 const { trackMessageSent } = require('./tracker');
 
 module.exports = {
@@ -20,9 +16,7 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
-  getUserDataFromDB,
-  createMockTasks,
-  createMockFBUser
+  getUserDataFromDB
 };
 
 async function getAllClients() {
