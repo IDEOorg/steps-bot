@@ -5,11 +5,11 @@
   "done": {
     "path": "static/images/done/",
     "images": [
-      "celebration_swish.gif",
-      "celebration_firework.gif",
-      "celebration_party.gif",
-      "celebration_pompom.gif",
-      "celebration_space.gif"
+      "03_A_Swish_v01.gif",
+      "03_B_Party_v01.gif",
+      "03_C_Firework_v02.gif",
+      "03_D_PomPom_v01.gif",
+      "03_E_Space_v02.gif"
     ]
   },
   "help": {
@@ -21,11 +21,11 @@
   "checkin": {
     "path": "static/images/checkin/",
     "images": [
-      "check_in_blinds.gif",
-      "check_in_sunglasses.gif",
-      "check_in_light.gif",
-      "check_in_fence.gif",
-      "check_in_binoculars.gif"
+      "02_A_Light_v03.gif",
+      "02_B_Fence_v01.gif",
+      "02_C_Sunglasses_v01.gif",
+      "02_D_Blinds_v01.gif",
+      "02_E_Binoculars_v02.gif"
     ]
   },
   "stories": {
@@ -37,15 +37,15 @@
   "tasks": {
     "path": "static/images/tasks/",
     "images": [
-      "1.gif",
-      "2.gif",
-      "3.gif",
-      "4.gif",
-      "5.gif",
-      "6.gif",
-      "7.gif",
-      "8.gif",
-      "9.gif"
+      "04_Number1.gif",
+      "04_Number2.gif",
+      "04_Number3.gif",
+      "04_Number4.gif",
+      "04_Number5.gif",
+      "04_Number6.gif",
+      "04_Number7.gif",
+      "04_Number8.gif",
+      "04_Number9.gif"
     ]
   },
   "welcome": {

@@ -268,7 +268,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
   const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
-  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.gif'; // eslint-disable-line
+  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
   const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
