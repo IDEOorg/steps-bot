@@ -21,8 +21,14 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     resetHelp,
     helpMessage,
     sendHelpMessage,
-    taskComplete
+    taskComplete,
+    newFacebookId
   } = variables;
+  console.log('aya variables');
+  console.log(userPlatformId);
+  console.log(variables);
+  console.log('newFacebookId variable');
+  console.log(newFacebookId);
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
@@ -92,6 +98,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (contentViewed) {
     api.markMediaAsViewed(client.id, parseInt(contentId, 10));
+  }
+  if (newFacebookId) {
+    client.fb_id = newFacebookId;
   }
 
   client.topic = topic;
@@ -216,10 +225,9 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
-        subject: 'Roo bot error',
-        text: `An error occurred on the bot server: \n ${err}`,
+        subject: `Coach notification email error - ${Date.now()}`,
+        text: `Unable to send help request notification email to ${coachEmail} on behalf of 
+              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
       });
-      // const {message, code, response} = error;
-      // const {headers, body} = response;
     });
 }

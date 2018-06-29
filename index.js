@@ -7,12 +7,6 @@ const Botkit = require('botkit');
 const server = require('./server.js');
 
 // Create the Botkit controller, which controls all instances of the bot.
-const fbController = Botkit.facebookbot({
-  verify_token: process.env.FB_VERIFY_TOKEN,
-  access_token: process.env.FB_PAGE_ACCESS_TOKEN,
-  require_delivery: true,
-  receive_via_postback: true
-});
 const twilioController = Botkit.twiliosmsbot({
   account_sid: process.env.TWILIO_ACCOUNT_SID,
   auth_token: process.env.TWILIO_AUTH_TOKEN,
@@ -21,25 +15,41 @@ const twilioController = Botkit.twiliosmsbot({
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 // We are passing the controller object into our express server module
 // so we can extend it and process incoming message payloads
-server(fbController, twilioController);
+server(fbEndpoint, twilioController);
 
-// Wildcard hears response, will respond to all user input with 'Hello World!'
-fbController.hears('.*', 'message_received,facebook_postback', (_, message) => {
-  const userPlatformId = message.user;
-  const userMessage = message.text;
+function fbEndpoint(req, res) {
+  res.status(200);
+  res.send('ok');
+  const body = req.body;
+  const messageObject = body.entry[0].messaging[0];
+  console.log(messageObject);
+  const userPlatformId = messageObject.sender.id;
+  let userMessage = null;
+  let fbNewUserPhone = null;
+  if (messageObject.message) {
+    userMessage = messageObject.message.text;
+  } else if (messageObject.postback) {
+    userMessage = messageObject.postback.title;
+    if (messageObject.postback.referral) {
+      fbNewUserPhone = '+1' + messageObject.postback.referral.ref;
+    }
+  } else {
+    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop
+  }
   // get message payload here for new users
-  const fbNewUserId = userPlatformId;
-  console.log(message);
-  console.log('awesome');
-  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserId).then((response) => {
-    console.log(response);
+  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
-        bot.resetVariables(userPlatformId);
-      });
+      console.log('response1');
+      console.log(response);
+      if (response.variables) {
+        const idToUpdate = fbNewUserPhone || userPlatformId;
+        updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
+          bot.resetVariables(userPlatformId);
+        });
+      }
     });
   });
-});
+}
 
 twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
@@ -59,8 +69,8 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 // }, 1800000);
 
 async function updateAllClients() {
+  const isUpdateMessage = true;
   const users = await getAllClients();
-  // TODO handle scenario where user has fb platform but hasn't signed up on messenger yet.
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
@@ -86,7 +96,7 @@ async function updateAllClients() {
         const checkIn = eligibleCheckIns[j];
         // arguments for below function are wrong
         bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
-          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
+          sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
             updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
               bot.resetVariables(userPlatformId);
             });

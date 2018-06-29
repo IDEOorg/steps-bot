@@ -2,25 +2,9 @@ const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
 const seedTasksData = require('./db/seedtasks.json');
 const sgMail = require('@sendgrid/mail');
+const { trackMessageSent } = require('./tracker');
 
-module.exports = {
-  getAllClients,
-  getOrgName,
-  getCoachName,
-  getCoach,
-  getClientTasks,
-  getAllMedia,
-  getViewedMediaIds,
-  createRequest,
-  getUserRequests,
-  createMessage,
-  updateUser,
-  updateTask,
-  markMediaAsViewed,
-  getUserDataFromDB,
-  createMockTasks,
-  createMockFBUser
-};
+const botId = 41;
 
 async function getAllClients() {
   const clients = await rp({
@@ -181,19 +165,21 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
-async function createMessage(requestId, fromId, toId, messageToSend) {
+async function createMessage(requestId, fromId, toId, messageToSend, topic) {
+  const body = {
+    text: messageToSend,
+    to_user: toId,
+    from_user: fromId,
+    media_id: null,
+    request_id: requestId,
+    timestamp: new Date(),
+    responses: null
+  };
+
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
-    body: {
-      text: messageToSend,
-      to_user: toId,
-      from_user: fromId,
-      media_id: null,
-      request_id: requestId,
-      timestamp: new Date(),
-      responses: null
-    },
+    body,
     json: true
   }).catch((e) => {
     console.log(e);
@@ -204,10 +190,17 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
       text: `An error occurred on the bot server: \n ${e}`,
     });
   });
+
+  const topicString = topic || 'noTopic';
+  trackMessageSent(body);
+
   return message;
 }
 
 async function updateUser(userId, userData) {
+  console.log('updateUser func');
+  console.log(userId);
+  console.log(userData);
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
@@ -270,6 +263,9 @@ async function getUserDataFromDB(platform, userPlatformId) {
       return client;
     }
     if (platform === 'fb' && client.fb_id === userPlatformId) {
+      return client;
+    }
+    if (platform === 'fb' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
       return client;
     }
   }
@@ -340,3 +336,21 @@ async function createMockFBUser(userPlatformId) {
   await createMockTasks(user.id);
   return user;
 }
+
+module.exports = {
+  getAllClients,
+  getOrgName,
+  getCoachName,
+  getCoach,
+  getClientTasks,
+  getAllMedia,
+  getViewedMediaIds,
+  createRequest,
+  getUserRequests,
+  createMessage,
+  updateUser,
+  updateTask,
+  markMediaAsViewed,
+  getUserDataFromDB,
+  botId
+};
