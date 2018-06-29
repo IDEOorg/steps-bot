@@ -15,26 +15,23 @@ module.exports = {
 
 async function sendReply(platform, userPlatformId, messages) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
-  console.log('messages*************************');
-  console.log(messages);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     let formattedMsg = null;
     if (platform === 'fb') {
       formattedMsg = formatMsgForFB(message);
       await sendFBMessage(userPlatformId, formattedMsg); // eslint-disable-line
-      await sleep(15100); // eslint-disable-line
+      await sleep(600); // eslint-disable-line
     } else if (platform === 'sms') {
       formattedMsg = formatMsgForSMS(message);
       await sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
       if (message.type === 'image') {
-        await sleep(10100); // eslint-disable-line
+        await sleep(6100); // eslint-disable-line
       } else {
         await sleep(1100); // eslint-disable-line
         api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
       }
     }
-    break;
   }
 }
 
