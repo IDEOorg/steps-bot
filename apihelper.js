@@ -198,6 +198,9 @@ async function getUserDataFromDB(platform, userPlatformId) {
     if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
+    if (platform === 'fb' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+      return client;
+    }
   }
   return null;
 }

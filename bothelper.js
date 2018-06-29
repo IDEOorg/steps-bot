@@ -38,6 +38,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     userInfo = await api.getUserDataFromDB(platform, fbNewUserPhone);
     if (userInfo) {
       userInfo.topic = 'welcome';
+      userInfo.fb_id = userPlatformId;
     }
   } else {
     userInfo = await api.getUserDataFromDB(platform, userPlatformId);
@@ -147,12 +148,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
     }
   } else if (userPlatform === 'FBOOK') {
     if (platform === 'sms') { // user has registered fb account but sends SMS
-      // TODO do nothing
       topic = 'setupfb';
-    }
-    if (!userInfo.fb_id) {
-      // TODO first fb message
-      topic = 'welcome';
     }
     userPlatformId = userInfo.fb_id;
   } else { // is SMS
