@@ -24,6 +24,11 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     taskComplete,
     setFacebookId
   } = variables;
+  console.log('aya variables');
+  console.log(userPlatformId);
+  console.log(variables);
+  console.log('setFacebookId variable');
+  console.log(setFacebookId);
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
