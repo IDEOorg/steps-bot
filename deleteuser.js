@@ -2,7 +2,12 @@ const rp = require('request-promise');
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(45);
+deleteUser(52);
+deleteUser(99);
+deleteUser(72);
+deleteUser(93);
+deleteUser(101);
+deleteUser(140);
 
 async function deleteUser(id) {
   const media = await rp({
@@ -34,7 +39,6 @@ async function deleteUser(id) {
       uri: url + '/requests/' + request.id
     });
   }
-  console.log('*********REQUESTS*********');
   let tasks = await rp({
     method: 'GET',
     uri: url + '/clients/' + id + '/tasks'
@@ -42,7 +46,6 @@ async function deleteUser(id) {
     console.log(e);
   });
   tasks = JSON.parse(tasks);
-  console.log(tasks);
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
     for (let j = 0; j < media.length; j++) {
@@ -52,11 +55,10 @@ async function deleteUser(id) {
           method: 'DELETE',
           uri: url + '/media/' + m.id
         }).catch((e) => {
-          // console.log(e);
+          console.log(e);
         });
       }
     }
-    console.log(task.id);
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/tasks/' + task.id
@@ -64,7 +66,6 @@ async function deleteUser(id) {
       console.log(e);
     });
   }
-  console.log('*********TASKS*********');
 
   let viewedMedia = await rp({
     method: 'GET',
@@ -73,14 +74,11 @@ async function deleteUser(id) {
   viewedMedia = JSON.parse(viewedMedia);
   for (let i = 0; i < viewedMedia.length; i++) {
     const viewed = viewedMedia[i];
-    console.log('viewed');
-    console.log(viewed);
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/clients/' + id + '/viewed_media/' + viewed.id
     });
   }
-  console.log('*********viewed mediatt*********');
   rp({
     method: 'DELETE',
     uri: url + '/clients/' + id

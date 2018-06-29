@@ -1,6 +1,5 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
-const seedTasksData = require('./db/seedtasks.json');
 const { trackMessageSent } = require('./tracker');
 
 module.exports = {
@@ -18,9 +17,7 @@ module.exports = {
   updateTask,
   markMediaAsViewed,
   getUserDataFromDB,
-  createMockTasks,
-  createMockFBUser,
-  botId,
+  botId
 };
 
 const botId = 41;
@@ -163,6 +160,9 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
 }
 
 async function updateUser(userId, userData) {
+  console.log('updateUser func');
+  console.log(userId);
+  console.log(userData);
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
@@ -209,57 +209,9 @@ async function getUserDataFromDB(platform, userPlatformId) {
     if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
+    if (platform === 'fb' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+      return client;
+    }
   }
   return null;
-}
-
-async function createMockTasks(id) {
-  const tasks = seedTasksData.tasks;
-  for (let i = 0; i < 7; i++) {
-    const taskData = tasks[i];
-    taskData.date_created = new Date();
-    taskData.user_id = id;
-    await rp({ // eslint-disable-line
-      method: 'POST',
-      uri: assetUrls.url + '/tasks',
-      body: taskData,
-      json: true
-    });
-  }
-}
-
-
-async function createMockFBUser(userPlatformId) {
-  const userData = {
-    first_name: 'Friend',
-    last_name: 'Friend',
-    email: 'test123@ideo.org',
-    phone: null,
-    coach_id: 2,
-    org_id: 3,
-    color: 'blue',
-    goals: [
-      'Buy a house'
-    ],
-    status: 'WORKING',
-    updated: new Date(),
-    platform: 'FBOOK',
-    image: null,
-    follow_up_date: '2018-07-18T12:14:58.914Z',
-    plan_url: null,
-    checkin_times: [],
-    topic: null,
-    fb_id: userPlatformId,
-    temp_help_response: null
-  };
-  const user = await rp({
-    method: 'POST',
-    uri: assetUrls.url + '/clients',
-    body: userData,
-    json: true
-  }).catch((e) => {
-    console.log(e);
-  });
-  await createMockTasks(user.id);
-  return user;
 }

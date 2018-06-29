@@ -1,5 +1,5 @@
 .env
 node_modules
 db/seed.json
-test.js
+utilstest.js
 *~

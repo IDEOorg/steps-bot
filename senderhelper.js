@@ -13,21 +13,22 @@ module.exports = {
   sendReply
 };
 
-async function sendReply(platform, userPlatformId, messages) {
+async function sendReply(platform, userPlatformId, messages, isUpdateMessage) {
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     let formattedMsg = null;
     if (platform === 'fb') {
       formattedMsg = formatMsgForFB(message);
-      await sendFBMessage(userPlatformId, formattedMsg); // eslint-disable-line
+      await sendFBMessage(userPlatformId, formattedMsg, isUpdateMessage); // eslint-disable-line
+      await sleep(300); // eslint-disable-line
     } else if (platform === 'sms') {
       formattedMsg = formatMsgForSMS(message);
-      sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
+      await sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
       if (message.type === 'image') {
-        await sleep(5100); // eslint-disable-line
+        await sleep(3100); // eslint-disable-line
       } else {
-        await sleep(1100); // eslint-disable-line
+        await sleep(800); // eslint-disable-line
         api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
       }
     }
@@ -137,7 +138,7 @@ function formatMsgForSMS(message) {
   };
 }
 
-function sendFBMessage(userId, message) {
+function sendFBMessage(userId, message, isUpdateMessage) {
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
@@ -149,6 +150,8 @@ function sendFBMessage(userId, message) {
         id: userId
       },
       message,
+      messaging_type: isUpdateMessage ? 'MESSAGE_TAG' : 'RESPONSE',
+      tag: isUpdateMessage ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
     }
   });
 }
