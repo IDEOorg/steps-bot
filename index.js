@@ -38,8 +38,6 @@ function fbEndpoint(req, res) {
   }
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
-    console.log('response0');
-    console.log(response);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       console.log('response1');
       console.log(response);
@@ -98,7 +96,7 @@ async function updateAllClients() {
         const checkIn = eligibleCheckIns[j];
         // arguments for below function are wrong
         bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
-          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
+          sender.sendReply(platform, userPlatformId, response.messages, true).then(() => {
             updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
               bot.resetVariables(userPlatformId);
             });
