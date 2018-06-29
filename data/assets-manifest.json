@@ -5,7 +5,10 @@
   "done": {
     "path": "static/images/done/",
     "images": [
-      "space_v14.gif"
+      "03_A_Swish_v01.gif",
+      "03_B_Party_v01.gif",
+      "03_C_Firework_v02.gif",
+      "03_D_PomPom_v01.gif"
     ]
   },
   "help": {
