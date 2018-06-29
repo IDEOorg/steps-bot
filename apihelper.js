@@ -16,11 +16,8 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
-  getUserDataFromDB,
-  botId
+  getUserDataFromDB
 };
-
-const botId = 41;
 
 async function getAllClients() {
   const clients = await rp({
