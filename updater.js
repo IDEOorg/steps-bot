@@ -213,6 +213,12 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
     })
     .catch((err) => {
       console.error(err.toString());
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: 'Roo bot error',
+        text: `An error occurred on the bot server: \n ${err}`,
+      });
       // const {message, code, response} = error;
       // const {headers, body} = response;
     });

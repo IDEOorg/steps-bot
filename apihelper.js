@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
 const seedTasksData = require('./db/seedtasks.json');
+const sgMail = require('@sendgrid/mail');
 
 module.exports = {
   getAllClients,
@@ -27,6 +28,12 @@ async function getAllClients() {
     uri: assetUrls.url + '/clients'
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return JSON.parse(clients);
 }
@@ -37,6 +44,12 @@ async function getOrgName(id) {
     uri: assetUrls.url + '/orgs/' + id.toString()
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   org = JSON.parse(org);
   if (org) {
@@ -51,6 +64,12 @@ async function getCoachName(id) {
     uri: assetUrls.url + '/coaches/' + id.toString()
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   coach = JSON.parse(coach);
   if (coach) {
@@ -65,6 +84,12 @@ async function getCoach(id) {
     uri: assetUrls.url + '/coaches/' + id.toString()
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return JSON.parse(coach);
 }
@@ -75,6 +100,12 @@ async function getClientTasks(id) {
     uri: assetUrls.url + '/clients/' + id.toString() + '/tasks'
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   tasks = JSON.parse(tasks);
   return tasks;
@@ -86,6 +117,12 @@ async function getAllMedia() {
     uri: assetUrls.url + '/media'
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   listOfMedia = JSON.parse(listOfMedia);
   return listOfMedia.filter((media) => {
@@ -99,6 +136,12 @@ async function getViewedMediaIds(id) {
     uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   viewedMedia = JSON.parse(viewedMedia);
   return viewedMedia.map((media) => {
@@ -118,6 +161,12 @@ async function createRequest(userId, taskId) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return request;
 }
@@ -148,6 +197,12 @@ async function createMessage(requestId, fromId, toId, messageToSend) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return message;
 }
@@ -160,6 +215,12 @@ async function updateUser(userId, userData) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return user;
 }
@@ -172,6 +233,12 @@ async function updateTask(id, taskData) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return task;
 }
@@ -183,6 +250,12 @@ async function markMediaAsViewed(clientId, mediaId) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   return media;
 }
@@ -214,6 +287,14 @@ async function createMockTasks(id) {
       uri: assetUrls.url + '/tasks',
       body: taskData,
       json: true
+    }).catch((err) => {
+      console.log(err);
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: 'Roo bot error',
+        text: `An error occurred on the bot server: \n ${err}`,
+      });
     });
   }
 }
@@ -249,6 +330,12 @@ async function createMockFBUser(userPlatformId) {
     json: true
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   await createMockTasks(user.id);
   return user;

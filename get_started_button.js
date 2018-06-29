@@ -1,5 +1,6 @@
 const rp = require('request-promise');
 require('dotenv').config();
+const sgMail = require('@sendgrid/mail');
 
 const apiUrl = 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + process.env.FB_PAGE_ACCESS_TOKEN;
 
@@ -21,7 +22,15 @@ const addGetStarted = payload =>
       }
     },
     json: true,
-  }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
+  }).then(res => console.log(res.result)).catch((error) => {
+    console.log(`ERROR: ${error}`);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${error}`,
+    });
+  });
 
 const deleteGetStarted = () =>
   rp({
@@ -33,7 +42,15 @@ const deleteGetStarted = () =>
       ]
     },
     json: true,
-  }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
+  }).then(res => console.log(res.result)).catch((error) => {
+    console.log(`ERROR: ${error}`);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${error}`,
+    });
+  });
 
 const checkGetStarted = payload =>
   rp({
@@ -45,6 +62,14 @@ const checkGetStarted = payload =>
       }
     },
     json: true,
-  }).then(res => console.log(res.result)).catch(error => console.log(`ERROR: ${error}`));
+  }).then(res => console.log(res.result)).catch((error) => {
+    console.log(`ERROR: ${error}`);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${error}`,
+    });
+  });
 addGetStarted('getstarted');
 // checkGetStarted();

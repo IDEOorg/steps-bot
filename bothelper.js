@@ -2,6 +2,7 @@ require('dotenv').config();
 const RiveScript = require('rivescript');
 const assetUrls = require('./data/assets-manifest.json');
 const api = require('./apihelper');
+const sgMail = require('@sendgrid/mail');
 
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
@@ -443,6 +444,12 @@ async function buildContentUrl(content, user) {
     bitlyUrl = await bitly.shorten(redirectUrl);
   } catch (err) {
     console.error(err);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${err}`,
+    });
   }
 
   // trackMediaSent(content, user); // to be implemented
