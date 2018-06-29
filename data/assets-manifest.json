@@ -5,11 +5,10 @@
   "done": {
     "path": "static/images/done/",
     "images": [
-      "celebration_swish.gif",
-      "celebration_firework.gif",
-      "celebration_party.gif",
-      "celebration_pompom.gif",
-      "celebration_space.gif"
+      "03_A_Swish_v01.gif",
+      "03_B_Party_v01.gif",
+      "03_C_Firework_v02.gif",
+      "03_D_PomPom_v01.gif"
     ]
   },
   "help": {
@@ -21,11 +20,11 @@
   "checkin": {
     "path": "static/images/checkin/",
     "images": [
-      "check_in_blinds.gif",
-      "check_in_sunglasses.gif",
-      "check_in_light.gif",
-      "check_in_fence.gif",
-      "check_in_binoculars.gif"
+      "02_A_Light_v03.gif",
+      "02_B_Fence_v01.gif",
+      "02_C_Sunglasses_v01.gif",
+      "02_D_Blinds_v01.gif",
+      "02_E_Binoculars_v02.gif"
     ]
   },
   "stories": {
@@ -37,46 +36,23 @@
   "tasks": {
     "path": "static/images/tasks/",
     "images": [
-      "1.gif",
-      "2.gif",
-      "3.gif",
-      "4.gif",
-      "5.gif",
-      "6.gif",
-      "7.gif",
-      "8.gif",
-      "9.gif"
+      "04_Number1.gif",
+      "04_Number2.gif",
+      "04_Number3.gif",
+      "04_Number4.gif",
+      "04_Number5.gif",
+      "04_Number6.gif",
+      "04_Number7.gif",
+      "04_Number8.gif",
+      "04_Number9.gif"
     ]
   },
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
-      "welcome_hi2.gif"
+      "01_A_Hello_v01.gif"
     ],
-    "workplanImgUrl": "Workplan.png",
-    "introCelebrateUrl": "intro_celebrate.gif"
-  },
-  "testing": {
-    "path": "static/images/testing/",
-    "test1": "01_A_Hello_v01.gif",
-    "test2": "01_B_Map_v01.gif",
-    "test3": "01_C_FirstCelebrate_v01.gif",
-    "test4": "02_A_Light_v03.gif",
-    "test5": "02_B_Fence_v01.gif",
-    "test6": "02_C_Sunglasses_v01.gif",
-    "test7": "02_D_Blinds_v01.gif",
-    "test8": "02_E_Binoculars_v02.gif",
-    "test9": "03_A_Swish_v01.gif",
-    "test10": "03_B_Party_v01.gif",
-    "test11": "03_C_Firework_v02.gif",
-    "test12": "03_D_PomPom_v01.gif",
-    "test13": "03_E_Space_v02.gif",
-    "test14": "04_Coach_v02.gif",
-    "test15": "04_DailyAction_v02.gif",
-    "test16": "04_Learn_v02.gif",
-    "test17": "04_Number1.gif",
-    "test18": "04_Number2.gif",
-    "test19": "04_Number3.gif",
-    "test20": "celebration_swish.gif"
+    "workplanImgUrl": "01_B_Map_v01.gif",
+    "introCelebrateUrl": "01_C_FirstCelebrate_v01.gif"
   }
 }

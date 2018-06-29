@@ -31,14 +31,21 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'resetHelp', null);
   riveBot.setUservar(userPlatformId, 'helpMessage', null);
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
+  riveBot.setUservar(userPlatformId, 'newFacebookId', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserId) {
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
   const BOT_ID = 41;
   let userInfo = null;
-  userInfo = await api.getUserDataFromDB(platform, userPlatformId);
-  console.log('userInfo');
-  console.log(userInfo);
+  if (fbNewUserPhone) {
+    userInfo = await api.getUserDataFromDB(platform, fbNewUserPhone);
+    if (userInfo) {
+      userInfo.topic = 'welcome';
+      userInfo.fb_id = userPlatformId;
+    }
+  } else {
+    userInfo = await api.getUserDataFromDB(platform, userPlatformId);
+  }
   if (!userInfo) {
     // user doesn't exist in db
     let errMessage = null;
@@ -50,12 +57,19 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
           message: errMessage
         }]
       };
+    } else if (platform === 'fb') {
+      errMessage = 'Sorry, we didn\'t recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.';
+      return {
+        messages: [{
+          type: 'text',
+          message: errMessage
+        }]
+      };
     }
-    userInfo = await api.createMockFBUser(userPlatformId);
-    console.log('mock fb user');
-    userInfo.topic = 'welcome';
   }
   await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
+
+  // fast forward script start
   if (userMessage.toLowerCase().trim() === 'ff') {
     const checkInTimes = userInfo.checkin_times;
     let soonestTime = Number.MAX_VALUE;
@@ -68,7 +82,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
         soonestCheckInIndex = i;
       }
     }
-
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
@@ -77,12 +90,15 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       await api.updateUser(userInfo.id, userInfo);
     }
   }
-  console.log('hey hey');
+  // fast forward script end
   const tasks = await api.getClientTasks(userInfo.id);
   userInfo.tasks = tasks;
-  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic, fbNewUserId);
+  await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
+  }
+  if (fbNewUserPhone) {
+    self.riveBot.setUservar(userPlatformId, 'newFacebookId', userPlatformId);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
@@ -111,9 +127,9 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   };
 }
 
-async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic, fbNewUserId) {
+async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, forceTopic) {
   const firstName = userInfo.first_name;
-  const workplanUrl = `https://www.helloroo.org/clients/${userInfo.id}/tasks`;
+  const workplanUrl = 'https://www.helloroo.org/my-tasks';
   const {
     tasks,
   } = userInfo;
@@ -136,15 +152,14 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
       topic = 'welcome';
     }
   } else if (userPlatform === 'FBOOK') {
-    userPlatformId = fbNewUserId;
     if (platform === 'sms') { // user has registered fb account but sends SMS
-      // TODO do nothing
+      topic = 'setupfb';
+    } else {
+      if (topic === 'setupfb') {
+        topic = 'welcome';
+      }
+      userPlatformId = userInfo.fb_id;
     }
-    if (!userInfo.fb_id) {
-      // TODO first fb message
-      topic = 'welcome'; // change it from setup
-    }
-    userPlatformId = userInfo.fb_id;
   } else { // is SMS
     userPlatformId = userInfo.phone;
   }
@@ -226,35 +241,14 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  if (formattedUserMessage === 'testingtopic') {
-    riveBot.setUservar(userPlatformId, 'test1', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test1);
-    riveBot.setUservar(userPlatformId, 'test2', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test2);
-    riveBot.setUservar(userPlatformId, 'test3', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test3);
-    riveBot.setUservar(userPlatformId, 'test4', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test4);
-    riveBot.setUservar(userPlatformId, 'test5', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test5);
-    riveBot.setUservar(userPlatformId, 'test6', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test6);
-    riveBot.setUservar(userPlatformId, 'test7', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test7);
-    riveBot.setUservar(userPlatformId, 'test8', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test8);
-    riveBot.setUservar(userPlatformId, 'test9', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test9);
-    riveBot.setUservar(userPlatformId, 'test10', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test10);
-    riveBot.setUservar(userPlatformId, 'test11', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test11);
-    riveBot.setUservar(userPlatformId, 'test12', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test12);
-    riveBot.setUservar(userPlatformId, 'test13', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test13);
-    riveBot.setUservar(userPlatformId, 'test14', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test14);
-    riveBot.setUservar(userPlatformId, 'test15', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test15);
-    riveBot.setUservar(userPlatformId, 'test16', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test16);
-    riveBot.setUservar(userPlatformId, 'test17', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test17);
-    riveBot.setUservar(userPlatformId, 'test18', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test18);
-    riveBot.setUservar(userPlatformId, 'test19', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test19);
-    riveBot.setUservar(userPlatformId, 'test20', assetUrls.baseUrl + assetUrls.testing.path + assetUrls.testing.test20);
-  }
   const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
   const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
   const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
   const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
-  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + taskNum + '.gif'; // eslint-disable-line
+  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
+  const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
   riveBot.setUservar(userPlatformId, 'coachName', coachName);
@@ -278,7 +272,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   riveBot.setUservar(userPlatformId, 'workplanLink', workplanUrl);
   riveBot.setUservar(userPlatformId, 'introVideoLink', assetUrls.videoUrl);
   riveBot.setUservar(userPlatformId, 'platform', platform);
-  riveBot.setUservar(userPlatformId, 'id', userPlatformId);
+  riveBot.setUservar(userPlatformId, 'referralId', referralId);
 }
 
 function setupRiveScript() {
