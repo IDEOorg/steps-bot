@@ -26,6 +26,6 @@ exports.trackMediaClicked = function trackMediaClicked(req) {
 };
 
 // see buildContentUrl() in bothelper.js
-exports.trackClientResponse = function trackClientResponse(body) {
+exports.trackMessageSent = function trackClientResponse(body) {
   keen.recordEvent('clientResponse', body);
 };
