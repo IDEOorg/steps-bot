@@ -6,6 +6,7 @@ const keen = new KeenTracking({
   writeKey: process.env.KEEN_WRITE_KEY,
 });
 
+// see `buildContentUrl()` in bothelper.js
 exports.trackMediaSent = function trackMediaSent(content, user) {
   keen.recordEvent('mediaSent', {
     mediaId: content.id,
@@ -14,18 +15,17 @@ exports.trackMediaSent = function trackMediaSent(content, user) {
   });
 };
 
-exports.trackMediaClicked = function trackMediaClicked(contentId, contentUrl, userId) {
+// see app.get('/redirect', ...) in server.js
+exports.trackMediaClicked = function trackMediaClicked(req) {
+  // query string = `${serverUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`
   keen.recordEvent('mediaClicked', {
-    mediaId: contentId,
-    mediaUrl: contentUrl,
-    userId,
+    mediaId: req.query.contentId,
+    mediaUrl: req.query.contentUrl,
+    userId: req.query.userId,
   });
 };
 
-exports.trackClientResponse = function trackClientResponse() {
-  keen.recordEvent('clientResponse', {
-    userId: null,
-    topic: null,
-    text: null,
-  });
+// see buildContentUrl() in bothelper.js
+exports.trackClientResponse = function trackClientResponse(body) {
+  keen.recordEvent('clientResponse', body);
 };

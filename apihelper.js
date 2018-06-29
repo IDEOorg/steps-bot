@@ -1,5 +1,6 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
+const { trackMessageSent } = require('./tracker');
 
 module.exports = {
   getAllClients,
@@ -15,8 +16,11 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
-  getUserDataFromDB
+  getUserDataFromDB,
+  botId
 };
+
+const botId = 41;
 
 async function getAllClients() {
   const clients = await rp({
@@ -130,22 +134,28 @@ async function getUserRequests(userId) {
 }
 
 async function createMessage(requestId, fromId, toId, messageToSend) {
+  const body = {
+    text: messageToSend,
+    to_user: toId,
+    from_user: fromId,
+    media_id: null,
+    request_id: requestId,
+    timestamp: new Date(),
+    responses: null
+  };
+
   const message = await rp({
     method: 'POST',
     uri: assetUrls.url + '/messages',
-    body: {
-      text: messageToSend,
-      to_user: toId,
-      from_user: fromId,
-      media_id: null,
-      request_id: requestId,
-      timestamp: new Date(),
-      responses: null
-    },
+    body,
     json: true
   }).catch((e) => {
     console.log(e);
   });
+
+  const topicString = topic || 'noTopic';
+  trackMessageSent(body);
+
   return message;
 }
 
