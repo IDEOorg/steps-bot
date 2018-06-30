@@ -3,8 +3,8 @@
   - Sorry <get username>.\nUnfortunately I can't understand your message.\nLet's try this a different way.<send>
   ^ <fb>^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"G": "No, I'm okay.", "A": "Have some questions."}`)</fb>
   ^ <sms>Do you need my assistance with action item <get taskNum>? If yes, text the letter "A". If all is well, text the letter "G".</sms>
-  + g
+  + (g|no im okay)
   - Okay, I'm here if you change your mind.
-  + a
+  + (a|have some questions)
   - {topic=help} {@ startprompt}
 < topic
