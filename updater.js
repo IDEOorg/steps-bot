@@ -86,8 +86,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     if (!request) {
       request = await api.createRequest(client.id, currentTask.id);
     }
-    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response);
-    console.log('****************requestMessage**************');
+    const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response, client.topic);
     const coach = await api.getCoach(client.coach_id);
     sendHelpEmailToCoach(client, coach, client.temp_help_response, requestMessage.timestamp, request, currentTask);
     client.temp_help_response = null;
@@ -226,7 +225,7 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
         subject: `Coach notification email error - ${Date.now()}`,
-        text: `Unable to send help request notification email to ${coachEmail} on behalf of 
+        text: `Unable to send help request notification email to ${coachEmail} on behalf of
               ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
       });
     });

@@ -67,7 +67,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
   }
-  await api.createMessage(null, userInfo.id, BOT_ID, userMessage);
+  await api.createMessage(null, userInfo.id, BOT_ID, userMessage, userInfo.topic);
 
   // fast forward script start
   if (userMessage.toLowerCase().trim() === 'ff') {

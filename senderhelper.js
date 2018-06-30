@@ -29,7 +29,7 @@ async function sendReply(platform, userPlatformId, messages, isUpdateMessage) {
         await sleep(3100); // eslint-disable-line
       } else {
         await sleep(800); // eslint-disable-line
-        api.createMessage(null, BOT_ID, client.id, formattedMsg.body);
+        api.createMessage(null, BOT_ID, client.id, formattedMsg.body, client.topic);
       }
     }
   }
