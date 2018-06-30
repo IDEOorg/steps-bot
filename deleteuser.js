@@ -1,4 +1,5 @@
 const rp = require('request-promise');
+const sgMail = require('@sendgrid/mail');
 
 const url = 'https://helloroo.org/api';
 
@@ -20,6 +21,14 @@ async function deleteUser(id) {
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/messages/' + message.id
+    }).catch((e) => {
+      console.log(e);
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: 'Roo bot error',
+        text: `An error occurred on the bot server: \n ${e}`,
+      });
     });
   }
   let requests = await rp({
@@ -39,6 +48,12 @@ async function deleteUser(id) {
     uri: url + '/clients/' + id + '/tasks'
   }).catch((e) => {
     console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
   tasks = JSON.parse(tasks);
   for (let i = 0; i < tasks.length; i++) {
@@ -59,6 +74,12 @@ async function deleteUser(id) {
       uri: url + '/tasks/' + task.id
     }).catch((e) => {
       console.log(e);
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: 'Roo bot error',
+        text: `An error occurred on the bot server: \n ${e}`,
+      });
     });
   }
 
@@ -72,10 +93,24 @@ async function deleteUser(id) {
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/clients/' + id + '/viewed_media/' + viewed.id
+    }).catch((e) => {
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: 'Roo bot error',
+        text: `An error occurred on the bot server: \n ${e}`,
+      });
     });
   }
   rp({
     method: 'DELETE',
     uri: url + '/clients/' + id
+  }).catch((e) => {
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
   });
 }
