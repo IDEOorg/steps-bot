@@ -21,16 +21,16 @@
   ^ <fb>^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"G": "Sounds good!", "N": "Ready for it now."}`)</fb>
   ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, text the letter "N".</sms>
   ^ {@ setvars}
-  + (g|sounds good)
+  + (g|sounds good|send it tomorrow)
   - Wonderful. Chat soon.
   - Great! Chat soon.
-  + (n|ready for it now)
+  + (n|ready for it now|yes send it now)
   - {topic=nexttask} {@ startprompt}
   + setvars
   - <set taskComplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
   - I'm a bit unclear on your last response.<send>
-  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "No, I'll wait until tomorrow.", "N": "Yep, send it over now."}`)</fb>
+  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "Send it tomorrow", "N": "Yes, send it now"}`)</fb>
   ^ <sms>Would you like to receive your next action item now? If yes, text the letter "N". If no, text the letter "G".</sms>
   ^ {@ setvars}
 
