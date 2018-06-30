@@ -32,7 +32,7 @@
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
-  ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "D": "I'm good for now."}`)</fb>
+  ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
   ^ <sms>You're doing great! If you need any help just text the letter "A".</sms>
   ^ {@ setvars}
   - The anticipation is often harder than the task, <get username>! Keep pushing through!
@@ -51,7 +51,7 @@
   ^ <fb>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "G": "No thanks. I'm good."}`)</fb>
   ^ <sms>Should you need me just text the letter "A".</sms>
   ^ {@ setvars}
-  + (g|still working)
+  + (g|still working|no thanks im good|im good for now)
   - Wonderful. I'll check in soon!
   - Sounds good. I'll be back in touch soon.
   + setvars
