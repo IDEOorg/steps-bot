@@ -123,6 +123,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     media_id: null,
     request_id: requestId,
     timestamp: new Date(),
+    topic: topic || 'NO_TOPIC',
     responses: null
   };
 
@@ -135,7 +136,6 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     console.log(e);
   });
 
-  const topicString = topic || 'noTopic';
   trackMessageSent(body);
 
   return message;
