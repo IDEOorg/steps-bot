@@ -2,32 +2,12 @@
   "media": [
     {
       "task_id": null,
-      "title": "Allene's Story",
-      "category": "STORY",
-      "description": "Learn how financial coaching helped Allene.",
-      "url": "https://readymag.com/u32761257/1083521/",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_allene.png",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Gail's Story",
-      "category": "STORY",
-      "description": "Learn how financial coaching helped Gail.",
-      "url": "https://readymag.com/u32761257/1083437/",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_gail.png",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Gemyra's Story",
-      "category": "STORY",
-      "description": "Learn how financial coaching helped Gemyra.",
-      "url": "https://readymag.com/u32761257/1083531/",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_gemyra.png",
-      "published_by": null,
+      "title": "Nicole's Story",
+      "category": "PODCAST",
+      "description": "Learn how financial coaching helped Nicole.",
+      "url": "https://soundcloud.com/roothebot/nicole",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nicole_600_900.jpg",
+      "published_by": 3,
       "type": "STORY"
     },
     {
@@ -37,47 +17,7 @@
       "description": "Learn how financial coaching helped Todrick.",
       "url": "https://readymag.com/u32761257/1083545/",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_todrick.png",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Robert's Story",
-      "category": "STORY",
-      "description": "Learn how financial coaching helped Robert.",
-      "url": "https://soundcloud.com/roothebot/robert",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_robert_600_900.jpg",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Godfrey's Story",
-      "category": "PODCAST",
-      "description": "Learn how financial coaching helped Godfrey.",
-      "url": "https://soundcloud.com/roothebot/godfrey",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_godfrey_600_900.jpg",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Nicole's Story",
-      "category": "PODCAST",
-      "description": "Learn how financial coaching helped Nicole.",
-      "url": "https://soundcloud.com/roothebot/nicole",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nicole_600_900.jpg",
-      "published_by": null,
-      "type": "STORY"
-    },
-    {
-      "task_id": null,
-      "title": "Nyree's Story",
-      "category": "PODCAST",
-      "description": "Learn how financial coaching helped Nyree.",
-      "url": "https://soundcloud.com/roothebot/nyree",
-      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nyree_600_900.jpg",
-      "published_by": null,
+      "published_by": 3,
       "type": "STORY"
     },
     {
@@ -87,7 +27,67 @@
       "description": "Learn how financial coaching helped Tamika.",
       "url": "https://soundcloud.com/roothebot/tamika",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_tamika_600_900.jpg",
-      "published_by": null,
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Gail's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Gail.",
+      "url": "https://readymag.com/u32761257/1083437/",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_gail.png",
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Godfrey's Story",
+      "category": "PODCAST",
+      "description": "Learn how financial coaching helped Godfrey.",
+      "url": "https://soundcloud.com/roothebot/godfrey",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_godfrey_600_900.jpg",
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Allene's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Allene.",
+      "url": "https://readymag.com/u32761257/1083521/",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_allene.png",
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Gemyra's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Gemyra.",
+      "url": "https://readymag.com/u32761257/1083531/",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/story_gemyra.png",
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Nyree's Story",
+      "category": "PODCAST",
+      "description": "Learn how financial coaching helped Nyree.",
+      "url": "https://soundcloud.com/roothebot/nyree",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_nyree_600_900.jpg",
+      "published_by": 3,
+      "type": "STORY"
+    },
+    {
+      "task_id": null,
+      "title": "Robert's Story",
+      "category": "STORY",
+      "description": "Learn how financial coaching helped Robert.",
+      "url": "https://soundcloud.com/roothebot/robert",
+      "image": "https://s3.amazonaws.com/steps-application-public/media_assets/podcast_robert_600_900.jpg",
+      "published_by": 3,
       "type": "STORY"
     },
     {
@@ -97,7 +97,7 @@
       "description": "A short video with strategies for your financial future.",
       "url": "https://www.youtube.com/watch?v=CU4l_rs50Kk",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
-      "published_by": null,
+      "published_by": 3,
       "type": "GENERAL_EDUCATION"
     },
     {
@@ -107,7 +107,7 @@
       "description": "A short article with tips for smart money choices.",
       "url": "https://s3.amazonaws.com/steps-application-public/media_assets/5_steps_for_making_financial_decisions.pdf",
       "image": "https://s3.amazonaws.com/steps-application-public/media_assets/bookmark_learn.png",
-      "published_by": null,
+      "published_by": 3,
       "type": "GENERAL_EDUCATION"
     }
   ]
