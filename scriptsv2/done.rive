@@ -21,10 +21,10 @@
   ^ <fb>^template(`button`, `I'll be in touch tomorrow with the next goal on your list!`, `{"G": "Sounds good!", "N": "Ready for it now."}`)</fb>
   ^ <sms>The next item on your work plan will be coming your way tomorrow. If you want to receive the next item now, text the letter "N".</sms>
   ^ {@ setvars}
-  + g
+  + (g|sounds good)
   - Wonderful. Chat soon.
   - Great! Chat soon.
-  + n
+  + (n|ready for it now)
   - {topic=nexttask} {@ startprompt}
   + setvars
   - <set taskComplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
