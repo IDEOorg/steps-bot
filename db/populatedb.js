@@ -3,6 +3,8 @@ const seedData = require('./seed.json');
 const seedMediaData = require('./seedmedia.json');
 const seedMediaTetheredData = require('./seedmediatethered.json');
 const seedTasksData = require('./seedtasks.json');
+require('dotenv').config();
+
 
 const url = 'https://steps-admin.herokuapp.com';
 
@@ -81,7 +83,6 @@ async function populateDB() {
   const medias = seedMediaData.media;
   for (let i = 0; i < medias.length; i++) {
     const mediaData = medias[i];
-    mediaData.published_by = orgId;
     await rp({ // eslint-disable-line
       method: 'POST',
       uri: url + '/api/media',
