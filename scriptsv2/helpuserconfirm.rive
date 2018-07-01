@@ -6,5 +6,6 @@
   + (g|never mind)
   - Okay, I've cancelled your assistance request. I'll be in touch soon!<set resetHelp=true>{topic=checkin}
   + *
-  - Sorry, I didn't understand that. If you want me to send this to your coach, text the letter "S".\nIf you want to edit your response before I send it, text the letter "E". No longer need help? Text the letter "G".
+  - <sms>Sorry, I didn't understand that. If you want me to send this to your coach, text the letter "S".\nIf you want to edit your response before I send it, text the letter "E". No longer need help? Text the letter "G".</sms>
+  ^ <fb>Sorry, I didn't understand that. What would you like to do with your current response? ^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)</fb>
 < topic
