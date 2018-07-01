@@ -112,6 +112,8 @@ async function getCoachResponse(req, res) {
         const user = api.getUserFromId(userId);
         let platform = 'sms';
         let userPlatformId = user.phone;
+        console.log('user***********');
+        console.log(user);
         if (user.platform === 'FBOOK') {
           platform = 'fb';
           userPlatformId = user.fb_id;
