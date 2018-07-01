@@ -32,6 +32,8 @@ async function sendReply(platform, userPlatformId, messages, isUpdateMessage) {
         api.createMessage(null, BOT_ID, client.id, formattedMsg.body, client.topic);
       }
     }
+    console.log('formattedMsg');
+    console.log(formattedMsg);
   }
 }
 
