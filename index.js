@@ -109,7 +109,7 @@ async function getCoachResponse(req, res) {
     if (messages.length) {
       const coachMessage = messages[messages.length - 1];
       if (coachMessage.to_user === parseInt(userId, 10)) {
-        const user = api.getUserFromId(userId);
+        const user = await api.getUserFromId(userId);
         let platform = 'sms';
         let userPlatformId = user.phone;
         console.log('user***********');
