@@ -23,6 +23,7 @@ function routes(app, fbEndpoint, twilioController) {
   app.get('/helpresponse', (req, res) => {
     console.log(req);
     console.log(res);
+    res.send('OK');
   });
   app.post('/facebook/receive', fbEndpoint);
   // Perform the FB webhook verification handshake with your verify token
