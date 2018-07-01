@@ -192,6 +192,19 @@ async function getUserRequests(userId) {
   return JSON.parse(requests);
 }
 
+async function getUserMessages(userId) {
+  const messages = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/clients/' + userId + '/messages',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
+  }).catch((e) => {
+    console.log(e);
+  });
+  return JSON.parse(messages);
+}
+
 async function createMessage(requestId, fromId, toId, messageToSend, topic) {
   const body = {
     text: messageToSend,
@@ -318,6 +331,7 @@ module.exports = {
   getViewedMediaIds,
   createRequest,
   getUserRequests,
+  getUserMessages,
   createMessage,
   updateUser,
   updateTask,

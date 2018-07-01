@@ -15,7 +15,7 @@ const twilioController = Botkit.twiliosmsbot({
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 // We are passing the controller object into our express server module
 // so we can extend it and process incoming message payloads
-server(fbEndpoint, twilioController);
+server(fbEndpoint, twilioController, getCoachResponse);
 
 function fbEndpoint(req, res) {
   res.status(200);
@@ -65,7 +65,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 
 async function updateAllClients() {
   const isUpdateMessage = true;
-  const users = await getAllClients();
+  const users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
@@ -102,7 +102,11 @@ async function updateAllClients() {
   }
 }
 
-async function getAllClients() {
-  const clients = await api.getAllClients();
-  return clients;
+function getCoachResponse(req) {
+  if (req.query && req.query.user_id) {
+    const userId = req.query.user_id;
+    api.getUserMessages(userId).then((result) => {
+      console.log(result);
+    });
+  }
 }

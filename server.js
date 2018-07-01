@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const { trackMediaClicked } = require('./tracker');
 
-module.exports = function server(fbEndpoint, twilioController) {
+module.exports = function server(fbEndpoint, twilioController, getCoachResponse) {
   const app = express();
   app.use(cors());
   app.use(bodyParser.json());
@@ -15,17 +15,14 @@ module.exports = function server(fbEndpoint, twilioController) {
   });
 
   // sets up webhook routes for Twilio and Facebook
-  routes(app, fbEndpoint, twilioController);
+  routes(app, fbEndpoint, twilioController, getCoachResponse);
 
   twilioController.webserver = app; // eslint-disable-line
   return app;
 };
 
-function routes(app, fbEndpoint, twilioController) {
-  app.get('/helpresponse', (req, res) => {
-    console.log(req.query);
-    res.send('OK');
-  });
+function routes(app, fbEndpoint, twilioController, getCoachResponse) {
+  app.get('/helpresponse', getCoachResponse);
   app.post('/facebook/receive', fbEndpoint);
   // Perform the FB webhook verification handshake with your verify token
   app.get('/facebook/receive', (req, res) => {
