@@ -20,7 +20,7 @@ module.exports = function server(fbEndpoint, twilioController) {
 };
 
 function routes(app, fbEndpoint, twilioController) {
-  app.post('/helpresponse', (req, res) => {
+  app.get('/helpresponse', (req, res) => {
     console.log(req);
     console.log(res);
   });
