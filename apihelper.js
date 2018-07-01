@@ -302,6 +302,25 @@ async function markMediaAsViewed(clientId, mediaId) {
   return media;
 }
 
+async function getUserFromId(id) {
+  const user = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/users/' + id,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
+  }).catch((e) => {
+    console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
+  });
+  return JSON.parse(user);
+}
+
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
@@ -330,6 +349,7 @@ module.exports = {
   getAllMedia,
   getViewedMediaIds,
   createRequest,
+  getUserFromId,
   getUserRequests,
   getUserMessages,
   createMessage,

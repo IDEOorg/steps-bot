@@ -32,9 +32,10 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'helpMessage', null);
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
   riveBot.setUservar(userPlatformId, 'newFacebookId', null);
+  riveBot.setUservar(userPlatformId, 'coachHelpResponse', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone) {
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone, coachHelpResponse) {
   const BOT_ID = 41;
   let userInfo = null;
   if (fbNewUserPhone) {
@@ -99,6 +100,9 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   if (fbNewUserPhone) {
     self.riveBot.setUservar(userPlatformId, 'newFacebookId', userPlatformId);
+  }
+  if (coachHelpResponse) {
+    self.riveBot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {

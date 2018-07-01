@@ -102,11 +102,32 @@ async function updateAllClients() {
   }
 }
 
-function getCoachResponse(req) {
+async function getCoachResponse(req, res) {
   if (req.query && req.query.user_id) {
     const userId = req.query.user_id;
-    api.getUserMessages(userId).then((result) => {
-      console.log(result);
-    });
+    const messages = await api.getUserMessages(userId);
+    if (messages.length) {
+      const coachMessage = messages[messages.length - 1];
+      if (coachMessage.to_user === parseInt(userId, 10)) {
+        const user = api.getUserFromId(userId);
+        let platform = 'sms';
+        let userPlatformId = user.phone;
+        if (user.platform === 'FBOOK') {
+          platform = 'fb';
+          userPlatformId = user.fb_id;
+        }
+        bot.getResponse(platform, userPlatformId, 'startprompt', 'helpcoachresponse', null, coachMessage.text).then((response) => {
+          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
+            if (response.variables) {
+              updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
+                bot.resetVariables(userPlatformId);
+              });
+            }
+          });
+        });
+      }
+    }
   }
+  res.send('OK');
+  return null;
 }
