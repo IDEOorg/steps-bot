@@ -1,6 +1,6 @@
 > topic helpuserconfirm includes global includes tempfastforward
   + (s|yes|yes send that)
-  - Great, I'll send this message to <get coachName> right away and get back to you once I've heard from them.<set sendHelpMessage=true><set resetHelp=true>{topic=checkin}
+  - Great, I'll send this message to <get coachName> right away and get back to you once I've heard from them.<set sendHelpMessage=true><set resetHelp=true>{topic=checkin}<set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + (e|i have a few edits)
   - No problem at all. Just send me your full revised message (with as many details as possible) so I can contact Coach <get coachName> and get some answers.<set resetHelp=true><set hours=8><set nextTopic=help><set nextMessage=pinguser>{topic=helpuserresponse}
   + (g|never mind)
