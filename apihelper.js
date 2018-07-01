@@ -1,15 +1,18 @@
 const rp = require('request-promise');
 const assetUrls = require('./data/assets-manifest.json');
-const seedTasksData = require('./db/seedtasks.json');
 const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('./tracker');
+require('dotenv').config();
 
 const botId = 41;
 
 async function getAllClients() {
   const clients = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients'
+    uri: assetUrls.url + '/clients',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -25,7 +28,10 @@ async function getAllClients() {
 async function getOrgName(id) {
   let org = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/orgs/' + id.toString()
+    uri: assetUrls.url + '/orgs/' + id.toString(),
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -45,7 +51,10 @@ async function getOrgName(id) {
 async function getCoachName(id) {
   let coach = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/coaches/' + id.toString()
+    uri: assetUrls.url + '/coaches/' + id.toString(),
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -65,7 +74,10 @@ async function getCoachName(id) {
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/coaches/' + id.toString()
+    uri: assetUrls.url + '/coaches/' + id.toString(),
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -81,7 +93,10 @@ async function getCoach(id) {
 async function getClientTasks(id) {
   let tasks = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/tasks'
+    uri: assetUrls.url + '/clients/' + id.toString() + '/tasks',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -98,7 +113,10 @@ async function getClientTasks(id) {
 async function getAllMedia() {
   let listOfMedia = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/media'
+    uri: assetUrls.url + '/media',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -117,7 +135,10 @@ async function getAllMedia() {
 async function getViewedMediaIds(id) {
   let viewedMedia = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media'
+    uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -142,6 +163,9 @@ async function createRequest(userId, taskId) {
       user_id: userId,
       task_id: taskId
     },
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    },
     json: true
   }).catch((e) => {
     console.log(e);
@@ -158,7 +182,10 @@ async function createRequest(userId, taskId) {
 async function getUserRequests(userId) {
   const requests = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + userId + '/requests'
+    uri: assetUrls.url + '/clients/' + userId + '/requests',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
   });
@@ -181,7 +208,10 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     method: 'POST',
     uri: assetUrls.url + '/messages',
     body,
-    json: true
+    json: true,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -198,14 +228,14 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
 }
 
 async function updateUser(userId, userData) {
-  console.log('updateUser func');
-  console.log(userId);
-  console.log(userData);
   const user = await rp({
     method: 'PUT',
     uri: assetUrls.url + '/clients/' + userId,
     body: userData,
-    json: true
+    json: true,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -223,7 +253,10 @@ async function updateTask(id, taskData) {
     method: 'PUT',
     uri: assetUrls.url + '/tasks/' + id,
     body: taskData,
-    json: true
+    json: true,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -240,7 +273,10 @@ async function markMediaAsViewed(clientId, mediaId) {
   const media = await rp({
     method: 'POST',
     uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
-    json: true
+    json: true,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -270,71 +306,6 @@ async function getUserDataFromDB(platform, userPlatformId) {
     }
   }
   return null;
-}
-
-async function createMockTasks(id) {
-  const tasks = seedTasksData.tasks;
-  for (let i = 0; i < 7; i++) {
-    const taskData = tasks[i];
-    taskData.date_created = new Date();
-    taskData.user_id = id;
-    await rp({ // eslint-disable-line
-      method: 'POST',
-      uri: assetUrls.url + '/tasks',
-      body: taskData,
-      json: true
-    }).catch((err) => {
-      console.log(err);
-      sgMail.send({
-        to: 'support@helloroo.zendesk.com',
-        from: 'no-reply@helloroo.org',
-        subject: 'Roo bot error',
-        text: `An error occurred on the bot server: \n ${err}`,
-      });
-    });
-  }
-}
-
-
-async function createMockFBUser(userPlatformId) {
-  const userData = {
-    first_name: 'Friend',
-    last_name: 'Friend',
-    email: 'test123@ideo.org',
-    phone: null,
-    coach_id: 2,
-    org_id: 3,
-    color: 'blue',
-    goals: [
-      'Buy a house'
-    ],
-    status: 'WORKING',
-    updated: new Date(),
-    platform: 'FBOOK',
-    image: null,
-    follow_up_date: '2018-07-18T12:14:58.914Z',
-    plan_url: null,
-    checkin_times: [],
-    topic: null,
-    fb_id: userPlatformId,
-    temp_help_response: null
-  };
-  const user = await rp({
-    method: 'POST',
-    uri: assetUrls.url + '/clients',
-    body: userData,
-    json: true
-  }).catch((e) => {
-    console.log(e);
-    sgMail.send({
-      to: 'support@helloroo.zendesk.com',
-      from: 'no-reply@helloroo.org',
-      subject: 'Roo bot error',
-      text: `An error occurred on the bot server: \n ${e}`,
-    });
-  });
-  await createMockTasks(user.id);
-  return user;
 }
 
 module.exports = {
