@@ -22,7 +22,6 @@ function fbEndpoint(req, res) {
   res.send('ok');
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
-  console.log(messageObject);
   const userPlatformId = messageObject.sender.id;
   let userMessage = null;
   let fbNewUserPhone = null;
@@ -39,8 +38,6 @@ function fbEndpoint(req, res) {
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      console.log('response1');
-      console.log(response);
       if (response.variables) {
         const idToUpdate = fbNewUserPhone || userPlatformId;
         updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
@@ -55,9 +52,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
-    console.log('sending message....');
     sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-      console.log('updating db...');
       updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
         bot.resetVariables(userPlatformId);
       });

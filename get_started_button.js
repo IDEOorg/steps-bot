@@ -10,7 +10,6 @@ const apiUrl = 'https://graph.facebook.com/v2.6/me/messenger_profile?access_toke
  * @param  {String} payload - the user defined payload for the webhook
  * @return {Object} - the promise for the request
  */
-console.log(process.env.FB_PAGE_ACCESS_TOKEN);
 
 const addGetStarted = payload =>
   rp({

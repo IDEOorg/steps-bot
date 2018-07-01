@@ -21,9 +21,8 @@ module.exports = function server(fbEndpoint, twilioController) {
 
 function routes(app, fbEndpoint, twilioController) {
   app.post('/helpresponse', (req, res) => {
-    // console.log('response received');
-    // console.log(req.body.MessageStatus);
-    // console.log(new Date());
+    console.log(req);
+    console.log(res);
   });
   app.post('/facebook/receive', fbEndpoint);
   // Perform the FB webhook verification handshake with your verify token
