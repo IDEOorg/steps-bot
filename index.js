@@ -81,6 +81,7 @@ async function updateAllClients() {
       if (user.id === 191) {
         console.log('eligible check ins');
         console.log(eligibleCheckIns);
+        console.log(user);
       }
       let platform = null;
       let userPlatformId = null;
