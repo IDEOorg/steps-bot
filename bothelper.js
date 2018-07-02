@@ -33,6 +33,7 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
   riveBot.setUservar(userPlatformId, 'newFacebookId', null);
   riveBot.setUservar(userPlatformId, 'coachHelpResponse', null);
+  riveBot.setUservar(userPlatformId, 'userAskedToStop', null);
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone, coachHelpResponse) {
