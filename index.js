@@ -98,7 +98,7 @@ async function updateAllClients() {
           console.log('checkIn');
           console.log(checkIn);
           // arguments for below function are wrong
-          bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
+          bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic).then((response) => { // eslint-disable-line
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
