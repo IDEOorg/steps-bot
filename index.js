@@ -82,7 +82,7 @@ async function updateAllClients() {
       if (user.platform === 'FBOOK') {
         platform = 'fb';
         userPlatformId = user.fb_id;
-      } else if (user.platform === 'SMS') {
+      } else {
         platform = 'sms';
         userPlatformId = user.phone;
       }
