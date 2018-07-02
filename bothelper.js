@@ -226,6 +226,9 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   let contentImgUrl = null;
   let contentDescription = null;
   const formattedUserMessage = userMessage.toLowerCase().trim();
+  if (formattedUserMessage === 'stop') {
+    riveBot.setUservar(userPlatformId, 'userAskedToStop', true);
+  }
   if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
     viewedMedia = await api.getViewedMediaIds(userInfo.id);
     // TODO handle case where user has viewed all media

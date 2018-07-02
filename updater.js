@@ -22,7 +22,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     helpMessage,
     sendHelpMessage,
     taskComplete,
-    newFacebookId
+    newFacebookId,
+    userAskedToStop
   } = variables;
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
@@ -107,7 +108,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       time: nextCheckInDate
     });
   }
-
+  if (userAskedToStop) {
+    client.checkin_times = [];
+  }
   // update user
   api.updateUser(client.id, client).then(() => {
     console.log('updated client ' + client.id);
