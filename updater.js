@@ -83,8 +83,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       request = await api.createRequest(client.id, currentTask.id);
     }
     const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response, client.topic);
-    console.log('request message sent');
-    console.log(requestMessage);
     const coach = await api.getCoach(client.coach_id);
     sendHelpEmailToCoach(client, coach, client.temp_help_response, requestMessage.timestamp, request, currentTask);
     client.temp_help_response = null;

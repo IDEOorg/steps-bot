@@ -61,11 +61,10 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 });
 setInterval(() => {
   updateAllClients();
-}, 120000); // 1800000 is 30 minutes
+}, 1800000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
   const isUpdateMessage = true;
-  console.log('updating...');
   const users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
@@ -77,11 +76,6 @@ async function updateAllClients() {
         if (checkIn.time < Date.now()) {
           eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
-      }
-      if (user.id === 191) {
-        console.log('eligible check ins');
-        console.log(eligibleCheckIns);
-        console.log(user);
       }
       let platform = null;
       let userPlatformId = null;
@@ -95,8 +89,6 @@ async function updateAllClients() {
       if (platform !== null && userPlatformId !== null) {
         for (let j = 0; j < eligibleCheckIns.length; j++) {
           const checkIn = eligibleCheckIns[j];
-          console.log('checkIn');
-          console.log(checkIn);
           // arguments for below function are wrong
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic).then((response) => { // eslint-disable-line
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
@@ -121,8 +113,6 @@ async function getCoachResponse(req, res) {
         const user = await api.getUserFromId(userId);
         let platform = 'sms';
         let userPlatformId = user.phone;
-        console.log('user***********');
-        console.log(user);
         if (user.platform === 'FBOOK') {
           platform = 'fb';
           userPlatformId = user.fb_id;
