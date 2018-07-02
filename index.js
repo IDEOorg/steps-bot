@@ -82,20 +82,22 @@ async function updateAllClients() {
       if (user.platform === 'FBOOK') {
         platform = 'fb';
         userPlatformId = user.fb_id;
-      } else { // sms
+      } else if (user.platform === 'SMS') {
         platform = 'sms';
         userPlatformId = user.phone;
       }
-      for (let j = 0; j < eligibleCheckIns.length; j++) {
-        const checkIn = eligibleCheckIns[j];
-        // arguments for below function are wrong
-        bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
-          sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
-            updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-              bot.resetVariables(userPlatformId);
+      if (platform !== null && userPlatformId !== null) {
+        for (let j = 0; j < eligibleCheckIns.length; j++) {
+          const checkIn = eligibleCheckIns[j];
+          // arguments for below function are wrong
+          bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.time).then((response) => { // eslint-disable-line
+            sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
+              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+                bot.resetVariables(userPlatformId);
+              });
             });
           });
-        });
+        }
       }
     }
   }
