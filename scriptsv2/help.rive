@@ -5,6 +5,7 @@
   - I haven't heard back from you in a while about the help you requested. Still need assistance?
   ^ <fb>^template(`quickreply`, `Have some questions.`, `No, I'm good for now`)</fb>
   ^ <sms><send>If you still need assistance, text the letter "A".\nNo longer need help? Text the letter "G".</sms>
+  ^ <set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + (g|no im good for now)
   - Sounds good. I'll be in touch soon.<set resetHelp=true>{topic=checkin}
   + (a|have some questions)
