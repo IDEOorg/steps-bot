@@ -7,7 +7,7 @@
   ^ <sms><send>If you still need assistance, text the letter "A".\nNo longer need help? Text the letter "G".</sms>
   ^ <set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + (g|no im good for now)
-  - Sounds good. I'll be in touch soon.<set resetHelp=true>{topic=checkin}
+  - Sounds good. I'll be in touch soon.<set resetHelp=true><set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>{topic=checkin}
   + (a|have some questions)
   - <set resetHelp=true>{@ startprompt}
 < topic
