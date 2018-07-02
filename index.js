@@ -59,9 +59,9 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     });
   });
 });
-// setInterval(() => {
-//   updateAllClients();
-// }, 120000);
+setInterval(() => {
+  updateAllClients();
+}, 120000);
 
 async function updateAllClients() {
   const isUpdateMessage = true;
