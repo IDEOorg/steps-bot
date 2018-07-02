@@ -59,9 +59,9 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     });
   });
 });
-// setInterval(() => {
-// updateAllClients();
-// }, 1800000);
+setInterval(() => {
+  updateAllClients();
+}, 120000);
 
 async function updateAllClients() {
   const isUpdateMessage = true;
@@ -77,7 +77,6 @@ async function updateAllClients() {
           eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
       }
-      // TODO PUT request for user await for it to finish
       let platform = null;
       let userPlatformId = null;
       if (user.platform === 'FBOOK') {
