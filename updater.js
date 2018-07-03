@@ -83,7 +83,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     if (!request) {
       request = await api.createRequest(client.id, currentTask.id);
     } else {
-      request.status = 'NEEDS_ASSISTANCE';
+      await api.setRequestByTaskId(client.id, currentTask.id, 'NEEDS_ASSISTANCE');
     }
     const requestMessage = await api.createMessage(request.id, client.id, client.coach_id, client.temp_help_response, client.topic);
     const coach = await api.getCoach(client.coach_id);
