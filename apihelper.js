@@ -187,7 +187,8 @@ async function setRequestByTaskId(clientId, taskId, status) {
       uri: assetUrls.url + '/clients/' + clientId + '/requests',
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
-      }
+      },
+      json: true
     }).catch((e) => {
       console.log(e);
     });
