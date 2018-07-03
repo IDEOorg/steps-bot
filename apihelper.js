@@ -179,17 +179,53 @@ async function createRequest(userId, taskId) {
   return request;
 }
 
+async function setRequestByTaskId(clientId, taskId, status) {
+  if (clientId) {
+    const requests = await rp({
+      method: 'GET',
+      uri: assetUrls.url + '/clients/' + clientId + '/requests',
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
+    }).catch((e) => {
+      console.log(e);
+    });
+    for (let i = 0; i < requests.length; i++) {
+      const request = requests[i];
+      if (request.task_id === taskId) {
+        rp({
+          method: 'PUT',
+          uri: assetUrls.url + '/requests/' + request.id,
+          headers: {
+            Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+          },
+          body: {
+            status,
+            user_id: clientId,
+            task_id: taskId
+          },
+          json: true
+        }).catch((e) => {
+          console.log(e);
+        });
+        break;
+      }
+    }
+  }
+}
+
 async function getUserRequests(userId) {
   const requests = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients/' + userId + '/requests',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
-    }
+    },
+    json: true
   }).catch((e) => {
     console.log(e);
   });
-  return JSON.parse(requests);
+  return requests;
 }
 
 async function getUserMessages(userId) {

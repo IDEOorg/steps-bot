@@ -6,10 +6,10 @@
   ^ Does this resolve your problem?
   ^ <fb>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>
   ^ <sms>\nIf you still need assistance, text the letter A.\nIf you're all set, text the letter G.</sms>
-  ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
+  ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt><set requestResolved=true>
   + (a|have more questions)
-  - {topic=help}{@ startprompt}
+  - {topic=help}{@ startprompt}<set requestResolved=false>
   + (g|im all set)
   - Glad to hear it! I'll be back in touch soon.
-  ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
+  ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt><set requestResolved=true>
 < topic

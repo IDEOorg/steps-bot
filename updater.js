@@ -23,7 +23,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     sendHelpMessage,
     taskComplete,
     newFacebookId,
-    userAskedToStop
+    userAskedToStop,
+    requestResolved
   } = variables;
 
   const client = await api.getUserDataFromDB(platform, userPlatformId);
@@ -108,6 +109,11 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (userAskedToStop) {
     client.checkin_times = [];
+  }
+  if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
+    api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
+  } else if (requestResolved === 'false') {
+    api.setRequestByTaskId(client.id, currentTask.id, 'NEEDS_ASSISTANCE');
   }
   // update user
   api.updateUser(client.id, client).then(() => {
