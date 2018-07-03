@@ -386,6 +386,7 @@ module.exports = {
   getViewedMediaIds,
   createRequest,
   getUserFromId,
+  setRequestByTaskId,
   getUserRequests,
   getUserMessages,
   createMessage,
