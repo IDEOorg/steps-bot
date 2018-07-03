@@ -112,8 +112,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   if (userAskedToStop) {
     client.checkin_times = [];
   }
-  console.log('hahahaha requestResolved');
-  console.log(requestResolved);
   if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
     api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
   } else if (requestResolved === 'false') {
