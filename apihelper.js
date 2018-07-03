@@ -180,6 +180,7 @@ async function createRequest(userId, taskId) {
 }
 
 async function setRequestByTaskId(clientId, taskId, status) {
+  console.log(taskId, clientId, status);
   if (clientId) {
     const requests = await rp({
       method: 'GET',
@@ -193,6 +194,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
     for (let i = 0; i < requests.length; i++) {
       const request = requests[i];
       if (request.task_id === taskId) {
+        console.log('submitting put request');
         rp({
           method: 'PUT',
           uri: assetUrls.url + '/requests/' + request.id,
