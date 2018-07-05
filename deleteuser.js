@@ -1,26 +1,36 @@
 const rp = require('request-promise');
 const sgMail = require('@sendgrid/mail');
+require('dotenv').config();
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(201);
+deleteUser(259);
 
 async function deleteUser(id) {
   const media = await rp({
     method: 'GET',
     uri: url + '/media',
-    json: true
+    json: true,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   });
   let messages = await rp({
     method: 'GET',
-    uri: url + '/clients/' + id + '/messages'
+    uri: url + '/clients/' + id + '/messages',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   });
   messages = JSON.parse(messages);
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     await rp({ // eslint-disable-line
       method: 'DELETE',
-      uri: url + '/messages/' + message.id
+      uri: url + '/messages/' + message.id,
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
     }).catch((e) => {
       console.log(e);
       sgMail.send({
@@ -33,19 +43,28 @@ async function deleteUser(id) {
   }
   let requests = await rp({
     method: 'GET',
-    uri: url + '/clients/' + id + '/requests'
+    uri: url + '/clients/' + id + '/requests',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   });
   requests = JSON.parse(requests);
   for (let i = 0; i < requests.length; i++) {
     const request = requests[i];
     await rp({ // eslint-disable-line
       method: 'DELETE',
-      uri: url + '/requests/' + request.id
+      uri: url + '/requests/' + request.id,
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
     });
   }
   let tasks = await rp({
     method: 'GET',
-    uri: url + '/clients/' + id + '/tasks'
+    uri: url + '/clients/' + id + '/tasks',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     console.log(e);
     sgMail.send({
@@ -63,7 +82,10 @@ async function deleteUser(id) {
       if (m.task_id === task.id) {
         await rp({ // eslint-disable-line
           method: 'DELETE',
-          uri: url + '/media/' + m.id
+          uri: url + '/media/' + m.id,
+          headers: {
+            Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+          }
         }).catch((e) => {
           console.log(e);
         });
@@ -71,7 +93,10 @@ async function deleteUser(id) {
     }
     await rp({ // eslint-disable-line
       method: 'DELETE',
-      uri: url + '/tasks/' + task.id
+      uri: url + '/tasks/' + task.id,
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
     }).catch((e) => {
       console.log(e);
       sgMail.send({
@@ -85,7 +110,10 @@ async function deleteUser(id) {
 
   let viewedMedia = await rp({
     method: 'GET',
-    uri: url + '/clients/' + id + '/viewed_media'
+    uri: url + '/clients/' + id + '/viewed_media',
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   });
   viewedMedia = JSON.parse(viewedMedia);
   for (let i = 0; i < viewedMedia.length; i++) {
@@ -104,7 +132,10 @@ async function deleteUser(id) {
   }
   rp({
     method: 'DELETE',
-    uri: url + '/clients/' + id
+    uri: url + '/clients/' + id,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    }
   }).catch((e) => {
     sgMail.send({
       to: 'support@helloroo.zendesk.com',
