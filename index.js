@@ -55,8 +55,14 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     sender.sendReply('sms', userPlatformId, response.messages).then(() => {
       updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
         bot.resetVariables(userPlatformId);
+      }).catch((e) => {
+        console.log(e);
       });
+    }).catch((e) => {
+      console.log(e);
     });
+  }).catch((e) => {
+    console.log(e);
   });
 });
 setInterval(() => {
@@ -94,8 +100,14 @@ async function updateAllClients() {
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
+              }).catch((e) => {
+                console.log(e);
               });
+            }).catch((e) => {
+              console.log(e);
             });
+          }).catch((e) => {
+            console.log(e);
           });
         }
       }
