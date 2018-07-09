@@ -70,7 +70,9 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
   }
-  await api.createMessage(null, userInfo.id, BOT_ID, userMessage, userInfo.topic);
+  if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
+    await api.createMessage(null, userInfo.id, BOT_ID, userMessage, userInfo.topic);
+  }
 
   // fast forward script start
   if (userMessage.toLowerCase().trim() === 'ff') {
@@ -255,6 +257,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
   const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
   const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
+  const recurringImgUrl = assetUrls.baseUrl + assetUrls.recurring.path + assetUrls.recurring.recurringImgUrl;
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const coachSaysImgUrl = assetUrls.baseUrl + assetUrls.help.path + getRandomItemFromArray(assetUrls.help.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
@@ -269,6 +272,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   riveBot.setUservar(userPlatformId, 'contentDescription', contentDescription);
   riveBot.setUservar(userPlatformId, 'contentImgUrl', contentImgUrl);
   riveBot.setUservar(userPlatformId, 'contentUrl', contentUrl);
+  riveBot.setUservar(userPlatformId, 'recurringImgUrl', recurringImgUrl);
   riveBot.setUservar(userPlatformId, 'currentTask', currentTask);
   riveBot.setUservar(userPlatformId, 'currentTaskSteps', currentTaskSteps);
   riveBot.setUservar(userPlatformId, 'currentTaskDescription', currentTaskDescription);

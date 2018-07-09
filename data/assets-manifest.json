@@ -48,6 +48,12 @@
       "04_Number9.gif"
     ]
   },
+  "recurring": {
+    "path": "static/images/recurring/",
+    "images": [
+      "04_DailyAction_v02.gif"
+    ]
+  },
   "welcome": {
     "path": "static/images/welcome/",
     "images": [
