@@ -12,4 +12,9 @@
   + (g|im all set)
   - Glad to hear it! I'll be back in touch soon.
   ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt><set requestResolved=true>
+  + *
+  - Sorry, I didn't understand that. Did the coach's response resolve your problem?<send>
+  ^ <fb>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>
+  ^ <sms>\nIf you still need assistance, text the letter A.\nIf you're all set, text the letter G.</sms>
+  ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt><set requestResolved=true>
 < topic
