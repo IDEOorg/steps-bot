@@ -370,9 +370,6 @@ async function getUserDataFromDB(platform, userPlatformId) {
     if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
-    if (client.platform === 'FBOOK') {
-      console.log(client);
-    }
     if (platform === 'fb' && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
       return client;
     }
@@ -381,8 +378,9 @@ async function getUserDataFromDB(platform, userPlatformId) {
 }
 
 function formatPhoneNumber(unformattedNumber) {
-  console.log('unformatted number');
-  console.log(unformattedNumber);
+  if (!unformattedNumber) {
+    return null;
+  }
   const digitsOnlyNumber = unformattedNumber.replace(/\D/g, '');
   if (digitsOnlyNumber.length === 10) {
     return '+1' + digitsOnlyNumber;
