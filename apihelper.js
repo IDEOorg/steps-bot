@@ -381,6 +381,8 @@ async function getUserDataFromDB(platform, userPlatformId) {
 }
 
 function formatPhoneNumber(unformattedNumber) {
+  console.log('unformatted number');
+  console.log(unformattedNumber);
   const digitsOnlyNumber = unformattedNumber.replace(/\D/g, '');
   if (digitsOnlyNumber.length === 10) {
     return '+1' + digitsOnlyNumber;
