@@ -41,12 +41,14 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   const BOT_ID = 41;
   let userInfo = null;
   if (fbNewUserPhone) {
+    console.log('hit this');
     userInfo = await api.getUserDataFromDB(platform, fbNewUserPhone);
     if (userInfo) {
       userInfo.topic = 'welcome';
       userInfo.fb_id = userPlatformId;
     }
   } else {
+    console.log('hit that');
     userInfo = await api.getUserDataFromDB(platform, userPlatformId);
   }
   if (!userInfo) {

@@ -31,9 +31,11 @@ function fbEndpoint(req, res) {
     userMessage = messageObject.postback.title;
     if (messageObject.postback.referral) {
       fbNewUserPhone = '+1' + messageObject.postback.referral.ref;
+      console.log('fbNewUserPhone');
+      console.log(fbNewUserPhone);
     }
   } else {
-    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop
+    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop and get you banned on fb messenger
   }
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
