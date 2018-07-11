@@ -1,7 +1,7 @@
 > topic welcome includes global includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
-  ^ <fb>Great to see you here in Facebook Messenger <get username>. You're all signed up! I'll be back in touch soon.</fb>
+  ^ <fb>Great to see you here on Facebook Messenger <get username>. You're all signed up! I'll be back in touch soon.</fb>
   ^ <sms>Hi <get username>! I'm Roo, your financial coaching assistant. I’m here to help you complete the work plan you create with Coach <get coachName> at <get orgName>.<send>
   ^ I'll be back in touch soon. Together, we’ll get it all done!</sms>
   ^ {topic=welcomewait}<set hours=2><set nextTopic=welcomenext><set nextMessage=startprompt>
