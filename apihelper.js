@@ -363,16 +363,26 @@ async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (platform === 'sms' && client.phone !== null && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+    if (platform === 'sms' && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
       client.phone = userPlatformId;
       return client;
     }
     if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
-    if (platform === 'fb' && (client.phone === userPlatformId || '+1' + client.phone === userPlatformId)) {
+    if (platform === 'fb' && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
       return client;
     }
+  }
+  return null;
+}
+
+function formatPhoneNumber(unformattedNumber) {
+  const digitsOnlyNumber = unformattedNumber.replace(/\D/g, '');
+  if (digitsOnlyNumber.length === 10) {
+    return '+1' + digitsOnlyNumber;
+  } else if (digitsOnlyNumber.length === 11 && digitsOnlyNumber[0] === '1') {
+    return '+' + digitsOnlyNumber;
   }
   return null;
 }
