@@ -370,7 +370,7 @@ async function getUserDataFromDB(platform, userPlatformId) {
     if (platform === 'fb' && client.fb_id === userPlatformId) {
       return client;
     }
-    if (platform === 'fb') {
+    if (client.platform === 'FBOOK') {
       console.log(client);
     }
     if (platform === 'fb' && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
