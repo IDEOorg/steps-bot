@@ -26,7 +26,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     userAskedToStop,
     requestResolved
   } = variables;
-
+  console.log('variables');
+  console.log(variables);
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
     return;
@@ -101,7 +102,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     client.fb_id = newFacebookId;
   }
 
-  client.topic = topic;
+  if (topic !== 'recurring' && topic !== 'random') {
+    client.topic = topic;
+  }
   if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {
     client.checkin_times.push({
       topic: nextTopic,
