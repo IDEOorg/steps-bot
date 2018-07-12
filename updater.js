@@ -26,8 +26,6 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     userAskedToStop,
     requestResolved
   } = variables;
-  console.log('variables');
-  console.log(variables);
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
     return;
