@@ -119,7 +119,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     return task.recurring;
   });
   for (let i = 0; i < recurringTasks.length; i++) { // add new recurring tasks
-    let task = recurringTasks[i];
+    const task = recurringTasks[i];
     let taskFound = false;
     for (let j = 0; j < client.checkin_times.length; j++) {
       const checkInTime = client.checkin_times[j];

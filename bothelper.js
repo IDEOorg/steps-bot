@@ -37,7 +37,7 @@ function resetVariables(userPlatformId) {
   riveBot.setUservar(userPlatformId, 'requestResolved', null);
 }
 
-async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone, coachHelpResponse) {
+async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone, coachHelpResponse, recurringTaskId) {
   const BOT_ID = 41;
   let userInfo = null;
   if (fbNewUserPhone) {
@@ -107,6 +107,10 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   if (coachHelpResponse) {
     self.riveBot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
+  }
+  if (recurringTaskId) {
+    const recurringTask = api.getTask(recurringTaskId);
+    self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {

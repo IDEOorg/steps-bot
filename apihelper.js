@@ -358,6 +358,26 @@ async function getUserFromId(id) {
   return JSON.parse(user);
 }
 
+async function getTask(id) {
+  const task = await rp({
+    method: 'GET',
+    uri: assetUrls.url + '/tasks/' + id,
+    headers: {
+      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+    },
+    json: true
+  }).catch((e) => {
+    console.log(e);
+    sgMail.send({
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: 'Roo bot error',
+      text: `An error occurred on the bot server: \n ${e}`,
+    });
+  });
+  return task;
+}
+
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
@@ -407,6 +427,7 @@ module.exports = {
   updateUser,
   updateTask,
   markMediaAsViewed,
+  getTask,
   getUserDataFromDB,
   botId
 };
