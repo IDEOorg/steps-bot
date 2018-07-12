@@ -112,7 +112,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   console.log('recurringTaskId');
   console.log(recurringTaskId);
   if (recurringTaskId) {
-    const recurringTask = api.getTask(recurringTaskId);
+    const recurringTask = await api.getTask(recurringTaskId);
     console.log('recurringTaskkkkk');
     console.log(recurringTask);
     self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
