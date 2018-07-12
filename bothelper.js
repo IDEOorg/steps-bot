@@ -108,8 +108,12 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   if (coachHelpResponse) {
     self.riveBot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
   }
+  console.log('recurringTaskId');
+  console.log(recurringTaskId);
   if (recurringTaskId) {
     const recurringTask = api.getTask(recurringTaskId);
+    console.log('recurringTaskkkkk');
+    console.log(recurringTask);
     self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
