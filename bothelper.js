@@ -257,7 +257,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
   const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
   const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
-  const recurringImgUrl = assetUrls.baseUrl + assetUrls.recurring.path + assetUrls.recurring.recurringImgUrl;
+  const recurringImgUrl = assetUrls.baseUrl + assetUrls.recurring.path + getRandomItemFromArray(assetUrls.recurring.images);
   const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const coachSaysImgUrl = assetUrls.baseUrl + assetUrls.help.path + getRandomItemFromArray(assetUrls.help.images);
   const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line

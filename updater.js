@@ -50,9 +50,10 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       client.temp_help_response = null;
     }
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
-      return checkInTime.topic !== 'help';
+      return checkInTime.topic !== 'help'; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
     });
   }
+
   if (taskComplete) {
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       if (checkInTime.recurring) {
@@ -112,7 +113,50 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       time: nextCheckInDate
     });
   }
-  if (userAskedToStop) {
+  // TODO fill in any deleted recurring tasks, added recurring tasks, and updated recurring tasks
+  // given tasks list and clientCheckInTimes
+  const recurringTasks = tasks.filter((task) => {
+    return task.recurring;
+  });
+  for (let i = 0; i < recurringTasks.length; i++) { // add new recurring tasks
+    let task = recurringTasks[i];
+    let taskFound = false;
+    for (let j = 0; j < client.checkin_times.length; j++) {
+      const checkInTime = client.checkin_times[j];
+      if (checkInTime.task_id === task.id) {
+        taskFound = true;
+      }
+    }
+    if (taskFound === false) {
+      client.checkin_times.push({
+        topic: 'recurring',
+        message: 'startprompt',
+        time: getNextCheckInDate(1, null, 'AFTERNOON'),
+        createdDate: new Date(),
+        task_id: task.id
+      });
+    }
+  }
+  for (let i = 0; i < client.checkin_times.length; i++) {
+    const checkInTime = client.checkin_times[i];
+    if (checkInTime.task_id) {
+      if (client.checkin_times[i].time < Date.now()) {
+        for (let j = 0; j < recurringTasks.length; j++) {
+          const task = recurringTasks[j];
+          if (checkInTime.task_id === task.id) {
+            if (task.duration && getNextCheckInDate(-1 * task.duration, null, null) > checkInTime.createdDate) {
+              break;
+            } else {
+              checkInTime.time = getNextCheckInDate(task.frequency ? task.frequency : 1, null, 'AFTERNOON');
+            }
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  if (userAskedToStop) { // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
     client.checkin_times = [];
   }
   if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
