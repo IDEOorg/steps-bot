@@ -51,16 +51,19 @@ function fbEndpoint(req, res) {
 twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
+
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
-    sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-      updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
-        bot.resetVariables(userPlatformId);
+    if (response !== null) {
+      sender.sendReply('sms', userPlatformId, response.messages).then(() => {
+        updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
+          bot.resetVariables(userPlatformId);
+        }).catch((e) => {
+          console.log(e);
+        });
       }).catch((e) => {
         console.log(e);
       });
-    }).catch((e) => {
-      console.log(e);
-    });
+    }
   }).catch((e) => {
     console.log(e);
   });
