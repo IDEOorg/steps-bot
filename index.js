@@ -76,8 +76,7 @@ async function updateAllClients() {
   const isUpdateMessage = true;
   let users = [];
   const currentTimeHour = (new Date()).getHours();
-  console.log(currentTimeHour);
-  if (currentTimeHour >= 13 || currentTimeHour <= 2) {
+  if (currentTimeHour === 14 || currentTimeHour === 19) {
     users = await api.getAllClients();
   }
   for (let i = 0; i < users.length; i++) {
