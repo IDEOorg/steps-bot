@@ -176,6 +176,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   } else if (userPlatform === 'FBOOK') {
     if (platform === 'sms') { // user has registered fb account but sends SMS
       topic = 'setupfb';
+      userPlatformId = userInfo.phone;
     } else {
       if (topic === 'setupfb') {
         topic = 'welcome';
