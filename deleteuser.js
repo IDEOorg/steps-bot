@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(315);
+deleteUser(338);
 
 async function deleteUser(id) {
   const media = await rp({
@@ -48,6 +48,7 @@ async function deleteUser(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   });
+  console.log('hey');
   requests = JSON.parse(requests);
   for (let i = 0; i < requests.length; i++) {
     const request = requests[i];
@@ -59,6 +60,7 @@ async function deleteUser(id) {
       }
     });
   }
+  console.log('hi');
   let tasks = await rp({
     method: 'GET',
     uri: url + '/clients/' + id + '/tasks',
@@ -75,6 +77,8 @@ async function deleteUser(id) {
     });
   });
   tasks = JSON.parse(tasks);
+  console.log('tasks');
+  console.log(tasks);
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
     for (let j = 0; j < media.length; j++) {
@@ -107,7 +111,7 @@ async function deleteUser(id) {
       });
     });
   }
-
+  console.log('bagels');
   let viewedMedia = await rp({
     method: 'GET',
     uri: url + '/clients/' + id + '/viewed_media',
@@ -118,10 +122,12 @@ async function deleteUser(id) {
   viewedMedia = JSON.parse(viewedMedia);
   for (let i = 0; i < viewedMedia.length; i++) {
     const viewed = viewedMedia[i];
+    console.log(viewed.id);
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/clients/' + id + '/viewed_media/' + viewed.id
     }).catch((e) => {
+      console.log('not deleted');
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
@@ -130,6 +136,7 @@ async function deleteUser(id) {
       });
     });
   }
+  console.log('sweden');
   rp({
     method: 'DELETE',
     uri: url + '/clients/' + id,
@@ -144,4 +151,5 @@ async function deleteUser(id) {
       text: `An error occurred on the bot server: \n ${e}`,
     });
   });
+  console.log('kk');
 }

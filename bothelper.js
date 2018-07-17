@@ -103,6 +103,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   // fast forward script end
   const tasks = await api.getClientTasks(userInfo.id);
+  console.log('**********tasks**********');
+  console.log(tasks);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic);
   if (topic) {
@@ -119,6 +121,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
+  console.log('**********part 2**********');
+  console.log(tasks);
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
     self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
     return {
