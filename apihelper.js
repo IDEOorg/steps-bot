@@ -91,6 +91,8 @@ async function getCoach(id) {
 }
 
 async function getClientTasks(id) {
+  console.log('getClientTasks');
+  console.log(id);
   let tasks = await rp({
     method: 'GET',
     uri: assetUrls.url + '/clients/' + id.toString() + '/tasks',
