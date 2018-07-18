@@ -208,24 +208,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   }
   // TODO handle all tasks completed scenario
   if (currentTask === null) {
-    for (let i = 0; i < tasks.length; i++) {
-      const task = tasks[i];
-      task.status = 'ACTIVE';
-      await api.updateTask(task.id, task); // eslint-disable-line
-    }
-    if (tasks.length !== 0) {
-      let steps = tasks[0].steps; // eslint-disable-line
-      if (steps === null) {
-        steps = [];
-      }
-      currentTask = tasks[0].title;
-      currentTaskSteps = steps;
-      currentTaskDescription = tasks[0].description;
-    } else {
-      currentTask = null;
-      currentTaskDescription = null;
-      currentTaskSteps = null;
-    }
+    topic = 'ultimatedone';
   }
 
   if (currentTaskDescription && currentTaskDescription.length !== 0) {

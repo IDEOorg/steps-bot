@@ -1,0 +1,4 @@
+> topic random
+  + *
+  - {topic=checkin}{@ startprompt}
+< topic

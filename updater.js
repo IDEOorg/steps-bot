@@ -32,7 +32,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   const tasks = await api.getClientTasks(client.id);
   let currentTask = null;
-  for (let i = 0; i < tasks.length; i++) {
+  for (let i = 0; i < tasks.length; i++) { // gets the current task
     const task = tasks[i];
     if (!task.recurring && task.status === 'ACTIVE') {
       currentTask = task;
@@ -52,7 +52,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     });
   }
 
-  if (taskComplete) {
+  if (taskComplete || topic === 'ultimatedone') { // removes all non-recurring checkins if the user has completed the task or is done with their workplan
     client.checkin_times = clientCheckInTimes.filter((checkInTime) => {
       if (checkInTime.recurring) {
         return true;
