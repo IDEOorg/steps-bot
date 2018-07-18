@@ -1,4 +1,4 @@
 > topic random
   + *
-  - {topic=checkin}
+  - {topic=checkin}{@ random}
 < topic
