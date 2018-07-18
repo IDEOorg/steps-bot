@@ -3,25 +3,25 @@
   - Hi, <get username>! Two things for you to check off your list today. First, remind yourself that you're unstoppable! Then:<send>
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.
+  ^ I'll check back in tomorrow.{topic=checkin}
   - <get username>! Hope you're having a great day! Let's make it even better. Here's an action item:<send>
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.
+  ^ I'll check back in tomorrow.{topic=checkin}
   - <get username>, you're creating the future you want with every action item you complete. How amazing! Let's dig into today's action item.
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.
+  ^ I'll check back in tomorrow.{topic=checkin}
   - You are on a roll with this work plan! Don't forget to check this action item off your list today:<send>
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.
+  ^ I'll check back in tomorrow.{topic=checkin}
   - You're powering through! Let's keep going. Remember to do this today:<send>
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.
+  ^ I'll check back in tomorrow.{topic=checkin}
   - <get username>, aren't you proud of yourself for being this incredible? You definitely should be! Here's your action item for the day:<send>
   ^ ^image("<get recurringImgUrl>")<send>
   ^ <get recurringTaskContent><send>
-  ^ I'll check back in tomorrow.  
+  ^ I'll check back in tomorrow.  {topic=checkin}
 < topic
