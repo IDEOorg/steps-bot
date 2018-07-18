@@ -191,7 +191,6 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
   const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
   // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
 
-  // TODO MEPLER IMPLEMENT SENDING THE EMAIL
   const url = 'https://helloroo.org/clients';
   const steps = taskSteps.map((step) => {
     return `<li>${step.text}</li>`;
