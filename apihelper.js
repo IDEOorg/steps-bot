@@ -211,7 +211,6 @@ async function setRequestByTaskId(clientId, taskId, status) {
         }).catch((e) => {
           console.log(e);
         });
-        break;
       }
     }
   }
