@@ -2,6 +2,6 @@
   + *
   - WOW! You've done it!! THIS. IS. MAJOR! You've finished every action item in your work plan!<send>
   ^ You took the steering wheel and are fully in the driver's seat, <get username>!<send>
-  ^ You should be INCREDIBLY proud of each and every step you've taken on this journey so far! CONGRATULATIONS!<SEND>
+  ^ You should be INCREDIBLY proud of each and every step you've taken on this journey so far! CONGRATULATIONS!<send>
   ^ ^image("<get celebrationImgUrl>")
 < topic
