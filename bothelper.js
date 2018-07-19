@@ -93,9 +93,13 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       }
     }
     if (soonestCheckInIndex !== null) {
+      console.log('checkInTimes[soonestCheckInIndex]');
+      console.log(checkInTimes[soonestCheckInIndex]);
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
       recurringTaskId = checkInTimes[soonestCheckInIndex].task_id;
+      console.log('recurringTaskId');
+      console.log(recurringTaskId);
       userInfo.checkin_times.splice(soonestCheckInIndex, 1);
       userInfo.topic = topic;
       await api.updateUser(userInfo.id, userInfo);
