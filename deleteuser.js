@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(471);
+deleteUser(473);
 
 async function deleteUser(id) {
   const media = await rp({

@@ -126,7 +126,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   console.log(currTopic);
   console.log('**********part 2**********');
   console.log(tasks);
-  if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
+  if (tasks.length === 0 && (currTopic !== 'setupfb' && currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
     self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
     return {
       messages: [
