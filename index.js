@@ -76,7 +76,7 @@ async function updateAllClients() {
   const isUpdateMessage = true;
   let users = [];
   const currentTimeHour = (new Date()).getHours();
-  if (currentTimeHour === 14 || currentTimeHour === 19 || currentTimeHour === 23) {
+  if (currentTimeHour > 12 || currentTimeHour < 4) {
     users = await api.getAllClients();
   }
   for (let i = 0; i < users.length; i++) {
@@ -90,6 +90,8 @@ async function updateAllClients() {
           eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
       }
+      console.log('eligibleCheckIns');
+      console.log(eligibleCheckIns);
       let platform = null;
       let userPlatformId = null;
       if (user.platform === 'FBOOK') {

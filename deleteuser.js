@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const url = 'https://helloroo.org/api';
 
-deleteUser(483);
+deleteUser(501);
 
 async function deleteUser(id) {
   const media = await rp({
@@ -123,6 +123,9 @@ async function deleteUser(id) {
       method: 'DELETE',
       uri: url + '/clients/' + id + '/viewed_media/' + viewed.id
     }).catch((e) => {
+      console.log('viewed.id');
+      console.log(id);
+      console.log(viewed.id);
       console.log('not deleted');
       sgMail.send({
         to: 'support@helloroo.zendesk.com',

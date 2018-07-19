@@ -1,6 +1,6 @@
 > topic welcomenext includes global includes tempfastforward
 + startprompt
-- Today you took a big step toward your financial future! As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on completing your financial coaching appointment!<send>
+- You took a big step toward your financial future! As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on completing your financial coaching appointment!<send>
 ^ I'll be sending you reminders and helpful links based on the work plan you created with coach <get coachName>. Here’s a video your coach may have shown you. It explains what I’m all about.\n<get introVideoLink><send>
 ^ ^image("<get workplanImgUrl>")<send>
 ^ And here's a link to your full work plan. It's a big picture of the small steps you'll take.\n<get workplanLink><send>
