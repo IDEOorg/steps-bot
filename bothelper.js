@@ -93,13 +93,9 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       }
     }
     if (soonestCheckInIndex !== null) {
-      console.log('checkInTimes[soonestCheckInIndex]');
-      console.log(checkInTimes[soonestCheckInIndex]);
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
       recurringTaskId = checkInTimes[soonestCheckInIndex].task_id;
-      console.log('recurringTaskId');
-      console.log(recurringTaskId);
       userInfo.checkin_times.splice(soonestCheckInIndex, 1);
       userInfo.topic = topic;
       await api.updateUser(userInfo.id, userInfo);
@@ -107,15 +103,11 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   }
   // fast forward script end
   const tasks = await api.getClientTasks(userInfo.id);
-  console.log('**********tasks**********');
-  console.log(tasks);
   userInfo.tasks = tasks;
   await loadVarsToRiveBot(self.riveBot, userInfo, platform, userMessage, topic);
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
-  console.log('topical');
-  console.log(topic);
   if (fbNewUserPhone) {
     self.riveBot.setUservar(userPlatformId, 'newFacebookId', userPlatformId);
   }
@@ -127,9 +119,6 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
-  console.log(currTopic);
-  console.log('**********part 2**********');
-  console.log(tasks);
   if (tasks.length === 0 && (currTopic !== 'setupfb' && currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
     self.riveBot.setUservar(userPlatformId, 'topic', 'introtask');
     return {
@@ -193,8 +182,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   } else { // is SMS
     userPlatformId = userInfo.phone;
   }
-  console.log('***topic is ******');
-  console.log(topic);
 
   let taskNum = 0;
   let currentTask = null;
