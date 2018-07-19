@@ -110,6 +110,8 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
   if (topic) {
     self.riveBot.setUservar(userPlatformId, 'topic', topic);
   }
+  console.log('topical');
+  console.log(topic);
   if (fbNewUserPhone) {
     self.riveBot.setUservar(userPlatformId, 'newFacebookId', userPlatformId);
   }
@@ -121,6 +123,7 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
     self.riveBot.setUservar(userPlatformId, 'recurringTaskContent', recurringTask.title);
   }
   const currTopic = self.riveBot.getUservar(userPlatformId, 'topic');
+  console.log(currTopic);
   console.log('**********part 2**********');
   console.log(tasks);
   if (tasks.length === 0 && (currTopic !== 'welcome' && currTopic !== 'welcomewait')) {
@@ -186,6 +189,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   } else { // is SMS
     userPlatformId = userInfo.phone;
   }
+  console.log('***topic is ******');
+  console.log(topic);
 
   let taskNum = 0;
   let currentTask = null;
