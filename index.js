@@ -70,17 +70,16 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 });
 setInterval(() => {
   updateAllClients();
-}, 180000); // 1800000 is 30 minutes
+}, 3600000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
   const isUpdateMessage = true;
   let users = [];
-  // const currentTimeHour = (new Date()).getHours();
-  // if (currentTimeHour > 12 || currentTimeHour < 4) {
-  //   users = await api.getAllClients();
-  // }
+  const currentTimeHour = (new Date()).getHours();
+  if (currentTimeHour > 12 || currentTimeHour < 4) {
+    users = await api.getAllClients();
+  }
   users = await api.getAllClients();
-  console.log('survived');
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
@@ -92,8 +91,6 @@ async function updateAllClients() {
           eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
       }
-      console.log('eligibleCheckIns');
-      console.log(eligibleCheckIns);
       let platform = null;
       let userPlatformId = null;
       if (user.platform === 'FBOOK') {
