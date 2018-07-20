@@ -78,6 +78,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     const coach = await api.getCoach(client.coach_id);
     sendHelpEmailToCoach(client, coach, client.temp_help_response, requestMessage.timestamp, request, currentTask);
     client.temp_help_response = null;
+    client.status = 'AWAITING_HELP';
   }
   if (taskComplete) {
     currentTask.status = 'COMPLETED';
@@ -148,8 +149,10 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
     api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
+    client.status = 'WORKING';
   } else if (requestResolved === 'false') {
     api.setRequestByTaskId(client.id, currentTask.id, 'NEEDS_ASSISTANCE');
+    client.status = 'AWAITING_HELP';
   }
   // update user
   api.updateUser(client.id, client).then(() => {
