@@ -22,6 +22,8 @@ async function getAllClients() {
       text: `An error occurred on the bot server: \n ${e}`,
     });
   });
+  console.log('*****clients****');
+  console.log(clients);
   return JSON.parse(clients);
 }
 

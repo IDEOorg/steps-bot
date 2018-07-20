@@ -75,10 +75,11 @@ setInterval(() => {
 async function updateAllClients() {
   const isUpdateMessage = true;
   let users = [];
-  const currentTimeHour = (new Date()).getHours();
-  if (currentTimeHour > 12 || currentTimeHour < 4) {
-    users = await api.getAllClients();
-  }
+  // const currentTimeHour = (new Date()).getHours();
+  // if (currentTimeHour > 12 || currentTimeHour < 4) {
+  //   users = await api.getAllClients();
+  // }
+  users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
