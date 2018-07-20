@@ -70,7 +70,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 });
 setInterval(() => {
   updateAllClients();
-}, 1800000); // 1800000 is 30 minutes
+}, 180000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
   const isUpdateMessage = true;
@@ -80,6 +80,7 @@ async function updateAllClients() {
   //   users = await api.getAllClients();
   // }
   users = await api.getAllClients();
+  console.log('survived');
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
