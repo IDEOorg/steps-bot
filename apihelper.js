@@ -14,6 +14,7 @@ async function getAllClients() {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
+    console.log('error');
     console.log(e);
     sgMail.send({
       to: 'support@helloroo.zendesk.com',
