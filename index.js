@@ -104,7 +104,7 @@ async function updateAllClients() {
         for (let j = 0; j < eligibleCheckIns.length; j++) {
           const checkIn = eligibleCheckIns[j];
           // arguments for below function are wrong
-          await sleep(1000); // eslint-disable-line
+          await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
