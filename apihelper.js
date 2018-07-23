@@ -51,7 +51,7 @@ async function getOrgName(id) {
 async function getCoachName(id) {
   let coach = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/coaches/' + id.toString(),
+    uri: assetUrls.url + '/users/' + id.toString(),
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
@@ -74,7 +74,7 @@ async function getCoachName(id) {
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/coaches/' + id.toString(),
+    uri: assetUrls.url + '/users/' + id.toString(),
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
