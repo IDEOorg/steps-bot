@@ -39,17 +39,20 @@ function fbEndpoint(req, res) {
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log(response.variables);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      console.log('sent');
-    }).catch((e) => {
-      console.log(e);
-    }).finally(() => {
-      console.log('updated user fb');
       if (response.variables) {
         const idToUpdate = fbNewUserPhone || userPlatformId;
         updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
           bot.resetVariables(userPlatformId);
         });
       }
+    }).catch((e) => {
+      if (response.variables) {
+        const idToUpdate = fbNewUserPhone || userPlatformId;
+        updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
+          bot.resetVariables(userPlatformId);
+        });
+      }
+      console.log(e);
     });
   });
 }
@@ -62,14 +65,17 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     if (response !== null) {
       console.log(response.variables);
       sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-        console.log('sent');
-      }).catch((e) => {
-        console.log(e);
-      }).finally(() => {
         updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
           bot.resetVariables(userPlatformId);
         }).catch((e) => {
           console.log(e);
+        });
+      }).catch((e) => {
+        console.log(e);
+        updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
+          bot.resetVariables(userPlatformId);
+        }).catch((err) => {
+          console.log(err);
         });
       });
     }
@@ -116,14 +122,18 @@ async function updateAllClients() {
           await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
             console.log(response.variables);
-            sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).catch((e) => {
-              console.log(e);
-            }).finally(() => {
-              console.log('updated user');
+            sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
               }).catch((e) => {
                 console.log(e);
+              });
+            }).catch((e) => {
+              console.log(e);
+              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+                bot.resetVariables(userPlatformId);
+              }).catch((err) => {
+                console.log(err);
               });
             });
           }).catch((e) => {
@@ -154,14 +164,19 @@ async function getCoachResponse(req, res) {
         }
         bot.getResponse(platform, userPlatformId, 'startprompt', 'helpcoachresponse', null, coachMessage.text).then((response) => {
           console.log(response.variables);
-          sender.sendReply(platform, userPlatformId, response.messages).catch((e) => {
-            console.log(e);
-          }).finally(() => {
+          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
             if (response.variables) {
               updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
               });
             }
+          }).catch((e) => {
+            console.log(e);
+            updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+              bot.resetVariables(userPlatformId);
+            }).catch((err) => {
+              console.log(err);
+            });
           });
         });
       }
