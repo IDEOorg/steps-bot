@@ -119,35 +119,38 @@ async function deleteUser(id) {
   viewedMedia = JSON.parse(viewedMedia);
   for (let i = 0; i < viewedMedia.length; i++) {
     const viewed = viewedMedia[i];
+    console.log(viewed.id);
+    console.log(url + '/clients/' + id + '/viewed_media/' + viewed.id);
     await rp({ // eslint-disable-line
       method: 'DELETE',
-      uri: url + '/clients/' + id + '/viewed_media/' + viewed.id
+      uri: url + '/clients/' + id + '/viewed_media/' + viewed.id,
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
     }).catch((e) => {
-      console.log('viewed.id');
-      console.log(id);
-      console.log(viewed.id);
-      console.log('not deleted');
-      sgMail.send({
-        to: 'support@helloroo.zendesk.com',
-        from: 'no-reply@helloroo.org',
-        subject: 'Roo bot error',
-        text: `An error occurred on the bot server: \n ${e}`,
-      });
+      console.log(viewed.id + ' not deleted');
+      // sgMail.send({
+      //   to: 'support@helloroo.zendesk.com',
+      //   from: 'no-reply@helloroo.org',
+      //   subject: 'Roo bot error',
+      //   text: `An error occurred on the bot server: \n ${e}`,
+      // });
     });
   }
-  rp({
+  await rp({
     method: 'DELETE',
     uri: url + '/clients/' + id,
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    sgMail.send({
-      to: 'support@helloroo.zendesk.com',
-      from: 'no-reply@helloroo.org',
-      subject: 'Roo bot error',
-      text: `An error occurred on the bot server: \n ${e}`,
-    });
+    console.log('client not deleted');
+    // sgMail.send({
+    //   to: 'support@helloroo.zendesk.com',
+    //   from: 'no-reply@helloroo.org',
+    //   subject: 'Roo bot error',
+    //   text: `An error occurred on the bot server: \n ${e}`,
+    // });
   });
   console.log('kk');
 }

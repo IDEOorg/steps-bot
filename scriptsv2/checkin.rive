@@ -28,7 +28,7 @@
   ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
-  + (b|no im finished|finished)
+  + (b|no im finished|finished|im done)
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."<send>
