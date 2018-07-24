@@ -38,7 +38,7 @@ function fbEndpoint(req, res) {
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
     console.log(response.variables);
-    sender.sendReply('fb', userPlatformId, response.messages).catch((e) => {
+    sender.sendReply('fb', userPlatformId, response.messages).then().catch((e) => {
       console.log(e);
     }).finally(() => {
       console.log('updated user fb');
@@ -59,7 +59,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
     if (response !== null) {
       console.log(response.variables);
-      sender.sendReply('sms', userPlatformId, response.messages).catch((e) => {
+      sender.sendReply('sms', userPlatformId, response.messages).then().catch((e) => {
         console.log(e);
       }).finally(() => {
         updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
