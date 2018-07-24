@@ -83,9 +83,9 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     console.log(e);
   });
 });
-// setInterval(() => {
-//   updateAllClients();
-// }, 10800000); // 1800000 is 30 minutes
+setInterval(() => {
+  updateAllClients();
+}, 1800000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
   const isUpdateMessage = true;
@@ -121,7 +121,11 @@ async function updateAllClients() {
           // arguments for below function are wrong
           await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
-            console.log(response.variables);
+            if (response.variables.username === 'Wanda') {
+              console.log(response.messages);
+              console.log(response.variables);
+              console.log(userPlatformId);
+            }
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
