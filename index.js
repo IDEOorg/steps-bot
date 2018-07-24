@@ -41,6 +41,7 @@ function fbEndpoint(req, res) {
     sender.sendReply('fb', userPlatformId, response.messages).catch((e) => {
       console.log(e);
     }).finally(() => {
+      console.log('updated user fb');
       if (response.variables) {
         const idToUpdate = fbNewUserPhone || userPlatformId;
         updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
@@ -114,6 +115,7 @@ async function updateAllClients() {
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).catch((e) => {
               console.log(e);
             }).finally(() => {
+              console.log('updated user');
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
               }).catch((e) => {
