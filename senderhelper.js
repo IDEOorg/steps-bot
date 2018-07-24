@@ -42,15 +42,17 @@ function formatMsgForFB(message) {
       text: message.message
     };
   } else if (type === 'image') {
-    return {
-      attachment: {
-        type: 'image',
-        payload: {
-          url: message.image,
-          is_reusable: true
+    if (message.image) {
+      return {
+        attachment: {
+          type: 'image',
+          payload: {
+            url: message.image,
+            is_reusable: true
+          }
         }
-      }
-    };
+      };
+    }
   } else if (type === 'quickreply') {
     const quickReplies = message.buttons.map((text) => { // eslint-disable-line
       return {
