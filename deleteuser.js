@@ -75,8 +75,6 @@ async function deleteUser(id) {
     });
   });
   tasks = JSON.parse(tasks);
-  console.log('tasks');
-  console.log(tasks);
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
     for (let j = 0; j < media.length; j++) {
@@ -119,8 +117,6 @@ async function deleteUser(id) {
   viewedMedia = JSON.parse(viewedMedia);
   for (let i = 0; i < viewedMedia.length; i++) {
     const viewed = viewedMedia[i];
-    console.log(viewed.id);
-    console.log(url + '/clients/' + id + '/viewed_media/' + viewed.id);
     await rp({ // eslint-disable-line
       method: 'DELETE',
       uri: url + '/clients/' + id + '/viewed_media/' + viewed.id,
@@ -152,5 +148,4 @@ async function deleteUser(id) {
     //   text: `An error occurred on the bot server: \n ${e}`,
     // });
   });
-  console.log('kk');
 }

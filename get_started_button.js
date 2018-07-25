@@ -50,25 +50,4 @@ const deleteGetStarted = () =>
       text: `An error occurred on the bot server: \n ${error}`,
     });
   });
-
-const checkGetStarted = payload =>
-  rp({
-    uri: apiUrl,
-    method: 'GET',
-    body: {
-      get_started: {
-        payload
-      }
-    },
-    json: true,
-  }).then(res => console.log(res.result)).catch((error) => {
-    console.log(`ERROR: ${error}`);
-    sgMail.send({
-      to: 'support@helloroo.zendesk.com',
-      from: 'no-reply@helloroo.org',
-      subject: 'Roo bot error',
-      text: `An error occurred on the bot server: \n ${error}`,
-    });
-  });
 addGetStarted('getstarted');
-// checkGetStarted();

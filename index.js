@@ -37,7 +37,6 @@ function fbEndpoint(req, res) {
   }
   // get message payload here for new users
   bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
-    console.log(response.variables);
     sender.sendReply('fb', userPlatformId, response.messages).then(() => {
       if (response.variables) {
         const idToUpdate = fbNewUserPhone || userPlatformId;
@@ -63,7 +62,6 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 
   bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
     if (response !== null) {
-      console.log(response.variables);
       sender.sendReply('sms', userPlatformId, response.messages).then(() => {
         updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
           bot.resetVariables(userPlatformId);
@@ -85,7 +83,7 @@ twilioController.hears('.*', 'message_received', (_, message) => {
 });
 setInterval(() => {
   updateAllClients();
-}, 1800000); // 1800000 is 30 minutes
+}, 3600000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
   const isUpdateMessage = true;
@@ -121,11 +119,6 @@ async function updateAllClients() {
           // arguments for below function are wrong
           await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
-            if (response.variables.username === 'Wanda') {
-              console.log(response.messages);
-              console.log(response.variables);
-              console.log(userPlatformId);
-            }
             sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
@@ -167,7 +160,6 @@ async function getCoachResponse(req, res) {
           userPlatformId = user.fb_id;
         }
         bot.getResponse(platform, userPlatformId, 'startprompt', 'helpcoachresponse', null, coachMessage.text).then((response) => {
-          console.log(response.variables);
           sender.sendReply(platform, userPlatformId, response.messages).then(() => {
             if (response.variables) {
               updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
