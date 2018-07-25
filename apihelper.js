@@ -271,7 +271,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     });
   });
 
-  trackMessageSent(body);
+  if (fromId !== 41) trackMessageSent(body);
 
   return message;
 }
