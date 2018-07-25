@@ -8,7 +8,7 @@ getClientData();
 
 async function getClientData() {
   let outputText = '';
-  outputText += 'ID,Client,Coach,Organization,Client Email,Client Phone,Client Platform,Client Sign Up Date,Client Follow Up Appointment,Tasks Completed,Tasks Assigned,Messages Sent By Bot,Messages Sent By Client,Messages Sent By Coach,Requests for Help, Date of Last Message From Bot, Date of Next Bot Message, Current Topic, User Asked To Stop\n';
+  outputText += 'ID,Client,Coach,Organization,Client Email,Client Phone,Client Platform,Client Sign Up Date,Client Follow Up Appointment,Tasks Completed,Tasks Assigned,Messages Sent By Bot,Messages Sent By Client,Messages Sent By Coach,Requests for Help, Date of Last Message From Bot, Date of Next Bot Message, Current Topic\n';
   const orgs = await rp({
     method: 'GET',
     uri: 'https://steps-admin.herokuapp.com/api' + '/orgs/',
@@ -96,8 +96,6 @@ async function getClientData() {
             const totalMessagesSentByBot = messagesSentByBot.length;
             const totalMessagesSentByCoach = messages.filter(message => message.from_user === coach.id).length;
             const totalRequestsForHelp = requests.length;
-            const askedToStopMessages = messages.filter(message => message.text.toLowerCase().trim() === 'stop' && message.from_user === client.id);
-            const askedToStop = askedToStopMessages.length !== 0;
             // Date of last bot message
             messagesSentByBot = messagesSentByBot.sort((a, b) => {
               return Date.parse(a.timestamp) > Date.parse(b.timestamp);
@@ -107,7 +105,7 @@ async function getClientData() {
               dateOfLastBotMessage = messagesSentByBot[messagesSentByBot.length - 1].timestamp;
             }
 
-            const clientRow = [clientId, clientName, coachName, orgName, email, clientPhone, platform, signUpDate, followUpDate, tasksCompleted, tasksAssigned, totalMessagesSentByBot, totalMessagesSentByClient, totalMessagesSentByCoach, totalRequestsForHelp, dateOfLastBotMessage, nextCheckInDate, topic, askedToStop];
+            const clientRow = [clientId, clientName, coachName, orgName, email, clientPhone, platform, signUpDate, followUpDate, tasksCompleted, tasksAssigned, totalMessagesSentByBot, totalMessagesSentByClient, totalMessagesSentByCoach, totalRequestsForHelp, dateOfLastBotMessage, nextCheckInDate, topic];
             outputText = outputText + clientRow.join(',') + '\n';
           }
         }
