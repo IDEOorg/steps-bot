@@ -1,13 +1,14 @@
 const rp = require('request-promise');
 const fs = require('fs');
 const path = require('path');
+const fakeClients = require('./fakeclients.json');
 require('dotenv').config();
 
 getClientData();
 
 async function getClientData() {
   let outputText = '';
-  outputText += 'Client,Coach,Organization,Client Email,Client Phone,Client Platform,Client Sign Up Date,Client Follow Up Appointment,Tasks Completed,Tasks Assigned,Messages Sent By Bot,Messages Sent By Client,Messages Sent By Coach,Requests for Help, Date of Last Message From Bot, Date of Next Bot Message, Current Topic, User Asked To Stop\n';
+  outputText += 'ID,Client,Coach,Organization,Client Email,Client Phone,Client Platform,Client Sign Up Date,Client Follow Up Appointment,Tasks Completed,Tasks Assigned,Messages Sent By Bot,Messages Sent By Client,Messages Sent By Coach,Requests for Help, Date of Last Message From Bot, Date of Next Bot Message, Current Topic, User Asked To Stop\n';
   const orgs = await rp({
     method: 'GET',
     uri: 'https://steps-admin.herokuapp.com/api' + '/orgs/',
@@ -48,8 +49,8 @@ async function getClientData() {
       if (coach.org_id === orgId) {
         for (let k = 0; k < clients.length; k++) {
           const client = clients[k];
-          if (client.coach_id === coachId) {
-            fs.writeFileSync(path.resolve(__dirname, 'bagels.csv'), client.first_name + ' ' + client.last_name);
+          if (client.coach_id === coachId && !fakeClients.fakes.includes(client.id)) {
+            const clientId = client.id;
             const clientName = client.first_name + ' ' + client.last_name;
             const coachName = coach.first_name + ' ' + coach.last_name;
             const orgName = org.name;
@@ -106,7 +107,7 @@ async function getClientData() {
               dateOfLastBotMessage = messagesSentByBot[messagesSentByBot.length - 1].timestamp;
             }
 
-            const clientRow = [clientName, coachName, orgName, email, clientPhone, platform, signUpDate, followUpDate, tasksCompleted, tasksAssigned, totalMessagesSentByBot, totalMessagesSentByClient, totalMessagesSentByCoach, totalRequestsForHelp, dateOfLastBotMessage, nextCheckInDate, topic, askedToStop];
+            const clientRow = [clientId, clientName, coachName, orgName, email, clientPhone, platform, signUpDate, followUpDate, tasksCompleted, tasksAssigned, totalMessagesSentByBot, totalMessagesSentByClient, totalMessagesSentByCoach, totalRequestsForHelp, dateOfLastBotMessage, nextCheckInDate, topic, askedToStop];
             outputText = outputText + clientRow.join(',') + '\n';
           }
         }
