@@ -4,10 +4,6 @@ To get started:
 2) `npm install`
 Make your modifications, then push to Heroku (changes won't be applied locally because the FB and Twilio only recognize webhooks from this url https://stepsroobot.herokuapp.com).
 
-TODO:
-1) Document the flow of all the scripts
-2) Fix text out of order bug
-3) Send images via FB messenger
-4) Simultaneous tasks feature
-5) Complete all the scripts
-6) Code refactoring
+### Dependencies
+- Node 9.5.0
+- npm 4.6.1
