@@ -26,7 +26,7 @@ async function getClientData() {
     json: true
   });
   coaches = coaches.filter((coach) => {
-    return coach.coach_id === null
+    return coach.coach_id === null;
   })
   const clients = await rp({
     method: 'GET',
