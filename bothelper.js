@@ -159,7 +159,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
     topic = forceTopic;
   }
   const orgName = await api.getOrgName(userInfo.org_id);
-  const coachName = await api.getCoachName(userInfo.coach_id);
+  const coach = await api.getCoach(userInfo.coach_id);
   let viewedMedia = null;
   let userPlatformId = null;
   if (topic === null) {
@@ -258,7 +258,8 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
-  riveBot.setUservar(userPlatformId, 'coachName', coachName);
+  riveBot.setUservar(userPlatformId, 'coachName', coach.name);
+  riveBot.setUservar(userPlatformId, 'coachEmail', coach.email);
   riveBot.setUservar(userPlatformId, 'orgName', orgName);
   riveBot.setUservar(userPlatformId, 'taskNum', taskNum);
   riveBot.setUservar(userPlatformId, 'contentId', contentIdChosen);

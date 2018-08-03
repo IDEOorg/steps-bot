@@ -48,29 +48,6 @@ async function getOrgName(id) {
   return null;
 }
 
-async function getCoachName(id) {
-  let coach = await rp({
-    method: 'GET',
-    uri: assetUrls.url + '/users/' + id.toString(),
-    headers: {
-      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
-    }
-  }).catch((e) => {
-    console.log(e);
-    sgMail.send({
-      to: 'support@helloroo.zendesk.com',
-      from: 'no-reply@helloroo.org',
-      subject: 'Roo bot error',
-      text: `An error occurred on the bot server: \n ${e}`,
-    });
-  });
-  coach = JSON.parse(coach);
-  if (coach) {
-    return coach.first_name;
-  }
-  return null;
-}
-
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
@@ -412,7 +389,6 @@ function formatPhoneNumber(unformattedNumber) {
 module.exports = {
   getAllClients,
   getOrgName,
-  getCoachName,
   getCoach,
   getClientTasks,
   getAllMedia,

@@ -91,7 +91,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     client.fb_id = newFacebookId;
   }
 
-  if (topic !== 'recurring' && topic !== 'random') {
+  if (topic !== 'recurring' && topic !== 'random' && topic !== 'followup') {
     client.topic = topic;
   }
   if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {

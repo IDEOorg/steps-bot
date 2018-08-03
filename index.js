@@ -96,22 +96,43 @@ async function updateAllClients() {
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const checkIns = user.checkin_times;
+    const followUpAppointment = user.follow_up_date;
     const eligibleCheckIns = [];
+    let platform = null;
+    let userPlatformId = null;
+    if (user.platform === 'FBOOK') {
+      platform = 'fb';
+      userPlatformId = user.fb_id;
+    } else {
+      platform = 'sms';
+      userPlatformId = user.phone;
+    }
+    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now() && user.id === 759) {
+      bot.getResponse(platform, userPlatformId, 'startprompt', 'followup', null, null, null).then((response) => { // eslint-disable-line
+        sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
+          updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+            bot.resetVariables(userPlatformId);
+          }).catch((e) => {
+            console.log(e);
+          });
+        }).catch((e) => {
+          console.log(e);
+          updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+            bot.resetVariables(userPlatformId);
+          }).catch((err) => {
+            console.log(err);
+          });
+        });
+      }).catch((e) => {
+        console.log(e);
+      });
+    }
     if (checkIns) {
       for (let j = checkIns.length - 1; j >= 0; j--) {
         const checkIn = checkIns[j];
         if (checkIn.time < Date.now()) {
           eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
         }
-      }
-      let platform = null;
-      let userPlatformId = null;
-      if (user.platform === 'FBOOK') {
-        platform = 'fb';
-        userPlatformId = user.fb_id;
-      } else {
-        platform = 'sms';
-        userPlatformId = user.phone;
       }
       if (platform !== null && userPlatformId !== null) {
         for (let j = 0; j < eligibleCheckIns.length; j++) {
