@@ -107,7 +107,8 @@ async function updateAllClients() {
       platform = 'sms';
       userPlatformId = user.phone;
     }
-    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now() && user.id === 759) {
+    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) {
+      await sleep(2000); // eslint-disable-line
       bot.getResponse(platform, userPlatformId, 'startprompt', 'followup', null, null, null).then((response) => { // eslint-disable-line
         sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
           updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {

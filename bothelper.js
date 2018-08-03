@@ -258,7 +258,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
-  riveBot.setUservar(userPlatformId, 'coachName', coach.name);
+  riveBot.setUservar(userPlatformId, 'coachName', coach.first_name);
   riveBot.setUservar(userPlatformId, 'coachEmail', coach.email);
   riveBot.setUservar(userPlatformId, 'orgName', orgName);
   riveBot.setUservar(userPlatformId, 'taskNum', taskNum);
