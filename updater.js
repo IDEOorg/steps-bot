@@ -24,7 +24,8 @@ async function updateUserToDB(userPlatformId, platform, variables) {
     taskComplete,
     newFacebookId,
     userAskedToStop,
-    requestResolved
+    requestResolved,
+    removeFollowup
   } = variables;
   const client = await api.getUserDataFromDB(platform, userPlatformId);
   if (!client) {
@@ -38,6 +39,9 @@ async function updateUserToDB(userPlatformId, platform, variables) {
       currentTask = task;
       break;
     }
+  }
+  if (removeFollowup) {
+    client.follow_up_date = null;
   }
   if (client.checkin_times === null) {
     client.checkin_times = [];
