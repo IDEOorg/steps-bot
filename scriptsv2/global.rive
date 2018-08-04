@@ -5,4 +5,6 @@
   - Here's a link to your full work plan.\n<get workplanLink>
   + (coach|help)
   - {topic=help} {@startprompt}
+  + thanks
+  - No problem, <get username>!
 < topic
