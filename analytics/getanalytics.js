@@ -56,7 +56,7 @@ async function getClientData() {
             const orgName = org.name;
             const email = client.email;
             const clientPhone = client.phone;
-            const platform = client.platform;
+            const platform = client.platform ? client.platform : 'SMS';
             const signUpDate = client.created_at;
             const topic = client.topic;
             const followUpDate = client.follow_up_date;
