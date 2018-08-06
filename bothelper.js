@@ -38,7 +38,6 @@ function resetVariables(userPlatformId) {
 }
 
 async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUserPhone, coachHelpResponse, recurringTaskId) {
-  console.log(userMessage);
   const BOT_ID = 41;
   let userInfo = null;
   if (fbNewUserPhone) {
