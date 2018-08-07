@@ -142,6 +142,12 @@ async function updateAllClients() {
           await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
             if (response.dontSendMessage) {
+              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+                bot.resetVariables(userPlatformId);
+              }).catch((e) => {
+                console.log(e);
+              });
+            } else {
               sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
                 updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                   bot.resetVariables(userPlatformId);
@@ -155,12 +161,6 @@ async function updateAllClients() {
                 }).catch((err) => {
                   console.log(err);
                 });
-              });
-            } else {
-              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-                bot.resetVariables(userPlatformId);
-              }).catch((e) => {
-                console.log(e);
               });
             }
           }).catch((e) => {
