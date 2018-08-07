@@ -4,7 +4,7 @@
   + (e|i have a few edits)
   - No problem at all. Just send me your full revised message (with as many details as possible) so I can contact Coach <get coachName> and get some answers.<set resetHelp=true><set hours=8><set nextTopic=help><set nextMessage=pinguser>{topic=helpuserresponse}
   + (g|never mind)
-  - Okay, I've cancelled your assistance request. I'll be in touch soon!<set resetHelp=true>{topic=checkin}<set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
+  - Okay, I've cancelled your assistance request. I'll be in touch soon!<set resetHelp=true>{topic=checkin}<set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + *
   - <sms>Sorry, I didn't understand that. If you want me to send this to your coach, text the letter "S".\nIf you want to edit your response before I send it, text the letter "E". No longer need help? Text the letter "G".</sms>
   ^ <fb>Sorry, I didn't understand that. What would you like to do with your current response? ^template(`quickreply`, `Yes, send that`, `I have a few edits`, `Never mind`)</fb>

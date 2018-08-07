@@ -15,5 +15,5 @@
   + (b|im done)
   - {topic=done}{@ startprompt}
   + setvars
-  - <set days=1><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
+  - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
 < topic

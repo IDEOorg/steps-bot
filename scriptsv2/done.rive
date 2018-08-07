@@ -27,7 +27,7 @@
   + (y|ready for it now|yes send it now)
   - {topic=nexttask} {@ startprompt}
   + setvars
-  - <set taskComplete=true><set days=1><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
+  - <set taskComplete=true><set days=2><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
   - I'm a bit unclear on your last response.<send>
   ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "Send it tomorrow", "Y": "Yes, send it now"}`)</fb>

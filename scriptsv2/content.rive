@@ -26,5 +26,5 @@
   ^ <get contentDescription>\n<get contentUrl><send></sms>
   ^ Keep at it! {@ setvars}
   + setvars
-  - <set contentViewed=true><set days=1><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
+  - <set contentViewed=true><set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
 < topic
