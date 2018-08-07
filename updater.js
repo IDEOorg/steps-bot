@@ -86,6 +86,7 @@ async function updateUserToDB(userPlatformId, platform, variables) {
   }
   if (taskComplete) {
     currentTask.status = 'COMPLETED';
+    currentTask.date_complete = new Date();
     api.updateTask(currentTask.id, currentTask);
   }
   if (contentViewed) {
