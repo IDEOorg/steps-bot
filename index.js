@@ -141,20 +141,28 @@ async function updateAllClients() {
           // arguments for below function are wrong
           await sleep(2000); // eslint-disable-line
           bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
-            sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
+            if (response.dontSendMessage) {
+              sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
+                updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+                  bot.resetVariables(userPlatformId);
+                }).catch((e) => {
+                  console.log(e);
+                });
+              }).catch((e) => {
+                console.log(e);
+                updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
+                  bot.resetVariables(userPlatformId);
+                }).catch((err) => {
+                  console.log(err);
+                });
+              });
+            } else {
               updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
                 bot.resetVariables(userPlatformId);
               }).catch((e) => {
                 console.log(e);
               });
-            }).catch((e) => {
-              console.log(e);
-              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-                bot.resetVariables(userPlatformId);
-              }).catch((err) => {
-                console.log(err);
-              });
-            });
+            }
           }).catch((e) => {
             console.log(e);
           });
