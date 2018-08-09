@@ -23,7 +23,7 @@
     "moment-timezone": "^0.5.16",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "rivescript": "^1.19.0",
+    "rivescript": "^2.0.0-alpha.6",
     "twilio": "^3.17.2"
   },
   "devDependencies": {
