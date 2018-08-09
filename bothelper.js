@@ -70,13 +70,13 @@ async function getResponse(platform, userPlatformId, userMessage, topic, fbNewUs
       };
     }
   }
+  if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
+    await api.createMessage(null, userInfo.id, BOT_ID, userMessage, userInfo.topic);
+  }
   if (userMessage.toLowerCase().trim() === 'stop') {
     userInfo.checkin_times = [];
     await api.updateUser(userInfo.id, userInfo);
     return null;
-  }
-  if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
-    await api.createMessage(null, userInfo.id, BOT_ID, userMessage, userInfo.topic);
   }
 
   // fast forward script start
