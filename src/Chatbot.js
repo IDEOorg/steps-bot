@@ -1,4 +1,5 @@
 import api from './api';
+import Rivebot from './Rivebot';
 import constants from './constants';
 
 export default class {
@@ -9,6 +10,7 @@ export default class {
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
   }
+
   async getResponse(opts) {
     let {
       platform,
@@ -19,8 +21,11 @@ export default class {
       coachHelpResponse,
       recurringTaskId
     } = opts;
-
+    this.setPlatform(platform);
     await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload);
+    if (userPressedGetStartedOnFBPayload) {
+      this.client.fb_id = userPlatformId;
+    }
     if (!this.client) { // client does not exist
       this.setUnrecognizedClientResponse();
       return;
@@ -39,8 +44,21 @@ export default class {
       topic = ffPayload.topic;
       recurringTaskId = ffPayload.recurringTaskId;
     }
+    if (topic) {
+      this.client.topic = topic;
+    }
+    if (this.client.topic === null || this.client.topic === 'setupfb') {
+      this.assignTopicForNewUser();
+    }
     this.client.tasks = await api.getClientTasks(this.client.id);
-    // TODO Rivebot things
+    // const rivebot = new Rivebot();
+    // await rivebot.loadVarsToRiveBot({
+    //   client: this.client,
+    //   platform: this.platform,
+    //   userMessage,
+    //   userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
+    //   recurringTaskId
+    // });
   }
 
   async loadClientData(userPlatformId, userPressedGetStartedOnFBPayload) {
@@ -140,5 +158,19 @@ export default class {
       topic,
       recurringTaskId
     };
+  }
+
+  assignTopicForNewUser() {
+    // this.platform is the platform the bot received the message from, this.client.platform is the platform the client should be using
+    if (this.client.platform === 'FBOOK' && this.platform === constants.SMS) {
+      this.client.topic = 'setupfb';
+    } else if (this.client.platform === 'FBOOK' && this.platform === constants.FB) {
+      this.client.topic = 'welcome';
+    } else if ((this.client.platform === 'SMS' || this.client.platform === null) && this.platform === constants.SMS) {
+      this.client.topic = 'welcome';
+    } else { // client is supposed to use SMS but somehow got access to Facebook
+      this.client.topic = 'welcome';
+      this.shouldMessageClient = false;
+    }
   }
 }

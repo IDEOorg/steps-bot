@@ -203,7 +203,6 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
       break;
     }
   }
-  // TODO handle all tasks completed scenario
   if (currentTask === null && tasks.length > 0) {
     topic = 'ultimatedone';
   }

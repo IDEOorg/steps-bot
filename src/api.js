@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const assetUrls = require('../data/assets-manifest.json');
+const assetUrls = require('./assets-manifest.json');
 const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('../tracker');
 require('dotenv').config();
@@ -22,7 +22,7 @@ async function getAllClients() {
 }
 
 async function getOrgName(id) {
-  let org = await rp({
+  const org = await rp({
     method: 'GET',
     uri: assetUrls.url + '/orgs/' + id.toString(),
     headers: {

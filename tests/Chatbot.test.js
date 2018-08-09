@@ -83,3 +83,43 @@ test('fast forward returns message saying there are no more checkins to fast for
 });
 
 /* TODO ff functionality for recurring tasks, make sure they're not removed until they're supposed to be */
+
+test('assignTopicForNewUser should assign the proper topic for new users', () => {
+  const bot = new Chatbot();
+  bot.client = {
+    platform: 'FBOOK',
+    topic: 'setupfb',
+  };
+  bot.platform = 'fb';
+  bot.assignTopicForNewUser();
+  expect(bot.client.topic).toEqual('welcome');
+
+  bot.client = {
+    platform: 'FBOOK',
+    topic: null
+  };
+  bot.assignTopicForNewUser();
+  expect(bot.client.topic).toEqual('welcome');
+
+  bot.platform = 'sms';
+  bot.client = {
+    platform: 'FBOOK',
+    topic: null
+  };
+  bot.assignTopicForNewUser();
+  expect(bot.client.topic).toEqual('setupfb');
+
+  bot.client = {
+    platform: 'SMS',
+    topic: null
+  };
+  bot.assignTopicForNewUser();
+  expect(bot.client.topic).toEqual('welcome');
+
+  bot.client = {
+    platform: null,
+    topic: null
+  };
+  bot.assignTopicForNewUser();
+  expect(bot.client.topic).toEqual('welcome');
+});
