@@ -42,3 +42,44 @@ test('when user asks to stop, user no longer receives checkins and bot doesn\'t 
   expect(bot.shouldMessageClient).toEqual(false);
   expect(bot.shouldUpdateClient).toEqual(true);
 });
+
+test('userAskedToFastForward returns true when user types ff', async () => {
+  const bot = new Chatbot();
+  let outcome = bot.userAskedToFastForward('ff');
+  expect(outcome).toEqual(true);
+  outcome = bot.userAskedToFastForward('ffs');
+  expect(outcome).toEqual(false);
+});
+
+test('fast forward functionality returns desired payload when there are checkin times', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    checkin_times: [
+      {
+        topic: 'content',
+        message: 'startprompt',
+        time: 1533321000526
+      },
+      {
+        topic: 'checkin',
+        message: 'startprompt',
+        time: 23480192835092385
+      }
+    ]
+  };
+  const payload = bot.fastForwardUser();
+  expect(payload.topic).toEqual('content');
+  expect(payload.userMessage).toEqual('startprompt');
+  expect(payload.recurringTaskId).toEqual(null);
+  expect(bot.client.checkin_times.length).toEqual(1);
+});
+
+test('fast forward returns message saying there are no more checkins to fast forward when there are no checkins', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    checkin_times: null
+  };
+  expect(bot.fastForwardUser()).toEqual(null);
+});
+
+/* TODO ff functionality for recurring tasks, make sure they're not removed until they're supposed to be */

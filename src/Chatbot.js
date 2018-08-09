@@ -10,7 +10,7 @@ export default class {
     this.shouldUpdateClient = true;
   }
   async getResponse(opts) {
-    const {
+    let {
       platform,
       userPlatformId,
       userMessage,
@@ -29,8 +29,20 @@ export default class {
     if (this.userAskedToStop(userMessage)) {
       return;
     }
-    
+    if (this.userAskedToFastForward(userMessage)) {
+      const ffPayload = this.fastForwardUser();
+      if (ffPayload === null) {
+        this.shouldMessageClient = false;
+        return;
+      }
+      userMessage = ffPayload.userMessage;
+      topic = ffPayload.topic;
+      recurringTaskId = ffPayload.recurringTaskId;
+    }
+    this.client.tasks = await api.getClientTasks(this.client.id);
+    // TODO Rivebot things
   }
+
   async loadClientData(userPlatformId, userPressedGetStartedOnFBPayload) {
     let userInfo = null;
     if (userPressedGetStartedOnFBPayload) {
@@ -84,5 +96,49 @@ export default class {
     if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
       await api.createMessage(null, this.client.id, constants.BOT_ID, userMessage, this.client.topic);
     }
+  }
+
+  userAskedToFastForward(userMessage) { // eslint-disable-line
+    if (userMessage.toLowerCase().trim() === 'ff') {
+      return true;
+    }
+    return false;
+  }
+
+  fastForwardUser() {
+    const checkInTimes = this.client.checkin_times;
+    let userMessage = null;
+    let topic = null;
+    let recurringTaskId = null;
+    let soonestTime = Number.MAX_VALUE;
+    let soonestCheckInIndex = null;
+    if (!checkInTimes) {
+      return null;
+    }
+    for (let i = 0; i < checkInTimes.length; i++) {
+      const checkInTime = checkInTimes[i];
+      const { time } = checkInTime;
+      if (time !== null && time < soonestTime) {
+        soonestTime = time;
+        soonestCheckInIndex = i;
+      }
+    }
+    if (soonestCheckInIndex !== null) {
+      userMessage = checkInTimes[soonestCheckInIndex].message;
+      topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
+      recurringTaskId = checkInTimes[soonestCheckInIndex].task_id;
+      if (!recurringTaskId) {
+        recurringTaskId = null;
+      }
+      this.client.checkin_times.splice(soonestCheckInIndex, 1);
+      this.client.topic = topic;
+    } else {
+      return null;
+    }
+    return {
+      userMessage,
+      topic,
+      recurringTaskId
+    };
   }
 }
