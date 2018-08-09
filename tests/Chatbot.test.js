@@ -43,6 +43,18 @@ test('when user asks to stop, user no longer receives checkins and bot doesn\'t 
   expect(bot.shouldUpdateClient).toEqual(true);
 });
 
+test('when user asks to stop, bot still sends message to user if user is on fb platform', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    checkin_times: [{ something: 'something' }]
+  };
+  bot.platform = 'fb';
+  bot.userAskedToStop('stop');
+  expect(bot.client.checkin_times).toEqual([]);
+  expect(bot.shouldMessageClient).toEqual(true);
+  expect(bot.shouldUpdateClient).toEqual(true);
+});
+
 test('userAskedToFastForward returns true when user types ff', async () => {
   const bot = new Chatbot();
   let outcome = bot.userAskedToFastForward('ff');

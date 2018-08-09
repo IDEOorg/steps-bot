@@ -13,30 +13,32 @@ export default class {
 
   async getResponse(opts) {
     let {
-      platform,
-      userPlatformId,
+      platform, // eslint-disable-line
+      userPlatformId, // eslint-disable-line
       userMessage,
       topic,
-      userPressedGetStartedOnFBPayload,
+      userPressedGetStartedOnFBPayload, // eslint-disable-line
       coachHelpResponse,
       recurringTaskId
     } = opts;
-    this.setPlatform(platform);
-    await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload);
-    if (userPressedGetStartedOnFBPayload) {
+    this.setPlatform(platform); // stores the platform the bot received the message from
+    await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload); // gets and stores the client's info from the api
+    if (userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
       this.client.fb_id = userPlatformId;
     }
-    if (!this.client) { // client does not exist
+    if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
       return;
     }
-    this.addMessageToUserLog(userMessage);
+
+    this.addMessageToUserLog(userMessage); // adds the user's message to the Client Message API
     if (this.userAskedToStop(userMessage)) {
+      this.handleIfUserAskedToStop();
       return;
     }
     if (this.userAskedToFastForward(userMessage)) {
       const ffPayload = this.fastForwardUser();
-      if (ffPayload === null) {
+      if (ffPayload === null) { // if there's no checkin to fast forward to, don't send a message
         this.shouldMessageClient = false;
         return;
       }
@@ -44,21 +46,24 @@ export default class {
       topic = ffPayload.topic;
       recurringTaskId = ffPayload.recurringTaskId;
     }
-    if (topic) {
+    if (topic) { // manually set the client's topic if a checkin time has hit or the user fast forwarded
       this.client.topic = topic;
     }
-    if (this.client.topic === null || this.client.topic === 'setupfb') {
+    if (this.client.topic === null || this.client.topic === 'setupfb') { // handles new users
       this.assignTopicForNewUser();
     }
     this.client.tasks = await api.getClientTasks(this.client.id);
-    // const rivebot = new Rivebot();
-    // await rivebot.loadVarsToRiveBot({
-    //   client: this.client,
-    //   platform: this.platform,
-    //   userMessage,
-    //   userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
-    //   recurringTaskId
-    // });
+    const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(userMessage); // pull all the remaining data rivebot needs to send a reply
+    this.setUserIfWorkplanComplete(remainingRivebotVars.currentTask);
+    const rivebotVars = Object.assign({
+      client: this.client,
+      platform: this.platform,
+      userMessage,
+      userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
+      recurringTaskId
+    }, remainingRivebotVars);
+    const rivebot = new Rivebot();
+    await rivebot.loadVarsToRiveBot(rivebotVars);
   }
 
   async loadClientData(userPlatformId, userPressedGetStartedOnFBPayload) {
@@ -101,13 +106,18 @@ export default class {
     };
   }
 
-  userAskedToStop(userMessage) {
+  userAskedToStop(userMessage) { // eslint-disable-line
     if (userMessage.toLowerCase().trim() === 'stop') {
-      this.client.checkin_times = [];
-      this.shouldMessageClient = false;
       return true;
     }
     return false;
+  }
+
+  handleIfUserAskedToStop() {
+    this.client.checkin_times = [];
+    if (this.platform !== constants.FB) {
+      this.shouldMessageClient = false;
+    }
   }
 
   async addMessageToUserLog(userMessage) {
@@ -171,6 +181,128 @@ export default class {
     } else { // client is supposed to use SMS but somehow got access to Facebook
       this.client.topic = 'welcome';
       this.shouldMessageClient = false;
+    }
+  }
+
+  async getRemainingVarsRivebotNeeds(userMessage) {
+    const orgName = await api.getOrgName(this.client.org_id);
+    const coach = await api.getCoach(this.client.coach_id);
+    const {
+      currentTask,
+      currentTaskSteps,
+      currentTaskDescription
+    } = this.getCurrentTaskData(this.client.tasks);
+    const taskNum = this.getTaskNum();
+    const {
+      contentIdChosen,
+      contentText,
+      contentUrl,
+      contentImgUrl,
+      contentDescription
+    } = await this.loadStoryContent(userMessage);
+    return {
+      orgName,
+      coach,
+      currentTask,
+      currentTaskSteps,
+      currentTaskDescription,
+      taskNum,
+      contentIdChosen,
+      contentText,
+      contentUrl,
+      contentImgUrl,
+      contentDescription
+    };
+  }
+
+  getCurrentTaskData(tasks) { //eslint-disable-line
+    let currentTask = null;
+    let currentTaskDescription = null;
+    let currentTaskSteps = null;
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+        let steps = tasks[i].steps; // eslint-disable-line
+        if (steps === null) {
+          steps = [];
+        }
+        currentTask = tasks[i].title;
+        currentTaskSteps = steps;
+        currentTaskDescription = tasks[i].description;
+        break;
+      }
+    }
+
+    if (currentTaskDescription && currentTaskDescription.length !== 0) {
+      currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
+    }
+
+    if (currentTaskSteps !== null) {
+      currentTaskSteps = currentTaskSteps.map((step, i) => {
+        return `▪️ Step ${i + 1}: ${step.text}`;
+      });
+      currentTaskSteps = currentTaskSteps.join('\n\n');
+    }
+    return {
+      currentTask,
+      currentTaskDescription,
+      currentTaskSteps
+    };
+  }
+
+  getTaskNum() { // eslint-disable-line
+    const tasks = this.client.tasks;
+    let taskNum = 0;
+    for (let i = 0; i < tasks.length; i++) {
+      if (!tasks[i].recurring) {
+        taskNum = i + 1;
+      }
+      if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+        break;
+      }
+    }
+    return taskNum;
+  }
+
+  async loadStoryContent(userMessage) { //eslint-disable-line
+    let contentIdChosen = null;
+    let contentText = null;
+    let contentUrl = null;
+    let contentImgUrl = null;
+    let contentDescription = null;
+    let viewedMedia = null;
+    const formattedUserMessage = userMessage.toLowerCase().trim();
+    if (this.client.topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
+      viewedMedia = await api.getViewedMediaIds(this.client.id);
+      // TODO handle case where user has viewed all media
+      const allContent = await api.getAllMedia();
+      for (let i = 0; i < allContent.length; i++) {
+        const content = allContent[i];
+        if (!viewedMedia || !viewedMedia.includes(content.id)) {
+          contentIdChosen = content.id;
+          contentText = content.title;
+          contentUrl = await buildContentUrl(content, userInfo); // eslint-disable-line
+          contentImgUrl = content.image;
+          contentDescription = content.description;
+          break;
+        }
+      }
+    }
+    if (contentIdChosen === null) {
+      this.shouldMessageClient = false;
+    }
+    return {
+      contentIdChosen,
+      contentText,
+      contentUrl,
+      contentImgUrl,
+      contentDescription
+    };
+  }
+
+  setUserIfWorkplanComplete(currentTask) {
+    if (currentTask === null && this.client.tasks.length > 0) {
+      this.client.topic = 'ultimatedone';
+      this.client.checkin_times = [];
     }
   }
 }
