@@ -1,4 +1,4 @@
-const api = require('../apihelper');
+const api = require('../src/Api');
 
 test('getAllClients works', async () => {
   const data = await api.getAllClients();

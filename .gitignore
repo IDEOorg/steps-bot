@@ -3,4 +3,5 @@ node_modules
 db/seed.json
 utilstest.js
 analytics/*.csv
+coverage
 *~
