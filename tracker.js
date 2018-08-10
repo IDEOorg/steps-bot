@@ -29,3 +29,7 @@ exports.trackMediaClicked = function trackMediaClicked(req) {
 exports.trackMessageSent = function trackMessageSent(body) {
   keen.recordEvent('clientResponse', body);
 };
+
+exports.trackStopRequest = function trackStopRequest(body) {
+  keen.recordEvent('stopRequest', body);
+};
