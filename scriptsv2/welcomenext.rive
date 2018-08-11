@@ -4,7 +4,7 @@
 ^ I'll be sending you reminders and helpful links based on the work plan you created with coach <get coachName>. Here’s a video your coach may have shown you. It explains what I’m all about.\n<get introVideoLink><send>
 ^ ^image("<get workplanImgUrl>")<send>
 ^ And here's a link to your full work plan. It's a big picture of the small steps you'll take.\n<get workplanLink><send>
-^ Lastly, you deserve a round of applause for starting today!\nI'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!<send>
+^ Lastly, you deserve a round of applause!\nI'll be in touch tomorrow with instructions for the first action item on your work plan. Talk soon!<send>
 ^ ^image("<get introCelebrateImgUrl>")<send>
 ^ {topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=startprompt>
 < topic
