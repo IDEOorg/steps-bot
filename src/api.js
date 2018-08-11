@@ -1,7 +1,9 @@
+import constants from './constants';
+
 const rp = require('request-promise');
 const assetUrls = require('./assets-manifest.json');
 const sgMail = require('@sendgrid/mail');
-const { trackMessageSent } = require('../tracker');
+const { trackMessageSent } = require('./tracker');
 require('dotenv').config();
 
 const botId = 41;
@@ -251,18 +253,21 @@ async function updateTask(id, taskData) {
 }
 
 async function markMediaAsViewed(clientId, mediaId) {
-  const media = await rp({
-    method: 'POST',
-    uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
-    json: true,
-    headers: {
-      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
-    }
-  }).catch((e) => {
-    console.log(e);
-    sendErrorToZendesk(e);
-  });
-  return media;
+  if (mediaId) {
+    const media = await rp({
+      method: 'POST',
+      uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
+      json: true,
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      }
+    }).catch((e) => {
+      console.log(e);
+      sendErrorToZendesk(e);
+    });
+    return media;
+  }
+  return null;
 }
 
 async function getUserFromId(id) {
@@ -298,14 +303,14 @@ async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (platform === 'sms' && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
+    if (platform === constants.SMS && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
       client.phone = userPlatformId;
       return client;
     }
-    if (platform === 'fb' && client.fb_id === userPlatformId) {
+    if (platform === constants.FB && client.fb_id === userPlatformId) {
       return client;
     }
-    if (platform === 'fb' && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
+    if (platform === constants.FB && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
       return client;
     }
   }

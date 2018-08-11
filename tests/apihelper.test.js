@@ -1,4 +1,4 @@
-const api = require('../src/Api');
+const api = require('../src/api');
 
 test('getAllClients works', async () => {
   const data = await api.getAllClients();
@@ -19,13 +19,8 @@ test('getOrgName works', async () => {
   expect(data).toEqual('IDEO.org');
 });
 
-test('getCoachName returns the coach\'s first name', async () => {
-  const data = await api.getCoachName(21);
-  expect(data).toEqual('Matthew');
-});
-
 test('getClientTasks returns the client\'s tasks', async () => {
-  const data = await api.getClientTasks(8);
+  const data = await api.getClientTasks(717);
   expect(data.length).toBeGreaterThan(0);
   expect(data[0]).toHaveProperty('id');
   expect(data[0]).toHaveProperty('title');

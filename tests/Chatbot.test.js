@@ -1,5 +1,6 @@
 import Chatbot from '../src/Chatbot';
 import constants from '../src/constants';
+import api from '../src/api';
 
 test('setPlatform loads platform into chatbot', () => {
   const bot = new Chatbot();
@@ -37,7 +38,9 @@ test('when user asks to stop, user no longer receives checkins and bot doesn\'t 
   bot.client = {
     checkin_times: [{ something: 'something' }]
   };
-  bot.userAskedToStop('stop');
+  if (bot.userAskedToStop('stop')) {
+    bot.handleIfUserAskedToStop();
+  }
   expect(bot.client.checkin_times).toEqual([]);
   expect(bot.shouldMessageClient).toEqual(false);
   expect(bot.shouldUpdateClient).toEqual(true);
@@ -49,7 +52,9 @@ test('when user asks to stop, bot still sends message to user if user is on fb p
     checkin_times: [{ something: 'something' }]
   };
   bot.platform = 'fb';
-  bot.userAskedToStop('stop');
+  if (bot.userAskedToStop('stop')) {
+    bot.handleIfUserAskedToStop();
+  }
   expect(bot.client.checkin_times).toEqual([]);
   expect(bot.shouldMessageClient).toEqual(true);
   expect(bot.shouldUpdateClient).toEqual(true);
@@ -134,4 +139,156 @@ test('assignTopicForNewUser should assign the proper topic for new users', () =>
   };
   bot.assignTopicForNewUser();
   expect(bot.client.topic).toEqual('welcome');
+});
+
+const tasks = [
+  {
+    id: 779,
+    title: 'Buy cake',
+    category: 'custom',
+    description: 'Cake good. ',
+    status: 'COMPLETED',
+    recurring: null,
+    steps: [
+      {
+        text: 'Earn dollar. '
+      },
+      {
+        text: 'Eat cake. '
+      }
+    ],
+    order: 0,
+    original_task_id: null
+  },
+  {
+    id: 422,
+    title: 'Recurring Task',
+    description: 'If you want or need more income, you might be able to get it from current employment.',
+    status: 'ACTIVE',
+    recurring: {
+      frequency: 1,
+      duration: 30
+    },
+    steps: [
+      {
+        text: 'Read the employee handbook to learn about the process of getting a raise at your company.',
+        note: null
+      }
+    ],
+    order: 1
+  },
+  {
+    id: 777,
+    title: 'Ask for a raise at work',
+    description: 'If you want or need more income, you might be able to get it from current employment.',
+    status: 'ACTIVE',
+    recurring: null,
+    steps: [
+      {
+        text: 'Read the employee handbook to learn about the process of getting a raise at your company.',
+        note: null
+      },
+      {
+        text: 'Schedule a time to speak with your manager, or once you see that they are available ask if they can speak privately.',
+        note: null
+      }
+    ],
+    order: 2
+  }
+];
+
+test('getCurrentTaskData gets correct task data', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    tasks: []
+  };
+  const noTaskDataOutput = bot.getCurrentTaskData();
+  expect(noTaskDataOutput.currentTask).toEqual(null);
+  expect(noTaskDataOutput.currentTaskSteps).toEqual(null);
+  expect(noTaskDataOutput.currentTaskDescription).toEqual(null);
+  bot.client = {
+    tasks
+  };
+  const taskDataOutput = bot.getCurrentTaskData();
+  expect(taskDataOutput.currentTask).toEqual('Ask for a raise at work');
+  expect(taskDataOutput.currentTaskDescription).toContain('Why it matters');
+  expect(taskDataOutput.currentTaskDescription).toContain('If you want or need more');
+  expect(taskDataOutput.currentTaskSteps).toContain('Step 1');
+  expect(taskDataOutput.currentTaskSteps).toContain('Read the employee handbook');
+});
+
+test('getTaskNum gets correct task num', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    tasks
+  };
+  expect(bot.getTaskNum()).toEqual(3);
+  bot.client = {
+    tasks: []
+  };
+  expect(bot.getTaskNum()).toEqual(0);
+});
+
+test('setUserIfWorkplanComplete works', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    topic: null,
+    checkin_times: [{ test: 1 }],
+    tasks: [
+      { something: 1 }
+    ]
+  };
+  bot.setUserIfWorkplanComplete(null);
+  expect(bot.client.topic).toEqual('ultimatedone');
+  expect(bot.client.checkin_times).toEqual([]);
+});
+
+test('loadStoryContent doesn\'t send anything if all content has been viewed', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    id: 1033,
+    topic: 'content'
+  };
+  const payload = await bot.loadStoryContent('startprompt');
+  expect(bot.shouldMessageClient).toEqual(false);
+  expect(payload.contentIdChosen).toEqual(null);
+  expect(payload.contentText).toEqual(null);
+  bot.client = {
+    id: 1035,
+    topic: 'content'
+  };
+});
+
+test('loadStoryContent loads proper content', async () => {
+  const bot = new Chatbot();
+  bot.client = {
+    id: 1035,
+    topic: 'content'
+  };
+  const payload = await bot.loadStoryContent('startprompt');
+  expect(bot.shouldMessageClient).toEqual(true);
+  expect(payload.contentIdChosen).toEqual(44);
+  expect(payload.contentText).toEqual('Gail\'s Story');
+  expect(payload.contentDescription).toContain('Gail');
+  expect(payload.contentUrl).toContain('bit');
+  expect(payload.contentImgUrl).toContain('aws');
+});
+
+test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () => {
+  const client = await api.getUserDataFromDB('fb', '1035');
+  const bot = new Chatbot();
+  bot.client = client;
+  bot.client.tasks = await api.getClientTasks(bot.client.id);
+  const payload = await bot.getRemainingVarsRivebotNeeds('startprompt');
+  expect(payload.orgName).toEqual('IDEO.org');
+  expect(payload.coach.first_name).toEqual('Michael');
+  expect(payload.currentTask).toContain('Consider enrolling in');
+  expect(payload.currentTaskSteps).toContain('DMP');
+  expect(payload.currentTaskDescription).toContain('DMP');
+  expect(payload.taskNum).toEqual(1);
+  expect(payload.contentIdChosen).toEqual(44);
+  expect(payload.contentText).toEqual('Gail\'s Story');
+  expect(payload.contentDescription).toContain('Gail');
+  expect(payload.contentUrl).toContain('bit');
+  expect(payload.contentImgUrl).toContain('aws');
 });

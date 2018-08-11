@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const assetUrls = require('./data/assets-manifest.json');
+const assetUrls = require('./src/assets-manifest.json');
 const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('./tracker');
 require('dotenv').config();

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const RiveScript = require('rivescript');
-const assetUrls = require('./data/assets-manifest.json');
+const assetUrls = require('./src/assets-manifest.json');
 const api = require('./apihelper');
 const sgMail = require('@sendgrid/mail');
 
@@ -448,12 +448,12 @@ async function buildContentUrl(content, user) {
   try {
     bitlyUrl = await bitly.shorten(redirectUrl);
   } catch (err) {
-    console.error(err);
+    console.error('Unable to create Bitly link');
     sgMail.send({
       to: 'support@helloroo.zendesk.com',
       from: 'no-reply@helloroo.org',
       subject: `Bitly error - ${Date.now()}`,
-      text: `Unable to creat Bitly link for ${content.url}. \n Here is the error: ${err}`,
+      text: `Unable to create Bitly link for ${content.url}. \n Here is the error: ${err}`,
     });
   }
 

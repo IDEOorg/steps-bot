@@ -1,6 +1,7 @@
 import api from './api';
 import Rivebot from './Rivebot';
 import constants from './constants';
+import { buildContentUrl } from './tracker';
 
 export default class {
   constructor() {
@@ -21,6 +22,8 @@ export default class {
       coachHelpResponse,
       recurringTaskId
     } = opts;
+
+    userMessage = formatUserMessage(userMessage);
     this.setPlatform(platform); // stores the platform the bot received the message from
     await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload); // gets and stores the client's info from the api
     if (userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
@@ -52,7 +55,7 @@ export default class {
     if (this.client.topic === null || this.client.topic === 'setupfb') { // handles new users
       this.assignTopicForNewUser();
     }
-    this.client.tasks = await api.getClientTasks(this.client.id);
+    this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
     const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(userMessage); // pull all the remaining data rivebot needs to send a reply
     this.setUserIfWorkplanComplete(remainingRivebotVars.currentTask);
     const rivebotVars = Object.assign({
@@ -66,6 +69,7 @@ export default class {
     await rivebot.loadVarsToRiveBot(rivebotVars);
   }
 
+  /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
   async loadClientData(userPlatformId, userPressedGetStartedOnFBPayload) {
     let userInfo = null;
     if (userPressedGetStartedOnFBPayload) {
@@ -107,7 +111,7 @@ export default class {
   }
 
   userAskedToStop(userMessage) { // eslint-disable-line
-    if (userMessage.toLowerCase().trim() === 'stop') {
+    if (userMessage === 'stop') {
       return true;
     }
     return false;
@@ -127,7 +131,7 @@ export default class {
   }
 
   userAskedToFastForward(userMessage) { // eslint-disable-line
-    if (userMessage.toLowerCase().trim() === 'ff') {
+    if (userMessage === 'ff') {
       return true;
     }
     return false;
@@ -215,10 +219,11 @@ export default class {
     };
   }
 
-  getCurrentTaskData(tasks) { //eslint-disable-line
+  getCurrentTaskData() { //eslint-disable-line
     let currentTask = null;
     let currentTaskDescription = null;
     let currentTaskSteps = null;
+    const tasks = this.client.tasks;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
         let steps = tasks[i].steps; // eslint-disable-line
@@ -270,17 +275,15 @@ export default class {
     let contentImgUrl = null;
     let contentDescription = null;
     let viewedMedia = null;
-    const formattedUserMessage = userMessage.toLowerCase().trim();
-    if (this.client.topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
+    if ((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic' || userMessage === 'ff') {
       viewedMedia = await api.getViewedMediaIds(this.client.id);
-      // TODO handle case where user has viewed all media
       const allContent = await api.getAllMedia();
       for (let i = 0; i < allContent.length; i++) {
         const content = allContent[i];
         if (!viewedMedia || !viewedMedia.includes(content.id)) {
           contentIdChosen = content.id;
           contentText = content.title;
-          contentUrl = await buildContentUrl(content, userInfo); // eslint-disable-line
+          contentUrl = await buildContentUrl(content, this.client); // eslint-disable-line
           contentImgUrl = content.image;
           contentDescription = content.description;
           break;
@@ -305,4 +308,11 @@ export default class {
       this.client.checkin_times = [];
     }
   }
+}
+
+function formatUserMessage(userMessage) {
+  if (userMessage) {
+    return userMessage.toLowerCase().trim();
+  }
+  return 'startprompt'; // should never reach this unless something unexpected happens
 }
