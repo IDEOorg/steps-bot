@@ -6,7 +6,7 @@ const sgMail = require('@sendgrid/mail');
 
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
-const { trackMediaSent } = require('./tracker');
+const { trackMediaSent } = require('./src/tracker');
 
 const token = process.env.BITLY_TOKEN; // see mepler if you don't have this in your .env file
 const bitly = new BitlyClient(token);

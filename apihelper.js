@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 const assetUrls = require('./src/assets-manifest.json');
 const sgMail = require('@sendgrid/mail');
-const { trackMessageSent } = require('./tracker');
+const { trackMessageSent } = require('./src/tracker');
 require('dotenv').config();
 
 const botId = 41;
