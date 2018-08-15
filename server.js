@@ -27,6 +27,7 @@ function routes(app, fbEndpoint, twilioController, getCoachResponse) {
   // Perform the FB webhook verification handshake with your verify token
   app.get('/facebook/receive', (req, res) => {
     if (req.query['hub.mode'] === 'subscribe') {
+      console.log('reached verification stage');
       if (req.query['hub.verify_token'] === process.env.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
       } else {
