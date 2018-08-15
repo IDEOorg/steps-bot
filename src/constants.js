@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   FB: 'fb',
   SMS: 'sms',
   BOT_ID: 41,

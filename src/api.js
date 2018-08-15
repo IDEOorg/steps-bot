@@ -1,4 +1,4 @@
-import constants from './constants';
+const constants = require('./constants');
 
 const rp = require('request-promise');
 const assetUrls = require('./assets-manifest.json');

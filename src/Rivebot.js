@@ -1,10 +1,9 @@
-import constants from './constants';
-import assetUrls from './assets-manifest.json';
-
+const constants = require('./constants');
+const assetUrls = require('./assets-manifest.json');
 const path = require('path');
 const RiveScript = require('rivescript');
 
-export default class {
+module.exports = class Rivebot {
   constructor() {
     this.rivebot = new RiveScript();
   }
@@ -207,7 +206,7 @@ export default class {
     }
     finalMessages.push(messageToPush);
   }
-}
+};
 
 function getRandomItemFromArray(array) {
   if (array.length) {

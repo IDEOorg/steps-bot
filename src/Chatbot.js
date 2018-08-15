@@ -1,9 +1,9 @@
-import api from './api';
-import Rivebot from './Rivebot';
-import constants from './constants';
-import { buildContentUrl } from './tracker';
+const api = require('./api');
+const Rivebot = require('./Rivebot');
+const constants = require('./constants');
+const { buildContentUrl } = require('./tracker');
 
-export default class {
+module.exports = class Chatbot {
   constructor() {
     this.platform = null;
     this.client = null;
