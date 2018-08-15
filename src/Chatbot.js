@@ -322,7 +322,7 @@ module.exports = class Chatbot {
       this.client.checkin_times = [];
     }
   }
-}
+};
 
 function formatUserMessage(userMessage) {
   if (userMessage) {

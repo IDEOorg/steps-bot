@@ -123,7 +123,7 @@ async function deleteUser(id) {
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
-    }).catch((e) => {
+    }).catch(() => {
       console.log(viewed.id + ' not deleted');
       // sgMail.send({
       //   to: 'support@helloroo.zendesk.com',
@@ -139,7 +139,7 @@ async function deleteUser(id) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
+  }).catch(() => {
     console.log('client not deleted');
     // sgMail.send({
     //   to: 'support@helloroo.zendesk.com',

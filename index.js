@@ -1,4 +1,4 @@
-import Chatbot from './src/Chatbot';
+const Chatbot = require('./src/Chatbot');
 
 require('dotenv').config();
 const bot = require('./bothelper');
