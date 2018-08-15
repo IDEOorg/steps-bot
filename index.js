@@ -1,3 +1,5 @@
+import Chatbot from './src/Chatbot';
+
 require('dotenv').config();
 const bot = require('./bothelper');
 const sender = require('./senderhelper');
@@ -36,24 +38,14 @@ function fbEndpoint(req, res) {
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop and get you banned on fb messenger
   }
-  // get message payload here for new users
-  bot.getResponse('fb', userPlatformId, userMessage, null, fbNewUserPhone).then((response) => {
-    sender.sendReply('fb', userPlatformId, response.messages).then(() => {
-      if (response.variables) {
-        const idToUpdate = fbNewUserPhone || userPlatformId;
-        updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
-          bot.resetVariables(userPlatformId);
-        });
-      }
-    }).catch((e) => {
-      if (response.variables) {
-        const idToUpdate = fbNewUserPhone || userPlatformId;
-        updater.updateUserToDB(idToUpdate, 'fb', response.variables).then(() => {
-          bot.resetVariables(userPlatformId);
-        });
-      }
-      console.log(e);
-    });
+  Chatbot.getResponse({
+    platform: 'fb',
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload: fbNewUserPhone
+  }).then((response) => {
+    console.log('***********response*********');
+    console.log(response);
   });
 }
 
