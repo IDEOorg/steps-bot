@@ -19,7 +19,6 @@ export default class {
       userMessage,
       topic,
       userPressedGetStartedOnFBPayload, // eslint-disable-line
-      coachHelpResponse,
       recurringTaskId
     } = opts;
 
@@ -31,19 +30,19 @@ export default class {
     }
     if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
-      return;
+      return null;
     }
 
     this.addMessageToUserLog(userMessage); // adds the user's message to the Client Message API
     if (this.userAskedToStop(userMessage)) {
       this.handleIfUserAskedToStop();
-      return;
+      return null;
     }
     if (this.userAskedToFastForward(userMessage)) {
       const ffPayload = this.fastForwardUser();
       if (ffPayload === null) { // if there's no checkin to fast forward to, don't send a message
         this.shouldMessageClient = false;
-        return;
+        return null;
       }
       userMessage = ffPayload.userMessage;
       topic = ffPayload.topic;
@@ -56,17 +55,30 @@ export default class {
       this.assignTopicForNewUser();
     }
     this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
-    const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(userMessage); // pull all the remaining data rivebot needs to send a reply
+    const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(opts); // pull all the remaining data rivebot needs to send a reply
+    let recurringTaskContent = null;
+    if (recurringTaskId) {
+      const recurringTask = await api.getTask(recurringTaskId);
+      recurringTaskContent = recurringTask.title;
+    }
     this.setUserIfWorkplanComplete(remainingRivebotVars.currentTask);
     const rivebotVars = Object.assign({
       client: this.client,
       platform: this.platform,
       userMessage,
       userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
-      recurringTaskId
+      recurringTaskContent
     }, remainingRivebotVars);
     const rivebot = new Rivebot();
     await rivebot.loadVarsToRiveBot(rivebotVars);
+    const response = await rivebot.reply(userPlatformId, userMessage);
+    const messages = rivebot.parseResponse(response, this.platform);
+    /* TODO check if workplan exists */
+    const finalVariables = await rivebot.getUservars(userPlatformId);
+    return {
+      messages,
+      variables: finalVariables
+    };
   }
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
@@ -188,7 +200,8 @@ export default class {
     }
   }
 
-  async getRemainingVarsRivebotNeeds(userMessage) {
+  async getRemainingVarsRivebotNeeds(opts) {
+    const { userMessage, coachHelpResponse } = opts;
     const orgName = await api.getOrgName(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
     const {
@@ -215,7 +228,8 @@ export default class {
       contentText,
       contentUrl,
       contentImgUrl,
-      contentDescription
+      contentDescription,
+      coachHelpResponse
     };
   }
 

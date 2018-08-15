@@ -19,7 +19,6 @@ export default class {
       client,
       platform,
       userPlatformId,
-      recurringTaskId,
       orgName,
       coach,
       currentTask,
@@ -30,7 +29,8 @@ export default class {
       contentText,
       contentUrl,
       contentImgUrl,
-      contentDescription
+      contentDescription,
+      recurringTaskContent
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(userPlatformId, 'username', client.first_name);
@@ -49,6 +49,7 @@ export default class {
     await this.rivebot.setUservar(userPlatformId, 'workplanLink', constants.WORKPLAN_URL);
     await this.rivebot.setUservar(userPlatformId, 'introVideoLink', constants.INTRO_VIDEO_URL);
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
+    await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
 
     const referralId = formatReferralIdForNewFBSignups();
     await this.rivebot.setUservar(userPlatformId, 'referralId', referralId);
@@ -74,6 +75,137 @@ export default class {
     await this.rivebot.setUservar(userPlatformId, 'coachSaysImgUrl', coachSaysImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'taskNumImgUrl', taskNumImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
+  }
+
+  parseResponse(response, platform) {
+    const sendRegex = /<send>/g;
+    const regex = {
+      image: /\^image\("(.*?)"\)/g,
+      imageForSplit: /\^image\(".*"\)/g,
+      template: /\^template\(([\s\S]*?)\)/g,
+      templateForSplit: /\^template\(([\s\S]*)\)/g,
+      templateStrings: /`([\s\S]*?)`/g,
+      sms: /<sms>([\s\S]*?)<\/sms>/g,
+      fb: /<fb>([\s\S]*?)<\/fb>/g,
+      nonwhitespaceChars: /\S/
+    };
+    if (platform === constants.FB) {
+      response = response.replace(regex.sms, '');
+      response = response.replace(regex.fb, '$1');
+    } else if (platform === constants.SMS) {
+      response = response.replace(regex.fb, '');
+      response = response.replace(regex.sms, '$1');
+    }
+    const messages = response.split(sendRegex);
+    const finalMessages = [];
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i];
+      const messageType = this.getMessageType(message, regex);
+      if (messageType === 'text') {
+        this.prepareTextMessage(finalMessages, message);
+      } else if (messageType === 'image') {
+        this.prepareImageMessage(finalMessages, message, regex);
+      } else if (messageType === 'template') {
+        this.prepareTemplateMessage(finalMessages, message, regex);
+      }
+    }
+    return finalMessages;
+  }
+
+  getMessageType(message, regex) { // eslint-disable-line
+    if (message.match(regex.image)) {
+      return 'image';
+    } else if (message.match(regex.template)) {
+      return 'template';
+    }
+    return 'text';
+  }
+
+  prepareTextMessage(finalMessages, message) {  // eslint-disable-line
+    if (message.length) {
+      finalMessages.push({
+        type: 'text',
+        message
+      });
+    }
+  }
+
+  prepareImageMessage(finalMessages, message, regex) {  // eslint-disable-line
+    const imageUrls = message.match(regex.image).map(tag => tag.replace(regex.image, '$1'));
+    const textMessages = message.split(regex.imageForSplit);
+    let text = null;
+    const image = imageUrls[0];
+    finalMessages.push({
+      type: 'image',
+      image
+    });
+    for (let j = 0; j < textMessages.length; j++) {
+      if (textMessages[j] && regex.nonwhitespaceChars.test(textMessages[j])) {
+        text = textMessages[j];
+        finalMessages.push({
+          type: 'text',
+          message: text
+        });
+        break;
+      }
+    }
+  }
+
+  prepareTemplateMessage(finalMessages, message, regex) { // eslint-disable-line
+    const defaultErrorMessage = {
+      type: 'text',
+      message: 'There was an error on our side. Type START and try again.'
+    };
+    let templateArgs = message.replace(regex.template, '$1').match(regex.templateStrings);
+    if (templateArgs.length === 0) {
+      finalMessages.push(defaultErrorMessage);
+      return;
+    }
+    templateArgs = templateArgs.map(arg => arg.replace(/`/g, ''));
+    const templateType = templateArgs[0];
+    let messageToPush = null;
+    if (templateType === 'quickreply') {
+      let introText = null;
+      const introTextBits = message.split(regex.templateForSplit);
+      for (let i = 0; i < introTextBits.length; i++) {
+        if (regex.nonwhitespaceChars.test(introTextBits[i] && i !== 1)) {
+          introText = introTextBits[i];
+          break;
+        }
+      }
+      messageToPush = {
+        type: templateType,
+        text: introText,
+        buttons: templateArgs.slice(1)
+      };
+    } else if (templateType === 'genericurl' || templateType === 'generic') {
+      if (templateArgs.length < 4) {
+        messageToPush = defaultErrorMessage;
+      }
+      const imageUrl = templateArgs[1];
+      const content = templateArgs[2];
+      const buttons = JSON.parse(templateArgs[3]);
+      messageToPush = {
+        type: templateType,
+        imageUrl,
+        content,
+        buttons
+      };
+    } else if (templateType === 'button') {
+      if (templateArgs.length < 3) {
+        messageToPush = defaultErrorMessage;
+      }
+      const content = templateArgs[1];
+      const buttons = JSON.parse(templateArgs[2]);
+      messageToPush = {
+        type: templateType,
+        content,
+        buttons
+      };
+    } else {
+      messageToPush = defaultErrorMessage;
+    }
+    finalMessages.push(messageToPush);
   }
 }
 
