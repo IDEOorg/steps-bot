@@ -18,6 +18,7 @@ const twilioController = Botkit.twiliosmsbot({
 server(fbEndpoint, twilioController, getCoachResponse);
 
 function fbEndpoint(req, res) {
+  console.log('received something');
   res.status(200);
   res.send('ok');
   const body = req.body;
