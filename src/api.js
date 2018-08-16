@@ -11,7 +11,7 @@ const botId = 41;
 async function getAllClients() {
   const clients = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients',
+    uri: process.env.API_URL + '/clients',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -26,7 +26,7 @@ async function getAllClients() {
 async function getOrgName(id) {
   const org = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/orgs/' + id.toString(),
+    uri: process.env.API_URL + '/orgs/' + id.toString(),
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -44,7 +44,7 @@ async function getOrgName(id) {
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/users/' + id.toString(),
+    uri: process.env.API_URL + '/users/' + id.toString(),
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -59,7 +59,7 @@ async function getCoach(id) {
 async function getClientTasks(id) {
   const tasks = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/tasks',
+    uri: process.env.API_URL + '/clients/' + id.toString() + '/tasks',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -74,7 +74,7 @@ async function getClientTasks(id) {
 async function getAllMedia() {
   let listOfMedia = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/media',
+    uri: process.env.API_URL + '/media',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
@@ -91,7 +91,7 @@ async function getAllMedia() {
 async function getViewedMediaIds(id) {
   let viewedMedia = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + id.toString() + '/viewed_media',
+    uri: process.env.API_URL + '/clients/' + id.toString() + '/viewed_media',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
@@ -108,7 +108,7 @@ async function getViewedMediaIds(id) {
 async function createRequest(userId, taskId) {
   const request = await rp({
     method: 'POST',
-    uri: assetUrls.url + '/requests',
+    uri: process.env.API_URL + '/requests',
     body: {
       status: 'NEEDS_ASSISTANCE',
       user_id: userId,
@@ -129,7 +129,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
   if (clientId) {
     const requests = await rp({
       method: 'GET',
-      uri: assetUrls.url + '/clients/' + clientId + '/requests',
+      uri: process.env.API_URL + '/clients/' + clientId + '/requests',
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       },
@@ -142,7 +142,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
       if (request.task_id === taskId) {
         await rp({ // eslint-disable-line
           method: 'PUT',
-          uri: assetUrls.url + '/requests/' + request.id,
+          uri: process.env.API_URL + '/requests/' + request.id,
           headers: {
             Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
           },
@@ -163,7 +163,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
 async function getUserRequests(userId) {
   const requests = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + userId + '/requests',
+    uri: process.env.API_URL + '/clients/' + userId + '/requests',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -178,7 +178,7 @@ async function getUserRequests(userId) {
 async function getUserMessages(userId) {
   const messages = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/clients/' + userId + '/messages',
+    uri: process.env.API_URL + '/clients/' + userId + '/messages',
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
@@ -204,7 +204,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
 
   const message = await rp({
     method: 'POST',
-    uri: assetUrls.url + '/messages',
+    uri: process.env.API_URL + '/messages',
     body,
     json: true,
     headers: {
@@ -223,7 +223,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
 async function updateUser(userId, userData) {
   const user = await rp({
     method: 'PUT',
-    uri: assetUrls.url + '/clients/' + userId,
+    uri: process.env.API_URL + '/clients/' + userId,
     body: userData,
     json: true,
     headers: {
@@ -239,7 +239,7 @@ async function updateUser(userId, userData) {
 async function updateTask(id, taskData) {
   const task = await rp({
     method: 'PUT',
-    uri: assetUrls.url + '/tasks/' + id,
+    uri: process.env.API_URL + '/tasks/' + id,
     body: taskData,
     json: true,
     headers: {
@@ -256,7 +256,7 @@ async function markMediaAsViewed(clientId, mediaId) {
   if (mediaId) {
     const media = await rp({
       method: 'POST',
-      uri: assetUrls.url + '/clients/' + clientId + '/viewed_media/' + mediaId,
+      uri: process.env.API_URL + '/clients/' + clientId + '/viewed_media/' + mediaId,
       json: true,
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
@@ -273,7 +273,7 @@ async function markMediaAsViewed(clientId, mediaId) {
 async function getUserFromId(id) {
   const user = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/users/' + id,
+    uri: process.env.API_URL + '/users/' + id,
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
@@ -287,7 +287,7 @@ async function getUserFromId(id) {
 async function getTask(id) {
   const task = await rp({
     method: 'GET',
-    uri: assetUrls.url + '/tasks/' + id,
+    uri: process.env.API_URL + '/tasks/' + id,
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },

@@ -246,15 +246,15 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   if (topic === 'helpuserresponse') {
     riveBot.setUservar(userPlatformId, 'helpMessage', userMessage);
   }
-  const storiesImgUrl = assetUrls.baseUrl + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
-  const celebrationImgUrl = assetUrls.baseUrl + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
-  const welcomeImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
-  const workplanImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
-  const introCelebrateImgUrl = assetUrls.baseUrl + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
-  const recurringImgUrl = assetUrls.baseUrl + assetUrls.recurring.path + getRandomItemFromArray(assetUrls.recurring.images);
-  const checkinImgUrl = assetUrls.baseUrl + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
-  const coachSaysImgUrl = assetUrls.baseUrl + assetUrls.help.path + getRandomItemFromArray(assetUrls.help.images);
-  const taskNumUrl = assetUrls.baseUrl + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
+  const storiesImgUrl = process.env.BOT_URL + assetUrls.stories.path + getRandomItemFromArray(assetUrls.stories.images);
+  const celebrationImgUrl = process.env.BOT_URL + assetUrls.done.path + getRandomItemFromArray(assetUrls.done.images);
+  const welcomeImgUrl = process.env.BOT_URL + assetUrls.welcome.path + getRandomItemFromArray(assetUrls.welcome.images);
+  const workplanImgUrl = process.env.BOT_URL + assetUrls.welcome.path + assetUrls.welcome.workplanImgUrl;
+  const introCelebrateImgUrl = process.env.BOT_URL + assetUrls.welcome.path + assetUrls.welcome.introCelebrateUrl;
+  const recurringImgUrl = process.env.BOT_URL + assetUrls.recurring.path + getRandomItemFromArray(assetUrls.recurring.images);
+  const checkinImgUrl = process.env.BOT_URL + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
+  const coachSaysImgUrl = process.env.BOT_URL + assetUrls.help.path + getRandomItemFromArray(assetUrls.help.images);
+  const taskNumUrl = process.env.BOT_URL + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
   const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);

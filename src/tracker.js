@@ -49,7 +49,7 @@ exports.buildContentUrl = async function buildContentUrl(content, user) {
     return null;
   }
   // create redirect Url to send them to our sever for tracking before being sent to final destination
-  const redirectUrl = `${assetUrls.baseUrl}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`;
+  const redirectUrl = `${process.env.BOT_URL}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`;
 
   // wrap redirect url in a bitly link
   let bitlyUrl = null;
