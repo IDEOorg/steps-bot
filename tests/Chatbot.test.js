@@ -31,6 +31,7 @@ test('bot sets invalid message response on unidentified user', async () => {
     userPlatform: '3333333'
   });
   expect(bot.messagesToSendToClient[0].message).toContain('Sorry, we didn\'t recognize the');
+  expect(bot.shouldUpdateClient).toEqual(false);
 });
 
 test('when user asks to stop, user no longer receives checkins and bot doesn\'t message but does update client', async () => {

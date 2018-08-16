@@ -110,6 +110,7 @@ module.exports = class Chatbot {
     } else { // platform is SMS
       errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
     }
+    this.shouldUpdateClient = false;
     this.messagesToSendToClient = [{
       type: 'text',
       message: errMessage
