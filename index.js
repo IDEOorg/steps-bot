@@ -40,6 +40,8 @@ async function fbEndpoint(req, res) {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
   const cb = new Chatbot();
+  console.log('userPlatformId');
+  console.log(userPlatformId);
   await cb.getResponse({
     platform: 'fb',
     userPlatformId,

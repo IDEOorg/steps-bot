@@ -7,6 +7,7 @@ require('dotenv').config();
 const botId = 41;
 
 async function getAllClients() {
+  console.log(process.env.API_URL);
   const clients = await rp({
     method: 'GET',
     uri: process.env.API_URL + '/clients',
