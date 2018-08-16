@@ -30,12 +30,12 @@ module.exports = class Chatbot {
     this.userPlatformId = userPlatformId;
     this.setPlatform(platform); // stores the platform the bot received the message from
     await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload); // gets and stores the client's info from the api
-    if (userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
-      this.client.fb_id = userPlatformId;
-    }
     if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
       return;
+    }
+    if (userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
+      this.client.fb_id = userPlatformId;
     }
     if (topic) { // manually set the client's topic if a checkin time has hit or the user fast forwarded
       this.client.topic = topic;
