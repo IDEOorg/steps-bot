@@ -1,3 +1,5 @@
+import { trackStopRequest } from './tracker';
+
 require('dotenv').config();
 const RiveScript = require('rivescript');
 const assetUrls = require('./src/assets-manifest.json');
@@ -226,6 +228,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const formattedUserMessage = userMessage.toLowerCase().trim();
   if (formattedUserMessage === 'stop') {
     riveBot.setUservar(userPlatformId, 'userAskedToStop', true);
+    trackStopRequest({ topic, userId: userInfo.id });
   }
   if (topic === 'content' || formattedUserMessage === 'contenttopic' || formattedUserMessage === 'ff') {
     viewedMedia = await api.getViewedMediaIds(userInfo.id);

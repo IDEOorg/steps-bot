@@ -2,7 +2,7 @@ require('dotenv').config();
 const api = require('./api');
 const Rivebot = require('./Rivebot');
 const constants = require('./constants');
-const { buildContentUrl } = require('./tracker');
+const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 module.exports = class Chatbot {
   constructor() {
@@ -125,6 +125,10 @@ module.exports = class Chatbot {
   }
 
   handleIfUserAskedToStop() {
+    trackStopRequest({
+      id: this.client.id,
+      topic: this.client.topic
+    });
     this.client.checkin_times = [];
     if (this.platform !== constants.FB) {
       this.shouldMessageClient = false;

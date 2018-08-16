@@ -1,6 +1,5 @@
 require('dotenv').config();
 const KeenTracking = require('keen-tracking');
-const assetUrls = require('./assets-manifest.json');
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
 const sgMail = require('@sendgrid/mail');
@@ -67,4 +66,9 @@ exports.buildContentUrl = async function buildContentUrl(content, user) {
 
   trackMediaSent(content, user);
   return bitlyUrl.url;
+};
+
+// see Chatbot.js
+exports.trackStopRequest = function trackStopRequest(body) {
+  keen.recordEvent('stopRequest', body);
 };
