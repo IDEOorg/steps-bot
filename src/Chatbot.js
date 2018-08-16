@@ -112,15 +112,15 @@ module.exports = class Chatbot {
           message: errMessage
         }]
       };
+    } else { // platform is SMS
+      errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
+      this.response = {
+        messages: [{
+          type: 'text',
+          message: errMessage
+        }]
+      };
     }
-    // platform is SMS
-    errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
-    this.response = {
-      messages: [{
-        type: 'text',
-        message: errMessage
-      }]
-    };
   }
 
   userAskedToStop(userMessage) { // eslint-disable-line

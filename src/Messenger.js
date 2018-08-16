@@ -14,8 +14,6 @@ module.exports = class Messenger {
   }
 
   async sendReply() {
-    console.log('sendreply func');
-    console.log(this.messages);
     if (this.messages === null) {
       return;
     }
@@ -24,8 +22,6 @@ module.exports = class Messenger {
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
-        console.log('formattedMsg');
-        console.log(formattedMsg);
         await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
         await sleep(300); // eslint-disable-line
       } else if (this.platform === constants.SMS) {
