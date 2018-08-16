@@ -8,22 +8,26 @@ module.exports = class Chatbot {
   constructor() {
     this.platform = null;
     this.client = null;
-    this.response = null;
+    this.messagesToSendToClient = null;
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
+    this.rivebot = new Rivebot();
+    this.userMessage = null;
+    this.coachHelpResponse = null;
+    this.recurringTaskId = null;
   }
 
   async getResponse(opts) {
-    let {
-      platform, // eslint-disable-line
-      userPlatformId, // eslint-disable-line
+    const {
+      platform,
+      userPlatformId,
       userMessage,
       topic,
-      userPressedGetStartedOnFBPayload, // eslint-disable-line
+      userPressedGetStartedOnFBPayload,
       recurringTaskId
     } = opts;
-
-    userMessage = formatUserMessage(userMessage);
+    this.userMessage = formatUserMessage(userMessage);
+    this.userPlatformId = userPlatformId;
     this.setPlatform(platform); // stores the platform the bot received the message from
     await this.loadClientData(userPlatformId, userPressedGetStartedOnFBPayload); // gets and stores the client's info from the api
     if (userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
@@ -31,32 +35,30 @@ module.exports = class Chatbot {
     }
     if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
-      return null;
-    }
-
-    this.addMessageToUserLog(userMessage); // adds the user's message to the Client Message API
-    if (this.userAskedToStop(userMessage)) {
-      this.handleIfUserAskedToStop();
-      return null;
-    }
-    if (this.userAskedToFastForward(userMessage)) {
-      const ffPayload = this.fastForwardUser();
-      if (ffPayload === null) { // if there's no checkin to fast forward to, don't send a message
-        this.shouldMessageClient = false;
-        return null;
-      }
-      userMessage = ffPayload.userMessage;
-      topic = ffPayload.topic;
-      recurringTaskId = ffPayload.recurringTaskId;
+      return;
     }
     if (topic) { // manually set the client's topic if a checkin time has hit or the user fast forwarded
       this.client.topic = topic;
+    }
+    this.addMessageToUserLog(); // adds the user's message to the Client Message API
+    if (this.userAskedToStop()) {
+      this.handleIfUserAskedToStop();
+      return;
+    }
+    if (this.userAskedToFastForward()) {
+      const ffPayload = this.fastForwardUser();
+      if (ffPayload === null) { // if there's no checkin to fast forward to, don't send a message
+        this.shouldMessageClient = false;
+        this.shouldUpdateClient = false;
+        return;
+      }
+      this.recurringTaskId = ffPayload.recurringTaskId;
     }
     if (this.client.topic === null || this.client.topic === 'setupfb') { // handles new users
       this.assignTopicForNewUser();
     }
     this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
-    const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(opts); // pull all the remaining data rivebot needs to send a reply
+    const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(); // pull all the remaining data rivebot needs to send a reply
     let recurringTaskContent = null;
     if (recurringTaskId) {
       const recurringTask = await api.getTask(recurringTaskId);
@@ -66,20 +68,19 @@ module.exports = class Chatbot {
     const rivebotVars = Object.assign({
       client: this.client,
       platform: this.platform,
-      userMessage,
+      userMessage: this.userMessage,
       userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
       recurringTaskContent
     }, remainingRivebotVars);
-    const rivebot = new Rivebot();
-    await rivebot.loadVarsToRiveBot(rivebotVars);
-    const response = await rivebot.reply(userPlatformId, userMessage);
-    const messages = rivebot.parseResponse(response, this.platform);
-    /* TODO check if workplan exists */
-    const finalVariables = await rivebot.getUservars(userPlatformId);
-    return {
-      messages,
-      variables: finalVariables
-    };
+    await this.rivebot.loadVarsToRiveBot(rivebotVars);
+    const response = await this.rivebot.reply(userPlatformId, this.userMessage);
+    const messages = this.rivebot.parseResponse(response, this.platform);
+    this.messagesToSendToClient = messages;
+  }
+
+  async updateClientToDB() {
+    const variables = await this.rivebot.getUservars(this.userPlatformId);
+    console.log(variables);
   }
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
@@ -123,8 +124,8 @@ module.exports = class Chatbot {
     }
   }
 
-  userAskedToStop(userMessage) { // eslint-disable-line
-    if (userMessage === 'stop') {
+  userAskedToStop() { // eslint-disable-line
+    if (this.userMessage === 'stop') {
       return true;
     }
     return false;
@@ -137,14 +138,14 @@ module.exports = class Chatbot {
     }
   }
 
-  async addMessageToUserLog(userMessage) {
-    if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
-      await api.createMessage(null, this.client.id, process.env.BOT_ID, userMessage, this.client.topic);
+  async addMessageToUserLog() {
+    if (this.userMessage !== 'startprompt' && this.userMessage !== 'pinguser') {
+      await api.createMessage(null, this.client.id, process.env.BOT_ID, this.userMessage, this.client.topic);
     }
   }
 
-  userAskedToFastForward(userMessage) { // eslint-disable-line
-    if (userMessage === 'ff') {
+  userAskedToFastForward() { // eslint-disable-line
+    if (this.userMessage === 'ff') {
       return true;
     }
     return false;
@@ -180,9 +181,8 @@ module.exports = class Chatbot {
     } else {
       return null;
     }
+    this.userMessage = userMessage;
     return {
-      userMessage,
-      topic,
       recurringTaskId
     };
   }
@@ -201,8 +201,7 @@ module.exports = class Chatbot {
     }
   }
 
-  async getRemainingVarsRivebotNeeds(opts) {
-    const { userMessage, coachHelpResponse } = opts;
+  async getRemainingVarsRivebotNeeds() {
     const orgName = await api.getOrgName(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
     const {
@@ -211,13 +210,14 @@ module.exports = class Chatbot {
       currentTaskDescription
     } = this.getCurrentTaskData(this.client.tasks);
     const taskNum = this.getTaskNum();
+    console.log(this.userMessage);
     const {
       contentIdChosen,
       contentText,
       contentUrl,
       contentImgUrl,
       contentDescription
-    } = await this.loadStoryContent(userMessage);
+    } = await this.loadStoryContent(this.userMessage);
     return {
       orgName,
       coach,
@@ -230,7 +230,7 @@ module.exports = class Chatbot {
       contentUrl,
       contentImgUrl,
       contentDescription,
-      coachHelpResponse
+      coachHelpResponse: this.coachHelpResponse
     };
   }
 

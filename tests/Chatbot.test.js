@@ -38,7 +38,8 @@ test('when user asks to stop, user no longer receives checkins and bot doesn\'t 
   bot.client = {
     checkin_times: [{ something: 'something' }]
   };
-  if (bot.userAskedToStop('stop')) {
+  bot.userMessage = 'stop';
+  if (bot.userAskedToStop()) {
     bot.handleIfUserAskedToStop();
   }
   expect(bot.client.checkin_times).toEqual([]);
@@ -51,8 +52,9 @@ test('when user asks to stop, bot still sends message to user if user is on fb p
   bot.client = {
     checkin_times: [{ something: 'something' }]
   };
+  bot.userMessage = 'stop';
   bot.platform = 'fb';
-  if (bot.userAskedToStop('stop')) {
+  if (bot.userAskedToStop()) {
     bot.handleIfUserAskedToStop();
   }
   expect(bot.client.checkin_times).toEqual([]);
@@ -62,9 +64,11 @@ test('when user asks to stop, bot still sends message to user if user is on fb p
 
 test('userAskedToFastForward returns true when user types ff', async () => {
   const bot = new Chatbot();
-  let outcome = bot.userAskedToFastForward('ff');
+  bot.userMessage = 'ff';
+  let outcome = bot.userAskedToFastForward();
   expect(outcome).toEqual(true);
-  outcome = bot.userAskedToFastForward('ffs');
+  bot.userMessage = 'ffs';
+  outcome = bot.userAskedToFastForward();
   expect(outcome).toEqual(false);
 });
 
@@ -85,8 +89,8 @@ test('fast forward functionality returns desired payload when there are checkin 
     ]
   };
   const payload = bot.fastForwardUser();
-  expect(payload.topic).toEqual('content');
-  expect(payload.userMessage).toEqual('startprompt');
+  expect(bot.client.topic).toEqual('content');
+  expect(bot.userMessage).toEqual('startprompt');
   expect(payload.recurringTaskId).toEqual(null);
   expect(bot.client.checkin_times.length).toEqual(1);
 });
@@ -275,11 +279,12 @@ test('loadStoryContent loads proper content', async () => {
 });
 
 test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () => {
-  const client = await api.getUserDataFromDB('fb', '1035');
+  const client = await api.getUserDataFromDB('fb', '1035'); // the 1035 here is the fake fb_id.
   const bot = new Chatbot();
   bot.client = client;
   bot.client.tasks = await api.getClientTasks(bot.client.id);
-  const payload = await bot.getRemainingVarsRivebotNeeds('startprompt');
+  bot.userMessage = 'startprompt';
+  const payload = await bot.getRemainingVarsRivebotNeeds();
   expect(payload.orgName).toEqual('IDEO.org');
   expect(payload.coach.first_name).toEqual('Michael');
   expect(payload.currentTask).toContain('Consider enrolling in');
