@@ -52,6 +52,7 @@ async function fbEndpoint(req, res) {
     response: cb.response,
     client: cb.client
   });
+  console.log(cb.shouldMessageClient);
   if (cb.shouldMessageClient) {
     await messenger.sendReply();
   }

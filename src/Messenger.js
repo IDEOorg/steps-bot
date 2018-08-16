@@ -14,11 +14,15 @@ module.exports = class Messenger {
   }
 
   async sendReply() {
+    console.log('sendreply func');
+    console.log(this.response);
     for (let i = 0; i < this.response.length; i++) {
       const message = this.response[i];
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
+        console.log('formattedMsg');
+        console.log(formattedMsg);
         await sendFBMessage(userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
         await sleep(300); // eslint-disable-line
       } else if (this.platform === constants.SMS) {
@@ -141,6 +145,7 @@ function formatMsgForSMS(message) {
 }
 
 function sendFBMessage(userId, message, isUpdateMessage) {
+  console.log('sending fb message.....');
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
