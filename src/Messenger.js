@@ -8,16 +8,19 @@ module.exports = class Messenger {
   constructor(opts) {
     this.platform = opts.platform;
     this.userPlatformId = opts.userPlatformId;
-    this.response = opts.response;
+    this.messages = opts.messages;
     this.isMessageSentFromCheckIn = opts.isMessageSentFromCheckIn;
     this.client = opts.client;
   }
 
   async sendReply() {
     console.log('sendreply func');
-    console.log(this.response);
-    for (let i = 0; i < this.response.length; i++) {
-      const message = this.response[i];
+    console.log(this.messages);
+    if (this.messages === null) {
+      return;
+    }
+    for (let i = 0; i < this.messages.length; i++) {
+      const message = this.messages[i];
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);

@@ -49,7 +49,7 @@ async function fbEndpoint(req, res) {
   const messenger = new Messenger({
     platform: 'fb',
     userPlatformId,
-    response: cb.response,
+    messages: cb.response ? cb.response.message : null,
     client: cb.client
   });
   console.log(cb.shouldMessageClient);
