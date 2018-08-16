@@ -11,7 +11,7 @@ module.exports = class Chatbot {
     this.messagesToSendToClient = null;
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
-    this.rivebot = new Rivebot();
+    this.rb = new Rivebot();
     this.userMessage = null;
     this.coachHelpResponse = null;
     this.recurringTaskId = null;
@@ -72,9 +72,9 @@ module.exports = class Chatbot {
       userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
       recurringTaskContent
     }, remainingRivebotVars);
-    await this.rivebot.loadVarsToRiveBot(rivebotVars);
-    const response = await this.rivebot.reply(userPlatformId, this.userMessage);
-    const messages = this.rivebot.parseResponse(response, this.platform);
+    await this.rb.rivebot.loadVarsToRiveBot(rivebotVars);
+    const response = await this.rb.rivebot.reply(userPlatformId, this.userMessage);
+    const messages = this.rb.rivebot.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
   }
 
@@ -82,7 +82,7 @@ module.exports = class Chatbot {
     if (!this.client) {
       return;
     }
-    const variables = await this.rivebot.getUservars(userPlatformId);
+    const variables = await this.rb.rivebot.getUservars(userPlatformId);
     console.log(variables);
     const {
       topic,
