@@ -37,7 +37,7 @@ async function fbEndpoint(req, res) {
       fbNewUserPhone = '+1' + messageObject.postback.referral.ref;
     }
   } else {
-    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop and get you banned on fb messenger
+    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
   const cb = new Chatbot();
   await cb.getResponse({
@@ -49,7 +49,7 @@ async function fbEndpoint(req, res) {
   const messenger = new Messenger({
     platform: 'fb',
     userPlatformId,
-    messages: cb.messages,
+    messages: cb.messagesToSendToClient,
     client: cb.client
   });
   console.log(cb.shouldMessageClient);
