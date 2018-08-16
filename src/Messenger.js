@@ -6,6 +6,7 @@ const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.e
 
 module.exports = class Messenger {
   constructor(opts) {
+    console.log(opts);
     this.platform = opts.platform;
     this.userPlatformId = opts.userPlatformId;
     this.messages = opts.messages;
