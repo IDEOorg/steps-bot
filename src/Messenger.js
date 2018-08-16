@@ -26,11 +26,11 @@ module.exports = class Messenger {
         formattedMsg = formatMsgForFB(message);
         console.log('formattedMsg');
         console.log(formattedMsg);
-        await sendFBMessage(userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
+        await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
         await sleep(300); // eslint-disable-line
       } else if (this.platform === constants.SMS) {
         formattedMsg = formatMsgForSMS(message);
-        await sendSMSMessage(userPlatformId, formattedMsg); // eslint-disable-line
+        await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
         if (message.type === 'image') {
           await sleep(3100); // eslint-disable-line
         } else {
