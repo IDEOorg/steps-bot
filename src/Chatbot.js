@@ -72,7 +72,7 @@ module.exports = class Chatbot {
       userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
       recurringTaskContent
     }, remainingRivebotVars);
-    await this.rb.rivebot.loadVarsToRiveBot(rivebotVars);
+    await this.rb.loadVarsToRiveBot(rivebotVars);
     const response = await this.rb.rivebot.reply(userPlatformId, this.userMessage);
     const messages = this.rb.rivebot.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
