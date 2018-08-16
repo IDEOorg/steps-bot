@@ -107,21 +107,13 @@ module.exports = class Chatbot {
     // platform is FB
     if (this.platform === constants.FB) {
       errMessage = 'Sorry, we didn\'t recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.';
-      this.response = {
-        messages: [{
-          type: 'text',
-          message: errMessage
-        }]
-      };
     } else { // platform is SMS
       errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
-      this.response = {
-        messages: [{
-          type: 'text',
-          message: errMessage
-        }]
-      };
     }
+    this.messagesToSendToClient = [{
+      type: 'text',
+      message: errMessage
+    }];
   }
 
   userAskedToStop() { // eslint-disable-line

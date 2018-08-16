@@ -30,7 +30,7 @@ test('bot sets invalid message response on unidentified user', async () => {
     platform: constants.SMS,
     userPlatform: '3333333'
   });
-  expect(bot.response.messages[0].message).toContain('Sorry, we didn\'t recognize the');
+  expect(bot.messagesToSendToClient[0].message).toContain('Sorry, we didn\'t recognize the');
 });
 
 test('when user asks to stop, user no longer receives checkins and bot doesn\'t message but does update client', async () => {
