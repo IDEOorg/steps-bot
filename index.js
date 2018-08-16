@@ -1,4 +1,5 @@
 const Chatbot = require('./src/Chatbot');
+const Messenger = require('./src/Messenger');
 
 require('dotenv').config();
 const bot = require('./bothelper');
@@ -19,7 +20,7 @@ const twilioController = Botkit.twiliosmsbot({
 // so we can extend it and process incoming message payloads
 server(fbEndpoint, twilioController, getCoachResponse);
 
-function fbEndpoint(req, res) {
+async function fbEndpoint(req, res) {
   console.log('received something');
   res.status(200);
   res.send('ok');
@@ -39,15 +40,21 @@ function fbEndpoint(req, res) {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop and get you banned on fb messenger
   }
   const cb = new Chatbot();
-  cb.getResponse({
+  await cb.getResponse({
     platform: 'fb',
     userPlatformId,
     userMessage,
     userPressedGetStartedOnFBPayload: fbNewUserPhone
-  }).then((response) => {
-    console.log('***********response*********');
-    console.log(cb.response);
   });
+  const messenger = new Messenger({
+    platform: 'fb',
+    userPlatformId,
+    response: cb.response,
+    client: cb.client
+  });
+  if (cb.shouldMessageClient) {
+    await messenger.sendReply();
+  }
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {

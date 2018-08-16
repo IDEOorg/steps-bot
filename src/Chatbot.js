@@ -1,3 +1,4 @@
+require('dotenv').config();
 const api = require('./api');
 const Rivebot = require('./Rivebot');
 const constants = require('./constants');
@@ -138,7 +139,7 @@ module.exports = class Chatbot {
 
   async addMessageToUserLog(userMessage) {
     if (userMessage !== 'startprompt' && userMessage !== 'pinguser') {
-      await api.createMessage(null, this.client.id, constants.BOT_ID, userMessage, this.client.topic);
+      await api.createMessage(null, this.client.id, process.env.BOT_ID, userMessage, this.client.topic);
     }
   }
 
