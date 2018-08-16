@@ -46,7 +46,7 @@ function fbEndpoint(req, res) {
     userPressedGetStartedOnFBPayload: fbNewUserPhone
   }).then((response) => {
     console.log('***********response*********');
-    console.log(response);
+    console.log(cb.response);
   });
 }
 
