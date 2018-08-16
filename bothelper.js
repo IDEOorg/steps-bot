@@ -1,11 +1,9 @@
-import { trackStopRequest } from './tracker';
-
 require('dotenv').config();
 const RiveScript = require('rivescript');
 const assetUrls = require('./src/assets-manifest.json');
 const api = require('./apihelper');
 const sgMail = require('@sendgrid/mail');
-
+const { trackStopRequest } = require('./tracker');
 // Bitly used for tracking Media links - uses v3 of the Bitly API
 const { BitlyClient } = require('bitly');
 const { trackMediaSent } = require('./src/tracker');
