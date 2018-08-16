@@ -26,6 +26,7 @@ module.exports = class Chatbot {
       userPressedGetStartedOnFBPayload,
       recurringTaskId
     } = opts;
+    await this.rb.loadChatScripts();
     this.userMessage = formatUserMessage(userMessage);
     this.userPlatformId = userPlatformId;
     this.setPlatform(platform); // stores the platform the bot received the message from
@@ -74,7 +75,7 @@ module.exports = class Chatbot {
     }, remainingRivebotVars);
     await this.rb.loadVarsToRiveBot(rivebotVars);
     const response = await this.rb.rivebot.reply(userPlatformId, this.userMessage);
-    const messages = this.rb.rivebot.parseResponse(response, this.platform);
+    const messages = this.rb.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
   }
 
