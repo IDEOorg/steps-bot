@@ -54,12 +54,14 @@ async function fbEndpoint(req, res) {
     messages: cb.messagesToSendToClient,
     client: cb.client
   });
+  console.log('cb.shouldMessageClient');
+  console.log(cb.shouldMessageClient);
   if (cb.shouldMessageClient) {
     await messenger.sendReply();
   }
-  if (cb.client && cb.shouldUpdateClient) {
-    await cb.updateClientToDB(userPlatformId);
-  }
+  // if (cb.client && cb.shouldUpdateClient) {
+  //   await cb.updateClientToDB(userPlatformId);
+  // }
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {
