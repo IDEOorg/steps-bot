@@ -255,7 +255,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
   const checkinImgUrl = process.env.BOT_URL + assetUrls.checkin.path + getRandomItemFromArray(assetUrls.checkin.images);
   const coachSaysImgUrl = process.env.BOT_URL + assetUrls.help.path + getRandomItemFromArray(assetUrls.help.images);
   const taskNumUrl = process.env.BOT_URL + assetUrls.tasks.path + '04_Number' + taskNum + '.gif'; // eslint-disable-line
-  const referralId = userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
+  const referralId = userPlatformId && userPlatformId.length > 2 ? userPlatformId.slice(2) : userPlatformId; // just the phone number without the +1
   riveBot.setUservar(userPlatformId, 'topic', topic);
   riveBot.setUservar(userPlatformId, 'username', firstName);
   riveBot.setUservar(userPlatformId, 'coachName', coach.first_name);

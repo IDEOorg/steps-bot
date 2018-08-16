@@ -1,3 +1,4 @@
+require('dotenv').config();
 const constants = require('./constants');
 const assetUrls = require('./assets-manifest.json');
 const path = require('path');
@@ -50,8 +51,8 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
 
-    const referralId = formatReferralIdForNewFBSignups();
-    await this.rivebot.setUservar(userPlatformId, 'referralId', referralId);
+    const referralLink = formatReferralLinkForNewFBSignups();
+    await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
     await this.loadGifUrlsToRivebot(userPlatformId);
   }
 
@@ -215,9 +216,12 @@ function getRandomItemFromArray(array) {
   return null;
 }
 
-function formatReferralIdForNewFBSignups(userPlatformId) { // returns just the phone number without the +1, FB referral postback doesn't properly handle '+' signs as a param
-  if (userPlatformId.length > 2 && userPlatformId[0] === '+' && userPlatformId[1] === '1') {
-    return userPlatformId.slice(2);
+function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the phone number without the +1, FB referral postback doesn't properly handle '+' signs as a param
+  if (userPlatformId && userPlatformId.length > 2 && userPlatformId[0] === '+' && userPlatformId[1] === '1') {
+    const referralId = userPlatformId.slice(2);
+    const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${referralId}`;
+    return referralLink;
   }
-  return userPlatformId;
+
+  return null;
 }
