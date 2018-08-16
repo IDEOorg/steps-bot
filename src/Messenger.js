@@ -6,7 +6,6 @@ const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.e
 
 module.exports = class Messenger {
   constructor(opts) {
-    console.log(opts);
     this.platform = opts.platform;
     this.userPlatformId = opts.userPlatformId;
     this.messages = opts.messages;
@@ -18,11 +17,15 @@ module.exports = class Messenger {
     if (this.messages === null) {
       return;
     }
+    console.log('this.messages');
+    console.log(this.messages);
     for (let i = 0; i < this.messages.length; i++) {
       const message = this.messages[i];
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
+        console.log('formattedMsg');
+        console.log(formattedMsg);
         await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
         await sleep(300); // eslint-disable-line
       } else if (this.platform === constants.SMS) {
@@ -144,7 +147,7 @@ function formatMsgForSMS(message) {
   };
 }
 
-function sendFBMessage(userId, message, isUpdateMessage) {
+function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
   console.log('sending fb message.....');
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -157,8 +160,8 @@ function sendFBMessage(userId, message, isUpdateMessage) {
         id: userId
       },
       message,
-      messaging_type: isUpdateMessage ? 'MESSAGE_TAG' : 'RESPONSE',
-      tag: isUpdateMessage ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
+      messaging_type: isMessageSentFromCheckIn ? 'MESSAGE_TAG' : 'RESPONSE',
+      tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
     }
   });
 }
