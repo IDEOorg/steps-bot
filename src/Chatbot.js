@@ -128,7 +128,11 @@ module.exports = class Chatbot {
         return false;
       });
     }
+    console.log('nextTopic, nextMessage, days, hours, timeOfDay');
+    console.log(nextTopic, nextMessage, days, hours, timeOfDay);
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+    console.log('nextCheckInDate');
+    console.log(nextCheckInDate);
     if (nextCheckInDate) {
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
         if (checkInTime.recurring) {
@@ -172,8 +176,6 @@ module.exports = class Chatbot {
     }
     // TODO fill in any deleted recurring tasks, added recurring tasks, and updated recurring tasks
     // given tasks list and clientCheckInTimes
-    console.log('midpoint stage');
-    console.log(this.client);
     const recurringTasks = this.client.tasks.filter((task) => {
       return task.recurring;
     });
@@ -225,8 +227,6 @@ module.exports = class Chatbot {
       api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
       this.client.status = 'AWAITING_HELP';
     }
-    console.log('this.client');
-    console.log(this.client);
     this.adjustClientForUpdate();
     // update user
     api.updateUser(this.client.id, this.client).then(() => {
