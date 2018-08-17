@@ -328,6 +328,9 @@ module.exports = class Chatbot {
   }
 
   assignTopicForNewUser() {
+    console.log('assigntopicfornewuser');
+    console.log(this.client.platform);
+    console.log(this.platform);
     // this.platform is the platform the bot received the message from, this.client.platform is the platform the client should be using
     if (this.client.platform === 'FBOOK' && this.platform === constants.SMS) {
       this.client.topic = 'setupfb';
@@ -424,6 +427,8 @@ module.exports = class Chatbot {
   }
 
   async loadStoryContent(userMessage) { //eslint-disable-line
+    console.log('loadstorycontent....');
+    console.log(userMessage);
     let contentIdChosen = null;
     let contentText = null;
     let contentUrl = null;
