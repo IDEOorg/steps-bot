@@ -427,8 +427,6 @@ module.exports = class Chatbot {
   }
 
   async loadStoryContent(userMessage) { //eslint-disable-line
-    console.log('loadstorycontent....');
-    console.log(userMessage);
     let contentIdChosen = null;
     let contentText = null;
     let contentUrl = null;
@@ -449,9 +447,6 @@ module.exports = class Chatbot {
           break;
         }
       }
-    }
-    if (contentIdChosen === null) {
-      this.shouldMessageClient = false;
     }
     return {
       contentIdChosen,
