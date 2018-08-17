@@ -1,4 +1,5 @@
 require('dotenv').config();
+const moment = require('moment');
 const api = require('./api');
 const Rivebot = require('./Rivebot');
 const constants = require('./constants');
@@ -79,152 +80,153 @@ module.exports = class Chatbot {
     this.messagesToSendToClient = messages;
   }
 
-  // async updateClientToDB(userPlatformId) {
-  //   if (!this.client) {
-  //     return;
-  //   }
-  //   const variables = await this.rb.rivebot.getUservars(userPlatformId);
-  //   const {
-  //     topic,
-  //     days,
-  //     hours,
-  //     timeOfDay,
-  //     nextTopic,
-  //     nextMessage,
-  //     contentViewed,
-  //     contentId,
-  //     resetHelp,
-  //     helpMessage,
-  //     sendHelpMessage,
-  //     taskComplete,
-  //     newFacebookId,
-  //     userAskedToStop,
-  //     requestResolved,
-  //     removeFollowup
-  //   } = variables;
-  //   if (removeFollowup) {
-  //     this.client.follow_up_date = null;
-  //   }
-  //   if (this.client.checkin_times === null) {
-  //     this.client.checkin_times = [];
-  //   }
-  //   if (resetHelp) {
-  //     if (!sendHelpMessage) {
-  //       this.client.temp_help_response = null;
-  //     }
-  //     this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-  //       return checkInTime.topic !== 'help'; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
-  //     });
-  //   }
-  //
-  //   if (taskComplete || topic === 'ultimatedone') { // removes all non-recurring checkins if the user has completed the task or is done with their workplan
-  //     this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-  //       if (checkInTime.recurring) {
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-  //   }
-  //   const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
-  //   if (nextCheckInDate) {
-  //     this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-  //       if (checkInTime.recurring) {
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-  //   }
-  //   if (helpMessage) {
-  //     this.client.temp_help_response = helpMessage;
-  //   }
-  //   if (sendHelpMessage) {
-  //     const request = await api.createRequest(this.client.id, currentTask.id);
-  //     const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
-  //     const coach = await api.getCoach(this.client.coach_id);
-  //     sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, currentTask);
-  //     this.client.temp_help_response = null;
-  //     this.client.status = 'AWAITING_HELP';
-  //   }
-  //   if (taskComplete) {
-  //     currentTask.status = 'COMPLETED';
-  //     currentTask.date_completed = new Date();
-  //     api.updateTask(currentTask.id, currentTask);
-  //   }
-  //   if (contentViewed) {
-  //     api.markMediaAsViewed(this.client.id, parseInt(contentId, 10));
-  //   }
-  //   if (newFacebookId) {
-  //     this.client.fb_id = newFacebookId;
-  //   }
-  //
-  //   if (topic !== 'recurring' && topic !== 'random' && topic !== 'followup') {
-  //     this.client.topic = topic;
-  //   }
-  //   if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {
-  //     client.checkin_times.push({
-  //       topic: nextTopic,
-  //       message: nextMessage,
-  //       time: nextCheckInDate
-  //     });
-  //   }
-  //   // TODO fill in any deleted recurring tasks, added recurring tasks, and updated recurring tasks
-  //   // given tasks list and clientCheckInTimes
-  //   const recurringTasks = tasks.filter((task) => {
-  //     return task.recurring;
-  //   });
-  //   for (let i = 0; i < recurringTasks.length; i++) { // add new recurring tasks
-  //     const task = recurringTasks[i];
-  //     let taskFound = false;
-  //     for (let j = 0; j < client.checkin_times.length; j++) {
-  //       const checkInTime = client.checkin_times[j];
-  //       if (checkInTime.task_id === task.id) {
-  //         taskFound = true;
-  //       }
-  //     }
-  //     if (taskFound === false) {
-  //       client.checkin_times.push({
-  //         topic: 'recurring',
-  //         message: 'startprompt',
-  //         time: getNextCheckInDate(1, null, 'AFTERNOON'),
-  //         createdDate: new Date(),
-  //         task_id: task.id
-  //       });
-  //     }
-  //   }
-  //   for (let i = 0; i < client.checkin_times.length; i++) {
-  //     const checkInTime = client.checkin_times[i];
-  //     if (checkInTime.task_id) {
-  //       if (client.checkin_times[i].time < Date.now()) {
-  //         for (let j = 0; j < recurringTasks.length; j++) {
-  //           const task = recurringTasks[j];
-  //           if (checkInTime.task_id === task.id) {
-  //             if (task.duration && getNextCheckInDate(-1 * task.duration, null, null) > checkInTime.createdDate) {
-  //               break;
-  //             } else {
-  //               checkInTime.time = getNextCheckInDate(task.frequency ? task.frequency : 1, null, 'AFTERNOON');
-  //             }
-  //           }
-  //         }
-  //         break;
-  //       }
-  //     }
-  //   }
-  //
-  //   if (userAskedToStop) { // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
-  //     client.checkin_times = [];
-  //   }
-  //   if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
-  //     api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
-  //     client.status = 'WORKING';
-  //   } else if (requestResolved === 'false') {
-  //     api.setRequestByTaskId(client.id, currentTask.id, 'NEEDS_ASSISTANCE');
-  //     client.status = 'AWAITING_HELP';
-  //   }
-  //   // update user
-  //   api.updateUser(client.id, client).then(() => {
-  //     console.log('updated client ' + client.id);
-  //   });
-  // }
+  async updateClientToDB(userPlatformId) {
+    if (!this.client) {
+      return;
+    }
+    const variables = await this.rb.rivebot.getUservars(userPlatformId);
+    console.log(variables);
+    const {
+      topic,
+      days,
+      hours,
+      timeOfDay,
+      nextTopic,
+      nextMessage,
+      contentViewed,
+      contentId,
+      resetHelp,
+      helpMessage,
+      sendHelpMessage,
+      taskComplete,
+      newFacebookId,
+      userAskedToStop,
+      requestResolved,
+      removeFollowup
+    } = variables;
+    if (removeFollowup) {
+      this.client.follow_up_date = null;
+    }
+    if (this.client.checkin_times === null) {
+      this.client.checkin_times = [];
+    }
+    if (resetHelp) {
+      if (!sendHelpMessage) {
+        this.client.temp_help_response = null;
+      }
+      this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
+        return checkInTime.topic !== 'help'; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
+      });
+    }
+
+    if (taskComplete || topic === 'ultimatedone') { // removes all non-recurring checkins if the user has completed the task or is done with their workplan
+      this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
+    }
+    const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
+    if (nextCheckInDate) {
+      this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
+    }
+    if (helpMessage) {
+      this.client.temp_help_response = helpMessage;
+    }
+    if (sendHelpMessage) {
+      const request = await api.createRequest(this.client.id, currentTask.id);
+      const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
+      const coach = await api.getCoach(this.client.coach_id);
+      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, currentTask);
+      this.client.temp_help_response = null;
+      this.client.status = 'AWAITING_HELP';
+    }
+    if (taskComplete) {
+      currentTask.status = 'COMPLETED';
+      currentTask.date_completed = new Date();
+      api.updateTask(currentTask.id, currentTask);
+    }
+    if (contentViewed) {
+      api.markMediaAsViewed(this.client.id, parseInt(contentId, 10));
+    }
+    if (newFacebookId) {
+      this.client.fb_id = newFacebookId;
+    }
+
+    if (topic !== 'recurring' && topic !== 'random' && topic !== 'followup') {
+      this.client.topic = topic;
+    }
+    if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {
+      this.client.checkin_times.push({
+        topic: nextTopic,
+        message: nextMessage,
+        time: nextCheckInDate
+      });
+    }
+    // TODO fill in any deleted recurring tasks, added recurring tasks, and updated recurring tasks
+    // given tasks list and clientCheckInTimes
+    const recurringTasks = this.client.tasks.filter((task) => {
+      return task.recurring;
+    });
+    for (let i = 0; i < recurringTasks.length; i++) { // add new recurring tasks
+      const task = recurringTasks[i];
+      let taskFound = false;
+      for (let j = 0; j < this.client.checkin_times.length; j++) {
+        const checkInTime = this.client.checkin_times[j];
+        if (checkInTime.task_id === task.id) {
+          taskFound = true;
+        }
+      }
+      if (taskFound === false) {
+        this.client.checkin_times.push({
+          topic: 'recurring',
+          message: 'startprompt',
+          time: getNextCheckInDate(1, null, 'AFTERNOON'),
+          createdDate: new Date(),
+          task_id: task.id
+        });
+      }
+    }
+    for (let i = 0; i < this.client.checkin_times.length; i++) {
+      const checkInTime = this.client.checkin_times[i];
+      if (checkInTime.task_id) {
+        if (this.client.checkin_times[i].time < Date.now()) {
+          for (let j = 0; j < recurringTasks.length; j++) {
+            const task = recurringTasks[j];
+            if (checkInTime.task_id === task.id) {
+              if (task.duration && getNextCheckInDate(-1 * task.duration, null, null) > checkInTime.createdDate) {
+                break;
+              } else {
+                checkInTime.time = getNextCheckInDate(task.frequency ? task.frequency : 1, null, 'AFTERNOON');
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    if (userAskedToStop) { // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
+      this.client.checkin_times = [];
+    }
+    if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
+      api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
+      this.client.status = 'WORKING';
+    } else if (requestResolved === 'false') {
+      api.setRequestByTaskId(this.client.id, currentTask.id, 'NEEDS_ASSISTANCE');
+      this.client.status = 'AWAITING_HELP';
+    }
+    // update user
+    api.updateUser(this.client.id, this.client).then(() => {
+      console.log('updated client ' + this.client.id);
+    });
+  }
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
   async loadClientData(userPlatformId, userPressedGetStartedOnFBPayload) {
@@ -328,9 +330,6 @@ module.exports = class Chatbot {
   }
 
   assignTopicForNewUser() {
-    console.log('assigntopicfornewuser');
-    console.log(this.client.platform);
-    console.log(this.platform);
     // this.platform is the platform the bot received the message from, this.client.platform is the platform the client should be using
     if (this.client.platform === 'FBOOK' && this.platform === constants.SMS) {
       this.client.topic = 'setupfb';
@@ -470,4 +469,28 @@ function formatUserMessage(userMessage) {
     return userMessage.toLowerCase().trim();
   }
   return 'startprompt'; // should never reach this unless something unexpected happens
+}
+
+function getNextCheckInDate(days, hours, timeOfDay) {
+  if (!days && !hours && !timeOfDay) {
+    return null;
+  }
+  let checkInDate = moment();
+  if (days) {
+    checkInDate = checkInDate.add(parseInt(days, 10), 'days');
+  }
+  if (hours) {
+    checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
+    return checkInDate.valueOf();
+  }
+  if (timeOfDay) {
+    if (timeOfDay.toUpperCase() === 'MORNING') {
+      checkInDate = checkInDate.hours(14).minutes(0).seconds(0);
+    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
+      checkInDate = checkInDate.hours(18).minutes(30).seconds(0);
+    } else {
+      checkInDate = checkInDate.hours(14).minutes(0).seconds(0); // this is if there's a mistake in the script and no time of day is indicated, default the text to be sent in the morning rather than 12am.
+    }
+  }
+  return checkInDate.tz('America/New_York').valueOf();
 }
