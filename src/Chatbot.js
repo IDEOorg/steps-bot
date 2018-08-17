@@ -227,6 +227,7 @@ module.exports = class Chatbot {
     }
     console.log('this.client');
     console.log(this.client);
+    this.adjustClientForUpdate();
     // update user
     api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
@@ -469,6 +470,11 @@ module.exports = class Chatbot {
       this.client.checkin_times = [];
     }
   }
+
+  /* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
+  adjustClientForUpdate() {
+    delete this.client.tasks;
+  }
 };
 
 function formatUserMessage(userMessage) {
@@ -477,6 +483,8 @@ function formatUserMessage(userMessage) {
   }
   return 'startprompt'; // should never reach this unless something unexpected happens
 }
+
+/* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
 
 function getNextCheckInDate(days, hours, timeOfDay) {
   if (!days && !hours && !timeOfDay) {
