@@ -16,6 +16,7 @@ module.exports = class Chatbot {
     this.userMessage = null;
     this.coachHelpResponse = null;
     this.recurringTaskId = null;
+    this.currentTask = null;
   }
 
   async getResponse(opts) {
@@ -85,7 +86,6 @@ module.exports = class Chatbot {
       return;
     }
     const variables = await this.rb.rivebot.getUservars(userPlatformId);
-    console.log(variables);
     const {
       topic,
       days,
@@ -104,6 +104,7 @@ module.exports = class Chatbot {
       requestResolved,
       removeFollowup
     } = variables;
+
     if (removeFollowup) {
       this.client.follow_up_date = null;
     }
@@ -140,17 +141,17 @@ module.exports = class Chatbot {
       this.client.temp_help_response = helpMessage;
     }
     if (sendHelpMessage) {
-      const request = await api.createRequest(this.client.id, currentTask.id);
+      const request = await api.createRequest(this.client.id, this.currentTask.id);
       const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
       const coach = await api.getCoach(this.client.coach_id);
-      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, currentTask);
+      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, this.currentTask);
       this.client.temp_help_response = null;
       this.client.status = 'AWAITING_HELP';
     }
     if (taskComplete) {
-      currentTask.status = 'COMPLETED';
-      currentTask.date_completed = new Date();
-      api.updateTask(currentTask.id, currentTask);
+      this.currentTask.status = 'COMPLETED';
+      this.currentTask.date_completed = new Date();
+      api.updateTask(this.currentTask.id, this.currentTask);
     }
     if (contentViewed) {
       api.markMediaAsViewed(this.client.id, parseInt(contentId, 10));
@@ -216,10 +217,10 @@ module.exports = class Chatbot {
       this.client.checkin_times = [];
     }
     if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(client.id, currentTask.id, 'RESOLVED');
+      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'RESOLVED');
       this.client.status = 'WORKING';
     } else if (requestResolved === 'false') {
-      api.setRequestByTaskId(this.client.id, currentTask.id, 'NEEDS_ASSISTANCE');
+      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
       this.client.status = 'AWAITING_HELP';
     }
     // update user
@@ -347,12 +348,11 @@ module.exports = class Chatbot {
     const orgName = await api.getOrgName(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
     const {
-      currentTask,
+      currentTaskTitle,
       currentTaskSteps,
       currentTaskDescription
     } = this.getCurrentTaskData(this.client.tasks);
     const taskNum = this.getTaskNum();
-    console.log(this.userMessage);
     const {
       contentIdChosen,
       contentText,
@@ -363,7 +363,7 @@ module.exports = class Chatbot {
     return {
       orgName,
       coach,
-      currentTask,
+      currentTaskTitle,
       currentTaskSteps,
       currentTaskDescription,
       taskNum,
@@ -378,6 +378,7 @@ module.exports = class Chatbot {
 
   getCurrentTaskData() { //eslint-disable-line
     let currentTask = null;
+    let currentTaskTitle = null;
     let currentTaskDescription = null;
     let currentTaskSteps = null;
     const tasks = this.client.tasks;
@@ -387,7 +388,8 @@ module.exports = class Chatbot {
         if (steps === null) {
           steps = [];
         }
-        currentTask = tasks[i].title;
+        currentTask = tasks[i];
+        currentTaskTitle = tasks[i].title;
         currentTaskSteps = steps;
         currentTaskDescription = tasks[i].description;
         break;
@@ -404,8 +406,9 @@ module.exports = class Chatbot {
       });
       currentTaskSteps = currentTaskSteps.join('\n\n');
     }
+    this.currentTask = currentTask;
     return {
-      currentTask,
+      currentTaskTitle,
       currentTaskDescription,
       currentTaskSteps
     };
@@ -456,8 +459,8 @@ module.exports = class Chatbot {
     };
   }
 
-  setUserIfWorkplanComplete(currentTask) {
-    if (currentTask === null && this.client.tasks.length > 0) {
+  setUserIfWorkplanComplete(currentTaskTitle) {
+    if (currentTaskTitle === null && this.client.tasks.length > 0) {
       this.client.topic = 'ultimatedone';
       this.client.checkin_times = [];
     }
@@ -493,4 +496,95 @@ function getNextCheckInDate(days, hours, timeOfDay) {
     }
   }
   return checkInDate.tz('America/New_York').valueOf();
+}
+
+function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request, currentTask) {
+  const clientId = client.id;
+  const clientFirstName = client.first_name;
+  const clientLastName = client.last_name;
+  const coachFirstName = coach.first_name;
+  const coachEmail = coach.email;
+  const taskTitle = currentTask.title;
+  const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
+  // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
+
+  const url = 'https://helloroo.org/clients';
+  const steps = taskSteps.map((step) => {
+    return `<li>${step.text}</li>`;
+  });
+
+  const msg = {
+    to: coachEmail,
+    from: 'no-reply@helloroo.org',
+    subject: `[Roo] ${client.first_name} ${client.last_name} has requested assistance.`,
+    html: `<html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="X-UA-Compatible" content="ie=edge">
+              <title>Coach Help Request</title>
+            </head>
+
+            <body>
+              <div class="wrapper" style="background: #c4e6f7;margin: 0 auto; padding: 5px;text-align: center; min-width: 300px;max-width: 600px;">
+                <table style="border:none; width:100%">
+                  <tr style="height:200px">
+                    <td style="text-align:left">
+                      <h1 style="color: #333333;font-family: sans-serif;font-size: 24px;margin: 10px 25px 25px 25px;">
+                        ${clientFirstName} ${clientLastName} needs your help!
+                      </h1>
+                    </td>
+                  </tr>
+                  <tr class="bodyText" style="background: white;color: #333333;font-family: sans-serif;font-size: 18px;padding: 15px;text-align: left;">
+                    <td colspan="2" style="padding:15px">
+                        <p style="margin-top:0">
+                          ${coachFirstName},
+                        </p>
+
+                        <p style="margin-bottom:45px">Your client ${clientFirstName} ${clientLastName} has requested help from Roo the chatbot.
+                        </p>
+
+                        <div class="cta-button" style="background: #00bf8d;border-radius: 25px;-webkit-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);
+                        -moz-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);margin: 0 auto;
+                        padding: 15px;text-align: center;width: 50%;">
+                          <a style="color: white;text-decoration: none;"href="${url}/${clientId}/chat/help">
+                            REPLY NOW
+                          </a>
+                        </div>
+
+                        <p style="margin-top:45px"><strong>Help text</strong>
+                          <!-- <em>(${currentTask.updated || currentTask.timestamp})</em> -->
+                        </p>
+
+                        <p>${helpMessage}</p>
+
+                        <strong>Current Action Item</strong>
+                        <p>${taskTitle}</p>
+
+                        <strong>Action Item Steps</strong>
+                        <ul>
+                          ${steps}
+                        </ul>
+                    </td>
+                  </tr>
+                </table>
+              <div>
+            </body>
+            </html>`
+  };
+
+  sgMail.send(msg)
+    .then(() => {
+      console.log(`email sent to ${coachEmail}`);
+    })
+    .catch((err) => {
+      console.error(err.toString());
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: `Coach notification email error - ${Date.now()}`,
+        text: `Unable to send help request notification email to ${coachEmail} on behalf of
+              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
+      });
+    });
 }

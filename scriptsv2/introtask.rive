@@ -1,10 +1,10 @@
 > topic introtask includes global includes tempfastforward includes gibberish
   + startprompt
   - Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTask>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
+  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
   ^ Use the buttons above to ask for help or to let me know you've finished.<send></fb>
   ^ <sms>^image("<get taskNumImgUrl>")<send></sms>
-  ^ 👉<get currentTask>👈<send>
+  ^ 👉<get currentTaskTitle>👈<send>
   ^ <get currentTaskDescription><send>
   ^ <get currentTaskSteps><send>
   ^ At any point you can message "COACH" to contact your coach, "PLAN" to see your full work plan, or "STOP" to stop receiving messages.<send>
