@@ -172,6 +172,8 @@ module.exports = class Chatbot {
     }
     // TODO fill in any deleted recurring tasks, added recurring tasks, and updated recurring tasks
     // given tasks list and clientCheckInTimes
+    console.log('midpoint stage');
+    console.log(this.client);
     const recurringTasks = this.client.tasks.filter((task) => {
       return task.recurring;
     });
@@ -223,6 +225,8 @@ module.exports = class Chatbot {
       api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
       this.client.status = 'AWAITING_HELP';
     }
+    console.log('this.client');
+    console.log(this.client);
     // update user
     api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);

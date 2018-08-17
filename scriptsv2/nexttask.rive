@@ -1,4 +1,4 @@
-currentTaskTitle > topic nexttask includes global includes tempfastforward includes gibberish
+> topic nexttask includes global includes tempfastforward includes gibberish
   + startprompt
   - Hello, <get username>! Every action item you complete puts you that much closer to your financial goal.<send>
   ^ Here's the next one from your work plan.<send>
