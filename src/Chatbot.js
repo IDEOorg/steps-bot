@@ -456,6 +456,9 @@ module.exports = class Chatbot {
         }
       }
     }
+    if (this.client.topic === 'content' && userMessage === 'startprompt' && contentIdChosen === null) {
+      this.shouldMessageClient = false;
+    }
     return {
       contentIdChosen,
       contentText,
