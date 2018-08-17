@@ -85,7 +85,7 @@ module.exports = class Chatbot {
     if (!this.client) {
       return;
     }
-    const variables = await this.rb.rivebot.getUservars(userPlatformId);
+    const variables = await this.rb.rivebot.getUservars(userPlatformId)[userPlatformId];
     console.log('***********variables***************');
     console.log(variables);
     const {
