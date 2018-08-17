@@ -21,7 +21,7 @@ module.exports = class Rivebot {
       userPlatformId,
       orgName,
       coach,
-      currentTask,
+      currentTaskTitle,
       currentTaskSteps,
       currentTaskDescription,
       taskNum,
@@ -38,7 +38,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'coachEmail', coach.email);
     await this.rivebot.setUservar(userPlatformId, 'orgName', orgName);
     await this.rivebot.setUservar(userPlatformId, 'taskNum', taskNum);
-    await this.rivebot.setUservar(userPlatformId, 'currentTask', currentTask);
+    await this.rivebot.setUservar(userPlatformId, 'currentTaskTitle', currentTaskTitle);
     await this.rivebot.setUservar(userPlatformId, 'currentTaskSteps', currentTaskSteps);
     await this.rivebot.setUservar(userPlatformId, 'currentTaskDescription', currentTaskDescription);
     await this.rivebot.setUservar(userPlatformId, 'contentId', contentIdChosen);
@@ -53,7 +53,7 @@ module.exports = class Rivebot {
 
     const referralLink = formatReferralLinkForNewFBSignups();
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
-    await this.loadGifUrlsToRivebot(userPlatformId);
+    await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
   }
 
   async loadGifUrlsToRivebot(userPlatformId, taskNum) {
