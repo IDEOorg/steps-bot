@@ -67,6 +67,7 @@ async function fbEndpoint(req, res) {
       currentTask: chatbot.currentTask,
       variables
     });
+    await u.loadNewInfoToClient();
     await u.updateClientToDB();
   }
 }

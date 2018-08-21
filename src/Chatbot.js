@@ -314,9 +314,4 @@ module.exports = class Chatbot {
       this.client.checkin_times = [];
     }
   }
-
-  /* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
-  adjustClientForUpdate() {
-    delete this.client.tasks;
-  }
 };

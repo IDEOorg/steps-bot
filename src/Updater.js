@@ -9,7 +9,7 @@ module.exports = class Updater {
     this.currentTask = opts.currentTask;
     this.variables = opts.variables;
   }
-  async updateClientToDB(userPlatformId) {
+  async loadNewInfoToClient() {
     if (!this.client) {
       return;
     }
@@ -68,20 +68,12 @@ module.exports = class Updater {
       this.client.temp_help_response = helpMessage;
     }
     if (sendHelpMessage) {
-      const request = await api.createRequest(this.client.id, this.currentTask.id);
-      const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
-      const coach = await api.getCoach(this.client.coach_id);
-      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, this.currentTask);
       this.client.temp_help_response = null;
       this.client.status = 'AWAITING_HELP';
     }
     if (taskComplete) {
       this.currentTask.status = 'COMPLETED';
       this.currentTask.date_completed = new Date();
-      api.updateTask(this.currentTask.id, this.currentTask);
-    }
-    if (contentViewed) {
-      api.markMediaAsViewed(this.client.id, parseInt(contentId, 10));
     }
     if (newFacebookId) {
       this.client.fb_id = newFacebookId;
@@ -142,11 +134,29 @@ module.exports = class Updater {
       this.client.checkin_times = [];
     }
     if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'RESOLVED');
       this.client.status = 'WORKING';
     } else if (requestResolved === 'false') {
-      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
       this.client.status = 'AWAITING_HELP';
+    }
+  }
+
+  async updateClientToDB() {
+    if (this.variables.sendHelpMessage) {
+      const request = await api.createRequest(this.client.id, this.currentTask.id);
+      const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
+      const coach = await api.getCoach(this.client.coach_id);
+      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, this.currentTask);
+    }
+    if (this.variables.taskComplete) {
+      api.updateTask(this.currentTask.id, this.currentTask);
+    }
+    if (this.variables.contentViewed) {
+      api.markMediaAsViewed(this.client.id, parseInt(this.variables.contentId, 10));
+    }
+    if (this.variables.requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
+      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'RESOLVED');
+    } else if (this.variables.requestResolved === 'false') {
+      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
     }
     this.adjustClientForUpdate();
     // update user
@@ -154,9 +164,11 @@ module.exports = class Updater {
       console.log('updated client ' + this.client.id);
     });
   }
+  /* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
+  adjustClientForUpdate() {
+    delete this.client.tasks;
+  }
 };
-
-/* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
 
 function getNextCheckInDate(days, hours, timeOfDay) {
   if (!days && !hours && !timeOfDay) {
