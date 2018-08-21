@@ -77,6 +77,11 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
   }
 
+  async getVariables(userPlatformId) {
+    const variables = await this.rivebot.getUservars(userPlatformId);
+    return variables ? variables[userPlatformId] : null;
+  }
+
   parseResponse(response, platform) {
     const sendRegex = /<send>/g;
     const regex = {

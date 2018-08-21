@@ -1,4 +1,6 @@
 const Chatbot = require('./src/Chatbot');
+const Rivebot = require('./src/Rivebot');
+const Updater = require('./src/Updater');
 const Messenger = require('./src/Messenger');
 
 require('dotenv').config();
@@ -21,7 +23,6 @@ const twilioController = Botkit.twiliosmsbot({
 server(fbEndpoint, twilioController, getCoachResponse);
 
 async function fbEndpoint(req, res) {
-  console.log('received something');
   res.status(200);
   res.send('ok');
   const body = req.body;
@@ -39,24 +40,34 @@ async function fbEndpoint(req, res) {
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
-  const cb = new Chatbot();
-  await cb.getResponse({
+  const rivebot = new Rivebot();
+  await rivebot.loadChatScripts();
+  const chatbot = new Chatbot({
+    rivebot,
     platform: 'fb',
     userPlatformId,
     userMessage,
     userPressedGetStartedOnFBPayload: fbNewUserPhone
   });
-  const messenger = new Messenger({
-    platform: 'fb',
-    userPlatformId,
-    messages: cb.messagesToSendToClient,
-    client: cb.client
-  });
-  if (cb.shouldMessageClient) {
+  await chatbot.getResponse();
+  if (chatbot.shouldMessageClient) {
+    const messenger = new Messenger({
+      platform: 'fb',
+      userPlatformId,
+      messages: chatbot.messagesToSendToClient,
+      client: chatbot.client
+    });
     await messenger.sendReply();
   }
-  if (cb.client && cb.shouldUpdateClient) {
-    await cb.updateClientToDB(userPlatformId);
+  if (chatbot.client && chatbot.shouldUpdateClient) {
+    const variables = rivebot.getVariables(userPlatformId);
+    const u = new Updater({
+      userPlatformId,
+      client: chatbot.client,
+      currentTask: chatbot.currentTask,
+      variables
+    });
+    await u.updateClientToDB();
   }
 }
 
