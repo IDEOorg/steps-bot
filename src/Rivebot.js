@@ -10,7 +10,7 @@ module.exports = class Rivebot {
   }
 
   async loadChatScripts() {
-    await this.rivebot.loadDirectory(path.resolve(__dirname, '../scriptsv2'));
+    await this.rivebot.loadDirectory(path.resolve(__dirname, '../scripts'));
     this.rivebot.sortReplies();
   }
 

@@ -20,8 +20,6 @@ module.exports = class Updater {
       timeOfDay,
       nextTopic,
       nextMessage,
-      contentViewed,
-      contentId,
       resetHelp,
       helpMessage,
       sendHelpMessage,

@@ -288,7 +288,7 @@ async function loadVarsToRiveBot(riveBot, userInfo, platform, userMessage, force
 
 function setupRiveScript() {
   const bot = new RiveScript();
-  bot.loadDirectory('scriptsv2', () => {
+  bot.loadDirectory('scripts', () => {
     bot.sortReplies();
   });
   return bot;
