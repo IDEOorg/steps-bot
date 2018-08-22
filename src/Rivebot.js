@@ -32,7 +32,11 @@ module.exports = class Rivebot {
       contentDescription,
       recurringTaskContent,
       helpMessage,
-      coachHelpResponse
+      coachHelpResponse,
+      days,
+      nextTopic,
+      nextMessage,
+      timeOfDay
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(userPlatformId, 'username', client.first_name);
@@ -54,7 +58,6 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
     await this.rivebot.setUservar(userPlatformId, 'helpMessage', helpMessage);
     await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
-
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
     await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
@@ -79,6 +82,14 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'coachSaysImgUrl', coachSaysImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'taskNumImgUrl', taskNumImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'checkinImgUrl', checkinImgUrl);
+  }
+
+  async overrideVarsInRivebot(opts, userPlatformId) {
+    const keys = Object.keys(opts);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      await this.rivebot.setUservar(userPlatformId, key, opts[key]); // eslint-disable-line
+    }
   }
 
   async getVariables(userPlatformId) {

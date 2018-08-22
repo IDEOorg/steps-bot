@@ -17,8 +17,6 @@ module.exports = class Messenger {
     if (this.messages === null) {
       return;
     }
-    console.log('this.messages');
-    console.log(this.messages);
     for (let i = 0; i < this.messages.length; i++) {
       const message = this.messages[i];
       let formattedMsg = null;
@@ -146,7 +144,6 @@ function formatMsgForSMS(message) {
 }
 
 function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
-  console.log('sending fb message.....');
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {

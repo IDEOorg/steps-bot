@@ -69,8 +69,10 @@ module.exports = class Updater {
       this.client.status = 'AWAITING_HELP';
     }
     if (taskComplete) {
-      this.currentTask.status = 'COMPLETED';
-      this.currentTask.date_completed = new Date();
+      if (this.currentTask) {
+        this.currentTask.status = 'COMPLETED';
+        this.currentTask.date_completed = new Date();
+      }
     }
     if (newFacebookId) {
       this.client.fb_id = newFacebookId;
@@ -146,7 +148,9 @@ module.exports = class Updater {
       this.client.temp_help_response = null;
     }
     if (this.variables.taskComplete) {
-      api.updateTask(this.currentTask.id, this.currentTask);
+      if (this.currentTask) {
+        api.updateTask(this.currentTask.id, this.currentTask);
+      }
     }
     if (this.variables.contentViewed) {
       api.markMediaAsViewed(this.client.id, parseInt(this.variables.contentId, 10));

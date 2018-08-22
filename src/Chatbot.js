@@ -35,7 +35,6 @@ module.exports = class Chatbot {
     this.addMessageToUserLog(); // adds the user's message to the Client Message API
     if (this.userAskedToStop()) {
       this.handleIfUserAskedToStop();
-      return;
     }
     if (this.userAskedToFastForward()) {
       const ableToFastForward = this.fastForwardUser();
@@ -67,6 +66,7 @@ module.exports = class Chatbot {
     const response = await this.rb.rivebot.reply(this.userPlatformId, this.userMessage);
     const messages = this.rb.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
+    await this.dontSendMessageIfNoWorkplan();
   }
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
@@ -191,6 +191,18 @@ module.exports = class Chatbot {
     } else { // client is supposed to use SMS but somehow got access to Facebook
       this.client.topic = 'welcome';
       this.shouldMessageClient = false;
+    }
+  }
+
+  async dontSendMessageIfNoWorkplan() {
+    if ((!this.client.tasks || this.client.tasks.length === 0) && this.client.topic !== 'setupfb' && this.client.topic !== 'welcome' && this.client.topic !== 'welcomenext' && this.client.topic !== 'welcomewait') {
+      this.shouldMessageClient = false;
+      await this.rb.overrideVarsInRivebot({
+        days: 2,
+        nextTopic: this.client.topic,
+        nextMessage: 'startprompt',
+        timeOfDay: 'morning'
+      }, this.userPlatformId);
     }
   }
 
