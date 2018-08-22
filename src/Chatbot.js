@@ -20,12 +20,12 @@ module.exports = class Chatbot {
   }
 
   async getResponse() {
-    this.formatUserMessage();
     await this.loadClientData(); // gets and stores the client's info from the api
     if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
       return;
     }
+    this.formatUserMessage();
     if (this.userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
       this.client.fb_id = this.userPlatformId;
     }
@@ -71,10 +71,14 @@ module.exports = class Chatbot {
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
   formatUserMessage() {
-    if (this.userMessage) {
-      return this.userMessage.toLowerCase().trim();
+    if (this.userMessage && this.client.topic === 'helpuserresponse') {
+      return; // don't modify the capitalization of the user's response
     }
-    return 'startprompt'; // should never reach this unless something unexpected happens
+    if (this.userMessage) {
+      this.userMessage = this.userMessage.toLowerCase().trim();
+      return;
+    }
+    this.userMessage = 'startprompt'; // should never reach this unless something unexpected happens
   }
 
   async loadClientData() {
@@ -193,6 +197,7 @@ module.exports = class Chatbot {
   async getRemainingVarsRivebotNeeds() {
     const orgName = await api.getOrgName(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
+    const helpMessage = await this.getHelpMessage();
     const {
       currentTaskTitle,
       currentTaskSteps,
@@ -218,11 +223,19 @@ module.exports = class Chatbot {
       contentUrl,
       contentImgUrl,
       contentDescription,
-      coachHelpResponse: this.coachHelpResponse
+      coachHelpResponse: this.coachHelpResponse,
+      helpMessage
     };
   }
 
-  getCurrentTaskData() { //eslint-disable-line
+  getHelpMessage() {
+    if (this.client.topic === 'helpuserresponse') {
+      return this.userMessage;
+    }
+    return null;
+  }
+
+  getCurrentTaskData() {
     let currentTask = null;
     let currentTaskTitle = null;
     let currentTaskDescription = null;
@@ -241,11 +254,9 @@ module.exports = class Chatbot {
         break;
       }
     }
-
     if (currentTaskDescription && currentTaskDescription.length !== 0) {
       currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
     }
-
     if (currentTaskSteps !== null) {
       currentTaskSteps = currentTaskSteps.map((step, i) => {
         return `▪️ Step ${i + 1}: ${step.text}`;

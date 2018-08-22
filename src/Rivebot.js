@@ -30,7 +30,9 @@ module.exports = class Rivebot {
       contentUrl,
       contentImgUrl,
       contentDescription,
-      recurringTaskContent
+      recurringTaskContent,
+      helpMessage,
+      coachHelpResponse
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(userPlatformId, 'username', client.first_name);
@@ -50,6 +52,8 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'introVideoLink', constants.INTRO_VIDEO_URL);
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
+    await this.rivebot.setUservar(userPlatformId, 'helpMessage', helpMessage);
+    await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
 
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
@@ -222,13 +226,15 @@ function getRandomItemFromArray(array) {
 }
 
 function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the phone number without the +1, FB referral postback doesn't properly handle '+' signs as a param
-  if (userPlatformId && userPlatformId.length === 12 && userPlatformId[0] === '+' && userPlatformId[1] === '1') { // is a phone number with +1
-    const referralId = userPlatformId.slice(2);
-    const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${referralId}`;
-    return referralLink;
-  } else if (userPlatformId.length === 10) {
-    const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${userPlatformId}`;
-    return referralLink;
+  if (userPlatformId) {
+    if (userPlatformId.length === 12 && userPlatformId[0] === '+' && userPlatformId[1] === '1') { // is a phone number with +1
+      const referralId = userPlatformId.slice(2);
+      const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${referralId}`;
+      return referralLink;
+    } else if (userPlatformId.length === 10) {
+      const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${userPlatformId}`;
+      return referralLink;
+    }
   }
   return null;
 }

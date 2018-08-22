@@ -66,7 +66,6 @@ module.exports = class Updater {
       this.client.temp_help_response = helpMessage;
     }
     if (sendHelpMessage) {
-      this.client.temp_help_response = null;
       this.client.status = 'AWAITING_HELP';
     }
     if (taskComplete) {
@@ -144,6 +143,7 @@ module.exports = class Updater {
       const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
       const coach = await api.getCoach(this.client.coach_id);
       sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, this.currentTask);
+      this.client.temp_help_response = null;
     }
     if (this.variables.taskComplete) {
       api.updateTask(this.currentTask.id, this.currentTask);
