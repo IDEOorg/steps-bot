@@ -258,10 +258,6 @@ test('loadStoryContent doesn\'t send anything if all content has been viewed', a
   expect(bot.shouldMessageClient).toEqual(false);
   expect(payload.contentIdChosen).toEqual(null);
   expect(payload.contentText).toEqual(null);
-  bot.client = {
-    id: 1035,
-    topic: 'content'
-  };
 });
 
 test('loadStoryContent loads proper content', async () => {

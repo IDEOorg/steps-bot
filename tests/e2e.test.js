@@ -20,14 +20,12 @@
 // user asks for HELP via global keyword
 // ------------BOT SENDS USER MESSAGE------------------
 // user is scheduled to receive a message, but doesn't have any tasks in their workplan
-// user is scheduled to receive a message, but has completed all tasks (they've completed their workplan)
+// user is scheduled to receive a message, but has completed their workplan
 // user is scheduled to receive content
 // user is scheduled to receive content, but has viewed all content
-// user is scheduled to receive a follow up appointment message
 // user is scheduled to receive a check in message
-// user is scheduled to receive a message that's a recurring task
-// user is scheduled to receive their very first task
-// user is scheduled to receive a task besides the first task
+// user is scheduled to receive their very first task (introtask topic)
+// user is scheduled to receive a task besides the first task (nexttask topic)
 // user is scheduled to receive recurring task
 // user is scheduled to receive follow up appointment
 // ------------COACH RESPONDS TO USER INTERACTIONS------------------
@@ -158,26 +156,16 @@ beforeEach(async () => {
 // });
 //
 // test('user fast forwards to next checkin message', async () => {
-//   const user = await api.getUserFromId(1231); // the id of the test user I created for this e2e test
-//   user.checkin_times = [
+//   const clientData = testdata['4'].client;
+//   clientData.id = 1231;
+//   clientData.checkin_times = [
 //     {
 //       topic: 'checkin',
 //       message: 'startprompt',
 //       time: 1534946400166
-//     },
-//     {
-//       topic: 'content',
-//       message: 'startprompt',
-//       time: 2034946400166
-//     },
-//     {
-//       topic: 'help',
-//       message: 'pinguser',
-//       time: 2434946400166
 //     }
 //   ];
-//   await updateUser(user);
-//   const clientData = testdata['4'].client;
+//   await updateUser(clientData);
 //   const userPlatformId = clientData.phone;
 //   const chatbot = new Chatbot({
 //     rivebot,
@@ -199,8 +187,8 @@ beforeEach(async () => {
 //   await u.loadNewInfoToClient();
 //   expect(u.client.topic).toEqual('checkin');
 //   expect(u.client.checkin_times.length).toEqual(1); // client is only expected to have 1 check in at a time for now
-//   user.checkin_times = [];
-//   await updateUser(user);
+//   clientData.checkin_times = [];
+//   await updateUser(clientData);
 // });
 //
 // test('user fast forwards but there\'s no check in message', async () => {
@@ -298,7 +286,6 @@ beforeEach(async () => {
 //
 // test('user writes help message but tells bot he/she wants to edit message', async () => {
 //   const clientData = testdata['9'].client;
-//   await addUser(clientData);
 //   const userPlatformId = clientData.fb_id;
 //   const chatbot = new Chatbot({
 //     rivebot,
@@ -381,7 +368,7 @@ beforeEach(async () => {
 //   expect(chatbot.client.checkin_times[0].topic).toEqual('checkin');
 //   expect(chatbot.client.checkin_times[0].message).toEqual('startprompt');
 // });
-
+//
 // test('user says they\'ve completed a task', async () => {
 //   const clientData = testdata['10'].client;
 //   const userPlatformId = clientData.phone;
@@ -513,26 +500,198 @@ beforeEach(async () => {
 //   expect(chatbot.client.topic).toEqual('helpuserresponse');
 //   expect(chatbot.client.checkin_times.length).toEqual(1);
 // });
+//
+// // ------------TESTS WHERE THE BOT SENDS USER A MESSAGE------------------
+// test('user is scheduled to receive a message, but doesn\'t have any tasks in their workplan', async () => {
+//   const clientData = testdata['11'].client;
+//   clientData.id = 1275;
+//   clientData.checkin_times = [{ topic: 'introtask', message: 'startprompt', time: 10 }];
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     userMessage: 'startprompt',
+//     topic: 'introtask'
+//   });
+//   await chatbot.getResponse();
+//   expect(chatbot.shouldMessageClient).toEqual(false);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('introtask');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('introtask');
+//   expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(10);
+//   clientData.checkin_times = [];
+//   await updateUser(clientData);
+// });
+//
+// test('user is scheduled to receive a message, but has completed their workplan', async () => {
+//   const clientData = testdata['12'].client;
+//   clientData.id = 1277;
+//   clientData.checkin_times = [{ topic: 'nexttask', message: 'startprompt', time: 3258094836093486908 }];
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.fb_id;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.FB,
+//     userPlatformId,
+//     userMessage: 'startprompt',
+//     topic: 'nexttask'
+//   });
+//   await chatbot.getResponse();
+//   expect(chatbot.messagesToSendToClient[1].message).toContain('You\'ve finished every action item in your work plan!');
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('ultimatedone');
+//   expect(chatbot.client.checkin_times.length).toEqual(0);
+//
+//   clientData.checkin_times = [];
+//   await updateUser(clientData);
+// });
+//
+// test('user is scheduled to receive content', async () => {
+//   const clientData = await api.getUserFromId(1035);
+//   const userPlatformId = clientData.fb_id;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.FB,
+//     userPlatformId,
+//     userMessage: 'startprompt',
+//     topic: 'content'
+//   });
+//   await chatbot.getResponse();
+//   const messages = chatbot.messagesToSendToClient;
+//   const contentMessage = messages[messages.length - 2];
+//   expect(contentMessage.type).toEqual('genericurl');
+//   expect(contentMessage).toHaveProperty('imageUrl');
+//   expect(contentMessage).toHaveProperty('content');
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('content');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('checkin');
+// });
+//
+// test('user is scheduled to receive content, but has viewed all content', async () => {
+//   const clientData = await api.getUserFromId(1033);
+//   const userPlatformId = clientData.fb_id;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.FB,
+//     userPlatformId,
+//     userMessage: 'startprompt',
+//     topic: 'content'
+//   });
+//   await chatbot.getResponse();
+//   expect(chatbot.shouldMessageClient).toEqual(false);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('content');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('checkin');
+// });
+//
+// test('user is scheduled to receive a check in message', async () => {
+//   const clientData = testdata['10'].client;
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'checkin',
+//     userMessage: 'startprompt'
+//   });
+//   await chatbot.getResponse();
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const messages = chatbot.messagesToSendToClient;
+//   expect(messages[0].type).toEqual('image');
+//   expect(messages[messages.length - 1].message).toContain('the letter "C".');
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('checkin');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+// });
+//
+// test('user is scheduled to receive their very first task (introtask topic)', async () => {
+//   const clientData = testdata['10'].client;
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'introtask',
+//     userMessage: 'startprompt'
+//   });
+//   await chatbot.getResponse();
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   expect(chatbot.messagesToSendToClient[0].message).toContain('Every journey begins with a single step. Here\'s the first one from your work plan:');
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('introtask');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+// });
 
-// ------------TESTS WHERE THE BOT SENDS USER A MESSAGE------------------
-test('user is scheduled to receive a message, but doesn\'t have any tasks in their workplan', async () => {
-  const clientData = testdata['11'].client;
-  clientData.id = 1275;
-  clientData.checkin_times = [{ topic: 'introtask', message: 'startprompt', time: 10 }];
-  await updateUser(clientData);
-  const userPlatformId = clientData.phone;
+test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
+  const clientData = testdata['9'].client;
+  const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
-    platform: constants.SMS,
+    platform: constants.FB,
     userPlatformId,
-    userMessage: 'startprompt',
-    topic: 'introtask'
+    topic: 'nexttask',
+    userMessage: 'startprompt'
   });
   await chatbot.getResponse();
-  console.log(chatbot.messagesToSendToClient);
-  expect(chatbot.shouldMessageClient).toEqual(false);
-  expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
+  expect(variables.taskNum).toEqual(2);
+  expect(variables.currentTaskTitle).toContain('Contact your utility company');
+  expect(variables.currentTaskDescription).toContain('Enrolling in Budget Billing with your utility company will');
+  expect(variables.currentTaskSteps).toContain(' Step 1: Call your utility company');
+  expect(chatbot.shouldMessageClient).toEqual(true);
+  expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
     userPlatformId,
     client: chatbot.client,
@@ -540,9 +699,6 @@ test('user is scheduled to receive a message, but doesn\'t have any tasks in the
     variables
   });
   await u.loadNewInfoToClient();
-  expect(chatbot.client.topic).toEqual('introtask');
-  expect(chatbot.client.checkin_times[0].topic).toEqual('introtask');
-  expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(10);
-  clientData.checkin_times = [];
-  await updateUser(clientData);
+  expect(chatbot.client.topic).toEqual('nexttask');
+  expect(chatbot.client.checkin_times[0].topic).toEqual('content');
 });

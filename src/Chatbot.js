@@ -54,7 +54,7 @@ module.exports = class Chatbot {
       recurringTaskContent = recurringTask.title;
     }
     const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(); // pull all the remaining data rivebot needs to send a reply
-    this.setUserIfWorkplanComplete(remainingRivebotVars.currentTask);
+    this.setUserIfWorkplanComplete();
     const rivebotVars = Object.assign({
       client: this.client,
       platform: this.platform,
@@ -214,7 +214,7 @@ module.exports = class Chatbot {
       currentTaskTitle,
       currentTaskSteps,
       currentTaskDescription
-    } = this.getCurrentTaskData(this.client.tasks);
+    } = this.getAndSetCurrentTaskData(this.client.tasks); // also sets this.currentTask
     const taskNum = this.getTaskNum();
     const {
       contentIdChosen,
@@ -247,7 +247,7 @@ module.exports = class Chatbot {
     return null;
   }
 
-  getCurrentTaskData() {
+  getAndSetCurrentTaskData() {
     let currentTask = null;
     let currentTaskTitle = null;
     let currentTaskDescription = null;
@@ -331,8 +331,8 @@ module.exports = class Chatbot {
     };
   }
 
-  setUserIfWorkplanComplete(currentTaskTitle) {
-    if (currentTaskTitle === null && this.client.tasks.length > 0) {
+  setUserIfWorkplanComplete() {
+    if (!this.currentTask && this.client.tasks.length > 0) {
       this.client.topic = 'ultimatedone';
       this.client.checkin_times = [];
     }
