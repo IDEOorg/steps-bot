@@ -51,7 +51,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
 
-    const referralLink = formatReferralLinkForNewFBSignups();
+    const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
     await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
   }
@@ -222,11 +222,13 @@ function getRandomItemFromArray(array) {
 }
 
 function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the phone number without the +1, FB referral postback doesn't properly handle '+' signs as a param
-  if (userPlatformId && userPlatformId.length > 2 && userPlatformId[0] === '+' && userPlatformId[1] === '1') {
+  if (userPlatformId && userPlatformId.length === 12 && userPlatformId[0] === '+' && userPlatformId[1] === '1') { // is a phone number with +1
     const referralId = userPlatformId.slice(2);
     const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${referralId}`;
     return referralLink;
+  } else if (userPlatformId.length === 10) {
+    const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${userPlatformId}`;
+    return referralLink;
   }
-
   return null;
 }

@@ -189,7 +189,7 @@ function getNextCheckInDate(days, hours, timeOfDay) {
       checkInDate = checkInDate.hours(14).minutes(0).seconds(0); // this is if there's a mistake in the script and no time of day is indicated, default the text to be sent in the morning rather than 12am.
     }
   }
-  return checkInDate.tz('America/New_York').valueOf();
+  return checkInDate.valueOf();
 }
 
 function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request, currentTask) {
