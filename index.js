@@ -10,7 +10,7 @@ const server = require('./server.js');
 
 // Create the Botkit controller, which controls all instances of the bot.
 const twilioController = Botkit.twiliosmsbot({
-  account_sid: process.env.TWILIO_ACCOUNT_SID,
+  account_sid: process.env.TWILO_ACCOUNT_SID,
   auth_token: process.env.TWILIO_AUTH_TOKEN,
   twilio_number: process.env.TWILIO_NUMBER
 });
