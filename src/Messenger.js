@@ -186,7 +186,7 @@ function sendSMSMessage(userId, message) {
     }, message);
     return twilioClient.messages.create(twilioMessage);
   } catch (e) {
-    console.log(`There's been an error. sendSMSMessage did not send message ${message} to ${userId}.`);
+    console.log(`There's been an error. sendSMSMessage did not send message ${message} to ${userId}. This likely means the phone number is invalid`);
     return null;
   }
 }
