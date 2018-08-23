@@ -174,7 +174,6 @@ async function run(opts) {
   });
   await chatbot.getResponse();
   console.log('*************************chatbot***************************');
-  console.log(chatbot);
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
       platform,

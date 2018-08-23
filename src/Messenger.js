@@ -19,13 +19,18 @@ module.exports = class Messenger {
     }
     for (let i = 0; i < this.messages.length; i++) {
       const message = this.messages[i];
+      console.log('message');
+      console.log(message);
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
+        console.log('sending fb message...');
         await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
         await sleep(300); // eslint-disable-line
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
+        console.log('sending sms message...');
+        console.log(this.userPlatformId, formattedMsg);
         await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
         if (message.type === 'image') {
           await sleep(3100); // eslint-disable-line
