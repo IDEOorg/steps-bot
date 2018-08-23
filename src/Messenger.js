@@ -155,7 +155,7 @@ function formatMsgForSMS(message) {
 
 function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
   try {
-    return rp({
+    const fbPromise = rp({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {
         access_token: process.env.FB_PAGE_ACCESS_TOKEN
@@ -170,6 +170,7 @@ function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
         tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
       }
     });
+    return fbPromise;
   } catch (e) {
     console.log(`There's been an error. sendFBMessage did not send message ${message} to ${userId}.`);
     return null;
@@ -184,7 +185,8 @@ function sendSMSMessage(userId, message) {
       from: process.env.TWILIO_NUMBER,
       to: userId
     }, message);
-    return twilioClient.messages.create(twilioMessage);
+    const twilioPromise = twilioClient.messages.create(twilioMessage);
+    return twilioPromise;
   } catch (e) {
     console.log(`There's been an error. sendSMSMessage did not send message ${message} to ${userId}. This likely means the phone number is invalid`);
     return null;
