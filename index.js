@@ -92,10 +92,6 @@ setInterval(() => {
 async function updateAllClients() {
   const isMessageSentFromCheckIn = true;
   let users = [];
-  const currentTimeHour = (new Date()).getHours();
-  if (currentTimeHour > 12 || currentTimeHour < 4) {
-    users = await api.getAllClients();
-  }
   users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
@@ -104,42 +100,43 @@ async function updateAllClients() {
     const eligibleCheckins = [];
     const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
     const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
-      await sleep(2000); // eslint-disable-line
-      console.log(user);
-      console.log('********FOLLOW UP DATE************');
-      console.log(user.follow_up_date);
-      console.log('follow up appointment');
-      await run({ // eslint-disable-line
-        platform,
-        userPlatformId,
-        userMessage: 'startprompt',
-        topic: 'followup',
-        isMessageSentFromCheckIn
-      });
-    }
-    if (checkins) {
-      for (let j = checkins.length - 1; j >= 0; j--) {
-        const checkin = checkins[j];
-        if (checkin.time < Date.now()) {
-          const removedCheckinFromClient = checkins.splice(j, 1)[0];
-          eligibleCheckins.push(removedCheckinFromClient);
-        }
+    if (userPlatformId) {
+      if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
+        await sleep(2000); // eslint-disable-line
+        console.log('********FOLLOW UP DATE************');
+        console.log(user.id, user.first_name);
+        console.log(user.follow_up_date);
+        await run({ // eslint-disable-line
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'followup',
+          isMessageSentFromCheckIn
+        });
       }
-      if (platform !== null && userPlatformId !== null) {
-        for (let j = 0; j < eligibleCheckins.length; j++) {
-          const eligibleCheckin = eligibleCheckins[j];
-          console.log('eligibleCheckin');
-          console.log(eligibleCheckin);
-          await sleep(2000); // eslint-disable-line
-          await run({ // eslint-disable-line
-            platform,
-            userPlatformId,
-            userMessage: eligibleCheckin.message,
-            topic: eligibleCheckin.topic,
-            recurringTaskId: eligibleCheckin.recurringTaskId,
-            isMessageSentFromCheckIn,
-          });
+      if (checkins) {
+        for (let j = checkins.length - 1; j >= 0; j--) {
+          const checkin = checkins[j];
+          if (checkin.time < Date.now()) {
+            const removedCheckinFromClient = checkins.splice(j, 1)[0];
+            eligibleCheckins.push(removedCheckinFromClient);
+          }
+        }
+        if (platform !== null && userPlatformId !== null) {
+          for (let j = 0; j < eligibleCheckins.length; j++) {
+            const eligibleCheckin = eligibleCheckins[j];
+            console.log('eligibleCheckin');
+            console.log(eligibleCheckin);
+            await sleep(2000); // eslint-disable-line
+            await run({ // eslint-disable-line
+              platform,
+              userPlatformId,
+              userMessage: eligibleCheckin.message,
+              topic: eligibleCheckin.topic,
+              recurringTaskId: eligibleCheckin.recurringTaskId,
+              isMessageSentFromCheckIn,
+            });
+          }
         }
       }
     }
@@ -157,6 +154,7 @@ async function run(opts) {
     isMessageSentFromCheckIn,
     coachHelpResponse
   } = opts;
+  console.log(opts);
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
   const chatbot = new Chatbot({
