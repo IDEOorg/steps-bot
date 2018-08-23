@@ -171,6 +171,8 @@ function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
 }
 
 function sendSMSMessage(userId, message) {
+  console.log('sendSMSMessage function');
+  console.log(userId);
   const twilioMessage = Object.assign({
     from: process.env.TWILIO_NUMBER,
     to: userId
