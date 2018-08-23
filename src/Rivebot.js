@@ -223,6 +223,23 @@ module.exports = class Rivebot {
     }
     finalMessages.push(messageToPush);
   }
+
+  async resetVariables(userPlatformId) {
+    await this.riveBot.setUservar(userPlatformId, 'timeOfDay', null);
+    await this.riveBot.setUservar(userPlatformId, 'days', null);
+    await this.riveBot.setUservar(userPlatformId, 'hours', null);
+    await this.riveBot.setUservar(userPlatformId, 'nextTopic', null);
+    await this.riveBot.setUservar(userPlatformId, 'nextMessage', null);
+    await this.riveBot.setUservar(userPlatformId, 'contentViewed', null);
+    await this.riveBot.setUservar(userPlatformId, 'taskComplete', null);
+    await this.riveBot.setUservar(userPlatformId, 'resetHelp', null);
+    await this.riveBot.setUservar(userPlatformId, 'helpMessage', null);
+    await this.riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
+    await this.riveBot.setUservar(userPlatformId, 'newFacebookId', null);
+    await this.riveBot.setUservar(userPlatformId, 'coachHelpResponse', null);
+    await this.riveBot.setUservar(userPlatformId, 'userAskedToStop', null);
+    await this.riveBot.setUservar(userPlatformId, 'requestResolved', null);
+  }
 };
 
 function getRandomItemFromArray(array) {
