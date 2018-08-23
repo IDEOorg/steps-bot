@@ -20,53 +20,6 @@ const twilioController = Botkit.twiliosmsbot({
 // so we can extend it and process incoming message payloads
 server(fbEndpoint, twilioController, getCoachResponse);
 
-async function run(opts) {
-  const {
-    platform,
-    userPlatformId,
-    userMessage,
-    fbNewUserPhone,
-    topic,
-    recurringTaskId,
-    isMessageSentFromCheckIn,
-    coachHelpResponse
-  } = opts;
-  const rivebot = new Rivebot();
-  await rivebot.loadChatScripts();
-  const chatbot = new Chatbot({
-    rivebot,
-    platform,
-    userPlatformId,
-    userMessage,
-    userPressedGetStartedOnFBPayload: fbNewUserPhone,
-    topic,
-    recurringTaskId,
-    coachHelpResponse
-  });
-  await chatbot.getResponse();
-  if (chatbot.shouldMessageClient) {
-    const messenger = new Messenger({
-      platform,
-      userPlatformId,
-      messages: chatbot.messagesToSendToClient,
-      client: chatbot.client,
-      isMessageSentFromCheckIn
-    });
-    await messenger.sendReply();
-  }
-  if (chatbot.client && chatbot.shouldUpdateClient) {
-    const variables = await rivebot.getVariables(userPlatformId);
-    const updater = new Updater({
-      userPlatformId,
-      client: chatbot.client,
-      currentTask: chatbot.currentTask,
-      variables
-    });
-    await updater.loadNewInfoToClient();
-    await updater.updateClientToDB();
-  }
-}
-
 async function fbEndpoint(req, res) {
   res.status(200);
   res.send('ok');
@@ -197,6 +150,53 @@ async function getCoachResponse(req, res) {
   }
   res.send('OK');
   return null;
+}
+
+async function run(opts) {
+  const {
+    platform,
+    userPlatformId,
+    userMessage,
+    fbNewUserPhone,
+    topic,
+    recurringTaskId,
+    isMessageSentFromCheckIn,
+    coachHelpResponse
+  } = opts;
+  const rivebot = new Rivebot();
+  await rivebot.loadChatScripts();
+  const chatbot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload: fbNewUserPhone,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  await chatbot.getResponse();
+  if (chatbot.shouldMessageClient) {
+    const messenger = new Messenger({
+      platform,
+      userPlatformId,
+      messages: chatbot.messagesToSendToClient,
+      client: chatbot.client,
+      isMessageSentFromCheckIn
+    });
+    await messenger.sendReply();
+  }
+  if (chatbot.client && chatbot.shouldUpdateClient) {
+    const variables = await rivebot.getVariables(userPlatformId);
+    const updater = new Updater({
+      userPlatformId,
+      client: chatbot.client,
+      currentTask: chatbot.currentTask,
+      variables
+    });
+    await updater.loadNewInfoToClient();
+    await updater.updateClientToDB();
+  }
 }
 
 function sleep(ms) {

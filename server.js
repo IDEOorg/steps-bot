@@ -41,7 +41,5 @@ function routes(app, fbEndpoint, twilioController, getCoachResponse) {
     res.redirect(req.query.contentUrl);
   });
 
-  const bot = twilioController.spawn({});
-  twilioController.createWebhookEndpoints(app, bot, () => {
-  });
+  twilioController.createWebhookEndpoints(app, twilioController.spawn({}), () => {});
 }
