@@ -38,7 +38,7 @@ async function fbEndpoint(req, res) {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
   console.log('fb endpoint');
-  run({
+  await run({
     platform: constants.FB,
     userPlatformId,
     userMessage,
@@ -46,11 +46,11 @@ async function fbEndpoint(req, res) {
   });
 }
 
-twilioController.hears('.*', 'message_received', (_, message) => {
+twilioController.hears('.*', 'message_received', async (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
   console.log('sms endpoint');
-  run({
+  await run({
     platform: constants.SMS,
     userPlatformId,
     userMessage
@@ -70,7 +70,7 @@ async function getCoachResponse(req, res) {
         const user = await api.getUserFromId(userId);
         const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
         const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-        run({
+        await run({
           platform,
           userPlatformId,
           userMessage: 'startprompt',
@@ -110,7 +110,7 @@ async function updateAllClients() {
       console.log('********FOLLOW UP DATE************');
       console.log(user.follow_up_date);
       console.log('follow up appointment');
-      run({
+      await run({ // eslint-disable-line
         platform,
         userPlatformId,
         userMessage: 'startprompt',
@@ -132,7 +132,7 @@ async function updateAllClients() {
           console.log('eligibleCheckin');
           console.log(eligibleCheckin);
           await sleep(2000); // eslint-disable-line
-          run({
+          await run({ // eslint-disable-line
             platform,
             userPlatformId,
             userMessage: eligibleCheckin.message,
