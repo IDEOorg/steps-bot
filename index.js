@@ -5,7 +5,7 @@ const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
 
 require('dotenv').config();
-const api = require('./apihelper');
+const api = require('./src/api');
 const Botkit = require('botkit');
 const server = require('./server.js');
 
