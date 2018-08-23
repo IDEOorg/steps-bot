@@ -132,7 +132,8 @@ async function updateAllClients() {
       if (platform !== null && userPlatformId !== null) {
         for (let j = 0; j < eligibleCheckins.length; j++) {
           const eligibleCheckin = eligibleCheckins[j];
-          // arguments for below function are wrong
+          console.log('**********************eligibleCheckin**********************');
+          console.log(eligibleCheckin);
           await sleep(2000); // eslint-disable-line
           run({
             platform,
@@ -172,6 +173,8 @@ async function run(opts) {
     coachHelpResponse
   });
   await chatbot.getResponse();
+  console.log('*************************chatbot***************************');
+  console.log(chatbot);
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
       platform,
@@ -184,6 +187,7 @@ async function run(opts) {
   }
   if (chatbot.client && chatbot.shouldUpdateClient) {
     const variables = await rivebot.getVariables(userPlatformId);
+    console.log('*************************variables***************************');
     const updater = new Updater({
       userPlatformId,
       client: chatbot.client,

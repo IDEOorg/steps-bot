@@ -33,7 +33,8 @@ module.exports = class Messenger {
           await sleep(800); // eslint-disable-line
         }
       }
-
+      console.log('sender this.platform');
+      console.log(this.platform);
       if (this.platform !== constants.FB && this.client) {
         api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
       }
