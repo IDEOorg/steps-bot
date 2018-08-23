@@ -225,20 +225,20 @@ module.exports = class Rivebot {
   }
 
   async resetVariables(userPlatformId) {
-    await this.riveBot.setUservar(userPlatformId, 'timeOfDay', null);
-    await this.riveBot.setUservar(userPlatformId, 'days', null);
-    await this.riveBot.setUservar(userPlatformId, 'hours', null);
-    await this.riveBot.setUservar(userPlatformId, 'nextTopic', null);
-    await this.riveBot.setUservar(userPlatformId, 'nextMessage', null);
-    await this.riveBot.setUservar(userPlatformId, 'contentViewed', null);
-    await this.riveBot.setUservar(userPlatformId, 'taskComplete', null);
-    await this.riveBot.setUservar(userPlatformId, 'resetHelp', null);
-    await this.riveBot.setUservar(userPlatformId, 'helpMessage', null);
-    await this.riveBot.setUservar(userPlatformId, 'sendHelpMessage', null);
-    await this.riveBot.setUservar(userPlatformId, 'newFacebookId', null);
-    await this.riveBot.setUservar(userPlatformId, 'coachHelpResponse', null);
-    await this.riveBot.setUservar(userPlatformId, 'userAskedToStop', null);
-    await this.riveBot.setUservar(userPlatformId, 'requestResolved', null);
+    await this.rivebot.setUservar(userPlatformId, 'timeOfDay', null);
+    await this.rivebot.setUservar(userPlatformId, 'days', null);
+    await this.rivebot.setUservar(userPlatformId, 'hours', null);
+    await this.rivebot.setUservar(userPlatformId, 'nextTopic', null);
+    await this.rivebot.setUservar(userPlatformId, 'nextMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'contentViewed', null);
+    await this.rivebot.setUservar(userPlatformId, 'taskComplete', null);
+    await this.rivebot.setUservar(userPlatformId, 'resetHelp', null);
+    await this.rivebot.setUservar(userPlatformId, 'helpMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'sendHelpMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'newFacebookId', null);
+    await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', null);
+    await this.rivebot.setUservar(userPlatformId, 'userAskedToStop', null);
+    await this.rivebot.setUservar(userPlatformId, 'requestResolved', null);
   }
 };
 
