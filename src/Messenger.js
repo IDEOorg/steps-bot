@@ -187,6 +187,7 @@ function sendSMSMessage(userId, message) {
     }, message);
     console.log('bacon');
     const twilioPromise = twilioClient.messages.create(twilioMessage);
+    console.log(twilioPromise);
     console.log('testt');
     return twilioPromise;
   } catch (e) {
