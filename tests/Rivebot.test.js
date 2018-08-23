@@ -1,5 +1,4 @@
 import Rivebot from '../src/Rivebot';
-import constants from '../src/constants';
 
 test('RiveBot load chat scripts loads the chat scripts', async () => {
   const rivebot = new Rivebot();
