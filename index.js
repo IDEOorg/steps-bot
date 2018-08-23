@@ -33,6 +33,8 @@ async function run(opts) {
   } = opts;
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
+  console.log('userPlatformId******************');
+  console.log(userPlatformId);
   const chatbot = new Chatbot({
     rivebot,
     platform,
@@ -95,6 +97,10 @@ async function fbEndpoint(req, res) {
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {
+  console.log('message receiveddd');
+  console.log(message);
+  console.log(message.user);
+  console.log(message.text);
   const userPlatformId = message.user;
   const userMessage = message.text;
 
