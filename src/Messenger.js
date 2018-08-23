@@ -19,15 +19,10 @@ module.exports = class Messenger {
     }
     for (let i = 0; i < this.messages.length; i++) {
       const message = this.messages[i];
-      console.log('message');
-      console.log(message);
       let formattedMsg = null;
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
-        console.log('sending fb message...');
         try {
-          console.log('formattedMsg');
-          console.log(formattedMsg);
           await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
           await sleep(300); // eslint-disable-line
         } catch (e) {
@@ -35,8 +30,6 @@ module.exports = class Messenger {
         }
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
-        console.log('sending sms message...');
-        console.log(this.userPlatformId, formattedMsg);
         try {
           await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
           if (message.type === 'image') {
@@ -49,8 +42,6 @@ module.exports = class Messenger {
           continue; // eslint-disable-line
         }
       }
-      console.log('sender this.platform');
-      console.log(this.platform);
       if (this.platform !== constants.FB && this.client) {
         api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
       }
