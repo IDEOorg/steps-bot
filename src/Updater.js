@@ -146,7 +146,7 @@ module.exports = class Updater {
     }
     this.adjustClientForUpdate();
     // update user
-    api.updateUser(this.client.id, this.client).then(() => {
+    await api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
     });
   }
