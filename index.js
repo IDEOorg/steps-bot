@@ -59,6 +59,7 @@ async function fbEndpoint(req, res) {
     });
     await messenger.sendReply();
   }
+  console.log(chatbot);
   if (chatbot.client && chatbot.shouldUpdateClient) {
     const variables = rivebot.getVariables(userPlatformId);
     const u = new Updater({

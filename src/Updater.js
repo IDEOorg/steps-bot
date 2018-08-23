@@ -1,6 +1,7 @@
 require('dotenv').config();
 const api = require('./api');
 const moment = require('moment');
+const sgMail = require('@sendgrid/mail');
 
 module.exports = class Updater {
   constructor(opts) {
