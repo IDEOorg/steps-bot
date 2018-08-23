@@ -673,23 +673,96 @@ beforeEach(async () => {
 //   expect(chatbot.client.topic).toEqual('introtask');
 //   expect(chatbot.client.checkin_times[0].topic).toEqual('content');
 // });
+//
+// test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
+//   const clientData = testdata['9'].client;
+//   const userPlatformId = clientData.fb_id;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.FB,
+//     userPlatformId,
+//     topic: 'nexttask',
+//     userMessage: 'startprompt'
+//   });
+//   await chatbot.getResponse();
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(variables.taskNum).toEqual(2);
+//   expect(variables.currentTaskTitle).toContain('Contact your utility company');
+//   expect(variables.currentTaskDescription).toContain('Enrolling in Budget Billing with your utility company will');
+//   expect(variables.currentTaskSteps).toContain(' Step 1: Call your utility company');
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('nexttask');
+//   expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+// });
+//
+// test('user is scheduled to receive recurring task', async () => {
+//   const clientData = await api.getUserFromId(1287);
+//   clientData.checkin_times = [
+//     {
+//       topic: 'recurring',
+//       message: 'startprompt',
+//       time: Date.now(),
+//       createdDate: new Date(),
+//       recurringTaskId: 1116
+//     },
+//     {
+//       topic: 'content',
+//       message: 'startprompt',
+//       time: 99999992159999292
+//     }
+//   ];
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'recurring',
+//     userMessage: 'startprompt',
+//     recurringTaskId: 1116
+//   });
+//   await chatbot.getResponse();
+//   expect(chatbot.messagesToSendToClient[2].message).toEqual('Track income and spending for one month');
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('checkin');
+//   expect(chatbot.client.checkin_times.length).toEqual(2);
+//   expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(Date.now());
+//   clientData.checkin_times = [];
+//   await updateUser(clientData);
+// });
 
-test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
-  const clientData = testdata['9'].client;
-  const userPlatformId = clientData.fb_id;
+test('user is scheduled to receive follow up appointment', async () => {
+  const clientData = await api.getUserFromId(1287);
+  clientData.follow_up_date = new Date();
+  await updateUser(clientData);
+  const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
-    platform: constants.FB,
+    platform: constants.SMS,
     userPlatformId,
-    topic: 'nexttask',
+    topic: 'followup',
     userMessage: 'startprompt'
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(variables.taskNum).toEqual(2);
-  expect(variables.currentTaskTitle).toContain('Contact your utility company');
-  expect(variables.currentTaskDescription).toContain('Enrolling in Budget Billing with your utility company will');
-  expect(variables.currentTaskSteps).toContain(' Step 1: Call your utility company');
+  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}.`);
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -699,6 +772,9 @@ test('user is scheduled to receive a task besides the first task (nexttask topic
     variables
   });
   await u.loadNewInfoToClient();
-  expect(chatbot.client.topic).toEqual('nexttask');
-  expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+  expect(chatbot.client.topic).toEqual('checkin');
+  expect(chatbot.client.follow_up_date).toEqual(null);
+
+  clientData.follow_up_date = null;
+  await updateUser(clientData);
 });

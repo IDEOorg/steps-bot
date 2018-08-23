@@ -1,6 +1,7 @@
 require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
+const moment = require('moment');
 const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 module.exports = class Chatbot {
@@ -48,8 +49,9 @@ module.exports = class Chatbot {
       this.assignTopicForNewUser();
     }
     this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
+    this.addRecurringTasksToCheckInList(); // on introtask topic loads any recurring tasks the user has
     let recurringTaskContent = null;
-    if (this.recurringTaskId) {
+    if (this.recurringTaskId) { // this will only be true if the bot is sending the daily reminder right now
       const recurringTask = await api.getTask(this.recurringTaskId);
       recurringTaskContent = recurringTask.title;
     }
@@ -203,6 +205,27 @@ module.exports = class Chatbot {
         nextMessage: 'startprompt',
         timeOfDay: 'morning'
       }, this.userPlatformId);
+    }
+  }
+
+  addRecurringTasksToCheckInList() {
+    if (this.client.topic === 'introtask') {
+      const clientTasks = this.client.tasks;
+      const existingRecurringCheckins = this.client.checkin_times.map(checkin => checkin.task_id);
+      for (let i = 0; i < clientTasks.length; i++) {
+        const task = clientTasks[i];
+        if (task.recurring) {
+          if (!existingRecurringCheckins.includes(task.id)) {
+            this.client.checkin_times.push({
+              topic: 'recurring',
+              message: 'startprompt',
+              time: Date.now(),
+              createdDate: new Date(),
+              recurringTaskId: task.id
+            });
+          }
+        }
+      }
     }
   }
 

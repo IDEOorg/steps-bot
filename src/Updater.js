@@ -77,7 +77,31 @@ module.exports = class Updater {
     if (newFacebookId) {
       this.client.fb_id = newFacebookId;
     }
-
+    const recurringTasks = this.client.tasks.filter((task) => {
+      return task.recurring;
+    });
+    if (this.client.topic === 'recurring') {
+      for (let i = 0; i < this.client.checkin_times.length; i++) {
+        const checkInTime = this.client.checkin_times[i];
+        if (checkInTime.recurringTaskId) {
+          if (this.client.checkin_times[i].time < Date.now()) {
+            for (let j = 0; j < recurringTasks.length; j++) {
+              const task = recurringTasks[j];
+              if (checkInTime.recurringTaskId === task.id) {
+                const duration = task.recurring.duration;
+                const frequency = task.recurring.frequency;
+                if (duration && getNextCheckInDate(-1 * duration, null, null) > checkInTime.createdDate) { // recurring task has ended
+                  this.client.checkin_times.splice(i, 1); // remove check in
+                } else {
+                  checkInTime.time = getNextCheckInDate(frequency || 1, null, 'AFTERNOON');
+                }
+              }
+            }
+            break;
+          }
+        }
+      }
+    }
     if (topic !== 'recurring' && topic !== 'random' && topic !== 'followup') {
       this.client.topic = topic;
     }
@@ -88,47 +112,6 @@ module.exports = class Updater {
         time: nextCheckInDate
       });
     }
-    const recurringTasks = this.client.tasks.filter((task) => {
-      return task.recurring;
-    });
-    for (let i = 0; i < recurringTasks.length; i++) { // add new recurring tasks
-      const task = recurringTasks[i];
-      let taskFound = false;
-      for (let j = 0; j < this.client.checkin_times.length; j++) {
-        const checkInTime = this.client.checkin_times[j];
-        if (checkInTime.task_id === task.id) {
-          taskFound = true;
-        }
-      }
-      if (taskFound === false) {
-        this.client.checkin_times.push({
-          topic: 'recurring',
-          message: 'startprompt',
-          time: getNextCheckInDate(1, null, 'AFTERNOON'),
-          createdDate: new Date(),
-          task_id: task.id
-        });
-      }
-    }
-    for (let i = 0; i < this.client.checkin_times.length; i++) {
-      const checkInTime = this.client.checkin_times[i];
-      if (checkInTime.task_id) {
-        if (this.client.checkin_times[i].time < Date.now()) {
-          for (let j = 0; j < recurringTasks.length; j++) {
-            const task = recurringTasks[j];
-            if (checkInTime.task_id === task.id) {
-              if (task.duration && getNextCheckInDate(-1 * task.duration, null, null) > checkInTime.createdDate) {
-                break;
-              } else {
-                checkInTime.time = getNextCheckInDate(task.frequency ? task.frequency : 1, null, 'AFTERNOON');
-              }
-            }
-          }
-          break;
-        }
-      }
-    }
-
     if (userAskedToStop) { // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
       this.client.checkin_times = [];
     }
