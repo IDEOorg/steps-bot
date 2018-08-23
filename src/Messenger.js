@@ -26,11 +26,16 @@ module.exports = class Messenger {
         await sleep(300); // eslint-disable-line
       } else if (this.platform === constants.SMS) {
         formattedMsg = formatMsgForSMS(message);
+        console.log('detected sms message....');
+        console.log(formattedMsg);
         await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
         if (message.type === 'image') {
           await sleep(3100); // eslint-disable-line
         } else {
           await sleep(800); // eslint-disable-line
+          console.log('logging message');
+          console.log(process.env.BOT_ID);
+          console.log(this.client.id, formattedMsg.body, this.client.topic);
           api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
         }
       }

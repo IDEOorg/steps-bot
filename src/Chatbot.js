@@ -101,6 +101,7 @@ module.exports = class Chatbot {
   }
 
   setUnrecognizedClientResponse() {
+    console.log('unrecognized');
     let errMessage = null;
     // platform is FB
     if (this.platform === constants.FB) {

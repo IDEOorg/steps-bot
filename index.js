@@ -33,8 +33,6 @@ async function run(opts) {
   } = opts;
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
-  console.log('userPlatformId******************');
-  console.log(userPlatformId);
   const chatbot = new Chatbot({
     rivebot,
     platform,
@@ -46,9 +44,10 @@ async function run(opts) {
     coachHelpResponse
   });
   await chatbot.getResponse();
+  console.log(chatbot);
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
-      platform: 'fb',
+      platform,
       userPlatformId,
       messages: chatbot.messagesToSendToClient,
       client: chatbot.client,
@@ -56,6 +55,7 @@ async function run(opts) {
     });
     await messenger.sendReply();
   }
+  console.log('...updating......');
   if (chatbot.client && chatbot.shouldUpdateClient) {
     const variables = await rivebot.getVariables(userPlatformId);
     const updater = new Updater({
