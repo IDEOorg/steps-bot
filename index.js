@@ -44,7 +44,6 @@ async function run(opts) {
     coachHelpResponse
   });
   await chatbot.getResponse();
-  console.log(chatbot);
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
       platform,
@@ -55,7 +54,6 @@ async function run(opts) {
     });
     await messenger.sendReply();
   }
-  console.log('...updating......');
   if (chatbot.client && chatbot.shouldUpdateClient) {
     const variables = await rivebot.getVariables(userPlatformId);
     const updater = new Updater({
@@ -97,10 +95,6 @@ async function fbEndpoint(req, res) {
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {
-  console.log('message receiveddd');
-  console.log(message);
-  console.log(message.user);
-  console.log(message.text);
   const userPlatformId = message.user;
   const userMessage = message.text;
 
