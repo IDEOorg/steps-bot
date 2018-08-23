@@ -29,7 +29,7 @@ module.exports = class Messenger {
           await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
           await sleep(300); // eslint-disable-line
         } catch (e) {
-          console.log(`There's been an error. sendFBMessage did not send message ${message} to ${this.userPlatformId}.`);
+          console.log(`There's been an error. sendFBMessage did not send message to ${this.userPlatformId}.`);
         }
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
@@ -43,7 +43,7 @@ module.exports = class Messenger {
             await sleep(800); // eslint-disable-line
           }
         } catch (e) {
-          console.log(`There's been an error. sendSMSMessage did not send message ${formattedMsg} to ${this.userPlatformId}. This likely means the phone number is invalid`);
+          console.log(`There's been an error. sendSMSMessage did not send message ${formattedMsg.message} to ${this.userPlatformId}. This likely means the phone number is invalid`);
           continue; // eslint-disable-line
         }
       }
