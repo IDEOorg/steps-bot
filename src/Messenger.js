@@ -25,18 +25,26 @@ module.exports = class Messenger {
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
         console.log('sending fb message...');
-        await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
-        await sleep(300); // eslint-disable-line
+        try {
+          await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
+          await sleep(300); // eslint-disable-line
+        } catch (e) {
+          console.log(`There's been an error. sendFBMessage did not send message ${message} to ${this.userPlatformId}.`);
+        }
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
         console.log('sending sms message...');
         console.log(this.userPlatformId, formattedMsg);
-        await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
-        console.log('exit');
-        if (message.type === 'image') {
-          await sleep(3100); // eslint-disable-line
-        } else {
-          await sleep(800); // eslint-disable-line
+        try {
+          await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
+          if (message.type === 'image') {
+            await sleep(3100); // eslint-disable-line
+          } else {
+            await sleep(800); // eslint-disable-line
+          }
+        } catch (e) {
+          console.log(`There's been an error. sendSMSMessage did not send message ${formattedMsg} to ${this.userPlatformId}. This likely means the phone number is invalid`);
+          continue; // eslint-disable-line
         }
       }
       console.log('sender this.platform');
@@ -154,46 +162,30 @@ function formatMsgForSMS(message) {
 }
 
 function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
-  try {
-    const fbPromise = rp({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {
-        access_token: process.env.FB_PAGE_ACCESS_TOKEN
+  return rp({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {
+      access_token: process.env.FB_PAGE_ACCESS_TOKEN
+    },
+    method: 'POST',
+    json: {
+      recipient: {
+        id: userId
       },
-      method: 'POST',
-      json: {
-        recipient: {
-          id: userId
-        },
-        message,
-        messaging_type: isMessageSentFromCheckIn ? 'MESSAGE_TAG' : 'RESPONSE',
-        tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
-      }
-    });
-    return fbPromise;
-  } catch (e) {
-    console.log(`There's been an error. sendFBMessage did not send message ${message} to ${userId}.`);
-    return null;
-  }
+      message,
+      messaging_type: isMessageSentFromCheckIn ? 'MESSAGE_TAG' : 'RESPONSE',
+      tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
+    }
+  });
 }
 
 function sendSMSMessage(userId, message) {
-  try {
-    console.log('sendSMSMessage function');
-    console.log(userId);
-    const twilioMessage = Object.assign({
-      from: process.env.TWILIO_NUMBER,
-      to: userId
-    }, message);
-    console.log('bacon');
-    const twilioPromise = twilioClient.messages.create(twilioMessage);
-    console.log(twilioPromise);
-    console.log('testt');
-    return twilioPromise;
-  } catch (e) {
-    console.log(`There's been an error. sendSMSMessage did not send message ${message} to ${userId}. This likely means the phone number is invalid`);
-    return null;
-  }
+  const twilioMessage = Object.assign({
+    from: process.env.TWILIO_NUMBER,
+    to: userId
+  }, message);
+  const twilioPromise = twilioClient.messages.create(twilioMessage);
+  return twilioPromise;
 }
 
 function sleep(ms) {
