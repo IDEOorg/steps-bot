@@ -23,9 +23,6 @@ module.exports = class Messenger {
       if (this.platform === constants.FB) {
         formattedMsg = formatMsgForFB(message);
         try {
-          console.log(this.messages);
-          console.log(this.client);
-          console.log(formattedMsg, this.isMessageSentFromCheckIn);
           await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
           console.log('fb message sent to ' + this.userPlatformId);
           await sleep(300); // eslint-disable-line

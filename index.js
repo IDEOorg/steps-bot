@@ -103,9 +103,6 @@ async function updateAllClients() {
     if (userPlatformId) {
       if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
         await sleep(2000); // eslint-disable-line
-        console.log('********FOLLOW UP DATE************');
-        console.log(user.id, user.first_name);
-        console.log(user.follow_up_date);
         await run({ // eslint-disable-line
           platform,
           userPlatformId,
@@ -125,8 +122,6 @@ async function updateAllClients() {
         if (platform !== null && userPlatformId !== null) {
           for (let j = 0; j < eligibleCheckins.length; j++) {
             const eligibleCheckin = eligibleCheckins[j];
-            console.log('eligibleCheckin');
-            console.log(eligibleCheckin);
             await sleep(2000); // eslint-disable-line
             await run({ // eslint-disable-line
               platform,
