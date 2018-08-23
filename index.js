@@ -85,10 +85,9 @@ async function getCoachResponse(req, res) {
   return null;
 }
 
-
 setInterval(() => {
   updateAllClients();
-}, 5400000); // 1800000 is 30 minutes
+}, 100000); // 5400000 check all clients for checkin messages every 90 minutes
 
 async function updateAllClients() {
   const isMessageSentFromCheckIn = true;
@@ -126,7 +125,8 @@ async function updateAllClients() {
       for (let j = checkins.length - 1; j >= 0; j--) {
         const checkin = checkins[j];
         if (checkin.time < Date.now()) {
-          eligibleCheckins.push(checkin.splice(checkins[j], 1)[0]);
+          const removedCheckinFromClient = checkins.splice(j, 1)[0];
+          eligibleCheckins.push(removedCheckinFromClient);
         }
       }
       if (platform !== null && userPlatformId !== null) {
