@@ -106,6 +106,8 @@ async function updateAllClients() {
     const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
     if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
       await sleep(2000); // eslint-disable-line
+      console.log(user);
+      console.log('********FOLLOW UP DATE************');
       console.log(user.follow_up_date);
       console.log('follow up appointment');
       run({
