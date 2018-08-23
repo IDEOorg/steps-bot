@@ -87,7 +87,7 @@ async function getCoachResponse(req, res) {
 
 setInterval(() => {
   updateAllClients();
-}, 100000); // 5400000 check all clients for checkin messages every 90 minutes
+}, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
 
 async function updateAllClients() {
   const isMessageSentFromCheckIn = true;
