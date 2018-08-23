@@ -2,6 +2,7 @@ const Chatbot = require('./src/Chatbot');
 const Rivebot = require('./src/Rivebot');
 const Updater = require('./src/Updater');
 const Messenger = require('./src/Messenger');
+const constants = require('./src/constants');
 
 require('dotenv').config();
 const bot = require('./bothelper');
@@ -22,6 +23,45 @@ const twilioController = Botkit.twiliosmsbot({
 // so we can extend it and process incoming message payloads
 server(fbEndpoint, twilioController, getCoachResponse);
 
+async function run(opts) {
+  const {
+    platform,
+    userPlatformId,
+    userMessage,
+    fbNewUserPhone
+  } = opts;
+  const rivebot = new Rivebot();
+  await rivebot.loadChatScripts();
+  const chatbot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload: fbNewUserPhone
+  });
+  await chatbot.getResponse();
+  if (chatbot.shouldMessageClient) {
+    const messenger = new Messenger({
+      platform: 'fb',
+      userPlatformId,
+      messages: chatbot.messagesToSendToClient,
+      client: chatbot.client
+    });
+    await messenger.sendReply();
+  }
+  if (chatbot.client && chatbot.shouldUpdateClient) {
+    const variables = await rivebot.getVariables(userPlatformId);
+    const u = new Updater({
+      userPlatformId,
+      client: chatbot.client,
+      currentTask: chatbot.currentTask,
+      variables
+    });
+    await u.loadNewInfoToClient();
+    await u.updateClientToDB();
+  }
+}
+
 async function fbEndpoint(req, res) {
   res.status(200);
   res.send('ok');
@@ -40,62 +80,23 @@ async function fbEndpoint(req, res) {
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
-  const rivebot = new Rivebot();
-  await rivebot.loadChatScripts();
-  const chatbot = new Chatbot({
-    rivebot,
-    platform: 'fb',
+
+  run({
+    platform: constants.FB,
     userPlatformId,
     userMessage,
-    userPressedGetStartedOnFBPayload: fbNewUserPhone
+    fbNewUserPhone
   });
-  await chatbot.getResponse();
-  if (chatbot.shouldMessageClient) {
-    const messenger = new Messenger({
-      platform: 'fb',
-      userPlatformId,
-      messages: chatbot.messagesToSendToClient,
-      client: chatbot.client
-    });
-    await messenger.sendReply();
-  }
-  if (chatbot.client && chatbot.shouldUpdateClient) {
-    const variables = await rivebot.getVariables(userPlatformId);
-    console.log(variables);
-    const u = new Updater({
-      userPlatformId,
-      client: chatbot.client,
-      currentTask: chatbot.currentTask,
-      variables
-    });
-    await u.loadNewInfoToClient();
-    await u.updateClientToDB();
-  }
 }
 
 twilioController.hears('.*', 'message_received', (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
 
-  bot.getResponse('sms', userPlatformId, userMessage).then((response) => {
-    if (response !== null) {
-      sender.sendReply('sms', userPlatformId, response.messages).then(() => {
-        updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
-          bot.resetVariables(userPlatformId);
-        }).catch((e) => {
-          console.log(e);
-        });
-      }).catch((e) => {
-        console.log(e);
-        updater.updateUserToDB(userPlatformId, 'sms', response.variables).then(() => {
-          bot.resetVariables(userPlatformId);
-        }).catch((err) => {
-          console.log(err);
-        });
-      });
-    }
-  }).catch((e) => {
-    console.log(e);
+  run({
+    platform: constants.SMS,
+    userPlatformId,
+    userMessage
   });
 });
 setInterval(() => {
