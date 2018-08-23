@@ -185,6 +185,7 @@ function sendSMSMessage(userId, message) {
       from: process.env.TWILIO_NUMBER,
       to: userId
     }, message);
+    console.log('bacon');
     const twilioPromise = twilioClient.messages.create(twilioMessage);
     console.log('testt');
     return twilioPromise;
