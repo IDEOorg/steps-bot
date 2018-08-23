@@ -3,7 +3,6 @@ const Rivebot = require('./src/Rivebot');
 const Updater = require('./src/Updater');
 const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
-
 require('dotenv').config();
 const api = require('./src/api');
 const Botkit = require('botkit');
@@ -15,7 +14,7 @@ const twilioController = Botkit.twiliosmsbot({
   auth_token: process.env.TWILIO_AUTH_TOKEN,
   twilio_number: process.env.TWILIO_NUMBER
 });
-// Set up an Express-powered webserver to expose oauth and webhook endpoints
+// Set up an Express-powered webserver to webhook endpoints
 // We are passing the controller object into our express server module
 // so we can extend it and process incoming message payloads
 server(fbEndpoint, twilioController, getCoachResponse);
@@ -57,6 +56,35 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     userMessage
   });
 });
+
+async function getCoachResponse(req, res) {
+  if (req.query && req.query.user_id) {
+    const userId = req.query.user_id;
+    let messages = await api.getUserMessages(userId);
+    messages = messages.sort((a, b) => {
+      return Date.parse(a.timestamp) > Date.parse(b.timestamp);
+    });
+    if (messages.length) {
+      const coachMessage = messages[messages.length - 1];
+      if (coachMessage.to_user === parseInt(userId, 10)) {
+        const user = await api.getUserFromId(userId);
+        const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+        const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
+        run({
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'helpcoachresponse',
+          coachHelpResponse: coachMessage.text,
+          isMessageSentFromCheckIn: true
+        });
+      }
+    }
+  }
+  res.send('OK');
+  return null;
+}
+
 
 setInterval(() => {
   updateAllClients();
@@ -118,38 +146,6 @@ async function updateAllClients() {
       }
     }
   }
-}
-
-async function getCoachResponse(req, res) {
-  if (req.query && req.query.user_id) {
-    const userId = req.query.user_id;
-    let messages = await api.getUserMessages(userId);
-    messages = messages.sort((a, b) => {
-      return Date.parse(a.timestamp) > Date.parse(b.timestamp);
-    });
-    if (messages.length) {
-      const coachMessage = messages[messages.length - 1];
-      if (coachMessage.to_user === parseInt(userId, 10)) {
-        const user = await api.getUserFromId(userId);
-        let platform = constants.platform;
-        let userPlatformId = user.phone;
-        if (user.platform === 'FBOOK') {
-          platform = constants.platform;
-          userPlatformId = user.fb_id;
-        }
-        run({
-          platform,
-          userPlatformId,
-          userMessage: 'startprompt',
-          topic: 'helpcoachresponse',
-          coachHelpResponse: coachMessage.text,
-          isMessageSentFromCheckIn: true
-        });
-      }
-    }
-  }
-  res.send('OK');
-  return null;
 }
 
 async function run(opts) {
