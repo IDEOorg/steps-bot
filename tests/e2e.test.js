@@ -778,7 +778,7 @@ beforeEach(async () => {
 //   clientData.follow_up_date = null;
 //   await updateUser(clientData);
 // });
-// 
+//
 // test('user receives proper response from coach', async () => {
 //   const clientData = await api.getUserFromId(1287);
 //   clientData.checkin_times = [
@@ -788,6 +788,7 @@ beforeEach(async () => {
 //       time: 99898325981989898169
 //     }
 //   ];
+//   clientData.status = 'AWAITING_HELP';
 //   await updateUser(clientData);
 //   const userPlatformId = clientData.phone;
 //   const chatbot = new Chatbot({
@@ -813,7 +814,9 @@ beforeEach(async () => {
 //   await u.loadNewInfoToClient();
 //   expect(chatbot.client.topic).toEqual('helpcoachresponse');
 //   expect(chatbot.client.checkin_times.length).toEqual(1);
+//   expect(chatbot.client.status).toEqual('WORKING');
 //
 //   clientData.checkin_times = [];
+//   clientData.status = 'WORKING';
 //   await updateUser(clientData);
 // });
