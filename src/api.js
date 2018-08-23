@@ -4,8 +4,6 @@ const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('./tracker');
 require('dotenv').config();
 
-const botId = 41;
-
 async function getAllClients() {
   const clients = await rp({
     method: 'GET',
@@ -357,6 +355,5 @@ module.exports = {
   updateTask,
   markMediaAsViewed,
   getTask,
-  getUserDataFromDB,
-  botId
+  getUserDataFromDB
 };
