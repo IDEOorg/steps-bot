@@ -748,33 +748,72 @@ beforeEach(async () => {
 //   await updateUser(clientData);
 // });
 
-test('user is scheduled to receive follow up appointment', async () => {
-  const clientData = await api.getUserFromId(1287);
-  clientData.follow_up_date = new Date();
-  await updateUser(clientData);
-  const userPlatformId = clientData.phone;
-  const chatbot = new Chatbot({
-    rivebot,
-    platform: constants.SMS,
-    userPlatformId,
-    topic: 'followup',
-    userMessage: 'startprompt'
-  });
-  await chatbot.getResponse();
-  const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}.`);
-  expect(chatbot.shouldMessageClient).toEqual(true);
-  expect(chatbot.shouldUpdateClient).toEqual(true);
-  const u = new Updater({
-    userPlatformId,
-    client: chatbot.client,
-    currentTask: chatbot.currentTask,
-    variables
-  });
-  await u.loadNewInfoToClient();
-  expect(chatbot.client.topic).toEqual('checkin');
-  expect(chatbot.client.follow_up_date).toEqual(null);
-
-  clientData.follow_up_date = null;
-  await updateUser(clientData);
-});
+// test('user is scheduled to receive follow up appointment', async () => {
+//   const clientData = await api.getUserFromId(1287);
+//   clientData.follow_up_date = new Date();
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'followup',
+//     userMessage: 'startprompt'
+//   });
+//   await chatbot.getResponse();
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}.`);
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('checkin');
+//   expect(chatbot.client.follow_up_date).toEqual(null);
+//
+//   clientData.follow_up_date = null;
+//   await updateUser(clientData);
+// });
+// 
+// test('user receives proper response from coach', async () => {
+//   const clientData = await api.getUserFromId(1287);
+//   clientData.checkin_times = [
+//     {
+//       topic: 'content',
+//       message: 'startprompt',
+//       time: 99898325981989898169
+//     }
+//   ];
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'helpcoachresponse',
+//     userMessage: 'startprompt',
+//     coachHelpResponse: 'This is the solution to your problem'
+//   });
+//   await chatbot.getResponse();
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.messagesToSendToClient[1].message).toEqual(`Okay, I was able to chat with your coach about the question you had on action item ${variables.taskNum}. Here's what they had to say:`);
+//   expect(chatbot.messagesToSendToClient[2].message).toEqual('This is the solution to your problem');
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('helpcoachresponse');
+//   expect(chatbot.client.checkin_times.length).toEqual(1);
+//
+//   clientData.checkin_times = [];
+//   await updateUser(clientData);
+// });

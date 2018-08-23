@@ -1,7 +1,6 @@
 require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
-const moment = require('moment');
 const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 module.exports = class Chatbot {
@@ -16,7 +15,7 @@ module.exports = class Chatbot {
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
     this.rb = opts.rivebot;
-    this.coachHelpResponse = null;
+    this.coachHelpResponse = opts.coachHelpResponse;
     this.currentTask = null;
   }
 

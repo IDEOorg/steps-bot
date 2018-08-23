@@ -32,11 +32,7 @@ module.exports = class Rivebot {
       contentDescription,
       recurringTaskContent,
       helpMessage,
-      coachHelpResponse,
-      days,
-      nextTopic,
-      nextMessage,
-      timeOfDay
+      coachHelpResponse
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(userPlatformId, 'username', client.first_name);
