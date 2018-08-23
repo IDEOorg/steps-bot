@@ -188,8 +188,8 @@ async function run(opts) {
     });
     await updater.loadNewInfoToClient();
     await updater.updateClientToDB();
+    await rivebot.resetVariables(userPlatformId);
   }
-  await rivebot.resetVariables(userPlatformId);
 }
 
 function sleep(ms) {
