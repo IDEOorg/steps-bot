@@ -5,10 +5,7 @@ const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
 
 require('dotenv').config();
-const bot = require('./bothelper');
-const sender = require('./senderhelper');
 const api = require('./apihelper');
-const updater = require('./updater');
 const Botkit = require('botkit');
 const server = require('./server.js');
 
@@ -28,7 +25,11 @@ async function run(opts) {
     platform,
     userPlatformId,
     userMessage,
-    fbNewUserPhone
+    fbNewUserPhone,
+    topic,
+    recurringTaskId,
+    isMessageSentFromCheckIn,
+    coachHelpResponse
   } = opts;
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
@@ -37,7 +38,10 @@ async function run(opts) {
     platform,
     userPlatformId,
     userMessage,
-    userPressedGetStartedOnFBPayload: fbNewUserPhone
+    userPressedGetStartedOnFBPayload: fbNewUserPhone,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
   });
   await chatbot.getResponse();
   if (chatbot.shouldMessageClient) {
@@ -45,20 +49,21 @@ async function run(opts) {
       platform: 'fb',
       userPlatformId,
       messages: chatbot.messagesToSendToClient,
-      client: chatbot.client
+      client: chatbot.client,
+      isMessageSentFromCheckIn
     });
     await messenger.sendReply();
   }
   if (chatbot.client && chatbot.shouldUpdateClient) {
     const variables = await rivebot.getVariables(userPlatformId);
-    const u = new Updater({
+    const updater = new Updater({
       userPlatformId,
       client: chatbot.client,
       currentTask: chatbot.currentTask,
       variables
     });
-    await u.loadNewInfoToClient();
-    await u.updateClientToDB();
+    await updater.loadNewInfoToClient();
+    await updater.updateClientToDB();
   }
 }
 
@@ -99,12 +104,13 @@ twilioController.hears('.*', 'message_received', (_, message) => {
     userMessage
   });
 });
+
 setInterval(() => {
   updateAllClients();
 }, 5400000); // 1800000 is 30 minutes
 
 async function updateAllClients() {
-  const isUpdateMessage = true;
+  const isMessageSentFromCheckIn = true;
   let users = [];
   const currentTimeHour = (new Date()).getHours();
   if (currentTimeHour > 12 || currentTimeHour < 4) {
@@ -113,76 +119,47 @@ async function updateAllClients() {
   users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
-    const checkIns = user.checkin_times;
+    const checkins = user.checkin_times;
     const followUpAppointment = user.follow_up_date;
-    const eligibleCheckIns = [];
+    const eligibleCheckins = [];
     let platform = null;
     let userPlatformId = null;
     if (user.platform === 'FBOOK') {
-      platform = 'fb';
+      platform = constants.FB;
       userPlatformId = user.fb_id;
     } else {
-      platform = 'sms';
+      platform = constants.SMS;
       userPlatformId = user.phone;
     }
-    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) {
+    if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
       await sleep(2000); // eslint-disable-line
-      bot.getResponse(platform, userPlatformId, 'startprompt', 'followup', null, null, null).then((response) => { // eslint-disable-line
-        sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
-          updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-            bot.resetVariables(userPlatformId);
-          }).catch((e) => {
-            console.log(e);
-          });
-        }).catch((e) => {
-          console.log(e);
-          updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-            bot.resetVariables(userPlatformId);
-          }).catch((err) => {
-            console.log(err);
-          });
-        });
-      }).catch((e) => {
-        console.log(e);
+      run({
+        platform,
+        userPlatformId,
+        userMessage: 'startprompt',
+        topic: 'followup',
+        isMessageSentFromCheckIn
       });
     }
-    if (checkIns) {
-      for (let j = checkIns.length - 1; j >= 0; j--) {
-        const checkIn = checkIns[j];
-        if (checkIn.time < Date.now()) {
-          eligibleCheckIns.push(checkIns.splice(checkIns[j], 1)[0]);
+    if (checkins) {
+      for (let j = checkins.length - 1; j >= 0; j--) {
+        const checkin = checkins[j];
+        if (checkin.time < Date.now()) {
+          eligibleCheckins.push(checkin.splice(checkins[j], 1)[0]);
         }
       }
       if (platform !== null && userPlatformId !== null) {
-        for (let j = 0; j < eligibleCheckIns.length; j++) {
-          const checkIn = eligibleCheckIns[j];
+        for (let j = 0; j < eligibleCheckins.length; j++) {
+          const eligibleCheckin = eligibleCheckins[j];
           // arguments for below function are wrong
           await sleep(2000); // eslint-disable-line
-          bot.getResponse(platform, userPlatformId, checkIn.message, checkIn.topic, null, null, checkIn.task_id).then((response) => { // eslint-disable-line
-            if (response.dontSendMessage) {
-              updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-                bot.resetVariables(userPlatformId);
-              }).catch((e) => {
-                console.log(e);
-              });
-            } else {
-              sender.sendReply(platform, userPlatformId, response.messages, isUpdateMessage).then(() => {
-                updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-                  bot.resetVariables(userPlatformId);
-                }).catch((e) => {
-                  console.log(e);
-                });
-              }).catch((e) => {
-                console.log(e);
-                updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-                  bot.resetVariables(userPlatformId);
-                }).catch((err) => {
-                  console.log(err);
-                });
-              });
-            }
-          }).catch((e) => {
-            console.log(e);
+          run({
+            platform,
+            userPlatformId,
+            userMessage: eligibleCheckin.message,
+            topic: eligibleCheckin.topic,
+            recurringTaskId: eligibleCheckin.recurringTaskId,
+            isMessageSentFromCheckIn,
           });
         }
       }
@@ -201,27 +178,19 @@ async function getCoachResponse(req, res) {
       const coachMessage = messages[messages.length - 1];
       if (coachMessage.to_user === parseInt(userId, 10)) {
         const user = await api.getUserFromId(userId);
-        let platform = 'sms';
+        let platform = constants.platform;
         let userPlatformId = user.phone;
         if (user.platform === 'FBOOK') {
-          platform = 'fb';
+          platform = constants.platform;
           userPlatformId = user.fb_id;
         }
-        bot.getResponse(platform, userPlatformId, 'startprompt', 'helpcoachresponse', null, coachMessage.text).then((response) => {
-          sender.sendReply(platform, userPlatformId, response.messages).then(() => {
-            if (response.variables) {
-              updater.updateUserToDB(userPlatformId, 'fb', response.variables).then(() => {
-                bot.resetVariables(userPlatformId);
-              });
-            }
-          }).catch((e) => {
-            console.log(e);
-            updater.updateUserToDB(userPlatformId, platform, response.variables).then(() => {
-              bot.resetVariables(userPlatformId);
-            }).catch((err) => {
-              console.log(err);
-            });
-          });
+        run({
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'helpcoachresponse',
+          coachHelpResponse: coachMessage.text,
+          isMessageSentFromCheckIn: true
         });
       }
     }
