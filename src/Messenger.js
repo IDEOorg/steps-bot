@@ -32,6 +32,7 @@ module.exports = class Messenger {
         console.log('sending sms message...');
         console.log(this.userPlatformId, formattedMsg);
         await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
+        console.log('exit');
         if (message.type === 'image') {
           await sleep(3100); // eslint-disable-line
         } else {
@@ -153,31 +154,41 @@ function formatMsgForSMS(message) {
 }
 
 function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
-  return rp({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {
-      access_token: process.env.FB_PAGE_ACCESS_TOKEN
-    },
-    method: 'POST',
-    json: {
-      recipient: {
-        id: userId
+  try {
+    return rp({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {
+        access_token: process.env.FB_PAGE_ACCESS_TOKEN
       },
-      message,
-      messaging_type: isMessageSentFromCheckIn ? 'MESSAGE_TAG' : 'RESPONSE',
-      tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
-    }
-  });
+      method: 'POST',
+      json: {
+        recipient: {
+          id: userId
+        },
+        message,
+        messaging_type: isMessageSentFromCheckIn ? 'MESSAGE_TAG' : 'RESPONSE',
+        tag: isMessageSentFromCheckIn ? 'NON_PROMOTIONAL_SUBSCRIPTION' : null
+      }
+    });
+  } catch (e) {
+    console.log(`There's been an error. sendFBMessage did not send message ${message} to ${userId}.`);
+    return null;
+  }
 }
 
 function sendSMSMessage(userId, message) {
-  console.log('sendSMSMessage function');
-  console.log(userId);
-  const twilioMessage = Object.assign({
-    from: process.env.TWILIO_NUMBER,
-    to: userId
-  }, message);
-  return twilioClient.messages.create(twilioMessage);
+  try {
+    console.log('sendSMSMessage function');
+    console.log(userId);
+    const twilioMessage = Object.assign({
+      from: process.env.TWILIO_NUMBER,
+      to: userId
+    }, message);
+    return twilioClient.messages.create(twilioMessage);
+  } catch (e) {
+    console.log(`There's been an error. sendSMSMessage did not send message ${message} to ${userId}.`);
+    return null;
+  }
 }
 
 function sleep(ms) {

@@ -102,15 +102,8 @@ async function updateAllClients() {
     const checkins = user.checkin_times;
     const followUpAppointment = user.follow_up_date;
     const eligibleCheckins = [];
-    let platform = null;
-    let userPlatformId = null;
-    if (user.platform === 'FBOOK') {
-      platform = constants.FB;
-      userPlatformId = user.fb_id;
-    } else {
-      platform = constants.SMS;
-      userPlatformId = user.phone;
-    }
+    const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+    const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
     if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
       await sleep(2000); // eslint-disable-line
       run({
