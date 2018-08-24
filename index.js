@@ -92,46 +92,51 @@ async function updateAllClients() {
   let users = [];
   users = await api.getAllClients();
   for (let i = 0; i < users.length; i++) {
-    const user = users[i];
-    const checkins = user.checkin_times;
-    const followUpAppointment = user.follow_up_date;
-    const eligibleCheckins = [];
-    const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
-    const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-    if (userPlatformId) {
-      if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
-        await sleep(2000); // eslint-disable-line
-        await run({ // eslint-disable-line
-          platform,
-          userPlatformId,
-          userMessage: 'startprompt',
-          topic: 'followup',
-          isMessageSentFromCheckIn
-        });
-      }
-      if (checkins) {
-        for (let j = checkins.length - 1; j >= 0; j--) {
-          const checkin = checkins[j];
-          if (checkin.time < Date.now()) {
-            const removedCheckinFromClient = checkins.splice(j, 1)[0];
-            eligibleCheckins.push(removedCheckinFromClient);
+    try {
+      const user = users[i];
+      const checkins = user.checkin_times;
+      const followUpAppointment = user.follow_up_date;
+      const eligibleCheckins = [];
+      const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+      const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
+      if (userPlatformId) {
+        if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
+          await sleep(2000); // eslint-disable-line
+          await run({ // eslint-disable-line
+            platform,
+            userPlatformId,
+            userMessage: 'startprompt',
+            topic: 'followup',
+            isMessageSentFromCheckIn
+          });
+        }
+        if (checkins) {
+          for (let j = checkins.length - 1; j >= 0; j--) {
+            const checkin = checkins[j];
+            if (checkin.time < Date.now()) {
+              const removedCheckinFromClient = checkins.splice(j, 1)[0];
+              eligibleCheckins.push(removedCheckinFromClient);
+            }
+          }
+          if (platform !== null && userPlatformId !== null) {
+            for (let j = 0; j < eligibleCheckins.length; j++) {
+              const eligibleCheckin = eligibleCheckins[j];
+              await sleep(2000); // eslint-disable-line
+              await run({ // eslint-disable-line
+                platform,
+                userPlatformId,
+                userMessage: eligibleCheckin.message,
+                topic: eligibleCheckin.topic,
+                recurringTaskId: eligibleCheckin.recurringTaskId,
+                isMessageSentFromCheckIn,
+              });
+            }
           }
         }
-        if (platform !== null && userPlatformId !== null) {
-          for (let j = 0; j < eligibleCheckins.length; j++) {
-            const eligibleCheckin = eligibleCheckins[j];
-            await sleep(2000); // eslint-disable-line
-            await run({ // eslint-disable-line
-              platform,
-              userPlatformId,
-              userMessage: eligibleCheckin.message,
-              topic: eligibleCheckin.topic,
-              recurringTaskId: eligibleCheckin.recurringTaskId,
-              isMessageSentFromCheckIn,
-            });
-          }
-        }
       }
+    } catch (e) {
+      console.log('error with user ' + users[i].id);
+      console.log(users[i]);
     }
   }
 }
@@ -159,7 +164,14 @@ async function run(opts) {
     recurringTaskId,
     coachHelpResponse
   });
-  await chatbot.getResponse();
+  try {
+    await chatbot.getResponse();
+  } catch (e) {
+    chatbot.shouldMessageClient = false;
+    chatbot.shouldUpdateClient = false;
+    console.log('error with user ' + chatbot.userPlatformId);
+    console.log(chatbot.client);
+  }
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
       platform,
