@@ -24,7 +24,6 @@ module.exports = class Messenger {
         formattedMsg = formatMsgForFB(message);
         try {
           await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
-          console.log('fb message sent to ' + this.userPlatformId);
           await sleep(300); // eslint-disable-line
         } catch (e) {
           console.log(`There's been an error. sendFBMessage did not send message to ${this.userPlatformId}.`);
@@ -44,7 +43,9 @@ module.exports = class Messenger {
         }
       }
       if (this.platform !== constants.FB && this.client) {
-        api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
+        if (message.type !== 'image') {
+          api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
+        }
       }
     }
   }

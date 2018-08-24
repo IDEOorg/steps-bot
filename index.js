@@ -37,7 +37,6 @@ async function fbEndpoint(req, res) {
   } else {
     return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
   }
-  console.log('fb endpoint');
   await run({
     platform: constants.FB,
     userPlatformId,
@@ -49,7 +48,6 @@ async function fbEndpoint(req, res) {
 twilioController.hears('.*', 'message_received', async (_, message) => {
   const userPlatformId = message.user;
   const userMessage = message.text;
-  console.log('sms endpoint');
   await run({
     platform: constants.SMS,
     userPlatformId,
@@ -87,7 +85,7 @@ async function getCoachResponse(req, res) {
 
 setInterval(() => {
   updateAllClients();
-}, 150000); // 5400000 check all clients for checkin messages every 90 minutes
+}, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
 
 async function updateAllClients() {
   const isMessageSentFromCheckIn = true;
@@ -149,7 +147,6 @@ async function run(opts) {
     isMessageSentFromCheckIn,
     coachHelpResponse
   } = opts;
-  console.log(opts);
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
   const chatbot = new Chatbot({
