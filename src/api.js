@@ -199,7 +199,8 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     topic: topic || 'NO_TOPIC',
     responses: null
   };
-
+  console.log('body........');
+  console.log(body);
   const message = await rp({
     method: 'POST',
     uri: process.env.API_URL + '/messages',
