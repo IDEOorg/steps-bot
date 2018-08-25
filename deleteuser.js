@@ -2,9 +2,9 @@ const rp = require('request-promise');
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
-const url = 'https://helloroo.org/api';
+const url = 'https://steps-staging.herokuapp.com/api';
 
-deleteUser(1295);
+deleteUser(372);
 
 async function deleteUser(id) {
   const media = await rp({
