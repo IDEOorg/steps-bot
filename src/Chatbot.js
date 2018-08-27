@@ -341,7 +341,7 @@ module.exports = class Chatbot {
         }
       }
     }
-    if (this.client.topic === 'content' && userMessage === 'startprompt' && contentIdChosen === null) {
+    if (((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic') && contentIdChosen === null) {
       this.shouldMessageClient = false;
     }
     return {
