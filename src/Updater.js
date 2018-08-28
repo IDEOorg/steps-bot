@@ -3,6 +3,8 @@ const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 module.exports = class Updater {
   constructor(opts) {
     this.userPlatformId = opts.userPlatformId;
