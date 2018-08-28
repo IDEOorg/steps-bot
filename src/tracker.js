@@ -4,6 +4,7 @@ const KeenTracking = require('keen-tracking');
 const { BitlyClient } = require('bitly');
 const sgMail = require('@sendgrid/mail');
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const token = process.env.BITLY_TOKEN; // see mepler if you don't have this in your .env file
 const bitly = new BitlyClient(token);
 

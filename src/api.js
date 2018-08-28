@@ -4,6 +4,8 @@ const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('./tracker');
 require('dotenv').config();
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 async function getAllClients() {
   const clients = await rp({
     method: 'GET',
