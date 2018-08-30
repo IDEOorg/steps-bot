@@ -43,7 +43,7 @@ import Rivebot from '../src/Rivebot';
 import Updater from '../src/Updater';
 import constants from '../src/constants';
 import testdata from './testdata.json';
-import { updateUser } from '../src/clientutilities';
+import { updateUser } from '../utilities/clientutilities';
 // import api from '../src/api';
 let rivebot = null;
 beforeEach(async () => {

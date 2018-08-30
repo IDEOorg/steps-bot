@@ -146,18 +146,15 @@ module.exports = class Updater {
     } else if (this.variables.requestResolved === 'false') {
       api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
     }
-    this.adjustClientForUpdate();
+    delete this.client.tasks;
     // update user
     await api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
     });
   }
-  /* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
-  adjustClientForUpdate() {
-    delete this.client.tasks;
-  }
 };
 
+/* ***** HELPER FUNCTIONS FOR updateClientToDB FUNCTION ****** */
 function getNextCheckInDate(days, hours, timeOfDay) {
   if (!days && !hours && !timeOfDay) {
     return null;

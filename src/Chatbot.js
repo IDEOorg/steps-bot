@@ -5,6 +5,7 @@ const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 module.exports = class Chatbot {
   constructor(opts) {
+    this.client = null;
     this.platform = opts.platform;
     this.userMessage = opts.userMessage;
     this.userPlatformId = opts.userPlatformId;

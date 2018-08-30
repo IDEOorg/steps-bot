@@ -11,7 +11,7 @@
   - {topic=help}{@ startprompt}<set requestResolved=true>
   + (g|im all set)
   - Glad to hear it! I'll be back in touch soon.
-  ^ <set requestResolved=true>
+  ^ <set requestResolved=true>{topic=checkin}
   + *
   - Sorry, I didn't understand that. Did the coach's response resolve your problem?<send>
   ^ <fb>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>
