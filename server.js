@@ -17,14 +17,15 @@ module.exports = function server(fbEndpoint, twilioController, getCoachResponse)
   // sets up webhook routes for Twilio and Facebook
   routes(app, fbEndpoint, twilioController, getCoachResponse);
 
-  twilioController.webserver = app; // eslint-disable-line
+  twilioController.webserver = app;
   return app;
 };
 
 function routes(app, fbEndpoint, twilioController, getCoachResponse) {
   app.get('/helpresponse', getCoachResponse);
   app.post('/facebook/receive', fbEndpoint);
-  // Perform the FB webhook verification handshake with your verify token
+
+  // Perform the FB webhook verification handshake with your verify token. This is solely so FB can verify that you are the same person
   app.get('/facebook/receive', (req, res) => {
     if (req.query['hub.mode'] === 'subscribe') {
       if (req.query['hub.verify_token'] === process.env.FB_VERIFY_TOKEN) {

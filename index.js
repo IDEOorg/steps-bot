@@ -14,11 +14,15 @@ const twilioController = Botkit.twiliosmsbot({
   auth_token: process.env.TWILIO_AUTH_TOKEN,
   twilio_number: process.env.TWILIO_NUMBER
 });
+
 // Set up an Express-powered webserver to webhook endpoints
-// We are passing the controller object into our express server module
-// so we can extend it and process incoming message payloads
 server(fbEndpoint, twilioController, getCoachResponse);
 
+setInterval(() => {
+  messageAllClientsWithOverdueCheckinsOrFollowups();
+}, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
+
+// takes in the request FB sends and formats that data and passes it into the run() function.
 async function fbEndpoint(req, res) {
   res.status(200);
   res.send('ok');
@@ -27,15 +31,13 @@ async function fbEndpoint(req, res) {
   const userPlatformId = messageObject.sender.id;
   let userMessage = null;
   let fbNewUserPhone = null;
-  if (messageObject.message) {
+  if (messageObject.message) { // if message came from user messaging FB
     userMessage = messageObject.message.text;
-  } else if (messageObject.postback) {
+  } else if (messageObject.postback) { // if message came from user pressing GET STARTED on FB, get the referral code (which is the user's phone number attached to the m.me link)
     userMessage = messageObject.postback.title;
-    if (messageObject.postback.referral) {
-      fbNewUserPhone = '+1' + messageObject.postback.referral.ref;
-    }
+    fbNewUserPhone = getPhoneNumberFromFBLink(messageObject.postback.referral);
   } else {
-    return; // this is critical. If it's not a message being sent to the api then it's a delivery receipt confirmation, which if not exited will cause an infinite loop, send thousands of messages per hour to a user, and get you banned on fb messenger
+    return; // this is critical. Do not delete without thorough testing. If it's not a message being sent to the api then it could be a delivery receipt confirmation, which if not exited will cause an infinite loop, send hundreds of messages per minute to a user, and get you banned on fb messenger
   }
   await run({
     platform: constants.FB,
@@ -58,50 +60,52 @@ twilioController.hears('.*', 'message_received', async (_, message) => {
 async function getCoachResponse(req, res) {
   if (req.query && req.query.user_id) {
     const userId = req.query.user_id;
-    let messages = await api.getUserMessages(userId);
-    messages = messages.sort((a, b) => {
-      return Date.parse(a.timestamp) > Date.parse(b.timestamp);
-    });
-    if (messages.length) {
-      const coachMessage = messages[messages.length - 1];
-      if (coachMessage.to_user === parseInt(userId, 10)) {
-        const user = await api.getUserFromId(userId);
-        const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
-        const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-        await run({
-          platform,
-          userPlatformId,
-          userMessage: 'startprompt',
-          topic: 'helpcoachresponse',
-          coachHelpResponse: coachMessage.text,
-          isMessageSentFromCheckIn: true
-        });
-      }
+    const coachMessage = await getMostRecentUserMessage(userId);
+    if (coachMessage && coachMessage.to_user === parseInt(userId, 10)) { // if the coach message exists and the person receiving the message is the user (this should always be true)
+      const user = await api.getUserFromId(userId);
+      const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+      const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
+      await run({
+        platform,
+        userPlatformId,
+        userMessage: 'startprompt',
+        topic: 'helpcoachresponse',
+        coachHelpResponse: coachMessage.text,
+        isMessageSentFromCheckIn: true
+      });
+    } else {
+      console.log('coach\'s message was not received by client ' + userId);
     }
   }
   res.send('OK');
+}
+
+// this sorts the user's messages and gets the latest message the user received, which should be the coach's message
+async function getMostRecentUserMessage(userId) {
+  let messages = await api.getUserMessages(userId);
+  messages = messages.sort((a, b) => {
+    return Date.parse(a.timestamp) > Date.parse(b.timestamp);
+  });
+  if (messages.length) {
+    const coachMessage = messages[messages.length - 1];
+    return coachMessage;
+  }
   return null;
 }
 
-setInterval(() => {
-  updateAllClients();
-}, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
-
-async function updateAllClients() {
+async function messageAllClientsWithOverdueCheckinsOrFollowups() {
   const isMessageSentFromCheckIn = true;
-  let users = [];
-  users = await api.getAllClients();
+  const users = await api.getAllClients();
+  if (!users.length) {
+    return;
+  }
   for (let i = 0; i < users.length; i++) {
     try {
       const user = users[i];
-      const checkins = user.checkin_times;
-      const followUpAppointment = user.follow_up_date;
-      const eligibleCheckins = [];
       const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
       const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-      if (userPlatformId) {
-        if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) { // send user a follow up message
-          await sleep(2000); // eslint-disable-line
+      if (userPlatformId) { // this line is needed in case a user created a FB account but hasn't messaged on FB (meaning the user.fb_id would be null since the bot has no way of knowing the fb id)
+        if (userShouldReceiveFollowupMessage(user)) { // send user a follow up message
           await run({ // eslint-disable-line
             platform,
             userPlatformId,
@@ -109,36 +113,54 @@ async function updateAllClients() {
             topic: 'followup',
             isMessageSentFromCheckIn
           });
+          await sleep(2000); // eslint-disable-line
         }
-        if (checkins) {
-          for (let j = checkins.length - 1; j >= 0; j--) {
-            const checkin = checkins[j];
-            if (checkin.time < Date.now()) {
-              const removedCheckinFromClient = checkins.splice(j, 1)[0];
-              eligibleCheckins.push(removedCheckinFromClient);
-            }
-          }
-          if (platform !== null && userPlatformId !== null) {
-            for (let j = 0; j < eligibleCheckins.length; j++) {
-              const eligibleCheckin = eligibleCheckins[j];
-              await sleep(2000); // eslint-disable-line
-              await run({ // eslint-disable-line
-                platform,
-                userPlatformId,
-                userMessage: eligibleCheckin.message,
-                topic: eligibleCheckin.topic,
-                recurringTaskId: eligibleCheckin.recurringTaskId,
-                isMessageSentFromCheckIn,
-              });
-            }
+        const eligibleCheckins = getAllCheckinMessagesUserShouldReceive(user);
+        if (platform !== null && userPlatformId !== null) {
+          for (let j = 0; j < eligibleCheckins.length; j++) {
+            const eligibleCheckin = eligibleCheckins[j];
+            await sleep(2000); // eslint-disable-line
+            await run({ // eslint-disable-line
+              platform,
+              userPlatformId,
+              userMessage: eligibleCheckin.message,
+              topic: eligibleCheckin.topic,
+              recurringTaskId: eligibleCheckin.recurringTaskId,
+              isMessageSentFromCheckIn,
+            });
           }
         }
       }
     } catch (e) {
-      console.log('error with user ' + users[i].id);
+      console.log('error updating user ' + users[i].id);
       console.log(users[i]);
     }
   }
+}
+
+// returns true if it's time for the user to receive a follow up message
+function userShouldReceiveFollowupMessage(user) {
+  const followUpAppointment = user.follow_up_date;
+  if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) {
+    return true;
+  }
+  return false;
+}
+
+// returns all check in messages that are overdue and will be sent to the user
+function getAllCheckinMessagesUserShouldReceive(user) {
+  const checkins = user.checkin_times;
+  const eligibleCheckins = [];
+  if (checkins) {
+    for (let j = checkins.length - 1; j >= 0; j--) {
+      const checkin = checkins[j];
+      if (checkin.time < Date.now()) {
+        const removedCheckinFromClient = checkins.splice(j, 1)[0];
+        eligibleCheckins.push(removedCheckinFromClient);
+      }
+    }
+  }
+  return eligibleCheckins;
 }
 
 async function run(opts) {
@@ -194,6 +216,13 @@ async function run(opts) {
     await updater.updateClientToDB();
     await rivebot.resetVariables(userPlatformId);
   }
+}
+
+/* if user clicks on http://m.me/188976981789653?ref=REFERRAL_ID`, and then presses GET START,
+* then the REFERRAL_ID, in this case the user's phone number, will be passed along as an argument.
+*/
+function getPhoneNumberFromFBLink(referral) {
+  return '+1' + referral;
 }
 
 function sleep(ms) {
