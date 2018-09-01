@@ -163,7 +163,9 @@ function getAllCheckinMessagesUserShouldReceive(user) {
   return eligibleCheckins;
 }
 
+// This function is the heart of the chatbot. It takes in user / platform data, figures out what the bot should respond to the client with, and then updates the client
 async function run(opts) {
+  // platform, userPlatformId, and userMessage are required fields in the run() function
   const {
     platform,
     userPlatformId,
