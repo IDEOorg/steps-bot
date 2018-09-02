@@ -93,6 +93,7 @@ module.exports = class Rivebot {
     return variables ? variables[userPlatformId] : null;
   }
 
+  // takes in the bot's message and platform and parses it into a more friendly message for Twilio + Facebook
   parseResponse(response, platform) {
     const sendRegex = /<send>/g;
     const regex = {

@@ -5,19 +5,19 @@ const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 module.exports = class Chatbot {
   constructor(opts) {
-    this.client = null;
     this.platform = opts.platform;
     this.userMessage = opts.userMessage;
     this.userPlatformId = opts.userPlatformId;
     this.userPressedGetStartedOnFBPayload = opts.userPressedGetStartedOnFBPayload;
     this.topic = opts.topic;
     this.recurringTaskId = opts.recurringTaskId;
+    this.coachHelpResponse = opts.coachHelpResponse;
+    this.rb = opts.rivebot;
+    this.currentTask = null;
+    this.client = null;
     this.messagesToSendToClient = null;
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
-    this.rb = opts.rivebot;
-    this.coachHelpResponse = opts.coachHelpResponse;
-    this.currentTask = null;
   }
 
   async getResponse() {
@@ -27,11 +27,11 @@ module.exports = class Chatbot {
       return;
     }
     this.formatUserMessage();
-    if (this.userPressedGetStartedOnFBPayload) { // if the user pressed on the 'Get Started' button, record the user's fb id
-      this.client.fb_id = this.userPlatformId;
-    }
-    if (this.topic) { // manually set the client's topic if a checkin time has hit or the user fast forwarded
+    if (this.topic) { // manually set the client's topic if a checkin time has hit
       this.client.topic = this.topic;
+    }
+    if (this.client.platform === null) { // due to a third party form library in the Admin interface, when a client is SMS, the platform will be null instead of 'SMS'
+      this.client.platform = 'SMS';
     }
     this.addMessageToUserLog(); // adds the user's message to the Client Message API
     if (this.userAskedToStop()) {
@@ -83,22 +83,19 @@ module.exports = class Chatbot {
     this.userMessage = 'startprompt'; // should never reach this unless something unexpected happens
   }
 
+  // gets and stores the client's info from the api
   async loadClientData() {
     let userInfo = null;
     if (this.userPressedGetStartedOnFBPayload) {
       userInfo = await api.getUserDataFromDB(this.platform, this.userPressedGetStartedOnFBPayload);
       if (userInfo) {
         userInfo.topic = 'welcome';
-        userInfo.fb_id = this.userPlatformId;
+        userInfo.fb_id = this.userPlatformId; // if the user pressed on the 'Get Started' button, record the user's fb id
       }
     } else {
       userInfo = await api.getUserDataFromDB(this.platform, this.userPlatformId);
     }
     this.client = userInfo;
-  }
-
-  setPlatform(platform) {
-    this.platform = platform;
   }
 
   setUnrecognizedClientResponse() {
@@ -128,6 +125,7 @@ module.exports = class Chatbot {
       id: this.client.id,
       topic: this.client.topic
     });
+    this.client.follow_up_date = null;
     this.client.checkin_times = [];
     if (this.platform !== constants.FB) {
       this.shouldMessageClient = false;
