@@ -7,17 +7,23 @@ require('dotenv').config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function getAllClients() {
-  const clients = await rp({
-    method: 'GET',
-    uri: process.env.API_URL + '/clients',
-    headers: {
-      Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
-    },
-    json: true
-  }).catch((e) => {
+  let clients = null;
+  try {
+    clients = await rp({
+      method: 'GET',
+      uri: process.env.API_URL + '/clients',
+      headers: {
+        Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
+      },
+      json: true
+    });
+  } catch (e) {
     console.log('getAllClients api method failed');
+    if (e.statusCode === 401) {
+      return constants.UNAUTHORIZED;
+    }
     sendErrorToZendesk(e);
-  });
+  }
   return clients;
 }
 
@@ -301,6 +307,12 @@ async function getTask(id) {
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await getAllClients();
+  if (clients === constants.UNAUTHORIZED) {
+    return constants.UNAUTHORIZED;
+  }
+  if (!clients) {
+    return null;
+  }
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
     if (platform === constants.SMS && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
