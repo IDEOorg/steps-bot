@@ -50,11 +50,6 @@ module.exports = class Chatbot {
     }
     this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
     this.addRecurringTasksToCheckInList(); // on introtask topic loads any recurring tasks the user has
-    let recurringTaskContent = null;
-    if (this.recurringTaskId) { // this will only be true if the bot is sending the daily reminder right now
-      const recurringTask = await api.getTask(this.recurringTaskId);
-      recurringTaskContent = recurringTask.title;
-    }
     const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(); // pull all the remaining data rivebot needs to send a reply
     this.setUserIfWorkplanComplete();
     const rivebotVars = Object.assign({
@@ -62,7 +57,6 @@ module.exports = class Chatbot {
       platform: this.platform,
       userMessage: this.userMessage,
       userPlatformId: this.userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
-      recurringTaskContent
     }, remainingRivebotVars);
     await this.rb.loadVarsToRiveBot(rivebotVars);
     const response = await this.rb.rivebot.reply(this.userPlatformId, this.userMessage);
@@ -145,6 +139,7 @@ module.exports = class Chatbot {
     return false;
   }
 
+  // gets all of the client's checkin times, finds the next checkin time, modifies the client data to take that checkin's data, and then removes that checkin time from the client's list of checkins
   fastForwardUser() {
     const checkInTimes = this.client.checkin_times;
     let userMessage = null;
@@ -231,6 +226,11 @@ module.exports = class Chatbot {
     const orgName = await api.getOrgName(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
     const helpMessage = await this.getHelpMessage();
+    let recurringTaskContent = null;
+    if (this.recurringTaskId) { // this will only be true if the bot is sending the daily reminder right now
+      const recurringTask = await api.getTask(this.recurringTaskId);
+      recurringTaskContent = recurringTask.title;
+    }
     const {
       currentTaskTitle,
       currentTaskSteps,
@@ -250,6 +250,7 @@ module.exports = class Chatbot {
       currentTaskTitle,
       currentTaskSteps,
       currentTaskDescription,
+      recurringTaskContent,
       taskNum,
       contentIdChosen,
       contentText,
@@ -268,6 +269,7 @@ module.exports = class Chatbot {
     return null;
   }
 
+  // gets the current task, current task title, current task description, and currenttask steps. If there's no workplan or if the user has completed their workplan, the fields will be null
   getAndSetCurrentTaskData() {
     let currentTask = null;
     let currentTaskTitle = null;
@@ -304,6 +306,7 @@ module.exports = class Chatbot {
     };
   }
 
+  // gets task number of current task
   getTaskNum() { // eslint-disable-line
     const tasks = this.client.tasks;
     let taskNum = 0;
@@ -318,6 +321,7 @@ module.exports = class Chatbot {
     return taskNum;
   }
 
+  // fetches content data if user is supposed to receive content
   async loadStoryContent(userMessage) { //eslint-disable-line
     let contentIdChosen = null;
     let contentText = null;
@@ -340,7 +344,7 @@ module.exports = class Chatbot {
         }
       }
     }
-    if (((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic') && contentIdChosen === null) {
+    if (contentIdChosen === null && ((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic')) {
       this.shouldMessageClient = false;
     }
     return {

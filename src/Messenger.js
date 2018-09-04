@@ -13,6 +13,7 @@ module.exports = class Messenger {
     this.client = opts.client;
   }
 
+  // sends the message to the Facebook or SMS platform
   async sendReply() {
     if (this.messages === null) {
       return;
@@ -27,6 +28,7 @@ module.exports = class Messenger {
           await sleep(300); // eslint-disable-line
         } catch (e) {
           console.log(`There's been an error. sendFBMessage did not send message to ${this.userPlatformId}.`);
+          continue; // eslint-disable-line
         }
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
@@ -42,11 +44,44 @@ module.exports = class Messenger {
           continue; // eslint-disable-line
         }
       }
-      if (this.platform !== constants.FB && this.client) {
-        if (message.type !== 'image') {
-          api.createMessage(null, process.env.BOT_ID, this.client.id, formattedMsg.body, this.client.topic);
+      this.addMessageToUserLog(message); // NOTE: the unformatted message is passed in as the argument here, NOT the formattedMsg
+    }
+  }
+  // adds the message to the Admin API so it shows up in the user's message log
+  addMessageToUserLog(message) {
+    if (this.client) {
+      let messageToUpload = null;
+      if (this.platform === constants.FB) {
+        switch (message.type) {
+          case 'text':
+            messageToUpload = message.message;
+            break;
+          case 'image':
+            messageToUpload = message.image;
+            break;
+          case 'quickreply':
+            messageToUpload = message.text;
+            break;
+          case 'generic':
+            messageToUpload = message.content;
+            break;
+          case 'genericurl':
+            messageToUpload = message.content;
+            break;
+          case 'button':
+            messageToUpload = message.content;
+            break;
+          default:
+            messageToUpload = constants.DEFAULT_ERR_MESSAGE;
+        }
+      } else { // platform is SMS
+        if (message.type === 'text') { // eslint-disable-line
+          messageToUpload = message.message;
+        } else if (message.type === 'image') {
+          messageToUpload = message.message + '\n' + message.image;
         }
       }
+      api.createMessage(null, process.env.BOT_ID, this.client.id, messageToUpload, this.client.topic);
     }
   }
 };
@@ -135,7 +170,7 @@ function formatMsgForFB(message) {
     };
   }
   return {
-    text: 'This message should not be showing up and is an error on our part.'
+    text: constants.DEFAULT_ERR_MESSAGE
   };
 }
 
