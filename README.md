@@ -9,7 +9,8 @@ NOTE: Both Facebook and Twilio, the SMS service we use, requires a non-localhost
 Instructions on how to set up the staging environment (which will allow you to send messages) can be found later in this README.
 ## .env file
 Create a .env file with the following values:
-`TWILIO_ACCOUNT_SID=
+```
+TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_NUMBER=
 FB_PAGE_ACCESS_TOKEN=
@@ -20,7 +21,8 @@ OAUTH_ACCESS_TOKEN=
 API_URL=https://steps-staging.herokuapp.com/api
 BOT_URL=
 BOT_ID=116
-SENDGRID_API_KEY=`
+SENDGRID_API_KEY=
+```
 You'll need a Twilio account and provide those credentials for SMS, a Facebook developer account / credentials for Facebook. You can go to twilio.com and developers.facebook.com for those. More info on getting set up in the documentation above.
 *Also required:*
 - BOT_URL, this is the url to the bot's server (you'll create this in the "Staging / Production Environment" section. For now, leave this blank.)
@@ -31,9 +33,11 @@ You'll need a Twilio account and provide those credentials for SMS, a Facebook d
 - BITLY_TOKEN, this wraps any content we send into a nice bit.ly url.
 - SENDGRID_API_KEY, any emails that are sent to the client or for error handling require this API key.
 ## Local Development
-`1) git clone https://github.com/IDEOorg/steps-bot
+```
+1) git clone https://github.com/IDEOorg/steps-bot
 2) npm install
-3) npm start`
+3) npm start
+```
 ## Adding a Staging / Production Environment
 1. Deploy this code to Heroku.
 1a. `npm install -g heroku`
@@ -41,8 +45,16 @@ You'll need a Twilio account and provide those credentials for SMS, a Facebook d
 1c. `heroku create` (do this in this directory. You should now have a server url)
 1d. Copy and paste the server url into the BOT_URL environment variable
 1e. `git push heroku master`
-1f. ``
+1f. Now your bot server should be operational.
+2. You need to set the environment variables in Heroku (Heroku doesn't read .env files). You can do that with the following url, substituting `YOUR_APP_NAME` with your app's name. https://dashboard.heroku.com/apps/YOUR_APP_NAME/settings. You should see a Config Vars section. Set the environment variables.
+3. To test if it's working, text the Twilio phone number `START`. You should receive this message `Sorry, we didn't recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.` If you didn't receive that message, check your environment variable credentials in Heroku (specifically for Twilio and BOT_URL).
+4. Create a new user in either https://steps-staging.herokuapp.com or your own Admin staging server (whichever you chose earlier in the *.env file* section).
+5. Text the Twilio phone number `START`. You should receive the following message `Hi <get username>! I'm Roo, your financial coaching assistant. I’m here to help you complete the work plan...` If you didn't check the API_URL, OAUTH_ACCESS_TOKEN environment variables.
+6. You're all setup now!
 
-### Dependencies Used
+# Testing
+The tests in the /tests folder are designed only to work with the IDEO.org database (it runs API calls looking for specific users). You can use `tests/e2e.test.js` and `testdata.json` as a sample for how to structure your own tests with your own database.
+
+# Dependencies Used
 - Node 9.5.0
 - npm 4.6.1
