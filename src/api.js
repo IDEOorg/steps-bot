@@ -300,9 +300,6 @@ async function getTask(id) {
 
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
-  console.log(userPlatformId);
-  console.log(platform);
-  console.log('getUserDataFromDB');
   const clients = await getAllClients();
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];

@@ -31,12 +31,11 @@ async function fbEndpoint(req, res) {
   const userPlatformId = messageObject.sender.id;
   let userMessage = null;
   let fbNewUserPhone = null;
-  console.log(messageObject);
   if (messageObject.message) { // if message came from user messaging FB
     userMessage = messageObject.message.text;
-  } else if (messageObject.postback) { // if message came from user pressing GET STARTED on FB, get the referral code (which is the user's phone number attached to the m.me link)
+  } else if (messageObject.postback) { // triggered if user presses any button
     userMessage = messageObject.postback.title;
-    if (messageObject.postback.referral) {
+    if (messageObject.postback.referral) { // if message came from user pressing GET STARTED on FB, get the referral code (which is the user's phone number attached to the m.me link)
       fbNewUserPhone = getPhoneNumberFromFBLink(messageObject.postback.referral);
     }
   } else {
