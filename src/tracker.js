@@ -5,8 +5,6 @@ const { BitlyClient } = require('bitly');
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const token = process.env.BITLY_TOKEN; // see mepler if you don't have this in your .env file
-const bitly = new BitlyClient(token);
 
 // Configure a client instance
 const keen = new KeenTracking({
@@ -39,34 +37,40 @@ exports.trackMessageSent = function trackMessageSent(body) {
   keen.recordEvent('clientResponse', body);
 };
 
-// see Chatbot.js
+// redirect (on this server) URL is wrapped in a bit.ly link with the content.id, content.url, and user.id
+// user clicks bit.ly link and is taken to redirect URL
+// the "view" is recorded in analytics with the params in the bit.ly link
+// user is redirected to content.url
 exports.buildContentUrl = async function buildContentUrl(content, user) {
-  // redirect (on this server) URL is wrapped in a bit.ly link with the content.id, content.url, and user.id
-  // user clicks bit.ly link and is taken to redirect URL
-  // the "view" is recorded in analytics with the params in the bit.ly link
-  // user is redirected to content.url
   if (content === null) {
     return null;
   }
-  // create redirect Url to send them to our sever for tracking before being sent to final destination
   const redirectUrl = `${process.env.BOT_URL}/redirect?contentId=${content.id}&contentUrl=${content.url}&userId=${user.id}`;
+  // create redirect Url to send them to our sever for tracking before being sent to final destination
 
-  // wrap redirect url in a bitly link
-  let bitlyUrl = null;
-  try {
-    bitlyUrl = await bitly.shorten(redirectUrl);
-  } catch (err) {
-    console.error('Unable to create Bitly link');
-    sgMail.send({
-      to: 'support@helloroo.zendesk.com',
-      from: 'no-reply@helloroo.org',
-      subject: `Bitly error - ${Date.now()}`,
-      text: `Unable to create Bitly link for ${content.url}. \n Here is the error: ${err}`,
-    });
+  const token = process.env.BITLY_TOKEN; // see mepler if you don't have this in your .env file
+
+  let urlToSend = redirectUrl;
+  if (token) {
+    const bitly = new BitlyClient(token);
+    // wrap redirect url in a bitly link
+    let bitlyUrl = null;
+    try {
+      bitlyUrl = await bitly.shorten(redirectUrl);
+    } catch (err) {
+      console.error('Unable to create Bitly link');
+      sgMail.send({
+        to: 'support@helloroo.zendesk.com',
+        from: 'no-reply@helloroo.org',
+        subject: `Bitly error - ${Date.now()}`,
+        text: `Unable to create Bitly link for ${content.url}. \n Here is the error: ${err}`,
+      });
+    }
+    urlToSend = bitlyUrl.url;
   }
 
   trackMediaSent(content, user);
-  return bitlyUrl.url;
+  return urlToSend;
 };
 
 // see Chatbot.js
