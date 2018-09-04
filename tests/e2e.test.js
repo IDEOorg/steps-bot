@@ -66,6 +66,7 @@ test('user pressed GET STARTED on FB but doesn\'t have a registered phone number
 });
 
 test('user presses GET STARTED on FB and has a registered phone number', async () => {
+  jest.setTimeout(10000);
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
@@ -92,6 +93,7 @@ test('user presses GET STARTED on FB and has a registered phone number', async (
 });
 
 test('user texts START via SMS but doesn\'t have a registered phone number', async () => {
+  jest.setTimeout(10000);
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.SMS,
@@ -105,6 +107,7 @@ test('user texts START via SMS but doesn\'t have a registered phone number', asy
 });
 
 test('user texts START via SMS, has a registered phone number, and is on SMS platform', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['2'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -131,6 +134,7 @@ test('user texts START via SMS, has a registered phone number, and is on SMS pla
 });
 
 test('user texts START via SMS, has a registered phone number, and is on FB platform', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['3'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -156,6 +160,7 @@ test('user texts START via SMS, has a registered phone number, and is on FB plat
 });
 
 test('user fast forwards to next checkin message', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['4'].client;
   clientData.id = 1231;
   clientData.checkin_times = [
@@ -192,6 +197,7 @@ test('user fast forwards to next checkin message', async () => {
 });
 
 test('user fast forwards but there\'s no check in message', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['5'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -206,6 +212,7 @@ test('user fast forwards but there\'s no check in message', async () => {
 });
 
 test('user asks for help on SMS by texting A', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['6'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -232,6 +239,7 @@ test('user asks for help on SMS by texting A', async () => {
 });
 
 test('user asks for help on FB by choosing "have some questions" button', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['7'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -258,6 +266,7 @@ test('user asks for help on FB by choosing "have some questions" button', async 
 });
 
 test('user writes help message but hasn\'t confirmed submission yet', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['8'].client;
   const userPlatformId = clientData.phone;
   const helpMessage = 'I need help with this.';
@@ -285,6 +294,7 @@ test('user writes help message but hasn\'t confirmed submission yet', async () =
 });
 
 test('user writes help message but tells bot he/she wants to edit message', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['9'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -312,6 +322,7 @@ test('user writes help message but tells bot he/she wants to edit message', asyn
 });
 
 test('user decides not to send help message', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['9'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -340,6 +351,7 @@ test('user decides not to send help message', async () => {
 });
 
 test('user sends help message to coach', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['9'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -370,6 +382,7 @@ test('user sends help message to coach', async () => {
 });
 
 test('user says they\'ve completed a task', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -395,6 +408,7 @@ test('user says they\'ve completed a task', async () => {
 });
 
 test('user texts STOP on FB', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['9'].client;
   clientData.id = 1247;
   clientData.checkin_times = [{ topic: 'checkin', message: 'startprompt', time: 432942342343325052 }];
@@ -424,6 +438,7 @@ test('user texts STOP on FB', async () => {
 });
 
 test('user texts STOP on SMS', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   clientData.id = 1271;
   clientData.checkin_times = [{ topic: 'checkin', message: 'startprompt', time: 432942342343325052 }];
@@ -453,6 +468,7 @@ test('user texts STOP on SMS', async () => {
 });
 
 test('user asks for their workplan (PLAN)', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -477,6 +493,7 @@ test('user asks for their workplan (PLAN)', async () => {
 });
 
 test('user asks for HELP via global keyword', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -503,6 +520,7 @@ test('user asks for HELP via global keyword', async () => {
 
 // ------------TESTS WHERE THE BOT SENDS USER A MESSAGE------------------
 test('user is scheduled to receive a message, but doesn\'t have any tasks in their workplan', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['11'].client;
   clientData.id = 1275;
   clientData.checkin_times = [{ topic: 'introtask', message: 'startprompt', time: 10 }];
@@ -534,6 +552,7 @@ test('user is scheduled to receive a message, but doesn\'t have any tasks in the
 });
 
 test('user is scheduled to receive a message, but has completed their workplan', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['12'].client;
   clientData.id = 1277;
   clientData.checkin_times = [{ topic: 'nexttask', message: 'startprompt', time: 3258094836093486908 }];
@@ -566,6 +585,7 @@ test('user is scheduled to receive a message, but has completed their workplan',
 });
 
 test('user is scheduled to receive content', async () => {
+  jest.setTimeout(10000);
   const clientData = await api.getUserFromId(1035);
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -596,6 +616,7 @@ test('user is scheduled to receive content', async () => {
 });
 
 test('user is scheduled to receive content, but has viewed all content', async () => {
+  jest.setTimeout(10000);
   const clientData = await api.getUserFromId(1033);
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -621,6 +642,7 @@ test('user is scheduled to receive content, but has viewed all content', async (
 });
 
 test('user is scheduled to receive a check in message', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -649,6 +671,7 @@ test('user is scheduled to receive a check in message', async () => {
 });
 
 test('user is scheduled to receive their very first task (introtask topic)', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['10'].client;
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
@@ -675,6 +698,7 @@ test('user is scheduled to receive their very first task (introtask topic)', asy
 });
 
 test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
+  jest.setTimeout(10000);
   const clientData = testdata['9'].client;
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
@@ -704,6 +728,7 @@ test('user is scheduled to receive a task besides the first task (nexttask topic
 });
 
 test('user is scheduled to receive recurring task', async () => {
+  jest.setTimeout(10000);
   const clientData = await api.getUserFromId(1287);
   clientData.checkin_times = [
     {
@@ -749,6 +774,7 @@ test('user is scheduled to receive recurring task', async () => {
 });
 
 test('user is scheduled to receive follow up appointment', async () => {
+  jest.setTimeout(10000);
   const clientData = await api.getUserFromId(1287);
   clientData.follow_up_date = new Date();
   await updateUser(clientData);
@@ -780,6 +806,7 @@ test('user is scheduled to receive follow up appointment', async () => {
 });
 
 test('user receives proper response from coach', async () => {
+  jest.setTimeout(10000);
   const clientData = await api.getUserFromId(1287);
   clientData.checkin_times = [
     {

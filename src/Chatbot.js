@@ -276,23 +276,25 @@ module.exports = class Chatbot {
     let currentTaskDescription = null;
     let currentTaskSteps = null;
     const tasks = this.client.tasks;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
-        let steps = tasks[i].steps; // eslint-disable-line
-        if (steps === null) {
-          steps = [];
+    if (tasks) {
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+          let steps = tasks[i].steps; // eslint-disable-line
+          if (steps === null) {
+            steps = [];
+          }
+          currentTask = tasks[i];
+          currentTaskTitle = tasks[i].title;
+          currentTaskSteps = steps;
+          currentTaskDescription = tasks[i].description;
+          break;
         }
-        currentTask = tasks[i];
-        currentTaskTitle = tasks[i].title;
-        currentTaskSteps = steps;
-        currentTaskDescription = tasks[i].description;
-        break;
       }
     }
     if (currentTaskDescription && currentTaskDescription.length !== 0) {
       currentTaskDescription = '▪️ Why it matters:\n' + currentTaskDescription;
     }
-    if (currentTaskSteps !== null) {
+    if (currentTaskSteps) {
       currentTaskSteps = currentTaskSteps.map((step, i) => {
         return `▪️ Step ${i + 1}: ${step.text}`;
       });
