@@ -1,10 +1,10 @@
 # Roo — The Chatbot
-This repository contains code for the chatbot side of Roo (for the admin, helloroo.org, code go to https://github.com/ideoorg/steps).
+This repository contains code for the chatbot side of Roo (for the admin interface code, helloroo.org, go to https://github.com/ideoorg/steps).
 
 # Documentation
 Documentation of how the chatbot works can be found [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing). (WORK IN PROGRESS)
 # Getting Started - Local Development
-NOTE: Both Facebook and Twilio, the SMS service we use, requires a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with the code.
+NOTE: Both Facebook and Twilio (the SMS service we use) requires a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with that limitation.
 
 Instructions on how to set up the staging environment (which will allow you to send messages) can be found later in this README.
 ## .env file
@@ -23,17 +23,17 @@ BOT_URL=
 BOT_ID=116
 SENDGRID_API_KEY=
 ```
-You'll need a Twilio account and provide those credentials for SMS, a Facebook developer account / credentials for Facebook. You can go to twilio.com and developers.facebook.com for those. More info on getting set up in the documentation above.
+You'll need a Twilio account and provide those credentials for SMS, and/or you'll need a Facebook developer account / credentials for Facebook. You can go to twilio.com and developers.facebook.com for those. More info on getting set up in the documentation above.
 
 **Also required:**
 - BOT_URL, this is the url to the bot's server (you'll create this in the "Staging / Production Environment" section. For now, leave this blank.)
-- API_URL, these connect with our own Admin API staging environment (from [this repo](https://github.com/ideoorg/steps)). If you'd like to set up your own API staging environment, you'll need to supply the Admin API url
+- API_URL, the default example environment variable above connects to our own Admin API staging environment (from [this repo](https://github.com/ideoorg/steps)). If you'd like to set up your own API staging environment, you'll need to supply the Admin API url. If you want to use ours, you can keep that environment variable as is.
 - OAUTH_ACCESS_TOKEN for communicating with the Admin API. If you're using the default Admin API URL above, reach out to mepler [at] ideo [dot] org for the OAuth Access Token info.
 - BOT_ID, if you're using out own Admin API staging environment, then the default BOT_ID above will suffice. Otherwise, create a new coach, admin, or superadmin in the Admin API and set the bot id to that. This value is only used when creating API requests adding to the user's message log.
 
 **Optional:**
-- BITLY_TOKEN, this wraps any content we send into a nice bit.ly url.
-- SENDGRID_API_KEY, any emails that are sent to the client or for error handling require this API key.
+- BITLY_TOKEN, this wraps any content url we send into a nice bit.ly url. Without this, an uglier redirect url (still operational though) is sent.
+- SENDGRID_API_KEY, any emails that are sent to the client or for error handling require this API key. Without this key no emails get sent.
 ## Local Development
 ```
 1) git clone https://github.com/IDEOorg/steps-bot
