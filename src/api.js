@@ -304,7 +304,6 @@ async function getUserDataFromDB(platform, userPlatformId) {
   console.log(platform);
   console.log('getUserDataFromDB');
   const clients = await getAllClients();
-  console.log(clients);
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
     if (platform === constants.SMS && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
