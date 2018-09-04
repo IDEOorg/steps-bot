@@ -42,12 +42,12 @@ You'll need a Twilio account and provide those credentials for SMS, a Facebook d
 ```
 ## Adding a Staging / Production Environment
 1. Deploy this code to Heroku.
-1a. `npm install -g heroku`
-1b. `heroku login` (enter login info)
-1c. `heroku create` (do this in this directory. You should now have a server url)
-1d. Copy and paste the server url into the BOT_URL environment variable
-1e. `git push heroku master`
-1f. Now your bot server should be operational.
+- `npm install -g heroku`
+- `heroku login` (enter login info)
+- `heroku create` (do this in this directory. You should now have a server url)
+- Copy and paste the server url into the BOT_URL environment variable
+- `git push heroku master`
+- Now your bot server should be operational.
 2. You need to set the environment variables in Heroku (Heroku doesn't read .env files). You can do that with the following url, substituting `YOUR_APP_NAME` with your app's name. https://dashboard.heroku.com/apps/YOUR_APP_NAME/settings. You should see a Config Vars section. Set the environment variables.
 3. To test if it's working, text the Twilio phone number `START`. You should receive this message `Sorry, we didn't recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.` If you didn't receive that message, check your environment variable credentials in Heroku (specifically for Twilio and BOT_URL).
 4. Create a new user in either https://steps-staging.herokuapp.com or your own Admin staging server (whichever you chose earlier in the *.env file* section).
