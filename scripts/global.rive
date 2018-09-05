@@ -11,4 +11,8 @@
   - Hi there, <get username>!
   + [*] (ok|sounds good|cool) [*]
   - Talk to you soon, <get username>!
+  + (a|have some questions|need some assistance|yes i have questions)
+  - {topic=help} {@ startprompt}
+  + (b|no im finished|finished|im done)
+  - {topic=done} {@ startprompt}
 < topic
