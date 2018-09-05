@@ -23,7 +23,7 @@ BOT_URL=
 BOT_ID=116
 SENDGRID_API_KEY=
 ```
-You'll need a Twilio account and provide those credentials for SMS, and/or you'll need a Facebook developer account / credentials for Facebook. You can go to twilio.com and developers.facebook.com for those. More info on getting set up in the documentation above.
+You'll need a Twilio account and provide those credentials for SMS, and/or you'll need a Facebook developer account / credentials for Facebook. To set up things on Facebook or Twilio (including the above environmental variables), view our docs [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing). It takes 4 weeks to 3 months for Facebook to approve bots. **The Facebook config variables are only required if you want to support the Facebook platform.** Twilio approval is instantaneous. More info on getting set up in the documentation above.
 
 **Also required:**
 - BOT_URL, this is the url to the bot's server (you'll create this in the "Staging / Production Environment" section. For now, leave this blank.)
