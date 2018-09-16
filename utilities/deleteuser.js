@@ -3,9 +3,9 @@ const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const url = 'https://steps-staging.herokuapp.com/api';
+const url = 'https://steps-admin.herokuapp.com/api';
 
-deleteUser(372);
+deleteUser(1303);
 
 async function deleteUser(id) {
   const media = await rp({

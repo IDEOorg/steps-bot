@@ -29,6 +29,8 @@ async function fbEndpoint(req, res) {
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
   const userPlatformId = messageObject.sender.id;
+  console.log(messageObject.postback);
+  console.log(messageObject.message);
   let userMessage = null;
   let fbNewUserPhone = null;
   if (messageObject.message) { // if message came from user messaging FB
@@ -41,6 +43,8 @@ async function fbEndpoint(req, res) {
   } else {
     return; // this is critical. Do not delete without thorough testing. If it's not a message being sent to the api then it could be a delivery receipt confirmation, which if not exited will cause an infinite loop, send hundreds of messages per minute to a user, and get you banned on fb messenger
   }
+  console.log('fbNewUserPhone');
+  console.log(fbNewUserPhone);
   await run({
     platform: constants.FB,
     userPlatformId,
