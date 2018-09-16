@@ -23,7 +23,7 @@ module.exports = class Chatbot {
   async getResponse() {
     await this.loadClientData(); // gets and stores the client's info from the api
     if (this.client === constants.UNAUTHORIZED) {
-      return; // unauthorized oauth token. Consider refreshing.
+      return; // unauthorized oauth token . Consider refreshing the token.
     }
     if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
