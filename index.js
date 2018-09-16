@@ -29,8 +29,6 @@ async function fbEndpoint(req, res) {
   const body = req.body;
   const messageObject = body.entry[0].messaging[0];
   const userPlatformId = messageObject.sender.id;
-  console.log(messageObject.postback);
-  console.log(messageObject.message);
   let userMessage = null;
   let fbNewUserPhone = null;
   if (messageObject.message) { // if message came from user messaging FB
@@ -38,13 +36,11 @@ async function fbEndpoint(req, res) {
   } else if (messageObject.postback) { // triggered if user presses any button
     userMessage = messageObject.postback.title;
     if (messageObject.postback.referral) { // if message came from user pressing GET STARTED on FB, get the referral code (which is the user's phone number attached to the m.me link)
-      fbNewUserPhone = getPhoneNumberFromFBLink(messageObject.postback.referral);
+      fbNewUserPhone = getPhoneNumberFromFBLink(messageObject.postback.referral.ref);
     }
   } else {
     return; // this is critical. Do not delete without thorough testing. If it's not a message being sent to the api then it could be a delivery receipt confirmation, which if not exited will cause an infinite loop, send hundreds of messages per minute to a user, and get you banned on fb messenger
   }
-  console.log('fbNewUserPhone');
-  console.log(fbNewUserPhone);
   await run({
     platform: constants.FB,
     userPlatformId,
