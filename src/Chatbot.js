@@ -262,7 +262,8 @@ module.exports = class Chatbot {
       contentImgUrl,
       contentDescription,
       coachHelpResponse: this.coachHelpResponse,
-      helpMessage
+      helpMessage,
+      isFinalTask
     };
   }
 
