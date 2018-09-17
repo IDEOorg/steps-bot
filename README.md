@@ -87,6 +87,9 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 # Testing
 The tests in the /tests folder are designed only to work with the IDEO.org database (it runs API calls looking for specific users). You can use `tests/e2e.test.js` and `testdata.json` as a sample for how to structure your own tests with your own database.
 
+# Known Bugs
+If you have an IDEO.org email address you can access the full list [here](https://docs.google.com/presentation/d/1Jtu08h3ch6HO02TKc0O8WRsBW92Yd9revwvWro4eVv4/edit?usp=sharing).
+
 # Dependencies Used
 - Node 9.5.0
 - npm 4.6.1
