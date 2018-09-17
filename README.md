@@ -8,7 +8,7 @@ NOTE: Both Facebook and Twilio (the SMS service we use) require a non-localhost 
 
 ### Step 1 - Decide what you want to support
 **Facebook Support**
-Configuring the bot with Facebook is a time-intensive effort because Facebook needs to approve your bot which take 1-3 months for Facebook to do so. Until Facebook approves the bot, you can't use it for the general public. If you decide you want to go that route, follow these setup instructions [at the Facebook config section of the documentation](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit#slide=id.g41371ee69c_0_143).
+Configuring the bot with Facebook is a time-intensive effort because Facebook needs to approve your bot which take 1-3 months for Facebook to do so. Until Facebook approves the bot, you can't use it for the general public. If you decide you want to go that route, follow these setup instructions [at the Facebook config section of the documentation](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
 
 **Hello Roo API Configuration**
 This bot collaborates closely with the Admin API from [this repo](https://github.com/IDEOorg/steps). The bot requires the url from that API. You can use our staging server API as a sandbox if you know someone at IDEO.org who can give you the associated oauth token (https://steps-staging.herokuapp.com/api), or you can use your own API server by following setup instructions in [this repo](https://github.com/ideoorg/steps) (recommended).
