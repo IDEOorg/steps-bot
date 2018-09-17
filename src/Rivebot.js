@@ -32,7 +32,8 @@ module.exports = class Rivebot {
       contentDescription,
       recurringTaskContent,
       helpMessage,
-      coachHelpResponse
+      coachHelpResponse,
+      isFinalTask
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(userPlatformId, 'username', client.first_name);
@@ -56,6 +57,9 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', coachHelpResponse);
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
+    await this.rivebot.setUservar(userPlatformId, 'isFinalTask', isFinalTask);
+    console.log('isFinalTask...');
+    console.log(isFinalTask);
     await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
   }
 
