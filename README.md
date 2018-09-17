@@ -62,10 +62,9 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 - `npm install -g heroku`
 - `heroku login` (enter login info)
 - `heroku create` (do this in this directory. You should now have a server url)
-- Copy and paste the server url into the BOT_URL environment variable
+- Copy and paste the server url into the `BOT_URL` environment variable (if you haven't already)
 - `git push heroku master`
 - Now your bot server should be operational.
-1a. If you haven't already, fill out the `BOT_URL` variable with your Heroku url.
 2. You need to set the environment variables in Heroku (Heroku doesn't read .env files). You can do that with the following url, substituting `YOUR_APP_NAME` with your app's name. https://dashboard.heroku.com/apps/YOUR_APP_NAME/settings. You should see a Config Vars section. Set the environment variables.
 3. To test if it's working, text the Twilio phone number `START`. You should receive this message `Sorry, we didn't recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.` If you didn't receive that message, check your environment variable credentials in Heroku (specifically for Twilio and BOT_URL).
 4. Create a new user in either https://steps-staging.herokuapp.com or your own Admin staging server (whichever you chose earlier in the *.env file* section).
