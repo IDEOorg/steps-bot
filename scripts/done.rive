@@ -33,5 +33,4 @@
   ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "Send it tomorrow", "Y": "Yes, send it now"}`)</fb>
   ^ <sms>Would you like to receive your next action item now? If yes, text the letter "Y". If no, text the letter "G".</sms>
   ^ {@ setvars}
-
 < topic

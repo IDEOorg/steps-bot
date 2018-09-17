@@ -27,7 +27,6 @@ module.exports = class Updater {
       helpMessage,
       sendHelpMessage,
       taskComplete,
-      newFacebookId,
       userAskedToStop,
       requestResolved,
       removeFollowup
@@ -76,9 +75,6 @@ module.exports = class Updater {
         this.currentTask.status = 'COMPLETED';
         this.currentTask.date_completed = new Date();
       }
-    }
-    if (newFacebookId) {
-      this.client.fb_id = newFacebookId;
     }
     const recurringTasks = this.client.tasks.filter((task) => {
       return task.recurring;

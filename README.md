@@ -2,12 +2,20 @@
 This repository contains code for the chatbot side of Roo (for the admin interface code, helloroo.org, go to https://github.com/ideoorg/steps).
 
 # Documentation
-Documentation of how the chatbot works can be found [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing). (WORK IN PROGRESS)
-# Getting Started - Local Development
-NOTE: Both Facebook and Twilio (the SMS service we use) requires a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with that limitation.
+Documentation of how the chatbot works can be found [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
+# Getting Started - Staging
+NOTE: Both Facebook and Twilio (the SMS service we use) require a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with that limitation.
+### Step 1 - Decide what you want to support
+**Facebook Support**
+Configuring the bot with Facebook is a time-intensive effort because Facebook needs to approve your bot which take 1-3 months for Facebook to do so. If you decide you want to go that route, follow these setup instructions [at the Facebook config section of the documentation](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit#slide=id.g41371ee69c_0_143).
+**Hello Roo API Configuration**
+This bot collaborates closely with the Admin API from [this repo](https://github.com/IDEOorg/steps). The bot requires an API url from that. Make note if you want to use ours (https://steps-staging.herokuapp.com/api) for sandboxing purposes, or if you want to use your own (recommended).
+**Bitly Support**
+If you want your media content to be wrapped using a bit.ly link, you'll need to get a [Bitly token](https://dev.bitly.com/authentication.html).
+**Email Support**
+If you want to be able to send emails to coaches / the client and get error logs emailed, you'll need to sign up for [Sendgrid](https://sendgrid.com/docs/API_Reference/index.html) and get their API key
 
-Instructions on how to set up the staging environment (which will allow you to send messages) can be found later in this README.
-## .env file
+### Step 2 - create the .env file
 Create a .env file with the following values:
 ```
 TWILIO_ACCOUNT_SID=
@@ -23,7 +31,16 @@ BOT_URL=
 BOT_ID=116
 SENDGRID_API_KEY=
 ```
-You'll need a Twilio account and provide those credentials for SMS, and/or you'll need a Facebook developer account / credentials for Facebook. To set up things on Facebook or Twilio (including the above environmental variables), view our docs [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing). It takes 4 weeks to 3 months for Facebook to approve bots. **The Facebook config variables are only required if you want to support the Facebook platform.** Twilio approval is instantaneous. More info on getting set up in the documentation above.
+
+You'll need a Twilio account to provide the `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_NUMBER` credentials for SMS. Instructions on getting set up for Twilio can be found in the docs [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
+
+If you elected not to support Facebook bots, you can leave the `FB_PAGE_ACCESS_TOKEN`, `FB_VERIFY_TOKEN`, and `FB_REFERRAL_LINK` environmental variables empty. **The Facebook config variables are only required if you want to support the Facebook platform.**
+
+If you elected to use Bitly, fill in the `BITLY_TOKEN` variable with the appropriate token. Otherwise it can be left blank.
+
+If you decided to use our staging platform for the Admin API, you can leave the `API_URL` as https://steps-staging.herokuapp.com/api. Otherwise deploy the Hello Roo Admin API to staging, get the oauth token there, and fill in `OAUTH_ACCESS_TOKEN` with your generated oauth token, and the `API_URL` as `https://YOUR-ADMIN-URL.herokuapp.com/api`. Note: the Admin API url is NOT the url for this bot's server. The bot server and API server are two separate entities.
+
+If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` variable with the sendgrid api key.
 
 **Also required:**
 - BOT_URL, this is the url to the bot's server (you'll create this in the "Staging / Production Environment" section. For now, leave this blank.)

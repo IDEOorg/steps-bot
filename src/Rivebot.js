@@ -236,7 +236,6 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'resetHelp', null);
     await this.rivebot.setUservar(userPlatformId, 'helpMessage', null);
     await this.rivebot.setUservar(userPlatformId, 'sendHelpMessage', null);
-    await this.rivebot.setUservar(userPlatformId, 'newFacebookId', null);
     await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', null);
     await this.rivebot.setUservar(userPlatformId, 'userAskedToStop', null);
     await this.rivebot.setUservar(userPlatformId, 'requestResolved', null);
