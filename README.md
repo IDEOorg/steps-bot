@@ -11,13 +11,20 @@ NOTE: Both Facebook and Twilio (the SMS service we use) require a non-localhost 
 Configuring the bot with Facebook is a time-intensive effort because Facebook needs to approve your bot which take 1-3 months for Facebook to do so. Until Facebook approves the bot, you can't use it for the general public. If you decide you want to go that route, follow these setup instructions [at the Facebook config section of the documentation](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit#slide=id.g41371ee69c_0_143).
 
 **Hello Roo API Configuration**
-This bot collaborates closely with the Admin API from [this repo](https://github.com/IDEOorg/steps). The bot requires an API url from that. Make note if you want to use ours (https://steps-staging.herokuapp.com/api) for sandboxing purposes, or if you want to use your own (recommended).
+This bot collaborates closely with the Admin API from [this repo](https://github.com/IDEOorg/steps). The bot requires the url from that API. You can use our staging server API as a sandbox if you know someone at IDEO.org who can give you the associated oauth token (https://steps-staging.herokuapp.com/api), or you can use your own API server by following setup instructions in [this repo](https://github.com/ideoorg/steps) (recommended).
 
 **Bitly Support**
 If you want your media content to be wrapped using a bit.ly link, you'll need to get a [Bitly token](https://dev.bitly.com/authentication.html).
 
 **Email Support**
 If you want to be able to send emails to coaches / the client and get error logs emailed, you'll need to sign up for [Sendgrid](https://sendgrid.com/docs/API_Reference/index.html) and get their API key
+
+Depending on what you want to support you'll need:
+1) A [Twilio](https://www.twilio.com/) account (required) and a phone number bought from there.
+2) Some platform to deploy the API (if you're not using our staging environment) and some platform to deploy the bot. We use Heroku.
+3) A [Facebook Developers](developers.facebook.com) account if you want to support Facebook.
+4) A [Sendgrid](https://www.sendgrid.com) account for sending emails.
+5) A [Bitly](dev.bitly.com) account for creating bit.ly links.
 
 ### Step 2 - create the .env file
 Create a .env file with the following values:
@@ -55,6 +62,7 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 **Optional:**
 - BITLY_TOKEN, this wraps any content url we send into a nice bit.ly url. Without this, an uglier redirect url (still operational though) is sent.
 - SENDGRID_API_KEY, any emails that are sent to the client or for error handling require this API key. Without this key no emails get sent.
+
 ## Local Development
 ```
 1) git clone https://github.com/IDEOorg/steps-bot
