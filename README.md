@@ -34,11 +34,11 @@ SENDGRID_API_KEY=
 
 You'll need a Twilio account to provide the `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_NUMBER` credentials for SMS. Instructions on getting set up for Twilio can be found in the docs [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
 
-If you elected not to support Facebook bots, you can leave the `FB_PAGE_ACCESS_TOKEN`, `FB_VERIFY_TOKEN`, and `FB_REFERRAL_LINK` environmental variables empty. **The Facebook config variables are only required if you want to support the Facebook platform.**
+If you elected not to support Facebook bots, you can leave the `FB_PAGE_ACCESS_TOKEN`, `FB_VERIFY_TOKEN`, and `FB_REFERRAL_LINK` environmental variables empty. **The Facebook config variables are only required if you want to support the Facebook platform.** Otherwise follow [the docs regarding Facebook config](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
 
 If you elected to use Bitly, fill in the `BITLY_TOKEN` variable with the appropriate token. Otherwise it can be left blank.
 
-If you decided to use our staging platform for the Admin API, you can leave the `API_URL` as https://steps-staging.herokuapp.com/api. Otherwise deploy the Hello Roo Admin API to staging, get the oauth token there, and fill in `OAUTH_ACCESS_TOKEN` with your generated oauth token, and the `API_URL` as `https://YOUR-ADMIN-URL.herokuapp.com/api`. Note: the Admin API url is NOT the url for this bot's server. The bot server and API server are two separate entities.
+If you decided to use our staging platform for the Admin API, you can leave the `API_URL` as https://steps-staging.herokuapp.com/api. Otherwise deploy the Hello Roo Admin API to staging, get the oauth token there, and fill in `OAUTH_ACCESS_TOKEN` with your generated oauth token, and the `API_URL` as `https://YOUR-ADMIN-URL.herokuapp.com/api`. Note: the Admin API url is NOT the url for this bot's server. The bot server and API server are two separate entities. More info on getting the oauth token and Admin API set up [here](https://github.com/IDEOorg/steps).
 
 If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` variable with the sendgrid api key.
 
@@ -65,6 +65,7 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 - Copy and paste the server url into the BOT_URL environment variable
 - `git push heroku master`
 - Now your bot server should be operational.
+1a. If you haven't already, fill out the `BOT_URL` variable with your Heroku url.
 2. You need to set the environment variables in Heroku (Heroku doesn't read .env files). You can do that with the following url, substituting `YOUR_APP_NAME` with your app's name. https://dashboard.heroku.com/apps/YOUR_APP_NAME/settings. You should see a Config Vars section. Set the environment variables.
 3. To test if it's working, text the Twilio phone number `START`. You should receive this message `Sorry, we didn't recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.` If you didn't receive that message, check your environment variable credentials in Heroku (specifically for Twilio and BOT_URL).
 4. Create a new user in either https://steps-staging.herokuapp.com or your own Admin staging server (whichever you chose earlier in the *.env file* section).
