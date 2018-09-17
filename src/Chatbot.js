@@ -241,7 +241,6 @@ module.exports = class Chatbot {
     } = this.getAndSetCurrentTaskData(this.client.tasks); // also sets this.currentTask
     const taskNum = this.getTaskNum();
     const isFinalTask = this.isFinalTask();
-    console.log(isFinalTask);
     const {
       contentIdChosen,
       contentText,
@@ -336,7 +335,6 @@ module.exports = class Chatbot {
       const activeTasks = tasks.filter((task) => {
         return task.status === 'ACTIVE' && !task.recurring;
       });
-      console.log(activeTasks);
       if (activeTasks.length === 1) {
         return true;
       }

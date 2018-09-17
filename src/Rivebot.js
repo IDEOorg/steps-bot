@@ -58,8 +58,6 @@ module.exports = class Rivebot {
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(userPlatformId, 'referralLink', referralLink);
     await this.rivebot.setUservar(userPlatformId, 'isFinalTask', isFinalTask);
-    console.log('isFinalTask...');
-    console.log(isFinalTask);
     await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
   }
 
