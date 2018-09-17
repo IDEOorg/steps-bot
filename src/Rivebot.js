@@ -239,6 +239,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', null);
     await this.rivebot.setUservar(userPlatformId, 'userAskedToStop', null);
     await this.rivebot.setUservar(userPlatformId, 'requestResolved', null);
+    await this.rivebot.setUservar(userPlatformId, 'isFinalTask', null);
   }
 };
 

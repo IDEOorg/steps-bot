@@ -1,5 +1,6 @@
 > topic done includes global includes tempfastforward
   + startprompt
+  * <get isFinalTask> == true => {topic=ultimatedone} {@ startprompt}
   - ^image("<get celebrationImgUrl>")<send>
   ^ THAT IS AMAZING!\n
   ^ Congratulations, <get username>!!!<send>

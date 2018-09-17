@@ -240,6 +240,7 @@ module.exports = class Chatbot {
       currentTaskDescription
     } = this.getAndSetCurrentTaskData(this.client.tasks); // also sets this.currentTask
     const taskNum = this.getTaskNum();
+    const isFinalTask = this.isFinalTask();
     const {
       contentIdChosen,
       contentText,
@@ -324,6 +325,20 @@ module.exports = class Chatbot {
       }
     }
     return taskNum;
+  }
+
+  // checks if the current task the user is on is the final task (used to detect ultimatedone potential)
+  isFinalTask() {
+    const tasks = this.client.tasks;
+    if (tasks) {
+      const activeTasks = tasks.filter((task) => {
+        return task.status === 'ACTIVE' && !task.recurring;
+      });
+      if (activeTasks.length === 1) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // fetches content data if user is supposed to receive content
