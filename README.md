@@ -2,7 +2,7 @@
 This repository contains code for the chatbot side of Roo (for the admin interface code, helloroo.org, go to https://github.com/ideoorg/steps).
 
 # Documentation
-Documentation of how the chatbot works can be found [here](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing).
+Documentation of how the chatbot works and a walkthough of this code can be found [here](https://docs.google.com/presentation/d/175cGeQ8chW0W-L6gRtG6fIsVYQe0HCIh6NsXkHd66Tk/edit?usp=sharing).
 # Getting Started - Staging
 NOTE: Both Facebook and Twilio (the SMS service we use) require a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with that limitation.
 
