@@ -1,9 +1,9 @@
 > topic welcomenext includes global includes tempfastforward
 + startprompt
 - ^image("<get workplanImgUrl>")<send>
-^ Hi <get username>, As Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on taking a big step today by creating a financial work plan.
+^ Hi <get username>, Mark Twain once said, "The secret to getting ahead is getting started." So CONGRATULATIONS on taking a big step today by creating a financial work plan.
 ^ \n\nI'll be sending you reminders and helpful links based on the work plan you created with coach <get coachName>. Here’s a video your coach may have shown you. It explains what I’m all about.\n<get introVideoLink>
 ^ \n\nAnd here's a link to your full work plan that you can access at any time.\n<get workplanLink>
-^ \n\nI'll be in touch tomorrow with instructions for the first action introCelebrateImgUrl. Talk soon!
+^ \n\nI'll be in touch tomorrow with instructions for the first action item. Talk soon!
 ^ {topic=welcomewait}<set days=1><set timeOfDay=morning><set nextTopic=introtask><set nextMessage=startprompt>
 < topic
