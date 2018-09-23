@@ -7,7 +7,7 @@
   ^ \n\n<get currentTaskSteps>
   ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need a little help.", "B": "All done!"}`)<send></fb>
   ^ <sms>\n\nIf you could use a little help, text the letter "A". If you've completed the item, text the letter "B".</sms>
-  ^ <sms>\n\n<\sms>I'll check in on your progress soon.<fb><send</fb>
+  ^ <sms>\n\n</sms>I'll check in on your progress soon.<fb><send</fb>
   ^ {@ setvars}
   + (a|i have questions|need a little help|have some questions)
   - {topic=help}{@ startprompt}
