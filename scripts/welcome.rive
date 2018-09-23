@@ -1,7 +1,7 @@
 > topic welcome includes global includes tempfastforward
   + *
   - ^image("<get welcomeImgUrl>")<send>
-  ^ Hi <get username>! I'm Roo, your financial coaching assistant. 
+  ^ Hi <get username>-jkl! I'm Roo, your financial coaching assistant. 
   ^ \n\nI’m here to help you complete the work plan you created with Coach <get coachName> at <get orgName>.
   ^ \n\nI'll be back in touch soon to help you get started.
   ^ {topic=welcomewait}<set hours=2><set nextTopic=welcomenext><set nextMessage=startprompt>
