@@ -17,4 +17,6 @@
   - {topic=welcomenext}{@ startprompt}
   + testingtopic
   - {topic=testing}{@ startprompt}
+  + recurringtopic
+  - {topic=recurring}{@ startprompt}
 < topic
