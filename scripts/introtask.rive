@@ -1,15 +1,14 @@
 > topic introtask includes global includes tempfastforward includes gibberish
   + startprompt
-  - Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:<send>
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need some assistance", "B": "I'm done"}`)<send>
-  ^ Use the buttons above to ask for help or to let me know you've finished.<send></fb>
-  ^ <sms>^image("<get taskNumImgUrl>")<send></sms>
-  ^ 👉<get currentTaskTitle>👈<send>
-  ^ <get currentTaskDescription><send>
-  ^ <get currentTaskSteps><send>
-  ^ At any point you can message "COACH" to contact your coach, "PLAN" to see your full work plan, or "STOP" to stop receiving messages.<send>
-  ^ <sms>If you need some assistance, text the letter "A".\nIf you've finished, text the letter "B".<send></sms>
-  ^ You've got this! I'll check in on your progress soon. Good luck!{@ setvars}
+  - <sms>^image("<get taskNumImgUrl>")<send></sms>
+  ^ Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:
+  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need some assistance", "B": "I'm done"}`)
+  ^ \n\n👉<get currentTaskTitle>👈
+  ^ \n\n<get currentTaskSteps>
+  ^ \n\n<sms>If you need some assistance, text the letter "A".\nIf you've finished, text the letter "B".<send></sms>
+  ^ <fb>Use the buttons above to ask for help or to let me know you've finished.<send></fb>
+  ^ Also, if you ever need a little help, you can message "COACH" at any time to contact your coach, "PLAN" to see your full work plan, or "STOP" to stop receiving messages from me.<fb><send></fb>
+  ^ <sms>\n\n</sms>I'll check in on your progress soon. You've got this! {@ setvars}
   + (a|need some assistance)
   - {topic=help}{@ startprompt}
   + (b|im done)
