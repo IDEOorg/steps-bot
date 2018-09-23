@@ -1,7 +1,7 @@
 > topic nexttask includes global includes tempfastforward includes gibberish
   + startprompt
   - <sms>^image("<get taskNumImgUrl>")<send></sms>
-  ^ <get username>, Every action item you complete puts you one step closer to your financial goals.
+  ^ <get username>, Every action item you complete puts you one step closer to your financial goals. 
   ^ Here's the next one from your work plan...
   ^ \n\n👉<get currentTaskTitle>👈
   ^ \n\n<get currentTaskSteps>
