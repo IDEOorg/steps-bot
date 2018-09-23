@@ -48,7 +48,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'contentDescription', contentDescription);
     await this.rivebot.setUservar(userPlatformId, 'contentImgUrl', contentImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'contentUrl', contentUrl);
-    await this.rivebot.setUservar(userPlatformId, 'workplanLink', constants.WORKPLAN_URL);
+    await this.rivebot.setUservar(userPlatformId, 'workplanLink', client.plan_url);
     await this.rivebot.setUservar(userPlatformId, 'introVideoLink', constants.INTRO_VIDEO_URL);
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);

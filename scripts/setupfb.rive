@@ -1,5 +1,6 @@
 > topic setupfb
   + *
-  - Hi <get username>! I'm Roo, your financial coaching assistant. I’m here to help you complete the work plan you created with Coach <get coachName> at <get orgName>.<send>
-  ^ To get started, click on this link <get referralLink> and press the "GET STARTED" button.
+  - Hi <get username>! I'm Roo, your financial coaching assistant. 
+  ^ \n\nI’m here to help you complete the work plan you created with Coach <get coachName> at <get orgName>.
+  ^ \n\nTo get started, click on this link <get referralLink> and press the "GET STARTED" button.
 < topic
