@@ -3,19 +3,21 @@
   * <get isFinalTask> == true => {topic=ultimatedone} {@ startprompt}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Uhm, THAT IS AMAZING! Congratulations, <get username>!!!
-  ^ \n\n^ The road to financial health is not easy but you do NOT mess around! 
+  ^ \n\nThe road to financial health is not easy but you do NOT mess around! 
   ^ \n\nWay to bring your A game today.
   ^ <sms>\n\nI’ll send your next action item soon. If you’re feeling ambitious and want it now, text the letter N.</sms>
   ^ <fb>^template(`button`, `I’ll send your next action item soon.`, `{"G": "Sounds good", "Y": "Ready for it now."}`)<send></fb>
-  ^ ^image("<get celebrationImgUrl>")<send>
+  ^ {@ setvars}
+  - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!
-  ^ \n\nCongratulations!!! 🎊🎊🎊\nDo a dance and celebrate yourself. THAT's how you own the day!
-  ^ <sms>The next item on your work plan will be coming your way soon. If you want to get started on the next one now, just text the letter N.</sms>
+  ^ \n\nCongratulations!!! 🎊🎊🎊 Do a dance and celebrate yourself. THAT's how you own the day!
+  ^ <sms>\n\nThe next item on your work plan will be coming your way soon. If you want to get started on the next one now, just text the letter N.</sms>
   ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)</fb>
-  ^ ^image("<get celebrationImgUrl>")<send>
+  ^ {@ setvars}
+  - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! I knew you'd get it done!
   ^ \n\nRemember, the bigger the task, the sweeter the triumph.
-  ^ <sms>I'll be in touch soon with the next action item on your work plan! If you want to receive the next action item now, text the letter N.</sms>
+  ^ <sms>\n\nI'll be in touch soon with the next action item on your work plan! If you want to receive the next action item now, text the letter N.</sms>
   ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)</fb>
   ^ {@ setvars}
   + (g|sounds good|send it later)
