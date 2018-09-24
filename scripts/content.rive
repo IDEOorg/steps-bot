@@ -7,7 +7,7 @@
   ^ \n\nYou are amazing and your commitment to yourself deserves a standing ovation.
   ^ <send>
   ^ 2. Now, here's a bit of inspiration in case you forget any of the above.
-  ^ <sms><get contentDescription>\n\n<get contentUrl><send></sms>
+  ^ <sms>\n\n<get contentDescription>\n\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
   ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
   ^ {@ setvars}
