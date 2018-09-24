@@ -6,6 +6,30 @@
   ^ \n\nFor step-by-step details of this action item, click here: <get workplanLink>
   ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
   ^ <sms><send>If you need some assistance, text the letter A. If you’re finished—and can't be stopped—text the letter B. If you're still working on it, text the letter C.</sms>
+  ^ ^image("<get checkinImgUrl>")<send>
+  ^ Hey, <get username>! How's it going with:
+  ^ \n\n👉<get currentTaskTitle>👈
+  ^ \n\nClick here for step-by-step details of this action item: <get workplanLink>
+  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>Have questions?–Text the letter A.  Finished?–Text the letter B. Not quite there yet?–Text the letter C.</sms>
+  ^ ^image("<get checkinImgUrl>")<send>
+  ^ <get username>! Just checking in. How are things going with:
+  ^ \n\n👉<get currentTaskTitle>👈
+  ^ \n\nClick here for step-by-step details of this action item: <get workplanLink>
+  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>If you have questions, text the letter A. If you’re done, text the letter B. And celebrate! Not quite there yet? Text the letter C.</sms>
+  ^ ^image("<get checkinImgUrl>")<send>
+  ^ Hi <get username>! Hope your day's been great so far. How are things going with action item?
+  ^ \n\n👉<get currentTaskTitle>👈
+  ^ \n\nClick here to see step by step details of this action item: <get workplanLink>
+  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>Need assistance?–Text the letter A. Done?–Text the letter B. Want me to check back later?–Text the letter C.</sms>
+  ^ ^image("<get checkinImgUrl>")<send>
+  ^ Hey there, <get username>! How's it going with action item:
+  ^ \n\n👉<get currentTaskTitle>👈
+  ^ \n\nYou can find step-by step-details of this action item: <get workplanLink>
+  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)</fb>
+  ^ <sms><send>Want my assistance?–Text the letter A. Completed the item?–Text the letter B. Need more time to work on it?–Text the letter C.</sms>
   ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
@@ -41,8 +65,7 @@
    - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
   ^ <fb>^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"G": "No, I'm okay.", "A": "Have some questions."}`)</fb>
   ^ <sms>\n\nIf you need my assistance with action item <get taskNum> text the letter A. 
-  ^ \n\nIf all is well, text the letter G.
-  \n\nIf you're still working, text the letter C.</sms>
+  ^ \n\nIf all is well, text the letter G.</sms>
   + (g|no im okay)
   - Sounds good. I'll be back in touch soon.
   + (a|have some questions)
