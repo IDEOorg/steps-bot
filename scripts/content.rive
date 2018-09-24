@@ -1,6 +1,6 @@
 > topic content includes global includes tempfastforward includes gibberish
   + startprompt
-  - <get username>! I come bearing gifts.
+    - <get username>! I come bearing gifts.
   ^ \n\n1. A few reminders:
   ^ \n\nYou are not your current circumstance.
   ^ \n\nFixing your finances can feel daunting, but you are more than capable.
@@ -12,14 +12,16 @@
   ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
   ^ {@ setvars}
   - Hey, <get username>. Here's an inspiring story to check out between being a superstar and knocking out all your action items:
-  ^ <sms><get contentDescription>\n<get contentUrl><send></sms>
+  ^ <sms>\n\n<get contentDescription>\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
   ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
-  ^ Hey, <get username>! Arthur Ashe once said, "Start where you are. Use what you have. Do what you can."
+  ^ {@ setvars}
+  - Hey, <get username>! Arthur Ashe once said, "Start where you are. Use what you have. Do what you can."
   ^ \n\nThe road can feel long, but we'll get there! Here's a little motivation.
-  ^ <sms><get contentDescription>\n<get contentUrl><send></sms>
+  ^ <sms>\n\n<get contentDescription>\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
   ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
+  ^ {@ setvars}
   + setvars
   - <set contentViewed=true><set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
 < topic
