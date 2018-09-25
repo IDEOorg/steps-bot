@@ -20,14 +20,14 @@
   ^ You are on a roll with this work plan! Don't forget to check this action item off your list today:
   ^ \n\n<get recurringTaskContent>
   ^ \n\nI'll check back soon.
-  {topic=checkin}
+  ^ {topic=checkin}
   - ^image("<get recurringImgUrl>")<send>
   ^ Today's mantra?
   ^ \n\n"Can't stop, won't stop!" -Sean "Diddy" Combs
   ^ \n\nToday's action?
   ^ \n\n<get recurringTaskContent>
   ^ \n\nI'll check backsoon.
-  {topic=checkin}
+  ^ {topic=checkin}
   - ^image("<get recurringImgUrl>")<send>
   ^ You're powering through! Let's keep going. Remember to do this today:
   ^ \n\n<get recurringTaskContent>
@@ -37,5 +37,5 @@
   ^ <get username>, aren't you proud of yourself for being this incredible? You definitely should be. Here's something else to accomplish today:
   ^ \n\n<get recurringTaskContent>
   ^ \n\nI'll check back in tomorrow.  
-  {topic=checkin}
+  ^ {topic=checkin}
 < topic
