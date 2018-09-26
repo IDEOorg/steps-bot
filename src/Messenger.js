@@ -49,6 +49,7 @@ module.exports = class Messenger {
   }
   // adds the message to the Admin API so it shows up in the user's message log
   addMessageToUserLog(message) {
+    console.log('addMessageToUserLog called', message);
     if (this.client) {
       let messageToUpload = null;
       if (this.platform === constants.FB) {
@@ -87,6 +88,7 @@ module.exports = class Messenger {
 };
 
 function formatMsgForFB(message) {
+  console.log('formatMsgForFB called,' message);
   const { type } = message;
   if (type === 'text') {
     return {
@@ -192,6 +194,7 @@ function formatMsgForSMS(message) {
 }
 
 function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
+  console.log('sendFBMessage called:', message);
   return rp({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
