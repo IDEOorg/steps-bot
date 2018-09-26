@@ -88,7 +88,7 @@ module.exports = class Messenger {
 };
 
 function formatMsgForFB(message) {
-  console.log('formatMsgForFB called', message);
+  console.log('formatMsgForFB called: ', message);
   const { type } = message;
   if (type === 'text') {
     return {
