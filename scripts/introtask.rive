@@ -2,7 +2,7 @@
   + startprompt
   - <sms>^image("<get taskNumImgUrl>")<send></sms>
   ^ Hi, <get username>! Every journey begins with a single step. Here's the first one from your work plan:
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need some assistance", "B": "I'm done"}`)</fb>
+  ^ <fb><send>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need some assistance", "B": "I'm done"}`)</fb>
   ^ \n\n👉<get currentTaskTitle>👈
   ^ \n\n<get currentTaskSteps>
   ^ <sms>\n\nIf you need some assistance, text the letter "A". If you've finished, text the letter "B".<send></sms>

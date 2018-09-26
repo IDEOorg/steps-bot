@@ -9,18 +9,18 @@
   ^ 2. Now, here's a bit of inspiration in case you forget any of the above.
   ^ <sms>\n\n<get contentDescription>\n\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
-  ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
+  ^ <fb><send>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
   ^ {@ setvars}
   - Hey, <get username>. Here's an inspiring story to check out between being a superstar and knocking out all your action items:
   ^ <sms>\n\n<get contentDescription>\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
-  ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
+  ^ <fb><send>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
   ^ {@ setvars}
   - Hey, <get username>! Arthur Ashe once said, "Start where you are. Use what you have. Do what you can."
   ^ \n\nThe road can feel long, but we'll get there! Here's a little motivation.
   ^ <sms>\n\n<get contentDescription>\n<get contentUrl><send></sms>
   ^ <sms>^image("<get contentImgUrl>")<send></sms>
-  ^ <fb>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
+  ^ <fb><send>^template(`genericurl`, `<get contentImgUrl>`, `<get contentDescription>`, `{"<get contentUrl>": "View Details"}`)<send></fb>
   ^ {@ setvars}
   + setvars
   - <set contentViewed=true><set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>

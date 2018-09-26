@@ -5,7 +5,7 @@
   ^ {topic=helpuserresponse}<set hours=8><set nextTopic=help><set nextMessage=pinguser>
   + pinguser
   - I haven't heard back from you in a while about the help you requested.
-  ^ <fb>^template(`quickreply`, `Have some questions.`, `No, I'm good for now`)</fb>
+  ^ <fb><send>^template(`quickreply`, `Have some questions.`, `No, I'm good for now`)</fb>
   ^ <sms><send>\n\nIf you still need assistance, text the letter A. Or text the letter G if you no longer need my help.</sms>
   ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + (g|no im good for now)
