@@ -32,7 +32,7 @@
   ^ You're powering through! Let's keep going. Remember to do this today:
   ^ \n\n<get recurringTaskContent>
   ^ \n\nI'll check back soon.
-  {topic=checkin}
+  ^ {topic=checkin}
   - ^image("<get recurringImgUrl>")<send>
   ^ <get username>, aren't you proud of yourself for being this incredible? You definitely should be. Here's something else to accomplish today:
   ^ \n\n<get recurringTaskContent>
