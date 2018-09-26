@@ -12,11 +12,11 @@
   ^ <fb>
   ^ <get username>, Every action item you complete puts you one step closer to your financial goals. 
   ^ Here's the next one from your work plan...<send>
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `
       👉<get currentTaskTitle>👈
       \n\n<get currentTaskSteps>
       \n\nGood luck!
-    `, `{"A": "I have questions.", "B": "I'm finished!"}`)</fb>
+    `, `{"A": "I have questions.", "B": "I'm finished!"}`)
   ^ </fb>  
   ^ {@ setvars}
   + (a|i have questions|need a little help|have some questions)
