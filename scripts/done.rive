@@ -12,13 +12,13 @@
   ^ BOOM!! There it is, <get username>!
   ^ \n\nCongratulations!!! 🎊🎊🎊 Do a dance and celebrate yourself. THAT's how you own the day!
   ^ <sms>\n\nThe next item on your work plan will be coming your way soon. If you want to get started on the next one now, just text the letter N.</sms>
-  ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)</fb>
+  ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)<send></fb>
   ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! I knew you'd get it done!
   ^ \n\nRemember, the bigger the task, the sweeter the triumph.
   ^ <sms>\n\nI'll be in touch soon with the next action item on your work plan! If you want to receive the next action item now, text the letter N.</sms>
-  ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)</fb>
+  ^ <fb>^template(`button`, `The next item on your list will be coming your way soon.`, `{"G": "Sounds good!", "Y": "Ready for it now."}`)<send></fb>
   ^ {@ setvars}
   + (g|sounds good|send it later)
   - Wonderful. Chat soon.
@@ -29,7 +29,7 @@
   - <set taskComplete=true><set days=2><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
   - I'm a bit unclear on your last response. 
-  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "Send it later", "Y": "Yes, send it now"}`)</fb>
+  ^ <fb>^template(`button`, `Do you want to receive your next action item now?`, `{"G": "Send it later", "Y": "Yes, send it now"}`)<send></fb>
   ^ <sms>Would you like to receive your next action item now? If yes, text the letter Y. If no, text the letter G.</sms>
   ^ {@ setvars}
 < topic

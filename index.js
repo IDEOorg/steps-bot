@@ -24,7 +24,6 @@ setInterval(() => {
 
 // takes in the request FB sends and formats that data and passes it into the run() function.
 async function fbEndpoint(req, res) {
-  console.log('index.js..fbEndpoint called', req.body);
   res.status(200);
   res.send('ok');
   const body = req.body;
