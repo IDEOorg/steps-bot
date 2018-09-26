@@ -6,7 +6,7 @@
   ^ \n\n👉<get currentTaskTitle>👈
   ^ \n\n<get currentTaskSteps>
   ^ \n\nGood luck!
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "I have questions.", "B": "I'm finished!"}`)<send></fb>
+  ^ <fb><send>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "I have questions.", "B": "I'm finished!"}`)</fb>
   ^ <sms>If you need assistance, text the letter "A". If you've finished, text the letter "B".</sms>
   ^ {@ setvars}
   - <sms>^image("<get taskNumImgUrl>")<send></sms>
@@ -15,7 +15,7 @@
   ^ \n\n👉<get currentTaskTitle>👈
   ^ \n\n<get currentTaskSteps>
   ^ \n\nI'll check in on your progress soon.
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need a little help.", "B": "All done!"}`)<send></fb>
+  ^ <fb><send>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Need a little help.", "B": "All done!"}`)</fb>
   ^ <sms>\n\nIf you could use a little help, text the letter "A". If you've completed the item, text the letter "B".</sms>
   ^ {@ setvars}
   - <sms>^image("<get taskNumImgUrl>")<send></sms>
@@ -25,7 +25,7 @@
   ^ \n\n<get currentTaskSteps>
   ^ \n\nYou've got this! I'll check in on your progress soon.
   ^ <fb>\n\nYou've got this! I'll check in on your progress soon.</fb>
-  ^ <fb>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Have some questions.", "B": "I've finished!"}`)<send></fb>
+  ^ <fb><send>^template(`generic`, `<get taskNumImgUrl>`, `<get currentTaskTitle>`, `{"A": "Have some questions.", "B": "I've finished!"}`)</fb>
   ^ <sms>\n\nIf you have a few questions, text the letter "A". If you're done, text the letter "B".</sms>
   ^ {@ setvars}
   + (a|i have questions|need a little help|have some questions)
