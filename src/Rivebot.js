@@ -257,7 +257,7 @@ function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the
     if (userPlatformId.length === 12 && userPlatformId[0] === '+' && userPlatformId[1] === '1') { // is a phone number with +1
       // cannot rely on process.env.NODE_ENV because both staging and prod run
       // as 'production' when deployed. Set env var to true for staging deployment.
-      // false for production.
+      // false for production. 
       const refLink = process.env.STAGING === 'false' ? process.env.FB_REFERRAL_LINK : process.env.FB_REFERRAL_LINK_STAGING;
       console.log('refLink', refLink);
       const referralId = userPlatformId.slice(2);
