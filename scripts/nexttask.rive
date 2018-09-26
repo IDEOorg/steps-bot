@@ -10,9 +10,12 @@
   ^ \n\nIf you need assistance, text the letter "A". If you've finished, text the letter "B".
   ^ <send>
   ^ </sms>
-  ^ <fb><get username>, Every action item you complete puts you one step closer to your financial goals. 
+  ^ <fb>
+  ^ <get username>, Every action item you complete puts you one step closer to your financial goals. 
   ^ Here's the next one from your work plan...<send>
-  ^ ^template(`generic`, `<get taskNumImgUrl>`, `👉<get currentTaskTitle>👈\n\n<get currentTaskSteps>\n\nGood luck!`, `{"A": "I have questions.", "B": "I'm finished!"}`) </fb>
+  ^ ^template(`generic`, `<get taskNumImgUrl>`, `<👉<get currentTaskTitle>👈`)<send>
+  ^ <get currentTaskSteps>
+  ^ </fb>
   ^ {@ setvars}
   + (a|i have questions|need a little help|have some questions)
   - {topic=help}{@ startprompt}
