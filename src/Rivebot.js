@@ -258,7 +258,7 @@ function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the
       // cannot rely on process.env.NODE_ENV because both staging and prod run
       // as 'production' when deployed. Set env var to true for staging deployment.
       // false for production.
-      const refLink = process.env.STAGING === 'true' ? process.env.FB_REFERRAL_LINK : process.env.FB_REFERRAL_LINK_STAGING;
+      const refLink = process.env.STAGING === 'false' ? process.env.FB_REFERRAL_LINK : process.env.FB_REFERRAL_LINK_STAGING;
       console.log('refLink', refLink);
       const referralId = userPlatformId.slice(2);
       const referralLink = `${refLink}?ref=${referralId}`;
