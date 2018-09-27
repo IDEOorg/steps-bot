@@ -40,9 +40,9 @@
   + (b|no im finished|finished|im done)
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
-  - As Confucius said, "It does not matter how slowly you go as long as you do not stop."
-  ^ You're doing great! 
-  ^ <fb>If you end up needing any assistance just let me know.</fb>
+  - As Confucius said, "It does not matter how slowly you go as long as you do not stop."\s
+  ^ \n\nYou're doing great! 
+  ^ <fb>\n\nIf you end up needing any assistance just let me know.</fb>
   ^ <fb>^template(`quickreply`, `Need some assistance`,`I'm good for now`)</fb>
   ^ <sms>\n\nIf you need any help just text the letter A.</sms>
   ^ {@ setvars}
