@@ -1,13 +1,5 @@
 > topic done includes global includes tempfastforward
-  + startprompt
   * <get isFinalTask> == true => {topic=ultimatedone} {@ startprompt}
-  - ^image("<get celebrationImgUrl>")<send>
-  ^ BOOM!! There it is, <get username>!
-  ^ \n\nCongratulations!!! 🎊🎊🎊 Do a dance and celebrate yourself. THAT's how you own the day!
-  ^ \n\nThe next item on your work plan will be coming your way soon. 
-  ^ <sms>\n\nIf you want to get started on the next one now, just text the letter Y.</sms>
-  ^ <fb>^template(`quickreply`,`Sounds good`, `Ready for it now`)</fb>
-  ^ {@ setvars}
   + (sounds good|send it later)
   - Wonderful. Chat soon.
   - Great! Chat soon.
@@ -17,7 +9,7 @@
   - <set taskComplete=true><set days=2><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
   - I'm a bit unclear on your last response. Do you want to receive your next action item now?
-  ^ <fb><send>^template(`quickreply`, `Send it later`, `Yes, send it now`)</fb>
+  ^ <fb>^template(`quickreply`, `Send it later`, `Yes, send it now`)</fb>
   ^ <sms>If yes, text the letter Y. If no, text the letter G.</sms>
   ^ {@ setvars}
 < topic
