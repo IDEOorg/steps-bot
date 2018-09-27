@@ -40,10 +40,10 @@
   + (b|no im finished|finished|im done)
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
-  - The anticipation is often harder than the task, <get username>! Keep pushing through 💪!
-  ^ \n\nYou've got this! Let me know if you need any help.
-  ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`}`)</fb>
-  ^ <sms>\n\nIf you ever need assistance, just text the letter A.</sms>
+  - Got it. Remember: If you think you can do it, you will  🙌.
+  ^ <fb>\n\nLet me know if you need any help!</fb>
+  ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
+  ^ <sms>\n\nFor any help, just text the letter A. I’m just a text away.</sms>
   ^ {@ setvars}
   + (g|still working|no thanks im good|im good for now)
   - Wonderful. I'll check in soon!
