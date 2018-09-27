@@ -16,13 +16,6 @@
   ^ <sms>\n\nIf you want to get started on the next one now, just text the letter Y.</sms>
   ^ <fb>^template(`quickreply`,`Sounds good`, `Ready for it now`)</fb>
   ^ {@ setvars}
-  - ^image("<get celebrationImgUrl>")<send>
-  ^ Wonderful!! I knew you'd get it done!
-  ^ \n\nRemember, the bigger the task, the sweeter the triumph.
-  ^ \n\nI'll be in touch soon with the next action item on your work plan!
-  ^ <sms>\n\nIf you want to receive the next action item now, text the letter Y.</sms>
-  ^ <fb>^template(`quickreply`, `Sounds good`, `Ready for it now`)</fb>
-  ^ {@ setvars}
   + (sounds good|send it later)
   - Wonderful. Chat soon.
   - Great! Chat soon.
