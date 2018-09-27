@@ -196,7 +196,7 @@ async function run(opts) {
     chatbot.shouldMessageClient = false;
     chatbot.shouldUpdateClient = false;
     console.log('error with user ' + chatbot.userPlatformId);
-    console.log(chatbot.client);
+    // console.log(chatbot.client);
   }
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
