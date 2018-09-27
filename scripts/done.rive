@@ -27,7 +27,7 @@
   - Wonderful. Chat soon.
   - Great! Chat soon.
   + (y|ready for it now|yes send it now)
-  - {topic=nexttask} {@ startprompt}
+  - {topic=nexttask}{@ startprompt}
   + setvars
   - <set taskComplete=true><set days=2><set timeOfDay=morning><set nextTopic=nexttask><set nextMessage=startprompt>
   + *
