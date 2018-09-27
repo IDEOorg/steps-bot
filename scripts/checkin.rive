@@ -41,23 +41,28 @@
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
   - As Confucius said, "It does not matter how slowly you go as long as you do not stop."
-  ^ <fb>^template(`button`, `You're doing great! If you end up needing any assistance just let me know.`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <fb>You're doing great! If you end up needing any assistance just let me know.<send></fb>
+  ^ <fb>^template(`quickreply`, `Need some assistance`,`I'm good for now`)</fb>
   ^ <sms>\n\nIf you need any help just text the letter A.</sms>
   ^ {@ setvars}
   - The anticipation is often harder than the task, <get username>! Keep pushing through 💪!
-  ^ <fb><send>^template(`button`, `You've got this! Let me know if you need any help.`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <fb>You've got this! Let me know if you need any help.<send></fb>
+  ^ <fb><send>^template(`quickreply`, `Need some assistance`, `I'm good for now`}`)</fb>
   ^ <sms>\n\nIf you ever need assistance, just text the letter A.</sms>
   ^ {@ setvars}
   - Got it. Remember: If you think you can do it, you will  🙌.
-  ^ <fb><send>^template(`button`, `Let me know if you need any help!`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <fb>Let me know if you need any help!<send></fb>
+  ^ <fb><send>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
   ^ <sms>\n\nFor any help, just text the letter A. I’m just a text away.</sms>
   ^ {@ setvars}
   - Great! It isn't the pace that matters, it's staying in the race. Keep at it 👍.
-  ^ <fb><send>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <fb>You're doing great! Let me know if you need any help!<send></fb>
+  ^ <fb><send>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
   ^ <sms>\n\nIf you need my assistance just text the letter A.</sms>
   ^ {@ setvars}
   - "Still working" means you're getting it done! So, **hi five** ✋!
-  ^ <fb><send>^template(`button`, `You're doing great! Let me know if you need any help!`, `{"A": "Need some assistance", "G": "I'm good for now."}`)</fb>
+  ^ <fb>You're doing great! Let me know if you need any help!<send></fb>
+  ^ <fb><send>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
   ^ <sms>\n\nIf you want my help, text the letter A.</sms>
   ^ {@ setvars}
   + (g|still working|no thanks im good|im good for now)
@@ -66,8 +71,9 @@
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
-   - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
-  ^ <fb><send>^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"G": "No, I'm okay.", "A": "Have some questions."}`)</fb>
+  - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
+  ^ <fb>Do you need my assistance with action item <get taskNum>?<send></fb>
+  ^ <fb><send>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
   ^ <sms>\n\nIf you need my assistance with action item <get taskNum> text the letter A. 
   ^ \n\nIf all is well, text the letter G.</sms>
   + (g|no im okay)
