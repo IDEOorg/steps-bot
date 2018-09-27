@@ -14,13 +14,6 @@
   ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)<send></fb>
   ^ <sms><send>Have questions?–Text the letter A.  Finished?–Text the letter B. Not quite there yet?–Text the letter C.</sms>
   ^ {@ setvars}
-  - ^image("<get checkinImgUrl>")<send>
-  ^ <get username>! Just checking in. How are things going with:
-  ^ \n\n👉<get currentTaskTitle>👈
-  ^ \n\nClick here for step-by-step details of this action item: <get workplanLink>
-  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)<send></fb>
-  ^ <sms><send>If you have questions, text the letter A. If you’re done, text the letter B. And celebrate! Not quite there yet? Text the letter C.</sms>
-  ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
   + (b|no im finished|finished|im done)
