@@ -40,10 +40,10 @@
   + (b|no im finished|finished|im done)
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
-  - Great! It isn't the pace that matters, it's staying in the race. Keep at it 👍.
+  - "Still working" means you're getting it done! So, **hi five** ✋!
   ^ <fb>\n\nYou're doing great! Let me know if you need any help!</fb>
   ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
-  ^ <sms>\n\nIf you need my assistance just text the letter A.</sms>
+  ^ <sms>\n\nIf you want my help, text the letter A.</sms>
   ^ {@ setvars}
   + (g|still working|no thanks im good|im good for now)
   - Wonderful. I'll check in soon!
