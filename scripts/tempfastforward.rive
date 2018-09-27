@@ -20,5 +20,5 @@
   + recurringtopic
   - {topic=recurring}{@ startprompt}
   + gibberishtopic
-  - {topic=gibberish}
+  - {topic=gibberish}{@ *}
 < topic
