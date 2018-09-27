@@ -71,7 +71,7 @@
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
-  - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
+  - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.\s
   ^ <fb>Do you need my assistance with action item <get taskNum>?<send></fb>
   ^ <fb><send>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
   ^ <sms>\n\nIf you need my assistance with action item <get taskNum> text the letter A. 
