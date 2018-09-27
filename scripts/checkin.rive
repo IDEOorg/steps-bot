@@ -28,13 +28,6 @@
   ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)<send></fb>
   ^ <sms><send>Need assistance?–Text the letter A. Done?–Text the letter B. Want me to check back later?–Text the letter C.</sms>
   ^ {@ setvars}
-  - ^image("<get checkinImgUrl>")<send>
-  ^ Hey there, <get username>! How's it going with action item:
-  ^ \n\n👉<get currentTaskTitle>👈
-  ^ \n\nYou can find step-by step-details of this action item here: <get workplanLink>
-  ^ <fb>^template(`quickreply`, `I'm done!`, `Have some questions.`, `Working on it.`)<send></fb>
-  ^ <sms><send>Want my assistance?–Text the letter A. Completed the item?–Text the letter B. Need more time to work on it?–Text the letter C.</sms>
-  ^ {@ setvars}
   + (a|have some questions|need some assistance|yes i have questions)
   - {topic=help} {@ startprompt}
   + (b|no im finished|finished|im done)
