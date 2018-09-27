@@ -40,20 +40,41 @@
   + (b|no im finished|finished|im done)
   - {topic=done} {@ startprompt}
   + (c|working on it|still working)
+    - As Confucius said, "It does not matter how slowly you go as long as you do not stop."\s
+  ^ \n\nYou're doing great! 
+  ^ <fb>\n\nIf you end up needing any assistance just let me know.</fb>
+  ^ <fb>^template(`quickreply`, `Need some assistance`,`I'm good for now`)</fb>
+  ^ <sms>\n\nIf you need any help just text the letter A.</sms>
+  ^ {@ setvars}
+  - The anticipation is often harder than the task, <get username>! Keep pushing through 💪!
+  ^ \n\nYou've got this! Let me know if you need any help.
+  ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`}`)</fb>
+  ^ <sms>\n\nIf you need assistance, just text the letter A.</sms>
+  ^ {@ setvars}
+  - Got it. Remember: If you think you can do it, you will  🙌.
+  ^ <fb>\n\nLet me know if you need any help!</fb>
+  ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
+  ^ <sms>\n\nFor any help, just text the letter A. I’m just a text away.</sms>
+  ^ {@ setvars}
+  - Great! It isn't the pace that matters, it's staying in the race. Keep at it 👍.
+  ^ <fb>\n\nYou're doing great! Let me know if you need any help!</fb>
+  ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
+  ^ <sms>\n\nIf you need my assistance just text the letter A.</sms>
+  ^ {@ setvars}
   - "Still working" means you're getting it done! So, **hi five** ✋!
   ^ <fb>\n\nYou're doing great! Let me know if you need any help!</fb>
   ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm good for now`)</fb>
   ^ <sms>\n\nIf you want my help, text the letter A.</sms>
   ^ {@ setvars}
-  + (g|still working|no thanks im good|im good for now)
+  + (g|no thanks im good|im good for now)
   - Wonderful. I'll check in soon!
   - Sounds good. I'll be back in touch soon.
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
   - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.\s
-  ^ <fb>Do you need my assistance with action item <get taskNum>?<send></fb>
-  ^ <fb><send>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
+  ^ <fb>\n\nDo you need my assistance with action item <get taskNum>?</fb>
+  ^ <fb>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
   ^ <sms>\n\nIf you need my assistance with action item <get taskNum> text the letter A. 
   ^ \n\nIf all is well, text the letter G.</sms>
   + (g|no im okay)
