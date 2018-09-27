@@ -5,8 +5,7 @@
   ^ \n\n👉<get currentTaskTitle>👈
   ^ \n\n<get currentTaskSteps>
   ^ <sms>\n\nIf you need some assistance, text the letter "A". If you've finished, text the letter "B".<send></sms>
-  ^ Also, if you ever need a little help, you can message "COACH" at any time to contact your coach, "PLAN" to see your full work plan, or "STOP" to stop receiving messages from me.
-  ^ \n\nI'll check in on your progress soon. You've got this! {@ setvars}
+  ^ \n\nSelect a button below! Or, you can text "PLAN" to see your full work plan, or "STOP" to stop receiving messages from me.
   ^ <fb>^template(`quickreply`, `Need some assistance`, `I'm done`)<send></fb>
   + (a|need some assistance)
   - {topic=help}{@ startprompt}
