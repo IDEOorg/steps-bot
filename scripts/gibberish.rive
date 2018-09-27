@@ -2,8 +2,8 @@
   + *
   - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
   ^ \n\nDo you need my assistance with action item <get taskNum>?
-  ^ <sms>\n\nIf yes, text the letter A. If all is well, text the letter G.</sms><send>
-  ^ <fb>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
+  ^ <sms>\n\nIf yes, text the letter A. If all is well, text the letter G.</sms>
+  ^ <fb><send>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
   + (g|no im okay)
   - Sounds good. I'll be back in touch soon.
   + (a|have some questions)
