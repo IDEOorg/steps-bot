@@ -2,14 +2,6 @@
   + startprompt
   * <get isFinalTask> == true => {topic=ultimatedone} {@ startprompt}
   - ^image("<get celebrationImgUrl>")<send>
-  ^ Uhm, THAT IS AMAZING! Congratulations, <get username>!!!
-  ^ \n\nThe road to financial health is not easy but you do NOT mess around! 
-  ^ \n\nWay to bring your A game today.
-  ^ \n\nI’ll send your next action item soon. 
-  ^ <sms>\n\nIf you’re feeling ambitious and want it now, text the letter Y.</sms>
-  ^ <fb>^template(`quickreply`, `Sounds good`, `Ready for it now`)</fb>
-  ^ {@ setvars}
-  - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!
   ^ \n\nCongratulations!!! 🎊🎊🎊 Do a dance and celebrate yourself. THAT's how you own the day!
   ^ \n\nThe next item on your work plan will be coming your way soon. 
