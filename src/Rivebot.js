@@ -49,7 +49,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'contentDescription', contentDescription);
     await this.rivebot.setUservar(userPlatformId, 'contentImgUrl', contentImgUrl);
     await this.rivebot.setUservar(userPlatformId, 'contentUrl', contentUrl);
-    await this.rivebot.setUservar(userPlatformId, 'workplanLink', constants.WORKPLAN_URL);
+    await this.rivebot.setUservar(userPlatformId, 'workplanLink', client.plan_url);
     await this.rivebot.setUservar(userPlatformId, 'introVideoLink', constants.INTRO_VIDEO_URL);
     await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(userPlatformId, 'recurringTaskContent', recurringTaskContent);
@@ -255,8 +255,12 @@ function getRandomItemFromArray(array) {
 function formatReferralLinkForNewFBSignups(userPlatformId) { // returns just the phone number without the +1, FB referral postback doesn't properly handle '+' signs as a param
   if (userPlatformId) {
     if (userPlatformId.length === 12 && userPlatformId[0] === '+' && userPlatformId[1] === '1') { // is a phone number with +1
+      // cannot rely on process.env.NODE_ENV because both staging and prod run
+      // as 'production' when deployed. Set env var to true for staging deployment.
+      // false for production.
+      const refLink = process.env.STAGING === 'false' ? process.env.FB_REFERRAL_LINK : process.env.FB_REFERRAL_LINK_STAGING;
       const referralId = userPlatformId.slice(2);
-      const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${referralId}`;
+      const referralLink = `${refLink}?ref=${referralId}`;
       return referralLink;
     } else if (userPlatformId.length === 10) {
       const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${userPlatformId}`;
