@@ -5,22 +5,25 @@
   ^ Uhm, THAT IS AMAZING! Congratulations, <get username>!!!
   ^ \n\nThe road to financial health is not easy but you do NOT mess around! 
   ^ \n\nWay to bring your A game today.
-  ^ \n\nI’ll send your next action item soon. 
-  ^ <sms>\n\nIf you’re feeling ambitious and want it now, text the letter Y.</sms>
+  ^ \n\nI'll be in touch soon with the next action item on your work plan! 
+  ^ If you want to re-prioritize which action item you work on next, just 
+  ^ drag the action you want to the top of your workplan here: <get workplanLink> 
   ^ <fb>^template(`quickreply`, `Sounds good`, `Ready for it now`)</fb>
   ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ BOOM!! There it is, <get username>!
   ^ \n\nCongratulations!!! 🎊🎊🎊 Do a dance and celebrate yourself. THAT's how you own the day!
-  ^ \n\nThe next item on your work plan will be coming your way soon. 
-  ^ <sms>\n\nIf you want to get started on the next one now, just text the letter Y.</sms>
+  ^ \n\nI'll be in touch soon with the next action item on your work plan! 
+  ^ If you want to re-prioritize which action item you work on next, just 
+  ^ drag the action you want to the top of your workplan here: <get workplanLink> 
   ^ <fb>^template(`quickreply`,`Sounds good`, `Ready for it now`)</fb>
   ^ {@ setvars}
   - ^image("<get celebrationImgUrl>")<send>
   ^ Wonderful!! I knew you'd get it done!
   ^ \n\nRemember, the bigger the task, the sweeter the triumph.
-  ^ \n\nI'll be in touch soon with the next action item on your work plan!
-  ^ <sms>\n\nIf you want to receive the next action item now, text the letter Y.</sms>
+  ^ \n\nI'll be in touch soon with the next action item on your work plan! 
+  ^ If you want to re-prioritize which action item you work on next, just 
+  ^ drag the action you want to the top of your workplan here: <get workplanLink> 
   ^ <fb>^template(`quickreply`, `Sounds good`, `Ready for it now`)</fb>
   ^ {@ setvars}
   + (sounds good|send it later)
