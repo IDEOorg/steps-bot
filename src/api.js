@@ -18,7 +18,7 @@ async function getAllClients() {
       json: true
     });
   } catch (e) {
-    console.log('getAllClients api method failed');
+    console.log('getAllClients api method failed', e.message);
     if (e.statusCode === 401) {
       return constants.UNAUTHORIZED;
     }
@@ -36,7 +36,7 @@ async function getOrgName(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getOrgName api method failed for org id ' + id);
+    console.log('getOrgName api method failed for org id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   if (org) {
@@ -54,7 +54,7 @@ async function getCoach(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getCoach api method failed for coach id ' + id);
+    console.log('getCoach api method failed for coach id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return coach;
@@ -69,7 +69,7 @@ async function getClientTasks(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getClientTasks api method failed for client id ' + id);
+    console.log('getClientTasks api method failed for client id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return tasks;
@@ -83,7 +83,7 @@ async function getAllMedia() {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('getAllMedia method failed');
+    console.log('getAllMedia method failed', e.message);
     sendErrorToZendesk(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
@@ -100,7 +100,7 @@ async function getViewedMediaIds(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('getViewedMediaIds method failed for client id ' + id);
+    console.log('getViewedMediaIds method failed for client id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   viewedMedia = JSON.parse(viewedMedia);
@@ -123,7 +123,7 @@ async function createRequest(userId, taskId) {
     },
     json: true
   }).catch((e) => {
-    console.log('createRequest method failed with user id ' + userId + ' on task id ' + taskId);
+    console.log('createRequest method failed with user id ' + userId + ' on task id ' + taskId, e.message);
     sendErrorToZendesk(e);
   });
   return request;
@@ -139,7 +139,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
       },
       json: true
     }).catch((e) => {
-      console.log('setRequestByTaskId failed');
+      console.log('setRequestByTaskId failed', e.message);
       sendErrorToZendesk(e);
     });
     for (let i = 0; i < requests.length; i++) {
@@ -158,7 +158,7 @@ async function setRequestByTaskId(clientId, taskId, status) {
           },
           json: true
         }).catch((e) => {
-          console.log('setRequestByTaskId failed: issue in the for loop');
+          console.log('setRequestByTaskId failed: issue in the for loop', e.message);
           sendErrorToZendesk(e);
         });
       }
@@ -175,7 +175,7 @@ async function getUserRequests(userId) {
     },
     json: true
   }).catch((e) => {
-    console.log('getUserRequests method failed for user ' + userId);
+    console.log('getUserRequests method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return requests;
@@ -190,7 +190,7 @@ async function getUserMessages(userId) {
     },
     json: true
   }).catch((e) => {
-    console.log('getUserMessages method failed for user ' + userId);
+    console.log('getUserMessages method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return messages;
@@ -216,7 +216,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('createMessage method failed for user ' + fromId + ' to ' + toId);
+    console.log('createMessage method failed for user ' + fromId + ' to ' + toId, e.message);
     sendErrorToZendesk(e);
   });
 
@@ -235,7 +235,7 @@ async function updateUser(userId, userData) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('updateUser method failed for user ' + userId);
+    console.log('updateUser method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return user;
@@ -251,7 +251,7 @@ async function updateTask(id, taskData) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('failed to update task with id ' + id);
+    console.log('failed to update task with id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return task;
@@ -267,7 +267,7 @@ async function markMediaAsViewed(clientId, mediaId) {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
     }).catch((e) => {
-      console.log('failed to mark media as viewed with media id ' + mediaId);
+      console.log('failed to mark media as viewed with media id ' + mediaId, e.message);
       sendErrorToZendesk(e);
     });
     return media;
@@ -283,7 +283,7 @@ async function getUserFromId(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log('getUserFromId failed to find user id ' + id);
+    console.log('getUserFromId failed to find user id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return JSON.parse(user);
@@ -298,7 +298,7 @@ async function getTask(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getTask failed to find task id ' + id);
+    console.log('getTask failed to find task id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return task;
