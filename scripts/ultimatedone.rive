@@ -1,4 +1,4 @@
-> topic ultimatedone
+> topic ultimatedone includes global
   + *
   - ^image("<get celebrationImgUrl>")<send>
   ^ WOW! This. Is. Major. You've finished every task in your work plan, <get username>!

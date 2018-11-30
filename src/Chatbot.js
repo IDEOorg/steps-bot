@@ -295,6 +295,9 @@ module.exports = class Chatbot {
           currentTaskTitle = tasks[i].title;
           currentTaskSteps = steps;
           currentTaskDescription = tasks[i].description;
+          if (this.client.topic === 'ultimatedone') {
+            this.client.topic = 'checkin';
+          }
           break;
         }
       }

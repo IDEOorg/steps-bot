@@ -1,5 +1,6 @@
 import Chatbot from '../src/Chatbot';
 import constants from '../src/constants';
+import Rivebot from '../src/Rivebot';
 import api from '../src/api';
 
 test('setPlatform loads platform into chatbot', () => {
@@ -293,4 +294,49 @@ test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () =
   expect(payload.contentDescription).toContain('Gail');
   expect(payload.contentUrl).toContain('bit');
   expect(payload.contentImgUrl).toContain('aws');
+});
+
+test(`simulating getResponse returns a checkin response when the last topic 
+  for the client is ultimatedone and another task gets added`, async () => {
+  const rivebot = new Rivebot();
+  await rivebot.loadChatScripts();
+  const opts = {
+    platform: 'SMS',
+    userMessage: 'checkintopic',
+    userPlatformId: '+11234567890',
+    rivebot,
+  };
+  const bot = new Chatbot(opts);
+  bot.client = {
+    first_name: 'name',
+    last_name: 'last',
+    phone: '+11234567890',
+    platform: 'SMS',
+    tasks: [{
+      description: 'simple',
+      steps: null,
+      title: 'New task title',
+      status: 'ACTIVE',
+      recurring: false,
+    }],
+    topic: 'ultimatedone',
+  };
+
+  const rivebotVars = {
+    client: bot.client,
+    platform: bot.platform,
+    userMessage: bot.userMessage,
+    userPlatformId: bot.userPlatformId,
+    orgName: 'Org',
+    coach: 'me',
+    currentTaskTitle: 'New task title',
+    currentTaskSteps: '',
+    currentTaskDescription: 'simple',
+    taskNum: 1,
+  };
+  bot.getAndSetCurrentTaskData(bot.client.tasks);
+  await bot.rb.loadVarsToRiveBot(rivebotVars);
+  const response = await bot.rb.rivebot.reply(bot.userPlatformId, bot.userMessage);
+  const messages = bot.rb.parseResponse(response, bot.platform);
+  expect(messages[1].text).toContain('New task title');
 });
