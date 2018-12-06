@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "dev": "nodemon index.js",
+    "start:live:dev": "./node_modules/.bin/ngrok http 3002"
   },
   "author": "",
   "license": "ISC",
@@ -34,7 +36,8 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "jest": "^23.2.0"
+    "jest": "^23.2.0",
+    "ngrok": "^3.1.0"
   },
   "jest": {
     "testURL": "http://localhost"
