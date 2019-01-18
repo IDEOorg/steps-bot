@@ -35,7 +35,7 @@ async function getOrgName(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getOrgName api method failed for org id ' + id, e.message);
     sendErrorToZendesk(e);
   });
@@ -53,7 +53,7 @@ async function getCoach(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getCoach api method failed for coach id ' + id, e.message);
     sendErrorToZendesk(e);
   });
@@ -68,8 +68,11 @@ async function getClientTasks(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
-    console.log('getClientTasks api method failed for client id ' + id, e.message);
+  }).catch(e => {
+    console.log(
+      'getClientTasks api method failed for client id ' + id,
+      e.message
+    );
     sendErrorToZendesk(e);
   });
   return tasks;
@@ -82,13 +85,16 @@ async function getAllMedia() {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getAllMedia method failed', e.message);
     sendErrorToZendesk(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
-  return listOfMedia.filter((media) => {
-    return media.task_id === null && (media.type === 'STORY' || media.type === 'GENERAL_EDUCATION');
+  return listOfMedia.filter(media => {
+    return (
+      media.task_id === null &&
+      (media.type === 'STORY' || media.type === 'GENERAL_EDUCATION')
+    );
   });
 }
 
@@ -99,12 +105,15 @@ async function getViewedMediaIds(id) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
-    console.log('getViewedMediaIds method failed for client id ' + id, e.message);
+  }).catch(e => {
+    console.log(
+      'getViewedMediaIds method failed for client id ' + id,
+      e.message
+    );
     sendErrorToZendesk(e);
   });
   viewedMedia = JSON.parse(viewedMedia);
-  return viewedMedia.map((media) => {
+  return viewedMedia.map(media => {
     return media.id;
   });
 }
@@ -122,8 +131,14 @@ async function createRequest(userId, taskId) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
-    console.log('createRequest method failed with user id ' + userId + ' on task id ' + taskId, e.message);
+  }).catch(e => {
+    console.log(
+      'createRequest method failed with user id ' +
+        userId +
+        ' on task id ' +
+        taskId,
+      e.message
+    );
     sendErrorToZendesk(e);
   });
   return request;
@@ -138,14 +153,15 @@ async function setRequestByTaskId(clientId, taskId, status) {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       },
       json: true
-    }).catch((e) => {
+    }).catch(e => {
       console.log('setRequestByTaskId failed', e.message);
       sendErrorToZendesk(e);
     });
     for (let i = 0; i < requests.length; i++) {
       const request = requests[i];
       if (request.task_id === taskId) {
-        await rp({ // eslint-disable-line
+        await rp({
+          // eslint-disable-line
           method: 'PUT',
           uri: process.env.API_URL + '/requests/' + request.id,
           headers: {
@@ -157,8 +173,11 @@ async function setRequestByTaskId(clientId, taskId, status) {
             task_id: taskId
           },
           json: true
-        }).catch((e) => {
-          console.log('setRequestByTaskId failed: issue in the for loop', e.message);
+        }).catch(e => {
+          console.log(
+            'setRequestByTaskId failed: issue in the for loop',
+            e.message
+          );
           sendErrorToZendesk(e);
         });
       }
@@ -174,7 +193,7 @@ async function getUserRequests(userId) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getUserRequests method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
@@ -189,7 +208,7 @@ async function getUserMessages(userId) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getUserMessages method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
@@ -215,8 +234,11 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
-    console.log('createMessage method failed for user ' + fromId + ' to ' + toId, e.message);
+  }).catch(e => {
+    console.log(
+      'createMessage method failed for user ' + fromId + ' to ' + toId,
+      e.message
+    );
     sendErrorToZendesk(e);
   });
 
@@ -234,7 +256,7 @@ async function updateUser(userId, userData) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
+  }).catch(e => {
     console.log('updateUser method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
@@ -250,7 +272,7 @@ async function updateTask(id, taskData) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
+  }).catch(e => {
     console.log('failed to update task with id ' + id, e.message);
     sendErrorToZendesk(e);
   });
@@ -261,13 +283,21 @@ async function markMediaAsViewed(clientId, mediaId) {
   if (mediaId) {
     const media = await rp({
       method: 'POST',
-      uri: process.env.API_URL + '/clients/' + clientId + '/viewed_media/' + mediaId,
+      uri:
+        process.env.API_URL +
+        '/clients/' +
+        clientId +
+        '/viewed_media/' +
+        mediaId,
       json: true,
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
-    }).catch((e) => {
-      console.log('failed to mark media as viewed with media id ' + mediaId, e.message);
+    }).catch(e => {
+      console.log(
+        'failed to mark media as viewed with media id ' + mediaId,
+        e.message
+      );
       sendErrorToZendesk(e);
     });
     return media;
@@ -282,7 +312,7 @@ async function getUserFromId(id) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getUserFromId failed to find user id ' + id, e.message);
     sendErrorToZendesk(e);
   });
@@ -297,7 +327,7 @@ async function getTask(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     },
     json: true
-  }).catch((e) => {
+  }).catch(e => {
     console.log('getTask failed to find task id ' + id, e.message);
     sendErrorToZendesk(e);
   });
@@ -306,7 +336,7 @@ async function getTask(id) {
 
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
-  const clients = await getAllClients();
+  const clients = await this.getAllClients();
   if (clients === constants.UNAUTHORIZED) {
     return constants.UNAUTHORIZED;
   }
@@ -315,14 +345,23 @@ async function getUserDataFromDB(platform, userPlatformId) {
   }
   for (let i = 0; i < clients.length; i++) {
     const client = clients[i];
-    if (platform === constants.SMS && client.phone !== null && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
+    if (
+      platform === constants.SMS &&
+      client.phone !== null &&
+      (client.phone === userPlatformId ||
+        formatPhoneNumber(client.phone) === userPlatformId)
+    ) {
       client.phone = userPlatformId;
       return client;
     }
     if (platform === constants.FB && client.fb_id === userPlatformId) {
       return client;
     }
-    if (platform === constants.FB && (client.phone === userPlatformId || formatPhoneNumber(client.phone) === userPlatformId)) {
+    if (
+      platform === constants.FB &&
+      (client.phone === userPlatformId ||
+        formatPhoneNumber(client.phone) === userPlatformId)
+    ) {
       return client;
     }
   }
@@ -347,7 +386,7 @@ function sendErrorToZendesk(error) {
     to: 'support@helloroo.zendesk.com',
     from: 'no-reply@helloroo.org',
     subject: 'Roo bot error',
-    text: `An error occurred on the bot server: \n ${error}`,
+    text: `An error occurred on the bot server: \n ${error}`
   });
 }
 

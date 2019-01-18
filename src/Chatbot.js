@@ -8,7 +8,8 @@ module.exports = class Chatbot {
     this.platform = opts.platform;
     this.userMessage = opts.userMessage;
     this.userPlatformId = opts.userPlatformId;
-    this.userPressedGetStartedOnFBPayload = opts.userPressedGetStartedOnFBPayload;
+    this.userPressedGetStartedOnFBPayload =
+      opts.userPressedGetStartedOnFBPayload;
     this.topic = opts.topic;
     this.recurringTaskId = opts.recurringTaskId;
     this.coachHelpResponse = opts.coachHelpResponse;
@@ -25,15 +26,18 @@ module.exports = class Chatbot {
     if (this.client === constants.UNAUTHORIZED) {
       return; // unauthorized oauth token . Consider refreshing the token.
     }
-    if (!this.client) { // client does not exist, break the system and just send an 'unrecognized user text'
+    if (!this.client) {
+      // client does not exist, break the system and just send an 'unrecognized user text'
       this.setUnrecognizedClientResponse();
       return;
     }
     this.formatUserMessage();
-    if (this.topic) { // manually set the client's topic if a checkin time has hit
+    if (this.topic) {
+      // manually set the client's topic if a checkin time has hit
       this.client.topic = this.topic;
     }
-    if (this.client.platform === null) { // due to a third party form library in the Admin interface, when a client is SMS, the platform will be null instead of 'SMS'
+    if (this.client.platform === null) {
+      // due to a third party form library in the Admin interface, when a client is SMS, the platform will be null instead of 'SMS'
       this.client.platform = 'SMS';
     }
     this.addMessageToUserLog(); // adds the user's message to the Client Message API
@@ -42,27 +46,35 @@ module.exports = class Chatbot {
     }
     if (this.userAskedToFastForward()) {
       const ableToFastForward = this.fastForwardUser();
-      if (!ableToFastForward) { // if there's no checkin to fast forward to, don't send a message
+      if (!ableToFastForward) {
+        // if there's no checkin to fast forward to, don't send a message
         this.shouldMessageClient = false;
         this.shouldUpdateClient = false;
         return;
       }
     }
-    if (this.client.topic === null || this.client.topic === 'setupfb') { // handles new users
+    if (this.client.topic === null || this.client.topic === 'setupfb') {
+      // handles new users
       this.assignTopicForNewUser();
     }
     this.client.tasks = await api.getClientTasks(this.client.id); // loads client's tasks
     this.addRecurringTasksToCheckInList(); // on introtask topic loads any recurring tasks the user has
     const remainingRivebotVars = await this.getRemainingVarsRivebotNeeds(); // pull all the remaining data rivebot needs to send a reply
     this.setUserIfWorkplanComplete();
-    const rivebotVars = Object.assign({
-      client: this.client,
-      platform: this.platform,
-      userMessage: this.userMessage,
-      userPlatformId: this.userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
-    }, remainingRivebotVars);
+    const rivebotVars = Object.assign(
+      {
+        client: this.client,
+        platform: this.platform,
+        userMessage: this.userMessage,
+        userPlatformId: this.userPlatformId // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
+      },
+      remainingRivebotVars
+    );
     await this.rb.loadVarsToRiveBot(rivebotVars);
-    const response = await this.rb.rivebot.reply(this.userPlatformId, this.userMessage);
+    const response = await this.rb.rivebot.reply(
+      this.userPlatformId,
+      this.userMessage
+    );
     const messages = this.rb.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
     await this.dontSendMessageIfNoWorkplan();
@@ -84,13 +96,19 @@ module.exports = class Chatbot {
   async loadClientData() {
     let userInfo = null;
     if (this.userPressedGetStartedOnFBPayload) {
-      userInfo = await api.getUserDataFromDB(this.platform, this.userPressedGetStartedOnFBPayload);
+      userInfo = await api.getUserDataFromDB(
+        this.platform,
+        this.userPressedGetStartedOnFBPayload
+      );
       if (userInfo) {
         userInfo.topic = 'welcome';
         userInfo.fb_id = this.userPlatformId; // if the user pressed on the 'Get Started' button, record the user's fb id
       }
     } else {
-      userInfo = await api.getUserDataFromDB(this.platform, this.userPlatformId);
+      userInfo = await api.getUserDataFromDB(
+        this.platform,
+        this.userPlatformId
+      );
     }
     this.client = userInfo;
   }
@@ -99,18 +117,24 @@ module.exports = class Chatbot {
     let errMessage = null;
     // platform is FB
     if (this.platform === constants.FB) {
-      errMessage = 'Sorry, we didn\'t recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.';
-    } else { // platform is SMS
-      errMessage = 'Sorry, we didn\'t recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.';
+      errMessage =
+        "Sorry, we didn't recognize the Facebook account you sent this from. If you believe this is a mistake, contact your coach.";
+    } else {
+      // platform is SMS
+      errMessage =
+        "Sorry, we didn't recognize the phone number you sent this from. If you believe this is a mistake, contact your coach.";
     }
     this.shouldUpdateClient = false;
-    this.messagesToSendToClient = [{
-      type: 'text',
-      message: errMessage
-    }];
+    this.messagesToSendToClient = [
+      {
+        type: 'text',
+        message: errMessage
+      }
+    ];
   }
 
-  userAskedToStop() { // eslint-disable-line
+  userAskedToStop() {
+    // eslint-disable-line
     if (this.userMessage === 'stop') {
       return true;
     }
@@ -131,11 +155,18 @@ module.exports = class Chatbot {
 
   async addMessageToUserLog() {
     if (this.userMessage !== 'startprompt' && this.userMessage !== 'pinguser') {
-      await api.createMessage(null, this.client.id, process.env.BOT_ID, this.userMessage, this.client.topic);
+      await api.createMessage(
+        null,
+        this.client.id,
+        process.env.BOT_ID,
+        this.userMessage,
+        this.client.topic
+      );
     }
   }
 
-  userAskedToFastForward() { // eslint-disable-line
+  userAskedToFastForward() {
+    // eslint-disable-line
     if (this.userMessage === 'ff') {
       return true;
     }
@@ -185,32 +216,51 @@ module.exports = class Chatbot {
     // this.platform is the platform the bot received the message from, this.client.platform is the platform the client should be using
     if (this.client.platform === 'FBOOK' && this.platform === constants.SMS) {
       this.client.topic = 'setupfb';
-    } else if (this.client.platform === 'FBOOK' && this.platform === constants.FB) {
+    } else if (
+      this.client.platform === 'FBOOK' &&
+      this.platform === constants.FB
+    ) {
       this.client.topic = 'welcome';
-    } else if ((this.client.platform === 'SMS' || this.client.platform === null) && this.platform === constants.SMS) {
+    } else if (
+      (this.client.platform === 'SMS' || this.client.platform === null) &&
+      this.platform === constants.SMS
+    ) {
       this.client.topic = 'welcome';
-    } else { // client is supposed to use SMS but somehow got access to Facebook
+    } else {
+      // client is supposed to use SMS but somehow got access to Facebook
       this.client.topic = 'welcome';
       this.shouldMessageClient = false;
     }
   }
 
   async dontSendMessageIfNoWorkplan() {
-    if ((!this.client.tasks || this.client.tasks.length === 0) && this.client.topic !== 'setupfb' && this.client.topic !== 'welcome' && this.client.topic !== 'welcomenext' && this.client.topic !== 'welcomewait') {
+    if (
+      (!this.client.tasks || this.client.tasks.length === 0) &&
+      this.client.topic !== 'setupfb' &&
+      this.client.topic !== 'welcome' &&
+      this.client.topic !== 'welcomenext' &&
+      this.client.topic !== 'welcomewait' &&
+      this.client.topic !== 'followup'
+    ) {
       this.shouldMessageClient = false;
-      await this.rb.overrideVarsInRivebot({
-        days: 2,
-        nextTopic: this.client.topic,
-        nextMessage: 'startprompt',
-        timeOfDay: 'morning'
-      }, this.userPlatformId);
+      await this.rb.overrideVarsInRivebot(
+        {
+          days: 2,
+          nextTopic: this.client.topic,
+          nextMessage: 'startprompt',
+          timeOfDay: 'morning'
+        },
+        this.userPlatformId
+      );
     }
   }
 
   addRecurringTasksToCheckInList() {
     if (this.client.topic === 'introtask') {
       const clientTasks = this.client.tasks;
-      const existingRecurringCheckins = this.client.checkin_times.map(checkin => checkin.task_id);
+      const existingRecurringCheckins = this.client.checkin_times.map(
+        checkin => checkin.recurringTaskId
+      );
       for (let i = 0; i < clientTasks.length; i++) {
         const task = clientTasks[i];
         if (task.recurring) {
@@ -233,7 +283,8 @@ module.exports = class Chatbot {
     const coach = await api.getCoach(this.client.coach_id);
     const helpMessage = await this.getHelpMessage();
     let recurringTaskContent = null;
-    if (this.recurringTaskId) { // this will only be true if the bot is sending the daily reminder right now
+    if (this.recurringTaskId) {
+      // this will only be true if the bot is sending the daily reminder right now
       const recurringTask = await api.getTask(this.recurringTaskId);
       recurringTaskContent = recurringTask.title;
     }
@@ -317,7 +368,8 @@ module.exports = class Chatbot {
   }
 
   // gets task number of current task
-  getTaskNum() { // eslint-disable-line
+  getTaskNum() {
+    // eslint-disable-line
     const tasks = this.client.tasks;
     let taskNum = 0;
     for (let i = 0; i < tasks.length; i++) {
@@ -335,7 +387,7 @@ module.exports = class Chatbot {
   isFinalTask() {
     const tasks = this.client.tasks;
     if (tasks) {
-      const activeTasks = tasks.filter((task) => {
+      const activeTasks = tasks.filter(task => {
         return task.status === 'ACTIVE' && !task.recurring;
       });
       if (activeTasks.length === 1) {
@@ -346,14 +398,19 @@ module.exports = class Chatbot {
   }
 
   // fetches content data if user is supposed to receive content
-  async loadStoryContent(userMessage) { //eslint-disable-line
+  async loadStoryContent(userMessage) {
+    //eslint-disable-line
     let contentIdChosen = null;
     let contentText = null;
     let contentUrl = null;
     let contentImgUrl = null;
     let contentDescription = null;
     let viewedMedia = null;
-    if ((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic' || userMessage === 'ff') {
+    if (
+      (this.client.topic === 'content' && userMessage === 'startprompt') ||
+      userMessage === 'contenttopic' ||
+      userMessage === 'ff'
+    ) {
       viewedMedia = await api.getViewedMediaIds(this.client.id);
       const allContent = await api.getAllMedia();
       for (let i = 0; i < allContent.length; i++) {
@@ -368,7 +425,11 @@ module.exports = class Chatbot {
         }
       }
     }
-    if (contentIdChosen === null && ((this.client.topic === 'content' && userMessage === 'startprompt') || userMessage === 'contenttopic')) {
+    if (
+      contentIdChosen === null &&
+      ((this.client.topic === 'content' && userMessage === 'startprompt') ||
+        userMessage === 'contenttopic')
+    ) {
       this.shouldMessageClient = false;
     }
     return {
@@ -381,18 +442,22 @@ module.exports = class Chatbot {
   }
 
   checkAllTasksCompleted(tasks) {
-    tasks.forEach((task) => {
-      if (!task.completed) {
-        console.log('there is task that is not complete', task);
+    for (let index = 0; index < tasks.length; index++) {
+      if (tasks[index].status !== 'COMPLETED') {
+        console.log('there is task that is not complete', tasks[index]);
         return false;
       }
-    });
+    }
     console.log('all tasks have been completed');
     return true;
   }
 
   setUserIfWorkplanComplete() {
-    if (!this.currentTask && this.client.tasks.length > 0 && this.checkAllTasksCompleted(this.client.tasks)) {
+    if (
+      !this.currentTask &&
+      this.client.tasks.length > 0 &&
+      this.checkAllTasksCompleted(this.client.tasks)
+    ) {
       console.log('setting topic to `ultimatedone`');
       this.client.topic = 'ultimatedone';
       this.client.checkin_times = [];

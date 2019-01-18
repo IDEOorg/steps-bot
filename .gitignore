@@ -5,3 +5,4 @@ utilstest.js
 analytics/*.csv
 coverage
 *~
+.vscode/

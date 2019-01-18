@@ -1,41 +1,118 @@
 import Chatbot from '../src/Chatbot';
-import constants from '../src/constants';
 import api from '../src/api';
+import constants from '../src/constants';
+
+const Rivebot = require('../src/Rivebot');
+const mockdata = require('./mockdata');
+
+const {
+  mockTasks,
+  orgs,
+  mockCoach,
+  media,
+  viewedMediaIDs,
+  viewedAllMediaIDs,
+  taskList
+} = mockdata;
+
+// Mock functions
+api.getAllClients = jest.fn(() => Promise.resolve(mockdata.clients));
+api.createMessage = jest.fn(() => Promise.resolve());
+api.getOrgName = jest.fn(orgID => Promise.resolve(orgs[0][orgID].name));
+api.getCoach = jest.fn(coachID => Promise.resolve(mockCoach));
+api.getViewedMediaIds = jest.fn(clientID => Promise.resolve(viewedMediaIDs));
+api.getAllMedia = jest.fn(() => Promise.resolve(media));
+api.getClientTasks = jest.fn(clientID =>
+  Promise.resolve(mockTasks[0][clientID])
+);
+
+const rivebot = new Rivebot();
+const clientData = mockdata.clients[0];
+const userPlatformId = clientData.phone;
+const platform = constants.SMS;
+const userMessage = 'b';
+const userPressedGetStartedOnFBPayload = null;
+const topic = null;
+const recurringTaskId = null;
+const coachHelpResponse = null;
 
 test('setPlatform loads platform into chatbot', () => {
-  const bot = new Chatbot();
-  bot.setPlatform(constants.FB);
-  expect(bot.platform).toEqual('fb');
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+
+  expect(bot.platform).toEqual('sms');
 });
 
 test('loadClientData loads client data on valid user', async () => {
-  const bot = new Chatbot();
-  bot.setPlatform(constants.SMS);
-  await bot.loadClientData('3333333333', null);
-  expect(bot.client.id).toEqual(979);
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  await bot.loadClientData();
+  expect(bot.client.id).toEqual(717);
   expect(bot.platform).toEqual('sms');
 });
 
 test('loadClientData sets client to null on invalid', async () => {
-  const bot = new Chatbot();
-  bot.setPlatform(constants.SMS);
-  await bot.loadClientData('33433343333', null);
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId: '1010101010',
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  await bot.loadClientData();
   expect(bot.client).toEqual(null);
   expect(bot.platform).toEqual('sms');
 });
 
 test('bot sets invalid message response on unidentified user', async () => {
-  const bot = new Chatbot();
-  await bot.getResponse({
-    platform: constants.SMS,
-    userPlatform: '3333333'
+  await rivebot.loadChatScripts();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId: '2233445566',
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
   });
-  expect(bot.messagesToSendToClient[0].message).toContain('Sorry, we didn\'t recognize the');
+  await bot.getResponse();
+  expect(bot.messagesToSendToClient[0].message).toContain(
+    "Sorry, we didn't recognize the"
+  );
   expect(bot.shouldUpdateClient).toEqual(false);
 });
 
-test('when user asks to stop, user no longer receives checkins and bot doesn\'t message but does update client', async () => {
-  const bot = new Chatbot();
+test("when user asks to stop, user no longer receives checkins and bot doesn't message but does update client", async () => {
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     checkin_times: [{ something: 'something' }]
   };
@@ -49,7 +126,16 @@ test('when user asks to stop, user no longer receives checkins and bot doesn\'t 
 });
 
 test('when user asks to stop, bot still sends message to user if user is on fb platform', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     checkin_times: [{ something: 'something' }]
   };
@@ -64,7 +150,16 @@ test('when user asks to stop, bot still sends message to user if user is on fb p
 });
 
 test('userAskedToFastForward returns true when user types ff', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.userMessage = 'ff';
   let outcome = bot.userAskedToFastForward();
   expect(outcome).toEqual(true);
@@ -74,7 +169,16 @@ test('userAskedToFastForward returns true when user types ff', async () => {
 });
 
 test('fast forward functionality returns desired payload when there are checkin times', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     checkin_times: [
       {
@@ -89,28 +193,46 @@ test('fast forward functionality returns desired payload when there are checkin 
       }
     ]
   };
-  const payload = bot.fastForwardUser();
+  bot.fastForwardUser();
   expect(bot.client.topic).toEqual('content');
   expect(bot.userMessage).toEqual('startprompt');
-  expect(payload.recurringTaskId).toEqual(null);
+  expect(bot.recurringTaskId).toEqual(null);
   expect(bot.client.checkin_times.length).toEqual(1);
 });
 
 test('fast forward returns message saying there are no more checkins to fast forward when there are no checkins', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     checkin_times: null
   };
-  expect(bot.fastForwardUser()).toEqual(null);
+  expect(bot.fastForwardUser()).toEqual(false);
 });
 
-/* TODO ff functionality for recurring tasks, make sure they're not removed until they're supposed to be */
+// /* TODO ff functionality for recurring tasks, make sure they're not removed until they're supposed to be */
 
 test('assignTopicForNewUser should assign the proper topic for new users', () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     platform: 'FBOOK',
-    topic: 'setupfb',
+    topic: 'setupfb'
   };
   bot.platform = 'fb';
   bot.assignTopicForNewUser();
@@ -146,87 +268,49 @@ test('assignTopicForNewUser should assign the proper topic for new users', () =>
   expect(bot.client.topic).toEqual('welcome');
 });
 
-const tasks = [
-  {
-    id: 779,
-    title: 'Buy cake',
-    category: 'custom',
-    description: 'Cake good. ',
-    status: 'COMPLETED',
-    recurring: null,
-    steps: [
-      {
-        text: 'Earn dollar. '
-      },
-      {
-        text: 'Eat cake. '
-      }
-    ],
-    order: 0,
-    original_task_id: null
-  },
-  {
-    id: 422,
-    title: 'Recurring Task',
-    description: 'If you want or need more income, you might be able to get it from current employment.',
-    status: 'ACTIVE',
-    recurring: {
-      frequency: 1,
-      duration: 30
-    },
-    steps: [
-      {
-        text: 'Read the employee handbook to learn about the process of getting a raise at your company.',
-        note: null
-      }
-    ],
-    order: 1
-  },
-  {
-    id: 777,
-    title: 'Ask for a raise at work',
-    description: 'If you want or need more income, you might be able to get it from current employment.',
-    status: 'ACTIVE',
-    recurring: null,
-    steps: [
-      {
-        text: 'Read the employee handbook to learn about the process of getting a raise at your company.',
-        note: null
-      },
-      {
-        text: 'Schedule a time to speak with your manager, or once you see that they are available ask if they can speak privately.',
-        note: null
-      }
-    ],
-    order: 2
-  }
-];
-
 test('getCurrentTaskData gets correct task data', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     tasks: []
   };
-  const noTaskDataOutput = bot.getCurrentTaskData();
-  expect(noTaskDataOutput.currentTask).toEqual(null);
+  const noTaskDataOutput = bot.getAndSetCurrentTaskData();
+  expect(bot.currentTask).toEqual(null);
   expect(noTaskDataOutput.currentTaskSteps).toEqual(null);
   expect(noTaskDataOutput.currentTaskDescription).toEqual(null);
-  bot.client = {
-    tasks
-  };
-  const taskDataOutput = bot.getCurrentTaskData();
-  expect(taskDataOutput.currentTask).toEqual('Ask for a raise at work');
+  bot.client = { tasks: taskList };
+  const taskDataOutput = bot.getAndSetCurrentTaskData();
+  expect(bot.currentTask.title).toEqual('Ask for a raise at work');
   expect(taskDataOutput.currentTaskDescription).toContain('Why it matters');
-  expect(taskDataOutput.currentTaskDescription).toContain('If you want or need more');
+  expect(taskDataOutput.currentTaskDescription).toContain(
+    'If you want or need more'
+  );
   expect(taskDataOutput.currentTaskSteps).toContain('Step 1');
-  expect(taskDataOutput.currentTaskSteps).toContain('Read the employee handbook');
+  expect(taskDataOutput.currentTaskSteps).toContain(
+    'Read the employee handbook'
+  );
 });
 
 test('getTaskNum gets correct task num', async () => {
-  const bot = new Chatbot();
-  bot.client = {
-    tasks
-  };
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  bot.client = { tasks: taskList };
   expect(bot.getTaskNum()).toEqual(3);
   bot.client = {
     tasks: []
@@ -235,25 +319,45 @@ test('getTaskNum gets correct task num', async () => {
 });
 
 test('setUserIfWorkplanComplete works', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
     topic: null,
     checkin_times: [{ test: 1 }],
-    tasks: [
-      { something: 1 }
-    ]
+    tasks: [{ id: 1, status: 'COMPLETED' }]
   };
-  bot.setUserIfWorkplanComplete(null);
+  bot.setUserIfWorkplanComplete();
   expect(bot.client.topic).toEqual('ultimatedone');
   expect(bot.client.checkin_times).toEqual([]);
 });
 
-test('loadStoryContent doesn\'t send anything if all content has been viewed', async () => {
-  const bot = new Chatbot();
-  bot.client = {
-    id: 1033,
-    topic: 'content'
-  };
+test("loadStoryContent doesn't send anything if all content has been viewed", async () => {
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  await bot.loadClientData();
+
+  bot.client.topic = 'content';
+  bot.client.viewed_media = viewedAllMediaIDs;
+  api.getViewedMediaIds = jest.fn(clientID =>
+    Promise.resolve(viewedAllMediaIDs)
+  );
+
   const payload = await bot.loadStoryContent('startprompt');
   expect(bot.shouldMessageClient).toEqual(false);
   expect(payload.contentIdChosen).toEqual(null);
@@ -261,36 +365,62 @@ test('loadStoryContent doesn\'t send anything if all content has been viewed', a
 });
 
 test('loadStoryContent loads proper content', async () => {
-  const bot = new Chatbot();
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
   bot.client = {
-    id: 1035,
     topic: 'content'
   };
+
+  api.getViewedMediaIds = jest.fn(clientID => Promise.resolve(viewedMediaIDs));
   const payload = await bot.loadStoryContent('startprompt');
   expect(bot.shouldMessageClient).toEqual(true);
-  expect(payload.contentIdChosen).toEqual(44);
-  expect(payload.contentText).toEqual('Gail\'s Story');
-  expect(payload.contentDescription).toContain('Gail');
+  expect(payload.contentIdChosen).toEqual(22);
+  expect(payload.contentText).toEqual('5 steps for making financial decisions');
+  expect(payload.contentDescription).toContain(
+    'A short article with tips for smart money choices.'
+  );
   expect(payload.contentUrl).toContain('bit');
   expect(payload.contentImgUrl).toContain('aws');
 });
 
 test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () => {
-  const client = await api.getUserDataFromDB('fb', '1035'); // the 1035 here is the fake fb_id.
-  const bot = new Chatbot();
-  bot.client = client;
+  const bot = new Chatbot({
+    rivebot,
+    platform,
+    userPlatformId,
+    userMessage,
+    userPressedGetStartedOnFBPayload,
+    topic,
+    recurringTaskId,
+    coachHelpResponse
+  });
+  await bot.loadClientData();
+  bot.client.topic = 'content';
   bot.client.tasks = await api.getClientTasks(bot.client.id);
   bot.userMessage = 'startprompt';
   const payload = await bot.getRemainingVarsRivebotNeeds();
-  expect(payload.orgName).toEqual('IDEO.org');
+
+  expect(payload.orgName).toEqual('Test.org');
   expect(payload.coach.first_name).toEqual('Michael');
-  expect(payload.currentTask).toContain('Consider enrolling in');
-  expect(payload.currentTaskSteps).toContain('DMP');
-  expect(payload.currentTaskDescription).toContain('DMP');
+  expect(payload.currentTaskTitle).toContain('Create a debt repayment plan');
+  expect(payload.currentTaskSteps).toContain('List all of your debts.');
+  expect(payload.currentTaskDescription).toContain(
+    'If you have the means to put some of your income toward your debt'
+  );
   expect(payload.taskNum).toEqual(1);
-  expect(payload.contentIdChosen).toEqual(44);
-  expect(payload.contentText).toEqual('Gail\'s Story');
-  expect(payload.contentDescription).toContain('Gail');
+  expect(payload.contentIdChosen).toEqual(22);
+  expect(payload.contentText).toEqual('5 steps for making financial decisions');
+  expect(payload.contentDescription).toContain(
+    'A short article with tips for smart money choices.'
+  );
   expect(payload.contentUrl).toContain('bit');
   expect(payload.contentImgUrl).toContain('aws');
 });
