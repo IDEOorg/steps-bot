@@ -2,6 +2,7 @@ require('dotenv').config();
 const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
+const pmEmail = require('./email_templates/PmEmail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -45,27 +46,27 @@ module.exports = class Updater {
         this.client.temp_help_response = null;
       }
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          return checkInTime.topic !== TOPICS.HELP; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
-        });
+        return checkInTime.topic !== TOPICS.HELP; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
+      });
     }
 
     if (taskComplete || topic === TOPICS.ULTIMATE_DONE) {
       // removes all non-recurring checkins if the user has completed the task or is done with their workplan
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          if (checkInTime.recurring) {
-            return true;
-          }
-          return false;
-        });
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
     }
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
     if (nextCheckInDate) {
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          if (checkInTime.recurring) {
-            return true;
-          }
-          return false;
-        });
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
     }
     if (helpMessage) {
       this.client.temp_help_response = helpMessage;
@@ -190,6 +191,11 @@ module.exports = class Updater {
       );
     }
     delete this.client.tasks;
+
+    // checks if user has received ultimatedone status
+    if (this.variables.topic === 'ultimatedone') {
+      sendUltimateDoneEmailToPm(this.client);
+    }
     // update user
     await api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
@@ -316,6 +322,33 @@ function sendHelpEmailToCoach(
         from: 'no-reply@helloroo.org',
         subject: `Coach notification email error - ${Date.now()}`,
         text: `Unable to send help request notification email to ${coachEmail} on behalf of
+              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
+      });
+    });
+}
+
+function sendUltimateDoneEmailToPm(client) {
+  const title = `Your client <a href="${process.env.ADMIN_URL}/clients/${client.id}/tasks"><strong>
+  ${client.first_name} ${client.last_name}&nbsp;</strong></a> has completed all of their action items!`;
+
+  const msg = {
+    to: process.env.PM_EMAIL,
+    from: 'no-reply@helloroo.org',
+    subject: `[Roo] ${client.first_name} ${client.last_name} has received an ultimate done status.`,
+    html: pmEmail.emailBody(client, title)
+  };
+
+  sgMail.send(msg)
+    .then(() => {
+      console.log(`email sent to ${process.env.PM_EMAIL}`);
+    })
+    .catch((err) => {
+      console.error(err.toString());
+      sgMail.send({
+        to: process.env.PM_EMAIL,
+        from: 'no-reply@helloroo.org',
+        subject: `Ultimate done email error - ${Date.now()}`,
+        text: `Unable to send ultimate done email to
               ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
       });
     });
