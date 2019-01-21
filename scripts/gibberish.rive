@@ -1,10 +1,11 @@
 > topic gibberish includes tempfastforward
   + *
-  - Sorry <get username>.\nUnfortunately I can't understand your message.\nLet's try this a different way.<send>
-  ^ <fb>^template(`button`, `Do you need my assistance with action item <get taskNum>?`, `{"G": "No, I'm okay.", "A": "Have some questions."}`)</fb>
-  ^ <sms>Do you need my assistance with action item <get taskNum>? If yes, text the letter "A". If all is well, text the letter "G".</sms>
+  - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.
+  ^ \n\nDo you need my assistance with action item <get taskNum>?
+  ^ <sms>\n\nIf yes, text the letter A. If all is well, text the letter G.</sms>
+  ^ <fb>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb><send>
   + (g|no im okay)
-  - Okay, I'm here if you change your mind.
+  - Sounds good. I'll be back in touch soon.
   + (a|have some questions)
   - {topic=help} {@ startprompt}
 < topic

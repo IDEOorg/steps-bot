@@ -142,7 +142,9 @@ module.exports = class Chatbot {
     return false;
   }
 
-  // gets all of the client's checkin times, finds the next checkin time, modifies the client data to take that checkin's data, and then removes that checkin time from the client's list of checkins
+  // gets all of the client's checkin times, finds the next checkin time,
+  // modifies the client data to take that checkin's data, and then removes
+  // that checkin time from the client's list of checkins
   fastForwardUser() {
     const checkInTimes = this.client.checkin_times;
     let userMessage = null;
@@ -164,6 +166,7 @@ module.exports = class Chatbot {
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
+      console.log('**topic=', topic);
       recurringTaskId = checkInTimes[soonestCheckInIndex].task_id;
       if (!recurringTaskId) {
         recurringTaskId = null;
@@ -377,8 +380,20 @@ module.exports = class Chatbot {
     };
   }
 
+  checkAllTasksCompleted(tasks) {
+    tasks.forEach((task) => {
+      if (!task.completed) {
+        console.log('there is task that is not complete', task);
+        return false;
+      }
+    });
+    console.log('all tasks have been completed');
+    return true;
+  }
+
   setUserIfWorkplanComplete() {
-    if (!this.currentTask && this.client.tasks.length > 0) {
+    if (!this.currentTask && this.client.tasks.length > 0 && this.checkAllTasksCompleted(this.client.tasks)) {
+      console.log('setting topic to `ultimatedone`');
       this.client.topic = 'ultimatedone';
       this.client.checkin_times = [];
     }

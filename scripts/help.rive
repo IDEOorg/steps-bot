@@ -1,10 +1,12 @@
 > topic help includes global includes tempfastforward includes gibberish
   + startprompt
-  - Great, I'm here to help. Please tell me (with as many details as possible) what you need assistance with so I can contact Coach <get coachName> and get some answers.{topic=helpuserresponse}<set hours=8><set nextTopic=help><set nextMessage=pinguser>
+  - Great, I'm here to help. Please tell me (with as many details as possible)\s
+  ^ what you need assistance with so I can contact Coach <get coachName> and get some answers.
+  ^ {topic=helpuserresponse}<set hours=8><set nextTopic=help><set nextMessage=pinguser>
   + pinguser
-  - I haven't heard back from you in a while about the help you requested. Still need assistance?
-  ^ <fb>^template(`quickreply`, `Have some questions.`, `No, I'm good for now`)</fb>
-  ^ <sms><send>If you still need assistance, text the letter "A".\nNo longer need help? Text the letter "G".</sms>
+  - I haven't heard back from you in a while about the help you requested.
+  ^ <fb><send>^template(`quickreply`, `Have some questions.`, `No, I'm good for now`)</fb>
+  ^ <sms><send>\n\nIf you still need assistance, text the letter A. Or text the letter G if you no longer need my help.</sms>
   ^ <set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>
   + (g|no im good for now)
   - Sounds good. I'll be in touch soon.<set resetHelp=true><set days=2><set timeOfDay=morning><set nextTopic=checkin><set nextMessage=startprompt>{topic=checkin}
