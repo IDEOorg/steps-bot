@@ -2,8 +2,11 @@ require('dotenv').config();
 const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
+const pmEmail = require('./PmEmail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+let messages;
 
 module.exports = class Updater {
   constructor(opts) {
@@ -143,6 +146,14 @@ module.exports = class Updater {
       api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
     }
     delete this.client.tasks;
+
+    // checks if user has received ultimatedone status
+    if (this.variables.topic === 'ultimatedone') {
+      await api.getUserMessages(this.client.id).then((response) => {
+        messages = response;
+      });
+      sendUltimateDoneEmailToPm(this.client, messages);
+    }
     // update user
     await api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
@@ -265,3 +276,30 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
       });
     });
 }
+
+
+function sendUltimateDoneEmailToPm(client, messages) {
+  const title = `The user with id #${client.id} has received the "ultimatedone" script`;
+  const msg = {
+    to: process.env.PM_EMAIL,
+    from: 'no-reply@helloroo.org',
+    subject: `[Roo] ${client.first_name} ${client.last_name} has received an ultimate done status.`,
+    html: pmEmail.emailBody(messages, title, client.id)
+  };
+
+  sgMail.send(msg)
+    .then(() => {
+      console.log(`email sent to ${process.env.PM_EMAIL}`);
+    })
+    .catch((err) => {
+      console.error(err.toString());
+      sgMail.send({
+        to: process.env.PM_EMAIL,
+        from: 'no-reply@helloroo.org',
+        subject: `Ultimate done email error - ${Date.now()}`,
+        text: `Unable to send ultimate done email to
+              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
+      });
+    });
+}
+

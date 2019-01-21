@@ -380,8 +380,20 @@ module.exports = class Chatbot {
     };
   }
 
+  checkAllTasksCompleted(tasks) {
+    tasks.forEach((task) => {
+      if (!task.completed) {
+        console.log('there is task that is not complete', task);
+        return false;
+      }
+    });
+    console.log('all tasks have been completed');
+    return true;
+  }
+
   setUserIfWorkplanComplete() {
-    if (!this.currentTask && this.client.tasks.length > 0) {
+    if (!this.currentTask && this.client.tasks.length > 0 && this.checkAllTasksCompleted(this.client.tasks)) {
+      console.log('setting topic to `ultimatedone`');
       this.client.topic = 'ultimatedone';
       this.client.checkin_times = [];
     }
