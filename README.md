@@ -74,7 +74,7 @@ As mentioned above, both Facebook and Twilio (the SMS service we use) require a 
 
 Note: you will need access to the Twilio console or the Facebook account that is linked  to the bot.
 Follow the steps below to work with the bot on localhost:
-- Ensure you've cloned the repo by running `git clone https://github.com/IDEOorg/steps-bot`, and ran `npm install`
+- Ensure you've cloned the repo by running `git clone https://github.com/IDEOorg/steps-bot`, and run `npm install`
 - Run `npm start` on the root directory to start the application
 - Open up another terminal and run `npm run start:live:dev` on the root directory to start [ngrok](https://www.npmjs.com/package/ngrok) which will tunnel through the running localhost server and expose it to the web via a returned url.
 - At this point, you should see two urls(http and https), copy the https url and paste it into the webhook space for either the Facebook app or the Twilio number linked to the bot.
