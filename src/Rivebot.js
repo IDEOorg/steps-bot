@@ -1,8 +1,10 @@
-require("dotenv").config();
-const constants = require("./constants");
-const assetUrls = require("./assets-manifest.json");
-const path = require("path");
-const RiveScript = require("rivescript");
+require('dotenv').config();
+const constants = require('./constants');
+const assetUrls = require('./assets-manifest.json');
+const path = require('path');
+const RiveScript = require('rivescript');
+
+const { TOPICS } = constants;
 
 module.exports = class Rivebot {
   constructor() {
@@ -10,7 +12,7 @@ module.exports = class Rivebot {
   }
 
   async loadChatScripts() {
-    await this.rivebot.loadDirectory(path.resolve(__dirname, "../scripts"));
+    await this.rivebot.loadDirectory(path.resolve(__dirname, '../scripts'));
     this.rivebot.sortReplies();
   }
 
@@ -33,75 +35,83 @@ module.exports = class Rivebot {
       recurringTaskContent,
       helpMessage,
       coachHelpResponse,
-      isFinalTask
+      isFinalTask,
     } = opts;
-    await this.rivebot.setUservar(userPlatformId, "topic", client.topic);
+    await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(
       userPlatformId,
-      "username",
+      'username',
       client.first_name
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "coachName",
+      'coachName',
       coach.first_name
     );
-    await this.rivebot.setUservar(userPlatformId, "coachEmail", coach.email);
-    await this.rivebot.setUservar(userPlatformId, "orgName", orgName);
-    await this.rivebot.setUservar(userPlatformId, "taskNum", taskNum);
+    await this.rivebot.setUservar(userPlatformId, 'coachEmail', coach.email);
+    await this.rivebot.setUservar(userPlatformId, 'orgName', orgName);
+    await this.rivebot.setUservar(userPlatformId, 'taskNum', taskNum);
     await this.rivebot.setUservar(
       userPlatformId,
-      "currentTaskTitle",
+      'currentTaskTitle',
       currentTaskTitle
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "currentTaskSteps",
+      'currentTaskSteps',
       currentTaskSteps
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "currentTaskDescription",
+      'currentTaskDescription',
       currentTaskDescription
     );
-    await this.rivebot.setUservar(userPlatformId, "contentId", contentIdChosen);
-    await this.rivebot.setUservar(userPlatformId, "content", contentText);
     await this.rivebot.setUservar(
       userPlatformId,
-      "contentDescription",
+      'contentId',
+      contentIdChosen
+    );
+    await this.rivebot.setUservar(userPlatformId, 'content', contentText);
+    await this.rivebot.setUservar(
+      userPlatformId,
+      'contentDescription',
       contentDescription
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "contentImgUrl",
+      'contentImgUrl',
       contentImgUrl
     );
-    await this.rivebot.setUservar(userPlatformId, "contentUrl", contentUrl);
+    await this.rivebot.setUservar(userPlatformId, 'contentUrl', contentUrl);
     await this.rivebot.setUservar(
       userPlatformId,
-      "workplanLink",
+      'workplanLink',
       client.plan_url
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "introVideoLink",
+      'introVideoLink',
       constants.INTRO_VIDEO_URL
     );
-    await this.rivebot.setUservar(userPlatformId, "platform", platform);
+    await this.rivebot.setUservar(userPlatformId, 'platform', platform);
     await this.rivebot.setUservar(
       userPlatformId,
-      "recurringTaskContent",
+      'recurringTaskContent',
       recurringTaskContent
     );
-    await this.rivebot.setUservar(userPlatformId, "helpMessage", helpMessage);
+    await this.rivebot.setUservar(userPlatformId, 'helpMessage', helpMessage);
     await this.rivebot.setUservar(
       userPlatformId,
-      "coachHelpResponse",
+      'coachHelpResponse',
       coachHelpResponse
     );
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
-    await this.rivebot.setUservar(userPlatformId, "referralLink", referralLink);
-    await this.rivebot.setUservar(userPlatformId, "isFinalTask", isFinalTask);
+    await this.rivebot.setUservar(
+      userPlatformId,
+      'referralLink',
+      referralLink
+    );
+    await this.rivebot.setUservar(userPlatformId, 'isFinalTask', isFinalTask);
     await this.loadGifUrlsToRivebot(userPlatformId, taskNum);
   }
 
@@ -110,10 +120,9 @@ module.exports = class Rivebot {
     const workplanImgUrl = assetUrls.gifPath + assetUrls.welcome.workplanImgUrl;
     const introCelebrateImgUrl =
       assetUrls.gifPath + assetUrls.welcome.introCelebrateImgUrl;
-    const taskNumImgUrl =
-      taskNum !== null && taskNum > 0 && taskNum < 10
-        ? assetUrls.gifPath + "04_Number" + taskNum + ".gif"
-        : null;
+    const taskNumImgUrl = taskNum !== null && taskNum > 0 && taskNum < 10
+      ? assetUrls.gifPath + '04_Number' + taskNum + '.gif'
+      : null;
     const storiesImgUrl =
       assetUrls.gifPath + getRandomItemFromArray(assetUrls.stories);
     const celebrationImgUrl =
@@ -126,47 +135,47 @@ module.exports = class Rivebot {
       assetUrls.gifPath + getRandomItemFromArray(assetUrls.help);
     await this.rivebot.setUservar(
       userPlatformId,
-      "recurringImgUrl",
+      'recurringImgUrl',
       recurringImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "storiesImgUrl",
+      'storiesImgUrl',
       storiesImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "celebrationImgUrl",
+      'celebrationImgUrl',
       celebrationImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "welcomeImgUrl",
+      'welcomeImgUrl',
       welcomeImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "workplanImgUrl",
+      'workplanImgUrl',
       workplanImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "introCelebrateImgUrl",
+      'introCelebrateImgUrl',
       introCelebrateImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "coachSaysImgUrl",
+      'coachSaysImgUrl',
       coachSaysImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "taskNumImgUrl",
+      'taskNumImgUrl',
       taskNumImgUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
-      "checkinImgUrl",
+      'checkinImgUrl',
       checkinImgUrl
     );
   }
@@ -175,7 +184,7 @@ module.exports = class Rivebot {
     const keys = Object.keys(opts);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
-      await this.rivebot.setUservar(userPlatformId, key, opts[key]); // eslint-disable-line
+      await this.rivebot.setUservar (userPlatformId, key, opts[key]); // eslint-disable-line
     }
   }
 
@@ -195,25 +204,25 @@ module.exports = class Rivebot {
       templateStrings: /`([\s\S]*?)`/g,
       sms: /<sms>([\s\S]*?)<\/sms>/g,
       fb: /<fb>([\s\S]*?)<\/fb>/g,
-      nonwhitespaceChars: /\S/
+      nonwhitespaceChars: /\S/,
     };
     if (platform === constants.FB) {
-      response = response.replace(regex.sms, "");
-      response = response.replace(regex.fb, "$1");
+      response = response.replace(regex.sms, '');
+      response = response.replace(regex.fb, '$1');
     } else if (platform === constants.SMS) {
-      response = response.replace(regex.fb, "");
-      response = response.replace(regex.sms, "$1");
+      response = response.replace(regex.fb, '');
+      response = response.replace(regex.sms, '$1');
     }
     const messages = response.split(sendRegex);
     const finalMessages = [];
     for (let i = 0; i < messages.length; i++) {
       const message = messages[i];
       const messageType = this.getMessageType(message, regex);
-      if (messageType === "text") {
+      if (messageType === 'text') {
         this.prepareTextMessage(finalMessages, message);
-      } else if (messageType === "image") {
+      } else if (messageType === 'image') {
         this.prepareImageMessage(finalMessages, message, regex);
-      } else if (messageType === "template") {
+      } else if (messageType === 'template') {
         this.prepareTemplateMessage(finalMessages, message, regex);
       }
     }
@@ -223,19 +232,19 @@ module.exports = class Rivebot {
   getMessageType(message, regex) {
     // eslint-disable-line
     if (message.match(regex.image)) {
-      return "image";
+      return 'image';
     } else if (message.match(regex.template)) {
-      return "template";
+      return 'template';
     }
-    return "text";
+    return 'text';
   }
 
   prepareTextMessage(finalMessages, message) {
     // eslint-disable-line
     if (message.length) {
       finalMessages.push({
-        type: "text",
-        message
+        type: 'text',
+        message,
       });
     }
   }
@@ -244,20 +253,20 @@ module.exports = class Rivebot {
     // eslint-disable-line
     const imageUrls = message
       .match(regex.image)
-      .map(tag => tag.replace(regex.image, "$1"));
+      .map(tag => tag.replace(regex.image, '$1'));
     const textMessages = message.split(regex.imageForSplit);
     let text = null;
     const image = imageUrls[0];
     finalMessages.push({
-      type: "image",
-      image
+      type: 'image',
+      image,
     });
     for (let j = 0; j < textMessages.length; j++) {
       if (textMessages[j] && regex.nonwhitespaceChars.test(textMessages[j])) {
         text = textMessages[j];
         finalMessages.push({
-          type: "text",
-          message: text
+          type: 'text',
+          message: text,
         });
         break;
       }
@@ -267,20 +276,20 @@ module.exports = class Rivebot {
   prepareTemplateMessage(finalMessages, message, regex) {
     // eslint-disable-line
     const defaultErrorMessage = {
-      type: "text",
-      message: "There was an error on our side. Type START and try again."
+      type: 'text',
+      message: 'There was an error on our side. Type START and try again.',
     };
     let templateArgs = message
-      .replace(regex.template, "$1")
+      .replace(regex.template, '$1')
       .match(regex.templateStrings);
     if (templateArgs.length === 0) {
       finalMessages.push(defaultErrorMessage);
       return;
     }
-    templateArgs = templateArgs.map(arg => arg.replace(/`/g, ""));
+    templateArgs = templateArgs.map(arg => arg.replace(/`/g, ''));
     const templateType = templateArgs[0];
     let messageToPush = null;
-    if (templateType === "quickreply") {
+    if (templateType === 'quickreply') {
       let introText = null;
       const introTextBits = message.split(regex.templateForSplit);
       for (let i = 0; i < introTextBits.length; i++) {
@@ -292,9 +301,9 @@ module.exports = class Rivebot {
       messageToPush = {
         type: templateType,
         text: introText,
-        buttons: templateArgs.slice(1)
+        buttons: templateArgs.slice(1),
       };
-    } else if (templateType === "genericurl" || templateType === "generic") {
+    } else if (templateType === 'genericurl' || templateType === 'generic') {
       if (templateArgs.length < 4) {
         messageToPush = defaultErrorMessage;
       }
@@ -305,9 +314,9 @@ module.exports = class Rivebot {
         type: templateType,
         imageUrl,
         content,
-        buttons
+        buttons,
       };
-    } else if (templateType === "button") {
+    } else if (templateType === 'button') {
       if (templateArgs.length < 3) {
         messageToPush = defaultErrorMessage;
       }
@@ -316,7 +325,7 @@ module.exports = class Rivebot {
       messageToPush = {
         type: templateType,
         content,
-        buttons
+        buttons,
       };
     } else {
       messageToPush = defaultErrorMessage;
@@ -325,20 +334,20 @@ module.exports = class Rivebot {
   }
 
   async resetVariables(userPlatformId) {
-    await this.rivebot.setUservar(userPlatformId, "timeOfDay", null);
-    await this.rivebot.setUservar(userPlatformId, "days", null);
-    await this.rivebot.setUservar(userPlatformId, "hours", null);
-    await this.rivebot.setUservar(userPlatformId, "nextTopic", null);
-    await this.rivebot.setUservar(userPlatformId, "nextMessage", null);
-    await this.rivebot.setUservar(userPlatformId, "contentViewed", null);
-    await this.rivebot.setUservar(userPlatformId, "taskComplete", null);
-    await this.rivebot.setUservar(userPlatformId, "resetHelp", null);
-    await this.rivebot.setUservar(userPlatformId, "helpMessage", null);
-    await this.rivebot.setUservar(userPlatformId, "sendHelpMessage", null);
-    await this.rivebot.setUservar(userPlatformId, "coachHelpResponse", null);
-    await this.rivebot.setUservar(userPlatformId, "userAskedToStop", null);
-    await this.rivebot.setUservar(userPlatformId, "requestResolved", null);
-    await this.rivebot.setUservar(userPlatformId, "isFinalTask", null);
+    await this.rivebot.setUservar(userPlatformId, 'timeOfDay', null);
+    await this.rivebot.setUservar(userPlatformId, 'days', null);
+    await this.rivebot.setUservar(userPlatformId, 'hours', null);
+    await this.rivebot.setUservar(userPlatformId, TOPICS.NEXT_TOPIC, null);
+    await this.rivebot.setUservar(userPlatformId, 'nextMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'contentViewed', null);
+    await this.rivebot.setUservar(userPlatformId, 'taskComplete', null);
+    await this.rivebot.setUservar(userPlatformId, 'resetHelp', null);
+    await this.rivebot.setUservar(userPlatformId, 'helpMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'sendHelpMessage', null);
+    await this.rivebot.setUservar(userPlatformId, 'coachHelpResponse', null);
+    await this.rivebot.setUservar(userPlatformId, 'userAskedToStop', null);
+    await this.rivebot.setUservar(userPlatformId, 'requestResolved', null);
+    await this.rivebot.setUservar(userPlatformId, 'isFinalTask', null);
   }
 };
 
@@ -354,24 +363,21 @@ function formatReferralLinkForNewFBSignups(userPlatformId) {
   if (userPlatformId) {
     if (
       userPlatformId.length === 12 &&
-      userPlatformId[0] === "+" &&
-      userPlatformId[1] === "1"
+      userPlatformId[0] === '+' &&
+      userPlatformId[1] === '1'
     ) {
       // is a phone number with +1
       // cannot rely on process.env.NODE_ENV because both staging and prod run
       // as 'production' when deployed. Set env var to true for staging deployment.
       // false for production.
-      const refLink =
-        process.env.STAGING === "false"
-          ? process.env.FB_REFERRAL_LINK
-          : process.env.FB_REFERRAL_LINK_STAGING;
+      const refLink = process.env.STAGING === 'false'
+        ? process.env.FB_REFERRAL_LINK
+        : process.env.FB_REFERRAL_LINK_STAGING;
       const referralId = userPlatformId.slice(2);
       const referralLink = `${refLink}?ref=${referralId}`;
       return referralLink;
     } else if (userPlatformId.length === 10) {
-      const referralLink = `${
-        process.env.FB_REFERRAL_LINK
-      }?ref=${userPlatformId}`;
+      const referralLink = `${process.env.FB_REFERRAL_LINK}?ref=${userPlatformId}`;
       return referralLink;
     }
   }

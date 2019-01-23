@@ -3,6 +3,7 @@ const api = require('./api');
 const constants = require('./constants');
 const { buildContentUrl, trackStopRequest } = require('./tracker');
 
+const { TOPICS, STATUS } = constants;
 module.exports = class Chatbot {
   constructor(opts) {
     this.platform = opts.platform;
@@ -53,7 +54,7 @@ module.exports = class Chatbot {
         return;
       }
     }
-    if (this.client.topic === null || this.client.topic === 'setupfb') {
+    if (this.client.topic === null || this.client.topic === TOPICS.SETUP_FB) {
       // handles new users
       this.assignTopicForNewUser();
     }
@@ -66,7 +67,7 @@ module.exports = class Chatbot {
         client: this.client,
         platform: this.platform,
         userMessage: this.userMessage,
-        userPlatformId: this.userPlatformId // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
+        userPlatformId: this.userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
       },
       remainingRivebotVars
     );
@@ -82,7 +83,7 @@ module.exports = class Chatbot {
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
   formatUserMessage() {
-    if (this.userMessage && this.client.topic === 'helpuserresponse') {
+    if (this.userMessage && this.client.topic === TOPICS.HELP_USER_RESPONSE) {
       return; // don't modify the capitalization of the user's response
     }
     if (this.userMessage) {
@@ -101,7 +102,7 @@ module.exports = class Chatbot {
         this.userPressedGetStartedOnFBPayload
       );
       if (userInfo) {
-        userInfo.topic = 'welcome';
+        userInfo.topic = TOPICS.WELCOME;
         userInfo.fb_id = this.userPlatformId; // if the user pressed on the 'Get Started' button, record the user's fb id
       }
     } else {
@@ -128,8 +129,8 @@ module.exports = class Chatbot {
     this.messagesToSendToClient = [
       {
         type: 'text',
-        message: errMessage
-      }
+        message: errMessage,
+      },
     ];
   }
 
@@ -144,7 +145,7 @@ module.exports = class Chatbot {
   handleIfUserAskedToStop() {
     trackStopRequest({
       id: this.client.id,
-      topic: this.client.topic
+      topic: this.client.topic,
     });
     this.client.follow_up_date = null;
     this.client.checkin_times = [];
@@ -215,20 +216,20 @@ module.exports = class Chatbot {
   assignTopicForNewUser() {
     // this.platform is the platform the bot received the message from, this.client.platform is the platform the client should be using
     if (this.client.platform === 'FBOOK' && this.platform === constants.SMS) {
-      this.client.topic = 'setupfb';
+      this.client.topic = TOPICS.SETUP_FB;
     } else if (
       this.client.platform === 'FBOOK' &&
       this.platform === constants.FB
     ) {
-      this.client.topic = 'welcome';
+      this.client.topic = TOPICS.WELCOME;
     } else if (
       (this.client.platform === 'SMS' || this.client.platform === null) &&
       this.platform === constants.SMS
     ) {
-      this.client.topic = 'welcome';
+      this.client.topic = TOPICS.WELCOME;
     } else {
       // client is supposed to use SMS but somehow got access to Facebook
-      this.client.topic = 'welcome';
+      this.client.topic = TOPICS.WELCOME;
       this.shouldMessageClient = false;
     }
   }
@@ -236,11 +237,11 @@ module.exports = class Chatbot {
   async dontSendMessageIfNoWorkplan() {
     if (
       (!this.client.tasks || this.client.tasks.length === 0) &&
-      this.client.topic !== 'setupfb' &&
-      this.client.topic !== 'welcome' &&
-      this.client.topic !== 'welcomenext' &&
-      this.client.topic !== 'welcomewait' &&
-      this.client.topic !== 'followup'
+      this.client.topic !== TOPICS.SETUP_FB &&
+      this.client.topic !== TOPICS.WELCOME &&
+      this.client.topic !== TOPICS.WELCOME_NEXT &&
+      this.client.topic !== TOPICS.WELCOME_WAIT &&
+      this.client.topic !== TOPICS.FOLLOW_UP
     ) {
       this.shouldMessageClient = false;
       await this.rb.overrideVarsInRivebot(
@@ -248,7 +249,7 @@ module.exports = class Chatbot {
           days: 2,
           nextTopic: this.client.topic,
           nextMessage: 'startprompt',
-          timeOfDay: 'morning'
+          timeOfDay: 'morning',
         },
         this.userPlatformId
       );
@@ -256,21 +257,19 @@ module.exports = class Chatbot {
   }
 
   addRecurringTasksToCheckInList() {
-    if (this.client.topic === 'introtask') {
+    if (this.client.topic === TOPICS.INTRO_TASK) {
       const clientTasks = this.client.tasks;
-      const existingRecurringCheckins = this.client.checkin_times.map(
-        checkin => checkin.recurringTaskId
-      );
+      const existingRecurringCheckins = this.client.checkin_times.map(checkin => checkin.recurringTaskId);
       for (let i = 0; i < clientTasks.length; i++) {
         const task = clientTasks[i];
         if (task.recurring) {
           if (!existingRecurringCheckins.includes(task.id)) {
             this.client.checkin_times.push({
-              topic: 'recurring',
+              topic: TOPICS.RECURRING,
               message: 'startprompt',
               time: Date.now(),
               createdDate: new Date(),
-              recurringTaskId: task.id
+              recurringTaskId: task.id,
             });
           }
         }
@@ -291,7 +290,7 @@ module.exports = class Chatbot {
     const {
       currentTaskTitle,
       currentTaskSteps,
-      currentTaskDescription
+      currentTaskDescription,
     } = this.getAndSetCurrentTaskData(this.client.tasks); // also sets this.currentTask
     const taskNum = this.getTaskNum();
     const isFinalTask = this.isFinalTask();
@@ -300,7 +299,7 @@ module.exports = class Chatbot {
       contentText,
       contentUrl,
       contentImgUrl,
-      contentDescription
+      contentDescription,
     } = await this.loadStoryContent(this.userMessage);
     return {
       orgName,
@@ -317,12 +316,12 @@ module.exports = class Chatbot {
       contentDescription,
       coachHelpResponse: this.coachHelpResponse,
       helpMessage,
-      isFinalTask
+      isFinalTask,
     };
   }
 
   getHelpMessage() {
-    if (this.client.topic === 'helpuserresponse') {
+    if (this.client.topic === TOPICS.HELP_USER_RESPONSE) {
       return this.userMessage;
     }
     return null;
@@ -337,7 +336,7 @@ module.exports = class Chatbot {
     const tasks = this.client.tasks;
     if (tasks) {
       for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+        if (tasks[i].status === STATUS.ACTIVE && !tasks[i].recurring) {
           let steps = tasks[i].steps; // eslint-disable-line
           if (steps === null) {
             steps = [];
@@ -363,7 +362,7 @@ module.exports = class Chatbot {
     return {
       currentTaskTitle,
       currentTaskDescription,
-      currentTaskSteps
+      currentTaskSteps,
     };
   }
 
@@ -376,7 +375,7 @@ module.exports = class Chatbot {
       if (!tasks[i].recurring) {
         taskNum = i + 1;
       }
-      if (tasks[i].status === 'ACTIVE' && !tasks[i].recurring) {
+      if (tasks[i].status === STATUS.ACTIVE && !tasks[i].recurring) {
         break;
       }
     }
@@ -387,8 +386,8 @@ module.exports = class Chatbot {
   isFinalTask() {
     const tasks = this.client.tasks;
     if (tasks) {
-      const activeTasks = tasks.filter(task => {
-        return task.status === 'ACTIVE' && !task.recurring;
+      const activeTasks = tasks.filter((task) => {
+        return task.status === STATUS.ACTIVE && !task.recurring;
       });
       if (activeTasks.length === 1) {
         return true;
@@ -407,7 +406,7 @@ module.exports = class Chatbot {
     let contentDescription = null;
     let viewedMedia = null;
     if (
-      (this.client.topic === 'content' && userMessage === 'startprompt') ||
+      (this.client.topic === TOPICS.CONTENT && userMessage === 'startprompt') ||
       userMessage === 'contenttopic' ||
       userMessage === 'ff'
     ) {
@@ -418,7 +417,7 @@ module.exports = class Chatbot {
         if (!viewedMedia || !viewedMedia.includes(content.id)) {
           contentIdChosen = content.id;
           contentText = content.title;
-          contentUrl = await buildContentUrl(content, this.client); // eslint-disable-line
+          contentUrl = await buildContentUrl (content, this.client); // eslint-disable-line
           contentImgUrl = content.image;
           contentDescription = content.description;
           break;
@@ -427,7 +426,8 @@ module.exports = class Chatbot {
     }
     if (
       contentIdChosen === null &&
-      ((this.client.topic === 'content' && userMessage === 'startprompt') ||
+      ((this.client.topic === TOPICS.CONTENT &&
+        userMessage === 'startprompt') ||
         userMessage === 'contenttopic')
     ) {
       this.shouldMessageClient = false;
@@ -437,13 +437,13 @@ module.exports = class Chatbot {
       contentText,
       contentUrl,
       contentImgUrl,
-      contentDescription
+      contentDescription,
     };
   }
 
   checkAllTasksCompleted(tasks) {
     for (let index = 0; index < tasks.length; index++) {
-      if (tasks[index].status !== 'COMPLETED') {
+      if (tasks[index].status !== STATUS.COMPLETED) {
         console.log('there is task that is not complete', tasks[index]);
         return false;
       }
@@ -459,7 +459,7 @@ module.exports = class Chatbot {
       this.checkAllTasksCompleted(this.client.tasks)
     ) {
       console.log('setting topic to `ultimatedone`');
-      this.client.topic = 'ultimatedone';
+      this.client.topic = TOPICS.ULTIMATE_DONE;
       this.client.checkin_times = [];
     }
   }
