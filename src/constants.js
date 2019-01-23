@@ -34,4 +34,16 @@ module.exports = {
   UNAUTHORIZED: 'Unauthorized oauth token. Perhaps refresh the bot oauth token?',
   TOPICS,
   STATUS,
+  MORNING_CHECKIN: {
+    time: 'MORNING',
+    hour: 14,
+    minute: 0,
+    second: 0
+  },
+  AFTERNOON_CHECKIN: {
+    time: 'AFTERNOON',
+    hour: 18,
+    minute: 30,
+    second: 0
+  },
 };
