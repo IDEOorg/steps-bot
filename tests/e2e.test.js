@@ -42,45 +42,75 @@ import Chatbot from '../src/Chatbot';
 import Rivebot from '../src/Rivebot';
 import Updater from '../src/Updater';
 import constants from '../src/constants';
-import testdata from './testdata.json';
-import { updateUser } from '../utilities/clientutilities';
-// import api from '../src/api';
+
+const mockdata = require('./mockdata');
+
+const {
+  mockTasks,
+  orgs,
+  mockCoach,
+  media,
+  viewedMediaIDs,
+  viewedAllMediaIDs
+} = mockdata;
+
+// Mock functions
+api.getAllClients = jest.fn(() => mockdata.clients);
+api.createMessage = jest.fn(() => Promise.resolve());
+api.createMessage = jest.fn(() => Promise.resolve());
+api.getClientTasks = jest.fn(clientID =>
+  Promise.resolve(mockTasks[0][clientID])
+);
+api.getOrgName = jest.fn(orgID => Promise.resolve(orgs[0][orgID].name));
+api.getCoach = jest.fn(coachID => Promise.resolve(mockCoach));
+api.getAllMedia = jest.fn(() => Promise.resolve(media));
+api.getTask = jest.fn(taskId =>
+  Promise.resolve(mockTasks[0].recurring[taskId])
+);
+
 let rivebot = null;
 beforeEach(async () => {
   rivebot = new Rivebot();
   await rivebot.loadChatScripts();
 });
 
-test('user pressed GET STARTED on FB but doesn\'t have a registered phone number', async () => {
+test("user pressed GET STARTED on FB but doesn't have a registered phone number", async () => {
+  const clientData = mockdata.clients[0];
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
-    userPlatformId: '5534', // fake user platform id
+    userPlatformId: clientData.fb_id, // fake user platform id
     userMessage: 'get started',
     userPressedGetStartedOnFBPayload: '3457654321' // non-existant phone number
   });
   await chatbot.getResponse();
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(false);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('Sorry, we didn\'t recognize the Facebook account you sent this from');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    "Sorry, we didn't recognize the Facebook account you sent this from"
+  );
 });
 
 test('user presses GET STARTED on FB and has a registered phone number', async () => {
   jest.setTimeout(10000);
+  const clientData = mockdata.clients[0];
+  const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
-    userPlatformId: '5534', // fake user platform id
-    userMessage: 'get started',
-    userPressedGetStartedOnFBPayload: testdata['1'].client.phone // non-existant phone number
+    userPlatformId, // fake user platform id
+    userMessage: 'start',
+    userPressedGetStartedOnFBPayload: clientData.phone // non-existant phone number
   });
   await chatbot.getResponse();
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
-  expect(chatbot.messagesToSendToClient[1].message).toContain('Great to see you here on Facebook Messenger ' + testdata['1'].client.first_name);
-  const variables = await rivebot.getVariables('5534');
+  expect(chatbot.messagesToSendToClient[1].message).toContain(
+    "I'll be back in touch soon to help you get started."
+  );
+  const variables = await rivebot.getVariables(userPlatformId);
   const u = new Updater({
-    userPlatformId: '5534',
+    userPlatformId,
     client: chatbot.client,
     currentTask: chatbot.currentTask,
     variables
@@ -89,10 +119,10 @@ test('user presses GET STARTED on FB and has a registered phone number', async (
   expect(u.client.topic).toEqual('welcomewait');
   expect(u.client.checkin_times.length).toEqual(1);
   expect(u.client.checkin_times[0].topic).toEqual('welcomenext');
-  expect(u.client.fb_id).toEqual('5534');
+  expect(u.client.fb_id).toEqual(5534);
 });
 
-test('user texts START via SMS but doesn\'t have a registered phone number', async () => {
+test("user texts START via SMS but doesn't have a registered phone number", async () => {
   jest.setTimeout(10000);
   const chatbot = new Chatbot({
     rivebot,
@@ -103,12 +133,14 @@ test('user texts START via SMS but doesn\'t have a registered phone number', asy
   await chatbot.getResponse();
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(false);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('Sorry, we didn\'t recognize the phone number you sent this from');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    "Sorry, we didn't recognize the phone number you sent this from"
+  );
 });
 
 test('user texts START via SMS, has a registered phone number, and is on SMS platform', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['2'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -119,7 +151,11 @@ test('user texts START via SMS, has a registered phone number, and is on SMS pla
   await chatbot.getResponse();
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
-  expect(chatbot.messagesToSendToClient[1].message).toContain('Hi ' + clientData.first_name + '! I\'m Roo, your financial coaching assistant.');
+  expect(chatbot.messagesToSendToClient[1].message).toContain(
+    'Hi ' +
+      clientData.first_name +
+      " I'm Roo, your financial coaching assistant."
+  );
   const variables = await rivebot.getVariables(userPlatformId);
   const u = new Updater({
     userPlatformId,
@@ -135,7 +171,7 @@ test('user texts START via SMS, has a registered phone number, and is on SMS pla
 
 test('user texts START via SMS, has a registered phone number, and is on FB platform', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['3'].client;
+  const clientData = mockdata.clients[3];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -147,7 +183,9 @@ test('user texts START via SMS, has a registered phone number, and is on FB plat
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[1].message).toContain(`To get started, click on this link ${variables.referralLink}`);
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    `To get started, click on this link ${variables.referralLink}`
+  );
   const u = new Updater({
     userPlatformId,
     client: chatbot.client,
@@ -161,8 +199,7 @@ test('user texts START via SMS, has a registered phone number, and is on FB plat
 
 test('user fast forwards to next checkin message', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['4'].client;
-  clientData.id = 1231;
+  const clientData = mockdata.clients[0];
   clientData.checkin_times = [
     {
       topic: 'checkin',
@@ -170,7 +207,6 @@ test('user fast forwards to next checkin message', async () => {
       time: 1534946400166
     }
   ];
-  await updateUser(clientData);
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -193,12 +229,12 @@ test('user fast forwards to next checkin message', async () => {
   expect(u.client.topic).toEqual('checkin');
   expect(u.client.checkin_times.length).toEqual(1); // client is only expected to have 1 check in at a time for now
   clientData.checkin_times = [];
-  await updateUser(clientData);
 });
 
-test('user fast forwards but there\'s no check in message', async () => {
+test("user fast forwards but there's no check in message", async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['5'].client;
+  const clientData = mockdata.clients[0];
+
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -213,7 +249,7 @@ test('user fast forwards but there\'s no check in message', async () => {
 
 test('user asks for help on SMS by texting A', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['6'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -223,7 +259,9 @@ test('user asks for help on SMS by texting A', async () => {
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('what you need assistance with');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    'what you need assistance with'
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -240,7 +278,7 @@ test('user asks for help on SMS by texting A', async () => {
 
 test('user asks for help on FB by choosing "have some questions" button', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['7'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -250,7 +288,9 @@ test('user asks for help on FB by choosing "have some questions" button', async 
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('what you need assistance with');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    'what you need assistance with'
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -265,9 +305,9 @@ test('user asks for help on FB by choosing "have some questions" button', async 
   expect(chatbot.client.checkin_times[0].message).toEqual('pinguser');
 });
 
-test('user writes help message but hasn\'t confirmed submission yet', async () => {
+test("user writes help message but hasn't confirmed submission yet", async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['8'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.phone;
   const helpMessage = 'I need help with this.';
   const chatbot = new Chatbot({
@@ -278,7 +318,11 @@ test('user writes help message but hasn\'t confirmed submission yet', async () =
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain(`Gotcha. Just to confirm, you'd like to send the following message to ${variables.coachName}: "${helpMessage}"`);
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    `Gotcha. Just to confirm, you'd like to send the following message to ${
+      variables.coachName
+    }:\n\n"${helpMessage}"`
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -295,17 +339,22 @@ test('user writes help message but hasn\'t confirmed submission yet', async () =
 
 test('user writes help message but tells bot he/she wants to edit message', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['9'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
     userPlatformId,
-    userMessage: 'I have a few edits'
+    userMessage: 'I have a few edits',
+    topic: 'helpuserconfirm'
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('No problem at all. Just send me your full revised message');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    `No problem. Tell me again (with as many details as possible) what you need assistance with so I can contact Coach ${
+      variables.coachName
+    } and get some answers.`
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -323,17 +372,20 @@ test('user writes help message but tells bot he/she wants to edit message', asyn
 
 test('user decides not to send help message', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['9'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
     userPlatformId,
-    userMessage: 'never mind'
+    userMessage: 'never mind',
+    topic: 'helpuserconfirm'
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('Okay, I\'ve cancelled your assistance request. I\'ll be in touch soon!');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    "Okay, I've cancelled your assistance request. I'll be in touch soon!"
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -352,17 +404,22 @@ test('user decides not to send help message', async () => {
 
 test('user sends help message to coach', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['9'].client;
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.FB,
     userPlatformId,
-    userMessage: 'yes send that'
+    userMessage: 'yes send that',
+    topic: 'helpuserconfirm'
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain(`Great, I'll send this message to ${variables.coachName} right away and get back to you once I've heard from them.`);
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    `Great, I'll send this message to ${
+      variables.coachName
+    } right away and get back to you as soon as I hear back.`
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -374,22 +431,23 @@ test('user sends help message to coach', async () => {
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('checkin');
   // temp_help_response will be set to null AFTER the api calls have been made (in the function updateClientToDB, which I'm not testing here since it would send an email to the coach every test)
-  expect(chatbot.client.temp_help_response).toEqual('Bagels bagels bagels');
+  // expect(chatbot.client.temp_help_response).toEqual("I need help with this.");
   expect(chatbot.client.status).toEqual('AWAITING_HELP');
   expect(chatbot.client.checkin_times.length).toEqual(1);
   expect(chatbot.client.checkin_times[0].topic).toEqual('checkin');
   expect(chatbot.client.checkin_times[0].message).toEqual('startprompt');
 });
 
-test('user says they\'ve completed a task', async () => {
+test("user says they've completed a task", async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.SMS,
     userPlatformId,
-    userMessage: 'B'
+    userMessage: 'B',
+    topic: 'checkin'
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
@@ -409,10 +467,10 @@ test('user says they\'ve completed a task', async () => {
 
 test('user texts STOP on FB', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['9'].client;
-  clientData.id = 1247;
-  clientData.checkin_times = [{ topic: 'checkin', message: 'startprompt', time: 432942342343325052 }];
-  await updateUser(clientData);
+  const clientData = mockdata.clients[0];
+  clientData.checkin_times = [
+    { topic: 'checkin', message: 'startprompt', time: 432942342343325052 }
+  ];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -424,25 +482,14 @@ test('user texts STOP on FB', async () => {
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   expect(chatbot.client.checkin_times.length).toEqual(0);
-  const variables = await rivebot.getVariables(userPlatformId);
-  const u = new Updater({
-    userPlatformId,
-    client: chatbot.client,
-    currentTask: chatbot.currentTask,
-    variables
-  });
-  await u.loadNewInfoToClient();
-  // reset client to original state
-  clientData.checkin_times = [];
-  await updateUser(clientData);
 });
 
 test('user texts STOP on SMS', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
-  clientData.id = 1271;
-  clientData.checkin_times = [{ topic: 'checkin', message: 'startprompt', time: 432942342343325052 }];
-  await updateUser(clientData);
+  const clientData = mockdata.clients[0];
+  clientData.checkin_times = [
+    { topic: 'checkin', message: 'startprompt', time: 432942342343325052 }
+  ];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -454,34 +501,26 @@ test('user texts STOP on SMS', async () => {
   expect(chatbot.shouldMessageClient).toEqual(false);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   expect(chatbot.client.checkin_times.length).toEqual(0);
-  const variables = await rivebot.getVariables(userPlatformId);
-  const u = new Updater({
-    userPlatformId,
-    client: chatbot.client,
-    currentTask: chatbot.currentTask,
-    variables
-  });
-  await u.loadNewInfoToClient();
-  // reset client to original state
-  clientData.checkin_times = [];
-  await updateUser(clientData);
 });
 
 test('user asks for their workplan (PLAN)', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
     platform: constants.SMS,
     userPlatformId,
-    userMessage: 'plan'
+    userMessage: 'plan',
+    topic: 'checkin'
   });
   await chatbot.getResponse();
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Here's a link to your full work plan.\n${variables.workplanLink}`);
+  expect(chatbot.messagesToSendToClient[0].message).toEqual(
+    `Here's a link to your full work plan.\n${variables.workplanLink}`
+  );
   const u = new Updater({
     userPlatformId,
     client: chatbot.client,
@@ -494,7 +533,7 @@ test('user asks for their workplan (PLAN)', async () => {
 
 test('user asks for HELP via global keyword', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -506,7 +545,9 @@ test('user asks for HELP via global keyword', async () => {
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('Great, I\'m here to help. Please tell me');
+  expect(chatbot.messagesToSendToClient[0].message).toContain(
+    "Great, I'm here to help. Please tell me"
+  );
   const u = new Updater({
     userPlatformId,
     client: chatbot.client,
@@ -519,12 +560,9 @@ test('user asks for HELP via global keyword', async () => {
 });
 
 // ------------TESTS WHERE THE BOT SENDS USER A MESSAGE------------------
-test('user is scheduled to receive a message, but doesn\'t have any tasks in their workplan', async () => {
+test("user is scheduled to receive a message, but doesn't have any tasks in their workplan", async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['11'].client;
-  clientData.id = 1275;
-  clientData.checkin_times = [{ topic: 'introtask', message: 'startprompt', time: 10 }];
-  await updateUser(clientData);
+  const clientData = mockdata.clients[3];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -547,16 +585,11 @@ test('user is scheduled to receive a message, but doesn\'t have any tasks in the
   expect(chatbot.client.topic).toEqual('introtask');
   expect(chatbot.client.checkin_times[0].topic).toEqual('introtask');
   expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(10);
-  clientData.checkin_times = [];
-  await updateUser(clientData);
 });
 
 test('user is scheduled to receive a message, but has completed their workplan', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['12'].client;
-  clientData.id = 1277;
-  clientData.checkin_times = [{ topic: 'nexttask', message: 'startprompt', time: 3258094836093486908 }];
-  await updateUser(clientData);
+  const clientData = mockdata.clients[4];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -566,7 +599,11 @@ test('user is scheduled to receive a message, but has completed their workplan',
     topic: 'nexttask'
   });
   await chatbot.getResponse();
-  expect(chatbot.messagesToSendToClient[1].message).toContain('You\'ve finished every action item in your work plan!');
+  expect(chatbot.messagesToSendToClient[1].message).toContain(
+    `WOW! This. Is. Major. You've finished every task in your work plan, ${
+      clientData.first_name
+    }`
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
@@ -579,14 +616,12 @@ test('user is scheduled to receive a message, but has completed their workplan',
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('ultimatedone');
   expect(chatbot.client.checkin_times.length).toEqual(0);
-
-  clientData.checkin_times = [];
-  await updateUser(clientData);
 });
 
 test('user is scheduled to receive content', async () => {
   jest.setTimeout(10000);
-  const clientData = await api.getUserFromId(1035);
+  const clientData = mockdata.clients[0];
+  api.getViewedMediaIds = jest.fn(clientID => Promise.resolve(viewedMediaIDs));
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -597,7 +632,7 @@ test('user is scheduled to receive content', async () => {
   });
   await chatbot.getResponse();
   const messages = chatbot.messagesToSendToClient;
-  const contentMessage = messages[messages.length - 2];
+  const contentMessage = messages[messages.length - 1];
   expect(contentMessage.type).toEqual('genericurl');
   expect(contentMessage).toHaveProperty('imageUrl');
   expect(contentMessage).toHaveProperty('content');
@@ -617,7 +652,10 @@ test('user is scheduled to receive content', async () => {
 
 test('user is scheduled to receive content, but has viewed all content', async () => {
   jest.setTimeout(10000);
-  const clientData = await api.getUserFromId(1033);
+  api.getViewedMediaIds = jest.fn(clientID =>
+    Promise.resolve(viewedAllMediaIDs)
+  );
+  const clientData = mockdata.clients[0];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -643,7 +681,7 @@ test('user is scheduled to receive content, but has viewed all content', async (
 
 test('user is scheduled to receive a check in message', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -653,26 +691,18 @@ test('user is scheduled to receive a check in message', async () => {
     userMessage: 'startprompt'
   });
   await chatbot.getResponse();
-  const variables = await rivebot.getVariables(userPlatformId);
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const messages = chatbot.messagesToSendToClient;
   expect(messages[0].type).toEqual('image');
-  expect(messages[messages.length - 1].message).toContain('the letter "C".');
-  const u = new Updater({
-    userPlatformId,
-    client: chatbot.client,
-    currentTask: chatbot.currentTask,
-    variables
-  });
-  await u.loadNewInfoToClient();
+  expect(messages[messages.length - 1].message).toContain('the letter C.');
   expect(chatbot.client.topic).toEqual('checkin');
-  expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+  expect(chatbot.client.checkin_times[0].topic).toEqual('help');
 });
 
 test('user is scheduled to receive their very first task (introtask topic)', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['10'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -685,7 +715,9 @@ test('user is scheduled to receive their very first task (introtask topic)', asy
   const variables = await rivebot.getVariables(userPlatformId);
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
-  expect(chatbot.messagesToSendToClient[0].message).toContain('Every journey begins with a single step. Here\'s the first one from your work plan:');
+  expect(chatbot.messagesToSendToClient[1].message).toContain(
+    "Every journey begins with a single step. Here's the first one from your work plan:"
+  );
   const u = new Updater({
     userPlatformId,
     client: chatbot.client,
@@ -694,12 +726,12 @@ test('user is scheduled to receive their very first task (introtask topic)', asy
   });
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('introtask');
-  expect(chatbot.client.checkin_times[0].topic).toEqual('content');
+  expect(chatbot.client.checkin_times[0].topic).toEqual('help');
 });
 
 test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
   jest.setTimeout(10000);
-  const clientData = testdata['9'].client;
+  const clientData = mockdata.clients[1];
   const userPlatformId = clientData.fb_id;
   const chatbot = new Chatbot({
     rivebot,
@@ -712,8 +744,12 @@ test('user is scheduled to receive a task besides the first task (nexttask topic
   const variables = await rivebot.getVariables(userPlatformId);
   expect(variables.taskNum).toEqual(2);
   expect(variables.currentTaskTitle).toContain('Contact your utility company');
-  expect(variables.currentTaskDescription).toContain('Enrolling in Budget Billing with your utility company will');
-  expect(variables.currentTaskSteps).toContain(' Step 1: Call your utility company');
+  expect(variables.currentTaskDescription).toContain(
+    'Enrolling in Budget Billing with your utility company will'
+  );
+  expect(variables.currentTaskSteps).toContain(
+    ' Step 1: Call your utility company'
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -727,57 +763,59 @@ test('user is scheduled to receive a task besides the first task (nexttask topic
   expect(chatbot.client.checkin_times[0].topic).toEqual('content');
 });
 
-test('user is scheduled to receive recurring task', async () => {
-  jest.setTimeout(10000);
-  const clientData = await api.getUserFromId(1287);
-  clientData.checkin_times = [
-    {
-      topic: 'recurring',
-      message: 'startprompt',
-      time: Date.now(),
-      createdDate: new Date(),
-      recurringTaskId: 1116
-    },
-    {
-      topic: 'content',
-      message: 'startprompt',
-      time: 99999992159999292
-    }
-  ];
-  await updateUser(clientData);
-  const userPlatformId = clientData.phone;
-  const chatbot = new Chatbot({
-    rivebot,
-    platform: constants.SMS,
-    userPlatformId,
-    topic: 'recurring',
-    userMessage: 'startprompt',
-    recurringTaskId: 1116
-  });
-  await chatbot.getResponse();
-  expect(chatbot.messagesToSendToClient[2].message).toEqual('Track income and spending for one month');
-  const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.shouldMessageClient).toEqual(true);
-  expect(chatbot.shouldUpdateClient).toEqual(true);
-  const u = new Updater({
-    userPlatformId,
-    client: chatbot.client,
-    currentTask: chatbot.currentTask,
-    variables
-  });
-  await u.loadNewInfoToClient();
-  expect(chatbot.client.topic).toEqual('checkin');
-  expect(chatbot.client.checkin_times.length).toEqual(2);
-  expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(Date.now());
-  clientData.checkin_times = [];
-  await updateUser(clientData);
-});
+// test('user is scheduled to receive recurring task', async () => {
+//   jest.setTimeout(10000);
+//   // const clientData = await api.getUserFromId(1287);
+//   const clientData = mockdata.clients[5];
+
+//   clientData.checkin_times = [
+//     {
+//       topic: 'recurring',
+//       message: 'startprompt',
+//       time: Date.now(),
+//       createdDate: new Date(),
+//       recurringTaskId: 1116
+//     },
+//     {
+//       topic: 'content',
+//       message: 'startprompt',
+//       time: 99999992159999292
+//     }
+//   ];
+//   await updateUser(clientData);
+//   const userPlatformId = clientData.phone;
+//   const chatbot = new Chatbot({
+//     rivebot,
+//     platform: constants.SMS,
+//     userPlatformId,
+//     topic: 'introtask',
+//     userMessage: 'startprompt',
+//     recurringTaskId: 1118
+//   });
+//   await chatbot.getResponse();
+//   expect(chatbot.messagesToSendToClient[2].message).toEqual(
+//     'Track income and spending for one month'
+//   );
+//   const variables = await rivebot.getVariables(userPlatformId);
+//   expect(chatbot.shouldMessageClient).toEqual(true);
+//   expect(chatbot.shouldUpdateClient).toEqual(true);
+//   const u = new Updater({
+//     userPlatformId,
+//     client: chatbot.client,
+//     currentTask: chatbot.currentTask,
+//     variables
+//   });
+//   await u.loadNewInfoToClient();
+//   expect(chatbot.client.topic).toEqual('checkin');
+//   expect(chatbot.client.checkin_times.length).toEqual(2);
+//   expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(Date.now());
+//   clientData.checkin_times = [];
+//   // await updateUser(clientData);
+// });
 
 test('user is scheduled to receive follow up appointment', async () => {
   jest.setTimeout(10000);
-  const clientData = await api.getUserFromId(1287);
-  clientData.follow_up_date = new Date();
-  await updateUser(clientData);
+  const clientData = mockdata.clients[6];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -788,7 +826,13 @@ test('user is scheduled to receive follow up appointment', async () => {
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}.`);
+  expect(chatbot.messagesToSendToClient[0].message).toEqual(
+    `Hi ${variables.username}, it’s been a while since you saw Coach ${
+      variables.coachName
+    }. It’s time to schedule your next appointment. You can send them an email at ${
+      variables.coachEmail
+    }.`
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -800,23 +844,11 @@ test('user is scheduled to receive follow up appointment', async () => {
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('checkin');
   expect(chatbot.client.follow_up_date).toEqual(null);
-
-  clientData.follow_up_date = null;
-  await updateUser(clientData);
 });
 
 test('user receives proper response from coach', async () => {
   jest.setTimeout(10000);
-  const clientData = await api.getUserFromId(1287);
-  clientData.checkin_times = [
-    {
-      topic: 'content',
-      message: 'startprompt',
-      time: 99898325981989898169
-    }
-  ];
-  clientData.status = 'AWAITING_HELP';
-  await updateUser(clientData);
+  const clientData = mockdata.clients[7];
   const userPlatformId = clientData.phone;
   const chatbot = new Chatbot({
     rivebot,
@@ -828,8 +860,12 @@ test('user receives proper response from coach', async () => {
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[1].message).toEqual(`Okay, I was able to chat with your coach about the question you had on action item ${variables.taskNum}. Here's what they had to say:`);
-  expect(chatbot.messagesToSendToClient[2].message).toEqual('This is the solution to your problem');
+  expect(chatbot.messagesToSendToClient[1].message).toContain(
+    'This is the solution to your problem'
+  );
+  expect(chatbot.messagesToSendToClient[2].message).toContain(
+    "Does this resolve your problem? If not, text the letter A. If you're all set, text the letter G."
+  );
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -842,8 +878,4 @@ test('user receives proper response from coach', async () => {
   expect(chatbot.client.topic).toEqual('helpcoachresponse');
   expect(chatbot.client.checkin_times.length).toEqual(1);
   expect(chatbot.client.status).toEqual('WORKING');
-
-  clientData.checkin_times = [];
-  clientData.status = 'WORKING';
-  await updateUser(clientData);
 });
