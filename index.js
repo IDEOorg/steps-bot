@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 const throng = require('throng');
 const twilio = require('twilio');
 require('dotenv').config();
@@ -10,6 +11,8 @@ const constants = require('./src/constants');
 const api = require('./src/api');
 const server = require('./server.js');
 const helpers = require('./helpers');
+const handleError = require('./utilities/errorHandler');
+const errorConstants = require('./utilities/constants');
 
 const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
@@ -18,10 +21,13 @@ const WORKERS = process.env.WEB_CONCURRENCY || 1;
  * Workers maximizes the CPU utility and ensure that the bot runs with less likelihood of a downtime
  * For more info, see: https://devcenter.heroku.com/articles/node-concurrency
  */
-throng({
-  workers: WORKERS,
-  lifetime: Infinity,
-}, start);
+throng(
+  {
+    workers: WORKERS,
+    lifetime: Infinity,
+  },
+  start,
+);
 
 function start() {
   // Set up an Express-powered webserver to webhook endpoints
@@ -29,7 +35,7 @@ function start() {
     fbEndpoint,
     twilioReceiveSmsController,
     getCoachResponse,
-    testTwilioCredentialsController
+    testTwilioCredentialsController,
   );
 }
 
@@ -45,7 +51,7 @@ async function twilioReceiveSmsController(request) {
   await run({
     platform: constants.SMS,
     userPlatformId,
-    userMessage
+    userMessage,
   });
 }
 
@@ -63,12 +69,11 @@ async function testTwilioCredentialsController(request, response) {
       twilioPhoneNumber,
     } = request.body;
     const twilioClient = twilio(twilioAccountSid, twilioAuthToken);
-    const message = await twilioClient.messages
-      .create({
-        body: 'Testing the Twilio credentials for ' + twilioPhoneNumber,
-        from: twilioPhoneNumber,
-        to: process.env.TEST_PHONE_NUMBER,
-      });
+    const message = await twilioClient.messages.create({
+      body: 'Testing the Twilio credentials for ' + twilioPhoneNumber,
+      from: twilioPhoneNumber,
+      to: process.env.TEST_PHONE_NUMBER,
+    });
     if (message.sid) {
       return response.status(200).json({
         message,
@@ -108,7 +113,7 @@ async function fbEndpoint(req, res) {
     if (messageObject.postback.referral) {
       // if message came from user pressing GET STARTED on FB, get the referral code (which is the user's phone number attached to the m.me link)
       fbNewUserPhone = getPhoneNumberFromFBLink(
-        messageObject.postback.referral.ref
+        messageObject.postback.referral.ref,
       );
     }
   } else {
@@ -118,44 +123,53 @@ async function fbEndpoint(req, res) {
     platform: constants.FB,
     userPlatformId,
     userMessage,
-    fbNewUserPhone
+    fbNewUserPhone,
   });
 }
 
 async function getCoachResponse(req, res) {
-  if (req.query && req.query.user_id) {
-    const userId = req.query.user_id;
-    const coachMessage = await getMostRecentUserMessage(userId);
-    if (coachMessage && coachMessage.to_user === parseInt(userId, 10)) {
-      // if the coach message exists and the person receiving the message is the user (this should always be true)
-      const user = await api.getUserFromId(userId);
-      const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
-      const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-      if (coachMessage.topic === 'directmessage') {
-        await run({
-          platform,
-          userPlatformId,
-          userMessage: 'startprompt',
-          topic: 'directmessage',
-          coachDirectMessage: coachMessage.text,
-          isMessageSentFromCheckIn: true,
-        });
+  try {
+    if (req.query && req.query.user_id) {
+      const userId = req.query.user_id;
+      const coachMessage = await getMostRecentUserMessage(userId);
+      if (coachMessage && coachMessage.to_user === parseInt(userId, 10)) {
+        // if the coach message exists and the person receiving the message is the user (this should always be true)
+        const user = await api.getUserFromId(userId);
+        const platform =
+          user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+        const userPlatformId =
+          user.platform === 'FBOOK' ? user.fb_id : user.phone;
+
+        if (coachMessage.topic === 'directmessage') {
+          await run({
+            platform,
+            userPlatformId,
+            userMessage: 'startprompt',
+            topic: 'directmessage',
+            coachDirectMessage: coachMessage.text,
+            isMessageSentFromCheckIn: true,
+          });
+        } else {
+          await run({
+            platform,
+            userPlatformId,
+            userMessage: 'startprompt',
+            topic: 'helpcoachresponse',
+            coachHelpResponse: coachMessage.text,
+            isMessageSentFromCheckIn: true,
+            helpRequestId: coachMessage.request_id,
+          });
+        }
       } else {
-        await run({
-          platform,
-          userPlatformId,
-          userMessage: 'startprompt',
-          topic: 'helpcoachresponse',
-          coachHelpResponse: coachMessage.text,
-          isMessageSentFromCheckIn: true,
-          helpRequestId: coachMessage.request_id
-        });
+        console.log("coach's message was not received by client " + userId);
       }
-    } else {
-      console.log("coach's message was not received by client " + userId);
+      res.send('OK');
     }
+  } catch (e) {
+    e.custom =
+      "There's been an error. \n Error occurred while trying to fetch coach's response";
+    console.log(e.custom, e);
   }
-  res.send('OK');
 }
 
 // this sorts the user's messages and gets the latest message the user received, which should be the coach's message
@@ -187,13 +201,13 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
         // this line is needed in case a user created a FB account but hasn't messaged on FB (meaning the user.fb_id would be null since the bot has no way of knowing the fb id)
         if (userShouldReceiveFollowupMessage(user)) {
           // send user a follow up message
+          // eslint-disable-next-line no-await-in-loop
           await run({
-            // eslint-disable-line
             platform,
             userPlatformId,
             userMessage: 'startprompt',
             topic: 'followup',
-            isMessageSentFromCheckIn
+            isMessageSentFromCheckIn,
           });
           await sleep(2000); // eslint-disable-line
         }
@@ -202,6 +216,7 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
           for (let j = 0; j < eligibleCheckins.length; j++) {
             const eligibleCheckin = eligibleCheckins[j];
             await sleep(2000); // eslint-disable-line
+            // eslint-disable-next-line no-await-in-loop
             await run({
               // eslint-disable-line
               platform,
@@ -209,13 +224,13 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
               userMessage: eligibleCheckin.message,
               topic: eligibleCheckin.topic,
               recurringTaskId: eligibleCheckin.recurringTaskId,
-              isMessageSentFromCheckIn
+              isMessageSentFromCheckIn,
             });
           }
         }
       }
     } catch (e) {
-      console.log('error updating user ' + users[i].id);
+      console.log('error updating user ' + users[i].id, e);
       console.log(users[i]);
     }
   }
@@ -262,10 +277,13 @@ async function run(opts) {
     isMessageSentFromCheckIn,
     coachHelpResponse,
     coachDirectMessage,
-    helpRequestId
+    helpRequestId,
   } = opts;
   const rivebot = new Rivebot();
-  await rivebot.loadChatScripts();
+  await handleError(
+    rivebot.loadChatScripts(),
+    errorConstants.LOAD_CHAT_SCRIPTS,
+  );
   const chatbot = new Chatbot({
     rivebot,
     platform,
@@ -276,7 +294,7 @@ async function run(opts) {
     recurringTaskId,
     coachHelpResponse,
     coachDirectMessage,
-    helpRequestId
+    helpRequestId,
   });
   try {
     await chatbot.getResponse();
@@ -292,7 +310,7 @@ async function run(opts) {
       userPlatformId,
       messages: chatbot.messagesToSendToClient,
       client: chatbot.client,
-      isMessageSentFromCheckIn
+      isMessageSentFromCheckIn,
     });
     await messenger.sendReply();
   }
@@ -302,11 +320,20 @@ async function run(opts) {
       userPlatformId,
       client: chatbot.client,
       currentTask: chatbot.currentTask,
-      variables
+      variables,
     });
-    await updater.loadNewInfoToClient();
-    await updater.updateClientToDB();
-    await rivebot.resetVariables(userPlatformId);
+    await handleError(
+      updater.loadNewInfoToClient(),
+      errorConstants.LOAD_INFO_TO_CLIENT,
+    );
+    await handleError(
+      updater.updateClientToDB(),
+      errorConstants.UPDATE_CLIENT_TO_DB,
+    );
+    await handleError(
+      rivebot.resetVariables(userPlatformId),
+      errorConstants.RESET_VARIABLES,
+    );
   }
 }
 
@@ -318,5 +345,6 @@ function getPhoneNumberFromFBLink(referral) {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  // eslint-disable-next-line arrow-parens
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
