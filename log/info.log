@@ -1,0 +1,20 @@
+[2019-02-12T17:57:04.319] [INFO] startup - Express server listening on port  3002
+[2019-02-12T17:57:26.376] [ERROR] api.js - getAllClients api method failed 401 - "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>UnauthorizedError: jwt malformed<br> &nbsp; &nbsp;at /Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/lib/index.js:102:22<br> &nbsp; &nbsp;at Object.module.exports [as verify] (/Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/jsonwebtoken/verify.js:49:12)<br> &nbsp; &nbsp;at verifyToken (/Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/lib/index.js:100:13)<br> &nbsp; &nbsp;at fn (/Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:746:34)<br> &nbsp; &nbsp;at /Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:1213:16<br> &nbsp; &nbsp;at /Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:166:37<br> &nbsp; &nbsp;at /Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:706:43<br> &nbsp; &nbsp;at /Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:167:37<br> &nbsp; &nbsp;at Immediate._onImmediate (/Users/theodoreokafor/Documents/Apprenticeship/steps/apps/api/node_modules/express-jwt/node_modules/async/lib/async.js:1206:34)<br> &nbsp; &nbsp;at runCallback (timers.js:810:20)<br> &nbsp; &nbsp;at tryOnImmediate (timers.js:768:5)<br> &nbsp; &nbsp;at processImmediate [as _immediateCallback] (timers.js:745:5)</pre>\n</body>\n</html>\n"
+[2019-02-12T17:57:26.380] [ERROR] error-handler - There has been an error. New info to client could not be loaded (@updater.loadNewInfoToClient) { TypeError: Cannot destructure property `topic` of 'undefined' or 'null'.
+    at Updater.loadNewInfoToClient (/Users/theodoreokafor/Documents/Apprenticeship/steps-bot/src/Updater.js:39:14)
+    at run (/Users/theodoreokafor/Documents/Apprenticeship/steps-bot/index.js:235:15)
+    at <anonymous>
+  custom: 'There has been an error. New info to client could not be loaded (@updater.loadNewInfoToClient)' }
+[2019-02-12T17:57:26.381] [ERROR] error-handler - There has been an error. Updating client to the DB could not be completed (@updater.updateClientToDB) { TypeError: Cannot read property 'sendHelpMessage' of undefined
+    at Updater.updateClientToDB (/Users/theodoreokafor/Documents/Apprenticeship/steps-bot/src/Updater.js:152:24)
+    at run (/Users/theodoreokafor/Documents/Apprenticeship/steps-bot/index.js:239:15)
+    at <anonymous>
+  custom: 'There has been an error. Updating client to the DB could not be completed (@updater.updateClientToDB)' }
+[2019-02-12T18:01:06.279] [INFO] startup - Express server listening on port  3002
+[2019-02-12T18:01:26.805] [INFO] Chatbot.js - **topic= checkin
+[2019-02-12T18:01:35.039] [INFO] Updater.js - updated client 29
+[2019-02-12T18:01:59.524] [INFO] Updater.js - updated client 29
+[2019-02-12T18:03:00.578] [INFO] startup - Express server listening on port  3002
+[2019-02-12T18:03:13.066] [INFO] Updater.js - updated client 29
+[2019-02-12T18:03:22.054] [INFO] Chatbot.js - **topic= content
+[2019-02-12T18:03:22.127] [INFO] Updater.js - updated client 29

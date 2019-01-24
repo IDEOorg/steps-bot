@@ -8,6 +8,8 @@ const api = require('./src/api');
 const Botkit = require('botkit');
 const server = require('./server.js');
 const helpers = require('./helpers');
+const handleError = require('./utilities/error-handler');
+const errorConstants = require('./utilities/constants');
 
 // Create the Botkit controller, which controls all instances of the bot.
 const twilioController = Botkit.twiliosmsbot({
@@ -63,27 +65,31 @@ twilioController.hears('.*', 'message_received', async (_, message) => {
 });
 
 async function getCoachResponse(req, res) {
-  if (req.query && req.query.user_id) {
-    const userId = req.query.user_id;
-    const coachMessage = await getMostRecentUserMessage(userId);
-    if (coachMessage && coachMessage.to_user === parseInt(userId, 10)) { // if the coach message exists and the person receiving the message is the user (this should always be true)
-      const user = await api.getUserFromId(userId);
-      const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
-      const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-      await run({
-        platform,
-        userPlatformId,
-        userMessage: 'startprompt',
-        topic: 'helpcoachresponse',
-        coachHelpResponse: coachMessage.text,
-        isMessageSentFromCheckIn: true,
-        helpRequestId: coachMessage.request_id
-      });
-    } else {
-      console.log('coach\'s message was not received by client ' + userId);
+  try {
+    if (req.query && req.query.user_id) {
+      const userId = req.query.user_id;
+      const coachMessage = await getMostRecentUserMessage(userId);
+      if (coachMessage && coachMessage.to_user === parseInt(userId, 10)) { // if the coach message exists and the person receiving the message is the user (this should always be true)
+        const user = await api.getUserFromId(userId);
+        const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
+        const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
+        await run({
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'helpcoachresponse',
+          coachHelpResponse: coachMessage.text,
+          isMessageSentFromCheckIn: true
+        });
+      } else {
+        console.log('coach\'s message was not received by client ' + userId);
+      }
     }
+    res.send('OK');
+  } catch (e) {
+    e.custom = 'There\'s been an error. \n Error occurred while trying to fetch coache\'s response';
+    console.log(e.custom, e);
   }
-  res.send('OK');
 }
 
 // this sorts the user's messages and gets the latest message the user received, which should be the coach's message
@@ -138,7 +144,7 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
         }
       }
     } catch (e) {
-      console.log('error updating user ' + users[i].id);
+      console.log('error updating user ' + users[i].id, e);
       console.log(users[i]);
     }
   }
@@ -184,7 +190,10 @@ async function run(opts) {
     helpRequestId
   } = opts;
   const rivebot = new Rivebot();
-  await rivebot.loadChatScripts();
+  await handleError(
+    rivebot.loadChatScripts(),
+    errorConstants.LOAD_CHAT_SCRIPTS
+  );
   const chatbot = new Chatbot({
     rivebot,
     platform,
@@ -222,9 +231,18 @@ async function run(opts) {
       currentTask: chatbot.currentTask,
       variables
     });
-    await updater.loadNewInfoToClient();
-    await updater.updateClientToDB();
-    await rivebot.resetVariables(userPlatformId);
+    await handleError(
+      updater.loadNewInfoToClient(),
+      errorConstants.LOAD_INFO_TO_CLIENT
+    );
+    await handleError(
+      updater.updateClientToDB(),
+      errorConstants.UPDATE_CLIENT_TO_DB
+    );
+    await handleError(
+      rivebot.resetVariables(userPlatformId),
+      errorConstants.RESET_VARIABLES
+    );
   }
 }
 
