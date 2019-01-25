@@ -7,6 +7,7 @@
   ^ <sms>\n\nIf you need some assistance, text the letter "A". If you've finished, text the letter "B".<send></sms>
   ^ \n\nSelect a button below! Or, you can text "PLAN" to see your full work plan, or "STOP" to stop receiving messages from me.
   ^ <fb>^template(`quickreply`, `Need some assistance`, `Still working`, `I'm done`)<send></fb>
+  ^ {@ setvars}
   + (a|need some assistance)
   - {topic=help}{@ startprompt}
   + (b|im done)

@@ -726,7 +726,7 @@ test('user is scheduled to receive their very first task (introtask topic)', asy
   });
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('introtask');
-  expect(chatbot.client.checkin_times[0].topic).toEqual('help');
+  expect(chatbot.client.checkin_times[0].topic).toEqual('content');
 });
 
 test('user is scheduled to receive a task besides the first task (nexttask topic)', async () => {
