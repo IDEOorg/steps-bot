@@ -14,6 +14,7 @@ module.exports = class Chatbot {
     this.topic = opts.topic;
     this.recurringTaskId = opts.recurringTaskId;
     this.coachHelpResponse = opts.coachHelpResponse;
+    this.helpRequestId = opts.helpRequestId;
     this.rb = opts.rivebot;
     this.currentTask = null;
     this.client = null;
@@ -315,6 +316,7 @@ module.exports = class Chatbot {
       contentImgUrl,
       contentDescription,
       coachHelpResponse: this.coachHelpResponse,
+      helpRequestId: this.helpRequestId,
       helpMessage,
       isFinalTask,
     };

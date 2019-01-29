@@ -73,7 +73,8 @@ async function getCoachResponse(req, res) {
         userMessage: 'startprompt',
         topic: 'helpcoachresponse',
         coachHelpResponse: coachMessage.text,
-        isMessageSentFromCheckIn: true
+        isMessageSentFromCheckIn: true,
+        helpRequestId: coachMessage.request_id
       });
     } else {
       console.log('coach\'s message was not received by client ' + userId);
@@ -176,7 +177,8 @@ async function run(opts) {
     topic,
     recurringTaskId,
     isMessageSentFromCheckIn,
-    coachHelpResponse
+    coachHelpResponse,
+    helpRequestId
   } = opts;
   const rivebot = new Rivebot();
   await rivebot.loadChatScripts();
@@ -188,7 +190,8 @@ async function run(opts) {
     userPressedGetStartedOnFBPayload: fbNewUserPhone,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    helpRequestId
   });
   try {
     await chatbot.getResponse();
