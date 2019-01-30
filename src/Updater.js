@@ -45,27 +45,27 @@ module.exports = class Updater {
         this.client.temp_help_response = null;
       }
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          return checkInTime.topic !== TOPICS.HELP; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
-        });
+        return checkInTime.topic !== TOPICS.HELP; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
+      });
     }
 
     if (taskComplete || topic === TOPICS.ULTIMATE_DONE) {
       // removes all non-recurring checkins if the user has completed the task or is done with their workplan
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          if (checkInTime.recurring) {
-            return true;
-          }
-          return false;
-        });
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
     }
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
     if (nextCheckInDate) {
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-          if (checkInTime.recurring) {
-            return true;
-          }
-          return false;
-        });
+        if (checkInTime.recurring) {
+          return true;
+        }
+        return false;
+      });
     }
     if (helpMessage) {
       this.client.temp_help_response = helpMessage;
@@ -181,7 +181,7 @@ module.exports = class Updater {
     }
     if (this.variables.requestResolved === 'true') {
       // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'RESOLVED');
+      api.setRequestByTaskId(this.variables.helpRequestId, this.client.id, this.currentTask.id, 'RESOLVED');
     } else if (this.variables.requestResolved === 'false') {
       api.setRequestByTaskId(
         this.client.id,

@@ -36,6 +36,7 @@ module.exports = class Rivebot {
       helpMessage,
       coachHelpResponse,
       isFinalTask,
+      helpRequestId
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(
@@ -104,6 +105,11 @@ module.exports = class Rivebot {
       userPlatformId,
       'coachHelpResponse',
       coachHelpResponse
+    );
+    await this.rivebot.setUservar(
+      userPlatformId,
+      'helpRequestId',
+      helpRequestId
     );
     const referralLink = formatReferralLinkForNewFBSignups(userPlatformId);
     await this.rivebot.setUservar(
@@ -348,6 +354,7 @@ module.exports = class Rivebot {
     await this.rivebot.setUservar(userPlatformId, 'userAskedToStop', null);
     await this.rivebot.setUservar(userPlatformId, 'requestResolved', null);
     await this.rivebot.setUservar(userPlatformId, 'isFinalTask', null);
+    await this.rivebot.setUservar(userPlatformId, 'helpRequestId', null);
   }
 };
 
