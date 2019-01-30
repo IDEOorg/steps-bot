@@ -19,6 +19,7 @@ const sendCoachEmail = async (userData) => {
     client_phone,
     client_plan_url
   } = userData;
+
   const message = {
     to: coach_email,
     from: 'support@helloroo.org',

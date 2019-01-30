@@ -37,15 +37,6 @@ module.exports = class Updater {
       coachName,
       coachEmail,
     } = this.variables;
-/* eslint-disable */
-    const {
-      first_name,
-      last_name,
-      plan_url,
-      email,
-      phone,
-    } = this.client;
-
     /* eslint-disable */
     const {
       first_name,
@@ -55,7 +46,6 @@ module.exports = class Updater {
       phone,
       id
     } = this.client;
-
     if (removeFollowup) {
       this.client.follow_up_date = null;
     }
@@ -92,7 +82,9 @@ module.exports = class Updater {
         client_plan_url: `${process.env.BASE_URL}/clients/${id}/tasks`,
         client_id: id
       };
+      const adminUrl = process.env.ADMIN_URL;
       sendEMail.sendCoachEmail(substitution);
+      sendEMail.sendUltimateDoneEmailToPm(substitution, adminUrl);
     }
 
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
