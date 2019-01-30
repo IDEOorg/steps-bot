@@ -37,6 +37,14 @@ module.exports = class Updater {
       coachName,
       coachEmail,
     } = this.variables;
+/* eslint-disable */
+    const {
+      first_name,
+      last_name,
+      plan_url,
+      email,
+      phone,
+    } = this.client;
 
     /* eslint-disable */
     const {
