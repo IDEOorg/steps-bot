@@ -43,6 +43,7 @@ BOT_ID=116
 SENDGRID_API_KEY=
 PM_EMAIL=
 ADMIN_URL=
+NODE_ENV=
 ```
 
 You'll need a Twilio account to provide the `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_NUMBER` credentials for SMS. [Follow these instructions in the slides to get set up with Twilio](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing) (see the Twilio Config section of the slides).
