@@ -1,0 +1,164 @@
+swagger: '2.0'
+info:
+  title: Steps Bot API Specification
+  description: >-
+    The official API documentation for steps-bot. You will need to have a running instance of the [coach-app](https://github.com/IDEOorg/steps) to test these API endpoints on your local environment.
+  version: 1.0.0
+basePath: /
+schemes:
+  - https
+  - http
+paths:
+  /sms/receive:
+    post:
+      tags:
+        - Twilio
+      summary: A webhook for incoming messages to Twilio.
+      description: 'For implementation, see twilioController.hears() in index.js located in the root directory of the steps-bot code.'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: message
+          description: Pet object that needs to be added to the store
+          required: true
+          schema:
+            type: object
+            properties:
+              user:
+                type: integer
+                example: 2359383456
+              text:
+                type: string
+                example: 'Hi'
+      responses:
+        '200':
+          description: OK
+      security:
+  /facebook/receive:
+    get:
+      tags:
+        - Facebook
+      summary: Performs the Facebook webhook verification handshake with the verify token
+      description: Perform the FB webhook verification handshake with your verify token. This is required to ensure your webhook is authentic and working
+      produces:
+        - application/json
+      parameters:
+        - name: hub.verify_token
+          in: query
+          description: FB webhook token
+          required: true
+          type: string
+        - name: hub.challenge
+          in: query
+          description: FB challenge token
+          required: true
+          type: string
+        - name: hub.mode
+          in: query
+          description: FB webhook mode
+          required: true
+          type: string
+          default: subscribe
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Facebook
+      summary: Webhook triggered in Facebook upon receipt of new message from user.
+      description: Message is parsed and then processed by the bot. Aka fbEndpoint in the bot code. See fbEndpoint() in index.js
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description:
+          required: true
+          schema:
+            type: object
+            properties:
+              object:
+                type: string
+              entry:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                    time:
+                      type: integer
+                    messaging:
+                      type: array
+                      items:
+                        properties:
+                          sender:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                          recepient:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+      responses:
+        '200':
+          description: ok
+
+  /helpresponse:
+    get:
+      tags:
+        - Help Request/Response
+      summary: An endpoint for receiving a coach's response to a help request
+      description: Returns a message from the coach app. This message is submitted from within the coach (web) application by subitting a form. For implementation, see routes() in server.js and getCoachResponse() in index.js located in the root directory of the steps-bot code.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: user_id
+          description: ID of the user whose request has been responded
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+
+  /redirect:
+    get:
+      tags:
+        - Media
+      summary: An endpoint for tracking when a user clicks a link to a media object
+      description: When user clicks a link on a media object, it is sent to this endpoint so that a tracking function can be called. The user is then redirected to their original destination (media.url)
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: contentId
+          description: ID of the media object
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: contentUrl
+          description: URL of the media object
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: userId
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+
+externalDocs:
+  description: Find out more about Steps Bot
+  url: 'https://github.com/IDEOorg/steps-bot'
