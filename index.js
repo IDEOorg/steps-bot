@@ -7,6 +7,7 @@ require('dotenv').config();
 const api = require('./src/api');
 const Botkit = require('botkit');
 const server = require('./server.js');
+const helpers = require('./helpers');
 
 // Create the Botkit controller, which controls all instances of the bot.
 const twilioController = Botkit.twiliosmsbot({
@@ -18,9 +19,11 @@ const twilioController = Botkit.twiliosmsbot({
 // Set up an Express-powered webserver to webhook endpoints
 server(fbEndpoint, twilioController, getCoachResponse);
 
-setInterval(() => {
-  messageAllClientsWithOverdueCheckinsOrFollowups();
-}, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
+if (helpers.isProductionEnvironment()) {
+  setInterval(() => {
+    messageAllClientsWithOverdueCheckinsOrFollowups();
+  }, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
+}
 
 // takes in the request FB sends and formats that data and passes it into the run() function.
 async function fbEndpoint(req, res) {

@@ -3,6 +3,7 @@ const constants = require('./constants');
 const assetUrls = require('./assets-manifest.json');
 const path = require('path');
 const RiveScript = require('rivescript');
+const helpers = require('../helpers');
 
 const { TOPICS } = constants;
 
@@ -377,7 +378,7 @@ function formatReferralLinkForNewFBSignups(userPlatformId) {
       // cannot rely on process.env.NODE_ENV because both staging and prod run
       // as 'production' when deployed. Set env var to true for staging deployment.
       // false for production.
-      const refLink = process.env.STAGING === 'false'
+      const refLink = !helpers.isStagingEnvironment()
         ? process.env.FB_REFERRAL_LINK
         : process.env.FB_REFERRAL_LINK_STAGING;
       const referralId = userPlatformId.slice(2);
