@@ -70,8 +70,8 @@ module.exports = class Updater {
         return false;
       });
     }
-    
-  if (topic === TOPICS.ULTIMATE_DONE) {
+
+    if (topic === TOPICS.ULTIMATE_DONE) {
       const substitution = {
         coach_name: coachName,
         coach_email: coachEmail,
@@ -124,7 +124,7 @@ module.exports = class Updater {
                 if (
                   duration &&
                   getNextCheckInDate(-1 * duration, null, null) >
-                    checkInTime.createdDate
+                  checkInTime.createdDate
                 ) {
                   // recurring task has ended
                   this.client.checkin_times.splice(i, 1); // remove check in
@@ -161,10 +161,23 @@ module.exports = class Updater {
         time: nextCheckInDate,
       });
     }
+
     if (userAskedToStop) {
       // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
       this.client.checkin_times = [];
+      const substitution = {
+        coach_name: coachName,
+        coach_email: coachEmail,
+        client_first_name: first_name,
+        client_last_name: last_name,
+        client_email: email,
+        client_phone: phone,
+        client_plan_url: plan_url,
+        client_id: id
+      };
+      sendEMail.emailCoachOnClientStop(substitution);
     }
+
     if (requestResolved === 'true') {
       // rivebot converts text to strings, hence why these aren't booleans
       this.client.status = STATUS.WORKING;

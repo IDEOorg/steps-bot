@@ -69,6 +69,7 @@ module.exports = class Chatbot {
         client: this.client,
         platform: this.platform,
         userMessage: this.userMessage,
+        userAskedToStop: this.userMessage === 'stop',
         userPlatformId: this.userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
       },
       remainingRivebotVars
