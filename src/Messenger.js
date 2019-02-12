@@ -1,8 +1,11 @@
+const log4js = require('log4js');
 require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
 const rp = require('request-promise');
 const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+const log = log4js.getLogger('Messenger.js');
 
 module.exports = class Messenger {
   constructor(opts) {
@@ -27,7 +30,7 @@ module.exports = class Messenger {
           await sendFBMessage(this.userPlatformId, formattedMsg, this.isMessageSentFromCheckIn); // eslint-disable-line
           await sleep(300); // eslint-disable-line
         } catch (e) {
-          console.log(`There's been an error. sendFBMessage did not send message to ${this.userPlatformId}.`);
+          log.error(`There's been an error. sendFBMessage did not send message to ${this.userPlatformId}.`);
           continue; // eslint-disable-line
         }
       } else { // platform is sms
@@ -40,7 +43,7 @@ module.exports = class Messenger {
             await sleep(800); // eslint-disable-line
           }
         } catch (e) {
-          console.log(`There's been an error. sendSMSMessage did not send message ${formattedMsg.message} to ${this.userPlatformId}. This likely means the phone number is invalid`);
+          log.error(`There's been an error. sendSMSMessage did not send message ${formattedMsg.message} to ${this.userPlatformId}. This likely means the phone number is invalid`);
           continue; // eslint-disable-line
         }
       }

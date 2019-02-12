@@ -6,5 +6,6 @@ analytics/*.csv
 coverage
 .vscode
 *~
+log/
 .vscode/
 .idea/

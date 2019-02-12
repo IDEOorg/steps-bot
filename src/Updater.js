@@ -1,8 +1,11 @@
 require('dotenv').config();
+const log4js = require('log4js');
 const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 const pmEmail = require('./email_templates/PmEmail');
+
+const log = log4js.getLogger('Updater.js');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -198,7 +201,7 @@ module.exports = class Updater {
     }
     // update user
     await api.updateUser(this.client.id, this.client).then(() => {
-      console.log('updated client ' + this.client.id);
+      log.info('updated client ' + this.client.id);
     });
   }
 };
@@ -313,10 +316,10 @@ function sendHelpEmailToCoach(
   sgMail
     .send(msg)
     .then(() => {
-      console.log(`email sent to ${coachEmail}`);
+      log.info(`email sent to ${coachEmail}`);
     })
     .catch((err) => {
-      console.error(err.toString());
+      log.error(err.toString());
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
@@ -340,10 +343,10 @@ function sendUltimateDoneEmailToPm(client) {
 
   sgMail.send(msg)
     .then(() => {
-      console.log(`email sent to ${process.env.PM_EMAIL}`);
+      log.info(`email sent to ${process.env.PM_EMAIL}`);
     })
     .catch((err) => {
-      console.error(err.toString());
+      log.error(err.toString());
       sgMail.send({
         to: process.env.PM_EMAIL,
         from: 'no-reply@helloroo.org',

@@ -1,13 +1,16 @@
-const constants = require ('./constants');
-const rp = require ('request-promise');
-const sgMail = require ('@sendgrid/mail');
-const {trackMessageSent} = require ('./tracker');
-require ('dotenv').config ();
+const log4js = require('log4js');
+const constants = require('./constants');
+const rp = require('request-promise');
+const sgMail = require('@sendgrid/mail');
+const { trackMessageSent } = require('./tracker');
+require('dotenv').config();
+
+const log = log4js.getLogger('api.js');
 
 const TOPICS = constants.TOPICS;
 const STATUS = constants.STATUS;
 
-sgMail.setApiKey (process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function getAllClients() {
   let clients = null;
@@ -21,7 +24,7 @@ async function getAllClients() {
       json: true,
     });
   } catch (e) {
-    console.log('getAllClients api method failed', e.message);
+    log.error('getAllClients api method failed', e.message);
     if (e.statusCode === 401) {
       return constants.UNAUTHORIZED;
     }
@@ -39,7 +42,7 @@ async function getOrgName(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getOrgName api method failed for org id ' + id, e.message);
+    log.error('getOrgName api method failed for org id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   if (org) {
@@ -51,13 +54,13 @@ async function getOrgName(id) {
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
-    uri: `${process.env.API_URL}/users/${id.toString ()}`,
+    uri: `${process.env.API_URL}/users/${id.toString()}`,
     headers: {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
     },
     json: true
   }).catch((e) => {
-    console.log('getCoach api method failed for coach id ' + id, e.message);
+    log.error('getCoach api method failed for coach id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return coach;
@@ -72,7 +75,7 @@ async function getClientTasks(id) {
     },
     json: true
   }).catch((e) => {
-    console.log(
+    log.error(
       'getClientTasks api method failed for client id ' + id,
       e.message
     );
@@ -89,7 +92,7 @@ async function getAllMedia() {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
     }
   }).catch((e) => {
-    console.log('getAllMedia method failed', e.message);
+    log.error('getAllMedia method failed', e.message);
     sendErrorToZendesk(e);
   });
   listOfMedia = JSON.parse(listOfMedia);
@@ -109,7 +112,7 @@ async function getViewedMediaIds(id) {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
     }
   }).catch((e) => {
-    console.log(
+    log.error(
       'getViewedMediaIds method failed for client id ' + id,
       e.message
     );
@@ -135,7 +138,7 @@ async function createRequest(userId, taskId) {
     },
     json: true,
   }).catch((e) => {
-    console.log(
+    log.error(
       'createRequest method failed with user id ' +
         userId +
         ' on task id ' +
@@ -163,7 +166,7 @@ async function setRequestByTaskId(requestId, clientId, taskId, status) {
       },
       json: true
     }).catch((e) => {
-      console.log(
+      log.error(
         'setRequestByTaskId failed: issue in the for loop',
         e.message
       );
@@ -181,7 +184,7 @@ async function getUserRequests(userId) {
     },
     json: true,
   }).catch((e) => {
-    console.log('getUserRequests method failed for user ' + userId, e.message);
+    log.error('getUserRequests method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return requests;
@@ -196,7 +199,7 @@ async function getUserMessages(userId) {
     },
     json: true,
   }).catch((e) => {
-    console.log('getUserMessages method failed for user ' + userId, e.message);
+    log.error('getUserMessages method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return messages;
@@ -222,7 +225,7 @@ async function createMessage(requestId, fromId, toId, messageToSend, topic) {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
     }
   }).catch((e) => {
-    console.log(
+    log.error(
       'createMessage method failed for user ' + fromId + ' to ' + toId,
       e.message
     );
@@ -244,7 +247,7 @@ async function updateUser(userId, userData) {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
     }
   }).catch((e) => {
-    console.log('updateUser method failed for user ' + userId, e.message);
+    log.error('updateUser method failed for user ' + userId, e.message);
     sendErrorToZendesk(e);
   });
   return user;
@@ -260,7 +263,7 @@ async function updateTask(id, taskData) {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
     }
   }).catch((e) => {
-    console.log('failed to update task with id ' + id, e.message);
+    log.error('failed to update task with id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return task;
@@ -276,7 +279,7 @@ async function markMediaAsViewed(clientId, mediaId) {
         Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
       }
     }).catch((e) => {
-      console.log(
+      log.error(
         'failed to mark media as viewed with media id ' + mediaId,
         e.message
       );
@@ -295,7 +298,7 @@ async function getUserFromId(id) {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
     }
   }).catch((e) => {
-    console.log('getUserFromId failed to find user id ' + id, e.message);
+    log.error('getUserFromId failed to find user id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return JSON.parse(user);
@@ -310,7 +313,7 @@ async function getTask(id) {
     },
     json: true,
   }).catch((e) => {
-    console.log('getTask failed to find task id ' + id, e.message);
+    log.error('getTask failed to find task id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   return task;

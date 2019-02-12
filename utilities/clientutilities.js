@@ -1,5 +1,8 @@
 const rp = require('request-promise');
 require('dotenv').config();
+const log4js = require('log4js');
+
+const log = log4js.getLogger('clientutilities.js');
 
 // const url = 'http://localhost:3001/api';
 const url = 'https://helloroo.org/api';
@@ -97,7 +100,7 @@ async function deleteUser(id) {
             Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
           }
         }).catch((e) => {
-          console.log(e);
+          log.error(e);
         });
       }
     }
@@ -125,8 +128,9 @@ async function deleteUser(id) {
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
-    }).catch(() => {
-      console.log(viewed.id + ' not deleted');
+    }).catch((error) => {
+      log.debug(viewed.id + ' not deleted');
+      log.error(error);
     });
   }
   await rp({
@@ -135,8 +139,9 @@ async function deleteUser(id) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch(() => {
-    console.log('client not deleted');
+  }).catch((error) => {
+    log.debug('client not deleted');
+    log.error(error);
   });
 }
 

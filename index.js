@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+
 const Chatbot = require('./src/Chatbot');
 const Rivebot = require('./src/Rivebot');
 const Updater = require('./src/Updater');
@@ -10,6 +12,8 @@ const server = require('./server.js');
 const helpers = require('./helpers');
 const handleError = require('./utilities/error-handler');
 const errorConstants = require('./utilities/constants');
+
+const log = log4js.getLogger('index.js');
 
 // Create the Botkit controller, which controls all instances of the bot.
 const twilioController = Botkit.twiliosmsbot({
@@ -82,13 +86,13 @@ async function getCoachResponse(req, res) {
           isMessageSentFromCheckIn: true
         });
       } else {
-        console.log('coach\'s message was not received by client ' + userId);
+        log.debug('coach\'s message was not received by client ' + userId);
       }
     }
     res.send('OK');
   } catch (e) {
     e.custom = 'There\'s been an error. \n Error occurred while trying to fetch coache\'s response';
-    console.log(e.custom, e);
+    log.error(e.custom, e);
   }
 }
 
@@ -144,8 +148,8 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
         }
       }
     } catch (e) {
-      console.log('error updating user ' + users[i].id, e);
-      console.log(users[i]);
+      log.debug('error updating user ' + users[i].id);
+      log.error(e);
     }
   }
 }
@@ -210,8 +214,7 @@ async function run(opts) {
   } catch (e) {
     chatbot.shouldMessageClient = false;
     chatbot.shouldUpdateClient = false;
-    console.log('error with user ' + chatbot.userPlatformId);
-    console.log(e);
+    log.error('error with user ' + chatbot.userPlatformId, e);
   }
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({

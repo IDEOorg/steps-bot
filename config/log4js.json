@@ -1,0 +1,45 @@
+{
+  "appenders": {
+    "console": {
+      "type": "console"
+    },
+    "debugFile": {
+      "type": "dateFile",
+      "filename": "log/debug.log",
+      "pattern": "-yyyy-MM-dd",
+      "keepFileExt": true,
+      "category": "debug"
+    },
+    "debug": {
+      "type": "logLevelFilter",
+      "level": "DEBUG",
+      "appender": "debugFile"
+    },
+    "errorFile": {
+      "type": "dateFile",
+      "filename": "log/errors.log",
+      "pattern": "-yyyy-MM-dd",
+      "keepFileExt": true
+    },
+    "errors": {
+      "type": "logLevelFilter",
+      "level": "ERROR",
+      "appender": "errorFile"
+    },
+    "infoFile": {
+      "type": "dateFile",
+      "filename": "log/info.log",
+      "pattern": "-yyyy-MM-dd",
+      "keepFileExt": true
+    },
+    "info": {
+      "type": "logLevelFilter",
+      "level": "INFO",
+      "appender": "infoFile"
+    }
+  },
+  "categories": {
+    "default": { "appenders": [ "debugFile", "info", "errors", "console" ], "level": "DEBUG" },
+    "debug": { "appenders": [ "debugFile" ], "level": "DEBUG" }
+  }
+}

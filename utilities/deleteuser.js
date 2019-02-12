@@ -1,6 +1,9 @@
 const rp = require('request-promise');
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
+const log4js = require('log4js');
+
+const log = log4js.getLogger('deleteuser.js');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const url = 'https://steps-admin.herokuapp.com/api';
@@ -33,7 +36,7 @@ async function deleteUser(id) {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
     }).catch((e) => {
-      console.log(e);
+      log.error(e);
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
@@ -67,7 +70,7 @@ async function deleteUser(id) {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
   }).catch((e) => {
-    console.log(e);
+    log.error(e);
     sgMail.send({
       to: 'support@helloroo.zendesk.com',
       from: 'no-reply@helloroo.org',
@@ -88,7 +91,7 @@ async function deleteUser(id) {
             Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
           }
         }).catch((e) => {
-          console.log(e);
+          log.error(e);
         });
       }
     }
@@ -99,7 +102,7 @@ async function deleteUser(id) {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
     }).catch((e) => {
-      console.log(e);
+      log.error(e);
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',
@@ -124,8 +127,9 @@ async function deleteUser(id) {
       headers: {
         Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
       }
-    }).catch(() => {
-      console.log(viewed.id + ' not deleted');
+    }).catch((e) => {
+      log.debug(viewed.id + ' not deleted');
+      log.error(e);
       // sgMail.send({
       //   to: 'support@helloroo.zendesk.com',
       //   from: 'no-reply@helloroo.org',
@@ -140,8 +144,9 @@ async function deleteUser(id) {
     headers: {
       Authorization: 'Bearer ' + process.env.OAUTH_ACCESS_TOKEN
     }
-  }).catch(() => {
-    console.log('client not deleted');
+  }).catch((e) => {
+    log.debug('client not deleted');
+    log.error(e);
     // sgMail.send({
     //   to: 'support@helloroo.zendesk.com',
     //   from: 'no-reply@helloroo.org',

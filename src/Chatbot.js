@@ -1,9 +1,12 @@
+const log4js = require('log4js');
 require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
 const { buildContentUrl, trackStopRequest } = require('./tracker');
 
 const { TOPICS, STATUS } = constants;
+const log = log4js.getLogger('Chatbot.js');
+
 module.exports = class Chatbot {
   constructor(opts) {
     this.platform = opts.platform;
@@ -199,7 +202,7 @@ module.exports = class Chatbot {
     if (soonestCheckInIndex !== null) {
       userMessage = checkInTimes[soonestCheckInIndex].message;
       topic = checkInTimes[soonestCheckInIndex].topic; // eslint-disable-line
-      console.log('**topic=', topic);
+      log.info('**topic=', topic);
       recurringTaskId = checkInTimes[soonestCheckInIndex].task_id;
       if (!recurringTaskId) {
         recurringTaskId = null;
@@ -446,11 +449,11 @@ module.exports = class Chatbot {
   checkAllTasksCompleted(tasks) {
     for (let index = 0; index < tasks.length; index++) {
       if (tasks[index].status !== STATUS.COMPLETED) {
-        console.log('there is task that is not complete', tasks[index]);
+        log.debug('there is task that is not complete', tasks[index]);
         return false;
       }
     }
-    console.log('all tasks have been completed');
+    log.info('all tasks have been completed');
     return true;
   }
 
@@ -460,7 +463,7 @@ module.exports = class Chatbot {
       this.client.tasks.length > 0 &&
       this.checkAllTasksCompleted(this.client.tasks)
     ) {
-      console.log('setting topic to `ultimatedone`');
+      log.debug('setting topic to `ultimatedone`');
       this.client.topic = TOPICS.ULTIMATE_DONE;
       this.client.checkin_times = [];
     }

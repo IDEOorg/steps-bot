@@ -1,3 +1,6 @@
+const log4js = require('log4js');
+
+const log = log4js.getLogger('error-handler');
 /**
  * This function handles errors in async methods and functions
  * @param {func} methodOrFunction
@@ -9,6 +12,6 @@ module.exports = async function handleError(methodOrFunction, customMessage) {
     return returnedValue;
   } catch (error) {
     error.custom = 'There has been an error. ' + customMessage;
-    console.log(error.custom, error);
+    log.error(error.custom, error);
   }
 };

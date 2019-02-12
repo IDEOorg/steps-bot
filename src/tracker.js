@@ -1,3 +1,4 @@
+const log4js = require('log4js');
 require('dotenv').config();
 const KeenTracking = require('keen-tracking');
 // Bitly used for tracking Media links - uses v3 of the Bitly API
@@ -5,6 +6,7 @@ const { BitlyClient } = require('bitly');
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const log = log4js.getLogger('tracker.js');
 
 // Configure a client instance
 const keen = new KeenTracking({
@@ -58,7 +60,7 @@ exports.buildContentUrl = async function buildContentUrl(content, user) {
     try {
       bitlyUrl = await bitly.shorten(redirectUrl);
     } catch (err) {
-      console.error('Unable to create Bitly link');
+      log.debug('Unable to create Bitly link', err);
       sgMail.send({
         to: 'support@helloroo.zendesk.com',
         from: 'no-reply@helloroo.org',

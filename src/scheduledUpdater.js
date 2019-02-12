@@ -1,9 +1,11 @@
+const log4js = require('log4js');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const requestPromise = require('request-promise');
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const log = log4js.getLogger('scheduledUpdater.js');
 
 const decoded = jwt.decode(process.env.OAUTH_ACCESS_TOKEN);
 const { exp } = decoded;
@@ -41,7 +43,7 @@ module.exports = {
         const emails = [process.env.PM_EMAIL, process.env.TTL_EMAIL];
         this.sendTokenNotificationEmail(emails, accessToken);
       } catch (e) {
-        console.log(e);
+        log.error(e);
       }
     }
   },
@@ -69,7 +71,7 @@ module.exports = {
       };
       await requestPromise(options);
     } catch (e) {
-      console.log(e);
+      log.error(e);
     }
   },
 
@@ -96,5 +98,5 @@ module.exports = {
 };
 
 module.exports.getToken(daysRemaining).catch((e) => {
-  console.log(e);
+  log.error(e);
 });

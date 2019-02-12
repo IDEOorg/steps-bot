@@ -1,6 +1,9 @@
 const rp = require('request-promise');
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
+const log4js = require('log4js');
+
+const log = log4js.getLogger('get_started_button.js');
 
 const apiUrl = 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + process.env.FB_PAGE_ACCESS_TOKEN_STAGING;
 
@@ -21,8 +24,8 @@ const addGetStarted = payload =>
       }
     },
     json: true,
-  }).then(res => console.log(res.result)).catch((error) => {
-    console.log(`ERROR: ${error}`);
+  }).then(res => log.debug(res.result)).catch((error) => {
+    log.error(`ERROR: ${error}`);
     sgMail.send({
       to: 'support@helloroo.zendesk.com',
       from: 'no-reply@helloroo.org',
@@ -41,8 +44,8 @@ const addGetStarted = payload =>
 //       ]
 //     },
 //     json: true,
-//   }).then(res => console.log(res.result)).catch((error) => {
-//     console.log(`ERROR: ${error}`);
+//   }).then(res => log.debug(res.result)).catch((error) => {
+//     log.error(`ERROR: ${error}`);
 //     sgMail.send({
 //       to: 'support@helloroo.zendesk.com',
 //       from: 'no-reply@helloroo.org',
