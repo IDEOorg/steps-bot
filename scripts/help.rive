@@ -1,6 +1,7 @@
 > topic help includes global includes tempfastforward includes gibberish
   + startprompt
   - Great, I'm here to help. Please tell me (with as many details as possible)\s
+  ^ <set requestResolved=false>
   ^ what you need assistance with so I can contact Coach <get coachName> and get some answers.
   ^ {topic=helpuserresponse}<set hours=8><set nextTopic=help><set nextMessage=pinguser>
   + pinguser

@@ -8,12 +8,12 @@
   ^ \n\nDoes this resolve your problem?\s
   ^ <fb><send>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>
   ^ <sms>If not, text the letter A. If you're all set, text the letter G.</sms>
-  ^ <set requestResolved=true>
   + (a|have more questions)
-  - {topic=help}{@ startprompt}<set requestResolved=true>
+  - {topic=help}{@ startprompt}<set requestResolved=false>
   + (g|im all set)
   - Glad to hear that helped! I'll be back in touch soon.
-  ^ <set requestResolved=true>{topic=checkin}
+  ^ <set completeRequest=true><set requestResolved=true>
+  ^ {topic=checkin}
   + *
   - Sorry, I didn't understand that. Did the coach's response resolve your problem?<send>
   ^ <fb><send>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>

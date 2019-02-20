@@ -33,11 +33,22 @@ module.exports = class Updater {
       userAskedToStop,
       requestResolved,
       removeFollowup,
+      helpRequestId,
+      completeRequest,
     } = this.variables;
+
+    if (helpRequestId) {
+      this.client.temp_request_id = helpRequestId;
+    }
+
+    if (completeRequest) {
+      this.client.temp_request_id = null;
+    }
 
     if (removeFollowup) {
       this.client.follow_up_date = null;
     }
+
     if (this.client.checkin_times === null) {
       this.client.checkin_times = [];
     }
@@ -137,22 +148,26 @@ module.exports = class Updater {
       // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
       this.client.checkin_times = [];
     }
-    if (requestResolved === 'true') {
-      // rivebot converts text to strings, hence why these aren't booleans
-      this.client.status = STATUS.WORKING;
-    } else if (requestResolved === 'false') {
-      this.client.status = STATUS.AWAITING_HELP;
-    }
   }
 
   async updateClientToDB() {
     if (this.variables.sendHelpMessage) {
-      const request = await api.createRequest(
-        this.client.id,
-        this.currentTask.id
-      );
+      let requestId;
+      let request;
+      if (this.client.temp_request_id) {
+        requestId = this.client.temp_request_id;
+        request = await api.getOneUserRequest(this.client.id, requestId);
+        request.status = 'NEEDS_ASSISTANCE';
+      } else {
+        request = await api.createRequest(
+          this.client.id,
+          this.currentTask.id
+        );
+        requestId = request.id;
+      }
+
       const requestMessage = await api.createMessage(
-        request.id,
+        requestId,
         this.client.id,
         this.client.coach_id,
         this.client.temp_help_response,
@@ -168,6 +183,7 @@ module.exports = class Updater {
         this.currentTask
       );
       this.client.temp_help_response = null;
+      this.client.temp_request_id = null;
     }
     if (this.variables.taskComplete) {
       if (this.currentTask) {
@@ -180,15 +196,25 @@ module.exports = class Updater {
         parseInt(this.variables.contentId, 10)
       );
     }
+
+    if (this.variables.requestResolved === 'false') {
+      console.log('STATUS FALSE')
+      if (this.client.temp_request_id) {
+        api.setRequestByTaskId(
+          this.client.temp_request_id,
+          this.client.id,
+          this.currentTask.id,
+          'NEEDS_ASSISTANCE'
+        );
+      }
+    }
+
     if (this.variables.requestResolved === 'true') {
-      // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(this.variables.helpRequestId, this.client.id, this.currentTask.id, 'RESOLVED');
-    } else if (this.variables.requestResolved === 'false') {
-      api.setRequestByTaskId(
-        this.client.id,
-        this.currentTask.id,
-        STATUS.NEEDS_ASSISTANCE
-      );
+      console.log('STATUS TRUE')
+      if (this.variables.helpRequestId) {
+        // rivebot converts text to strings, hence why these aren't booleans
+        api.setRequestByTaskId(this.variables.helpRequestId, this.client.id, this.currentTask.id, 'RESOLVED');
+      }
     }
     delete this.client.tasks;
 

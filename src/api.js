@@ -187,6 +187,27 @@ async function getUserRequests(userId) {
   return requests;
 }
 
+/**
+ * @description gets a single user request given the id
+ * @param {number} userId
+ * @param {number} requestId
+ * @returns a single request belonging to a user
+ */
+const getOneUserRequest = async (userId, requestId) => {
+  const request = await rp({
+    method: 'GET',
+    uri: `${process.env.API_URL}/clients/${userId}/requests/${requestId}`,
+    headers: {
+      Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
+    },
+    json: true,
+  }).catch((e) => {
+    console.log('getUserRequests method failed for user ' + userId, e.message);
+    sendErrorToZendesk(e);
+  });
+  return request;
+};
+
 async function getUserMessages(userId) {
   const messages = await rp({
     method: 'GET',
@@ -390,4 +411,5 @@ module.exports = {
   markMediaAsViewed,
   getTask,
   getUserDataFromDB,
+  getOneUserRequest
 };

@@ -24,6 +24,7 @@
     "keen-tracking": "^2.0.2",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
+    "nodemon": "^1.18.10",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "rivescript": "^2.0.0-alpha.6",

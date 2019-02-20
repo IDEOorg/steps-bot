@@ -825,5 +825,4 @@ test('user receives proper response from coach', async () => {
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual('helpcoachresponse');
   expect(chatbot.client.checkin_times.length).toEqual(1);
-  expect(chatbot.client.status).toEqual('WORKING');
 });
