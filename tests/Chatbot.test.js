@@ -18,7 +18,7 @@ const {
 // Mock functions
 api.getAllClients = jest.fn(() => Promise.resolve(mockdata.clients));
 api.createMessage = jest.fn(() => Promise.resolve());
-api.getOrgName = jest.fn(orgID => Promise.resolve(orgs[0][orgID].name));
+api.getOrg = jest.fn(orgID => Promise.resolve(orgs[0][orgID]));
 api.getCoach = jest.fn(coachID => Promise.resolve(mockCoach));
 api.getViewedMediaIds = jest.fn(clientID => Promise.resolve(viewedMediaIDs));
 api.getAllMedia = jest.fn(() => Promise.resolve(media));
@@ -408,7 +408,8 @@ test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () =
   bot.userMessage = 'startprompt';
   const payload = await bot.getRemainingVarsRivebotNeeds();
 
-  expect(payload.orgName).toEqual('Test.org');
+  expect(payload.org.name).toEqual('Test.org');
+  expect(payload.org.phone).toEqual(1234567890);
   expect(payload.coach.first_name).toEqual('Michael');
   expect(payload.currentTaskTitle).toContain('Create a debt repayment plan');
   expect(payload.currentTaskSteps).toContain('List all of your debts.');

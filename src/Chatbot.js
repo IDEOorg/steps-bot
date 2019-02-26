@@ -279,7 +279,7 @@ module.exports = class Chatbot {
   }
 
   async getRemainingVarsRivebotNeeds() {
-    const orgName = await api.getOrgName(this.client.org_id);
+    const org = await api.getOrg(this.client.org_id);
     const coach = await api.getCoach(this.client.coach_id);
     const helpMessage = await this.getHelpMessage();
     let recurringTaskContent = null;
@@ -303,7 +303,7 @@ module.exports = class Chatbot {
       contentDescription,
     } = await this.loadStoryContent(this.userMessage);
     return {
-      orgName,
+      org,
       coach,
       currentTaskTitle,
       currentTaskSteps,
