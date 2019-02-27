@@ -78,7 +78,7 @@ module.exports = class Messenger {
         if (message.type === 'text') { // eslint-disable-line
           messageToUpload = message.message;
         } else if (message.type === 'image') {
-          messageToUpload = message.message + '\n' + message.image;
+          messageToUpload = message.image;
         }
       }
       api.createMessage(null, process.env.BOT_ID, this.client.id, messageToUpload, this.client.topic);
@@ -182,7 +182,6 @@ function formatMsgForSMS(message) {
     };
   } else if (type === 'image') {
     return {
-      body: message.message,
       mediaUrl: message.image
     };
   }
