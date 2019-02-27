@@ -35,6 +35,7 @@ const userPressedGetStartedOnFBPayload = null;
 const topic = null;
 const recurringTaskId = null;
 const coachHelpResponse = null;
+const coachDirectMessage = null;
 
 test('setPlatform loads platform into chatbot', () => {
   const bot = new Chatbot({
@@ -45,7 +46,8 @@ test('setPlatform loads platform into chatbot', () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
 
   expect(bot.platform).toEqual('sms');
@@ -60,7 +62,8 @@ test('loadClientData loads client data on valid user', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   await bot.loadClientData();
   expect(bot.client.id).toEqual(717);
@@ -76,7 +79,8 @@ test('loadClientData sets client to null on invalid', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   await bot.loadClientData();
   expect(bot.client).toEqual(null);
@@ -93,7 +97,8 @@ test('bot sets invalid message response on unidentified user', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   await bot.getResponse();
   expect(bot.messagesToSendToClient[0].message).toContain(
@@ -111,7 +116,8 @@ test("when user asks to stop, user no longer receives checkins and bot doesn't m
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     checkin_times: [{ something: 'something' }]
@@ -134,7 +140,8 @@ test('when user asks to stop, bot still sends message to user if user is on fb p
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     checkin_times: [{ something: 'something' }]
@@ -158,7 +165,8 @@ test('userAskedToFastForward returns true when user types ff', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.userMessage = 'ff';
   let outcome = bot.userAskedToFastForward();
@@ -177,7 +185,8 @@ test('fast forward functionality returns desired payload when there are checkin 
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     checkin_times: [
@@ -209,7 +218,8 @@ test('fast forward returns message saying there are no more checkins to fast for
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     checkin_times: null
@@ -228,7 +238,8 @@ test('assignTopicForNewUser should assign the proper topic for new users', () =>
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     platform: 'FBOOK',
@@ -277,7 +288,8 @@ test('getCurrentTaskData gets correct task data', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     tasks: []
@@ -308,7 +320,8 @@ test('getTaskNum gets correct task num', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = { tasks: taskList };
   expect(bot.getTaskNum()).toEqual(3);
@@ -327,7 +340,8 @@ test('setUserIfWorkplanComplete works', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     topic: null,
@@ -348,7 +362,8 @@ test("loadStoryContent doesn't send anything if all content has been viewed", as
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   await bot.loadClientData();
 
@@ -373,7 +388,8 @@ test('loadStoryContent loads proper content', async () => {
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   bot.client = {
     topic: 'content'
@@ -400,7 +416,8 @@ test('getRemainingVarsRivebotNeeds gets all the necessary variables', async () =
     userPressedGetStartedOnFBPayload,
     topic,
     recurringTaskId,
-    coachHelpResponse
+    coachHelpResponse,
+    coachDirectMessage,
   });
   await bot.loadClientData();
   bot.client.topic = 'content';

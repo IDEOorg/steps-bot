@@ -827,3 +827,22 @@ test('user receives proper response from coach', async () => {
   expect(chatbot.client.checkin_times.length).toEqual(1);
   expect(chatbot.client.status).toEqual('WORKING');
 });
+
+test('user receives proper response from coach', async () => {
+  jest.setTimeout(10000);
+  const clientData = mockdata.clients[7];
+  const userPlatformId = clientData.phone;
+  const chatbot = new Chatbot({
+    rivebot,
+    platform: constants.SMS,
+    userPlatformId,
+    userMessage: 'startprompt',
+    topic: 'directmessage',
+    coachDirectMessage: 'I have to reschedule our appointment. Please call me when you can.',
+  });
+  await chatbot.getResponse();
+  const variables = await rivebot.getVariables(userPlatformId);
+  expect(chatbot.messagesToSendToClient[0].message)
+    .toContain('I have to reschedule our appointment. Please call me when you can.');
+  expect(chatbot.shouldMessageClient).toEqual(true);
+});

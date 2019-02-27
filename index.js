@@ -70,15 +70,27 @@ async function getCoachResponse(req, res) {
       const user = await api.getUserFromId(userId);
       const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
       const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-      await run({
-        platform,
-        userPlatformId,
-        userMessage: 'startprompt',
-        topic: 'helpcoachresponse',
-        coachHelpResponse: coachMessage.text,
-        isMessageSentFromCheckIn: true,
-        helpRequestId: coachMessage.request_id
-      });
+
+      if (coachMessage.topic === 'directmessage') {
+        await run({
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'directmessage',
+          coachDirectMessage: coachMessage.text,
+          isMessageSentFromCheckIn: true,
+        });
+      } else {
+        await run({
+          platform,
+          userPlatformId,
+          userMessage: 'startprompt',
+          topic: 'helpcoachresponse',
+          coachHelpResponse: coachMessage.text,
+          isMessageSentFromCheckIn: true,
+          helpRequestId: coachMessage.request_id
+        });
+      }
     } else {
       console.log('coach\'s message was not received by client ' + userId);
     }
@@ -181,6 +193,7 @@ async function run(opts) {
     recurringTaskId,
     isMessageSentFromCheckIn,
     coachHelpResponse,
+    coachDirectMessage,
     helpRequestId
   } = opts;
   const rivebot = new Rivebot();
@@ -194,6 +207,7 @@ async function run(opts) {
     topic,
     recurringTaskId,
     coachHelpResponse,
+    coachDirectMessage,
     helpRequestId
   });
   try {

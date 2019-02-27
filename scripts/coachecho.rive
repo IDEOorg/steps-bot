@@ -1,0 +1,7 @@
+> topic directmessage includes global includes tempfastforward
+  + startprompt
+  - Hi <get username>, I have a message for you from coach <get coachName>:
+  ^ \n\n"<get coachDirectMessage>"
+  ^ \n\n❗ To respond to your coach, text back the word "coach."
+  ^ <send>
+< topic
