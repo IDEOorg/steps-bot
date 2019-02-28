@@ -36,6 +36,7 @@ module.exports = class Rivebot {
       recurringTaskContent,
       helpMessage,
       coachHelpResponse,
+      coachDirectMessage,
       isFinalTask,
       helpRequestId
     } = opts;
@@ -106,6 +107,11 @@ module.exports = class Rivebot {
       userPlatformId,
       'coachHelpResponse',
       coachHelpResponse
+    );
+    await this.rivebot.setUservar(
+      userPlatformId,
+      'coachDirectMessage',
+      coachDirectMessage
     );
     await this.rivebot.setUservar(
       userPlatformId,
