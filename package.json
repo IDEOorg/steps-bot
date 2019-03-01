@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:prod": "pm2-runtime start ecosystem.config.js",
     "test": "jest",
     "coverage": "jest --coverage",
     "dev": "nodemon index.js",
@@ -24,6 +25,7 @@
     "keen-tracking": "^2.0.2",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
+    "pm2": "^3.3.1",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "rivescript": "^2.0.0-alpha.6",
