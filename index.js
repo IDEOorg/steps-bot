@@ -1,3 +1,5 @@
+
+
 /* eslint-disable function-paren-newline */
 const throng = require('throng');
 const twilio = require('twilio');
@@ -218,6 +220,19 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
         isMessageSentFromCheckIn,
       });
 
+      if (clientPlatformId) { // this line is needed in case a user created a FB account but hasn't messaged on FB (meaning the user.fb_id would be null since the bot has no way of knowing the fb id)
+          if (userShouldReceiveFollowupMessage(user)) { // send user a follow up message
+          await run({ // eslint-disable-line
+              platform,
+              clientPlatformId,
+              userMessage: 'startprompt',
+              topic: 'followup',
+              isMessageSentFromCheckIn
+            });
+          await sleep(2000); // eslint-disable-line
+          }
+        }
+
       const eligibleCheckins = getAllCheckinMessagesUserShouldReceive(client);
 
       await Promise.all(
@@ -234,6 +249,15 @@ async function messageAllClientsWithOverdueCheckinsOrFollowups() {
       );
     }),
   );
+}
+
+  // returns true if it's time for the user to receive a follow up message
+function userShouldReceiveFollowupMessage(user) {
+  const followUpAppointment = user.follow_up_date;
+  if (followUpAppointment && new Date(followUpAppointment).valueOf() < Date.now()) {
+    return true;
+  }
+  return false;
 }
 
 // returns all check in messages that are overdue and will be sent to the user
@@ -266,6 +290,7 @@ async function run(opts) {
     coachHelpResponse,
     coachDirectMessage,
     helpRequestId,
+    loadClientData,
   } = opts;
   const rivebot = new Rivebot();
   await handleError(
@@ -283,14 +308,19 @@ async function run(opts) {
     coachHelpResponse,
     coachDirectMessage,
     helpRequestId,
+    loadClientData,
   });
-  try {
-    await chatbot.getResponse();
-  } catch (e) {
-    chatbot.shouldMessageClient = false;
-    chatbot.shouldUpdateClient = false;
-    console.log('error with user ' + chatbot.userPlatformId);
-    console.log(e);
+
+  const loggedInUserData = await chatbot.loadClientData();
+  if (chatbot.client && chatbot.client.active) {
+    try {
+      await chatbot.getResponse();
+    } catch (e) {
+      chatbot.shouldMessageClient = false;
+      chatbot.shouldUpdateClient = false;
+      console.log('error with user ' + chatbot.userPlatformId);
+      console.log(e);
+    }
   }
   if (chatbot.shouldMessageClient) {
     const messenger = new Messenger({
@@ -331,3 +361,4 @@ async function run(opts) {
 function getPhoneNumberFromFBLink(referral) {
   return '+1' + referral;
 }
+

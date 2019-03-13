@@ -119,6 +119,7 @@ module.exports = class Chatbot {
     const chatURL = userInfo ? await api.getChatURLfromPlanURL(userInfo.plan_url) : null;
     this.chatURL = chatURL;
     this.client = userInfo;
+    return this.client;
   }
 
   setUnrecognizedClientResponse() {
