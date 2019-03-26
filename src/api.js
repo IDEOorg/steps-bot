@@ -48,6 +48,28 @@ async function getOrg(id) {
   return null;
 }
 
+/**
+ * Fetches the details of an organization from the steps app database
+ * @param {number} id 
+ */
+async function getOrg(id) {
+  const org = await rp({
+    method: 'GET',
+    uri: `${process.env.API_URL}/orgs/${id.toString()}`,
+    headers: {
+      Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
+    },
+    json: true
+  }).catch((e) => {
+    console.log('getOrg api method failed for org id ' + id, e.message);
+    sendErrorToZendesk(e);
+  });
+  if (org) {
+    return org;
+  }
+  return null;
+}
+
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
@@ -374,6 +396,7 @@ function sendErrorToZendesk(error) {
 
 module.exports = {
   getAllClients,
+  getOrgName,
   getOrg,
   getCoach,
   getClientTasks,

@@ -7,7 +7,7 @@ const { trackMediaClicked } = require('./src/tracker');
 
 module.exports = function server(
   fbEndpoint,
-  twilioController,
+  twilioReceiveSmsController,
   getCoachResponse
 ) {
   const app = express();
@@ -18,15 +18,16 @@ module.exports = function server(
   app.listen(process.env.PORT || 3002, null, () => {});
 
   // sets up webhook routes for Twilio and Facebook
-  routes(app, fbEndpoint, twilioController, getCoachResponse);
+  routes(app, fbEndpoint, twilioReceiveSmsController, getCoachResponse);
 
-  twilioController.webserver = app;
+  console.log('server listening on port ' + (process.env.PORT || 3002))
   return app;
 };
 
-function routes(app, fbEndpoint, twilioController, getCoachResponse) {
+function routes(app, fbEndpoint, twilioReceiveSmsController, getCoachResponse) {
   app.get('/helpresponse', getCoachResponse);
   app.post('/facebook/receive', fbEndpoint);
+  app.post('/sms/receive', twilioReceiveSmsController);
 
   // Perform the FB webhook verification handshake with your verify token. This is solely so FB can verify that you are the same person
   app.get('/facebook/receive', (req, res) => {
@@ -43,10 +44,4 @@ function routes(app, fbEndpoint, twilioController, getCoachResponse) {
     trackMediaClicked(req);
     res.redirect(req.query.contentUrl);
   });
-
-  twilioController.createWebhookEndpoints(
-    app,
-    twilioController.spawn({}),
-    () => {}
-  );
 }

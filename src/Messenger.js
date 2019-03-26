@@ -2,7 +2,7 @@ require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
 const rp = require('request-promise');
-const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const twilio = require('twilio');
 
 module.exports = class Messenger {
   constructor(opts) {
@@ -33,7 +33,7 @@ module.exports = class Messenger {
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
         try {
-          await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
+          await sendSMSMessage(this.userPlatformId, formattedMsg, this.client.org_id); // eslint-disable-line
           if (message.type === 'image') {
             await sleep(3100); // eslint-disable-line
           } else {
@@ -209,9 +209,27 @@ function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
   });
 }
 
-function sendSMSMessage(userId, message) {
+async function sendSMSMessage(userId, message, orgId) {
+  const {
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_NUMBER,
+    NODE_ENV,
+  } = process.env;
+  const orgCredentials = await api.getOrg(orgId);
+  let twilioAccountSid = orgCredentials.account_sid;
+  let twilioAuthToken = orgCredentials.auth_token;
+  let twilioPhoneNumber = orgCredentials.twilio_number;
+  
+  if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+    twilioAccountSid = TWILIO_ACCOUNT_SID;
+    twilioAuthToken = TWILIO_AUTH_TOKEN;
+    twilioPhoneNumber = TWILIO_NUMBER;
+  }
+
+  const twilioClient = twilio(twilioAccountSid, twilioAuthToken);
   const twilioMessage = Object.assign({
-    from: process.env.TWILIO_NUMBER,
+    from: twilioPhoneNumber,
     to: userId
   }, message);
   const twilioPromise = twilioClient.messages.create(twilioMessage);

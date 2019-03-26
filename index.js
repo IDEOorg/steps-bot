@@ -5,19 +5,11 @@ const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
 require('dotenv').config();
 const api = require('./src/api');
-const Botkit = require('botkit');
 const server = require('./server.js');
 const helpers = require('./helpers');
 
-// Create the Botkit controller, which controls all instances of the bot.
-const twilioController = Botkit.twiliosmsbot({
-  account_sid: process.env.TWILIO_ACCOUNT_SID,
-  auth_token: process.env.TWILIO_AUTH_TOKEN,
-  twilio_number: process.env.TWILIO_NUMBER
-});
-
 // Set up an Express-powered webserver to webhook endpoints
-server(fbEndpoint, twilioController, getCoachResponse);
+server(fbEndpoint, twilioReceiveSmsController, getCoachResponse);
 
 if (helpers.isProductionEnvironment()) {
   setInterval(() => {
@@ -52,15 +44,21 @@ async function fbEndpoint(req, res) {
   });
 }
 
-twilioController.hears('.*', 'message_received', async (_, message) => {
-  const userPlatformId = message.user;
-  const userMessage = message.text;
+/**
+ * This function is responsible for receiving the SMS from Twilio
+ * @param {object} request 
+ * @param {object} response 
+ */
+async function twilioReceiveSmsController (request, response) {
+  const message = request.body;
+  const userPlatformId = message.From;
+  const userMessage = message.Body;
   await run({
     platform: constants.SMS,
     userPlatformId,
     userMessage
   });
-});
+}
 
 async function getCoachResponse(req, res) {
   if (req.query && req.query.user_id) {
