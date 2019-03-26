@@ -30,27 +30,10 @@ async function getAllClients() {
   return clients;
 }
 
-async function getOrg(id) {
-  const org = await rp({
-    method: 'GET',
-    uri: `${process.env.API_URL}/orgs/${id.toString()}`,
-    headers: {
-      Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
-    },
-    json: true
-  }).catch((e) => {
-    console.log('getOrgName api method failed for org id ' + id, e.message);
-    sendErrorToZendesk(e);
-  });
-  if (org) {
-    return org;
-  }
-  return null;
-}
-
 /**
  * Fetches the details of an organization from the steps app database
- * @param {number} id 
+ * @param {number} id
+ * @returns {object | null} organization info or nothing
  */
 async function getOrg(id) {
   const org = await rp({
@@ -396,7 +379,6 @@ function sendErrorToZendesk(error) {
 
 module.exports = {
   getAllClients,
-  getOrgName,
   getOrg,
   getCoach,
   getClientTasks,
