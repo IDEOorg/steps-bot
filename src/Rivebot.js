@@ -40,7 +40,8 @@ module.exports = class Rivebot {
       isFinalTask,
       helpRequestId,
       userAskedToStop,
-      userMessage
+      userMessage,
+      chat_url,
     } = opts;
     await this.rivebot.setUservar(userPlatformId, 'topic', client.topic);
     await this.rivebot.setUservar(
@@ -94,12 +95,12 @@ module.exports = class Rivebot {
       'workplanLink',
       client.plan_url
     );
-    const chatUrl = client.plan_url.replace('plan', 'clientChat');
     await this.rivebot.setUservar(
       userPlatformId,
       'chatLink',
-      chatUrl
+      chat_url
     );
+
     await this.rivebot.setUservar(
       userPlatformId,
       'introVideoLink',

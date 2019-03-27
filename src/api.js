@@ -3,6 +3,8 @@ const rp = require('request-promise');
 const sgMail = require('@sendgrid/mail');
 const { trackMessageSent } = require('./tracker');
 require('dotenv').config();
+const unshortenURL = require('url-unshort')();
+const bitlyClient = require('./services/Bitly');
 
 const TOPICS = constants.TOPICS;
 const STATUS = constants.STATUS;
@@ -346,6 +348,22 @@ async function getTask(id) {
   return task;
 }
 
+async function getChatURLfromPlanURL(planURL) {
+  let chatURL;
+  await unshortenURL.expand(planURL)
+    .then(async (url) => {
+      if (url) {
+        const chatURL2 = url.replace('plan', 'clientChat');
+        chatURL = await bitlyClient.shortenURL(chatURL2);
+      } else {
+        // on localhost plan_url is not shortened
+        chatURL = planURL.replace('plan', 'clientChat');
+      }
+    })
+    .catch(err => console.log(err));
+  return chatURL;
+}
+
 // if there's a user, return api/client/id data, otherwise return null
 async function getUserDataFromDB(platform, userPlatformId) {
   const clients = await this.getAllClients();
@@ -421,4 +439,5 @@ module.exports = {
   markMediaAsViewed,
   getTask,
   getUserDataFromDB,
+  getChatURLfromPlanURL,
 };

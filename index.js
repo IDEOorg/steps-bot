@@ -10,7 +10,6 @@ const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
 const api = require('./src/api');
 const server = require('./server.js');
-const helpers = require('./helpers');
 const handleError = require('./utilities/errorHandler');
 const errorConstants = require('./utilities/constants');
 
