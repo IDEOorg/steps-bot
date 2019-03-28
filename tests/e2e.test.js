@@ -62,7 +62,7 @@ api.createMessage = jest.fn(() => Promise.resolve());
 api.createMessage = jest.fn(() => Promise.resolve());
 api.getClientTasks = jest.fn(clientID =>
   Promise.resolve(mockTasks[0][clientID]));
-api.getOrgName = jest.fn(orgID => Promise.resolve(orgs[0][orgID].name));
+api.getOrg = jest.fn(orgID => Promise.resolve(orgs[0][orgID]));
 api.getCoach = jest.fn(coachID => Promise.resolve(mockCoach));
 api.getAllMedia = jest.fn(() => Promise.resolve(media));
 api.getTask = jest.fn(taskId =>
@@ -784,7 +784,7 @@ test('user is scheduled to receive follow up appointment', async () => {
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}.`);
+  expect(chatbot.messagesToSendToClient[0].message).toEqual(`Hi ${variables.username}, it’s been a while since you saw Coach ${variables.coachName}. It’s time to schedule your next appointment. You can send them an email at ${variables.coachEmail}, or call them at 1234567890.`);
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({

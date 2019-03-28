@@ -30,7 +30,7 @@ async function getAllClients() {
   return clients;
 }
 
-async function getOrgName(id) {
+async function getOrg(id) {
   const org = await rp({
     method: 'GET',
     uri: `${process.env.API_URL}/orgs/${id.toString()}`,
@@ -43,7 +43,7 @@ async function getOrgName(id) {
     sendErrorToZendesk(e);
   });
   if (org) {
-    return org.name;
+    return org;
   }
   return null;
 }
@@ -374,7 +374,7 @@ function sendErrorToZendesk(error) {
 
 module.exports = {
   getAllClients,
-  getOrgName,
+  getOrg,
   getCoach,
   getClientTasks,
   getAllMedia,

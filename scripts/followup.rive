@@ -1,5 +1,5 @@
 > topic followup
   + startprompt
-  - Hi <get username>, it’s been a while since you saw Coach <get coachName>. It’s time to schedule your next appointment. You can send them an email at <get coachEmail>.{topic=checkin}
+  - Hi <get username>, it’s been a while since you saw Coach <get coachName>. It’s time to schedule your next appointment. You can send them an email at <get coachEmail>, or call them at <get orgPhone>.{topic=checkin}
   ^ <set removeFollowup=true>
 < topic

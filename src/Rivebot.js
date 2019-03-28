@@ -22,7 +22,7 @@ module.exports = class Rivebot {
       client,
       platform,
       userPlatformId,
-      orgName,
+      org,
       coach,
       currentTaskTitle,
       currentTaskSteps,
@@ -52,7 +52,8 @@ module.exports = class Rivebot {
       coach.first_name
     );
     await this.rivebot.setUservar(userPlatformId, 'coachEmail', coach.email);
-    await this.rivebot.setUservar(userPlatformId, 'orgName', orgName);
+    await this.rivebot.setUservar(userPlatformId, 'orgName', org.name);
+    await this.rivebot.setUservar(userPlatformId, 'orgPhone', org.phone);
     await this.rivebot.setUservar(userPlatformId, 'taskNum', taskNum);
     await this.rivebot.setUservar(
       userPlatformId,

@@ -4,6 +4,7 @@
   ^ WOW! This. Is. Major. You've finished every task in your work plan, <get username>!
   ^ \n\nTake a moment. You should feel INCREDIBLY proud of each and every step you've taken on this journey so far!
   ^ \n\nNow might be a good time to check in with <get coachName> at <get orgName> on your progress.
+  ^ \n\nYou can email them at <get coachEmail> or call them at: <get orgPhone>
   ^ {@ setvars}
   + setvars
   - <set taskComplete=true>
