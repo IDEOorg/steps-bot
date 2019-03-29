@@ -8,7 +8,7 @@
   ^ \n\nDoes this resolve your problem?\s
   ^ <fb><send>^template(`quickreply`, `I'm all set`, `Have more questions`)</fb>
   ^ <sms>If not, text the letter A. If you're all set, text the letter G.</sms>
-  ^ <set requestResolved=true>
+  ^ <set requestResolved=false>
   + (a|have more questions)
   - {topic=help}{@ startprompt}<set requestResolved=true>
   + (g|im all set)
