@@ -21,4 +21,6 @@
   - {topic=recurring}{@ startprompt}
   + gibberishtopic
   - {topic=gibberish}{@ *}
+  + followuptopic
+  - {topic=followup}{@ startprompt}
 < topic
