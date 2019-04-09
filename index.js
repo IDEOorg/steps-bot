@@ -1,23 +1,105 @@
+const cluster = require('cluster');
+const twilio = require('twilio');
+require('dotenv').config();
+
 const Chatbot = require('./src/Chatbot');
 const Rivebot = require('./src/Rivebot');
 const Updater = require('./src/Updater');
 const Messenger = require('./src/Messenger');
 const constants = require('./src/constants');
-require('dotenv').config();
 const api = require('./src/api');
-const Botkit = require('botkit');
 const server = require('./server.js');
 const helpers = require('./helpers');
 
-// Create the Botkit controller, which controls all instances of the bot.
-const twilioController = Botkit.twiliosmsbot({
-  account_sid: process.env.TWILIO_ACCOUNT_SID,
-  auth_token: process.env.TWILIO_AUTH_TOKEN,
-  twilio_number: process.env.TWILIO_NUMBER
-});
+const numCPUs = require('os').cpus().length;
 
-// Set up an Express-powered webserver to webhook endpoints
-server(fbEndpoint, twilioController, getCoachResponse);
+let workerCount = 0;
+
+/**
+ * This creates node cluster workers for bot app
+ * Workers maximizes the CPU utility and ensure that the bot runs with less likelihood of a downtime
+ * For more info, see: https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/
+ * and https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
+ */
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`);
+
+  // Creates as many workers as the number of available CPUs
+  while (workerCount <= numCPUs) {
+    cluster.fork();
+    workerCount += 1;
+  }
+
+  // Starts a new worker when one worker exits/dies
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(
+      'worker %d died (%s). restarting...',
+      worker.process.pid, signal || code
+    );
+    cluster.fork();
+  });
+} else {
+  // Set up an Express-powered webserver to webhook endpoints
+  server(
+    fbEndpoint,
+    twilioReceiveSmsController,
+    getCoachResponse,
+    testTwilioCredentialsController
+  );
+  console.log(`Worker ${process.pid} started
+    listening on server port ${process.env.PORT || 3002}`);
+}
+
+/**
+ * This function is responsible for receiving the SMS from Twilio
+ * @param {object} request
+ * @param {object} response
+ */
+async function twilioReceiveSmsController(request, response) {
+  const message = request.body;
+  const userPlatformId = message.From;
+  const userMessage = message.Body;
+  await run({
+    platform: constants.SMS,
+    userPlatformId,
+    userMessage
+  });
+}
+
+/**
+ * @description This function is responsible for testing the Twilio credentials provided by orgs
+ * @param {object} request
+ * @param {object} response
+ * @returns {object} http response object
+ */
+async function testTwilioCredentialsController(request, response) {
+  try {
+    const {
+      twilioAccountSid,
+      twilioAuthToken,
+      twilioPhoneNumber,
+    } = request.body;
+    const twilioClient = twilio(twilioAccountSid, twilioAuthToken);
+    const message = await twilioClient.messages
+      .create({
+        body: 'Testing the Twilio credentials for ' + twilioPhoneNumber,
+        from: twilioPhoneNumber,
+        to: process.env.TEST_PHONE_NUMBER,
+      });
+    if (message.sid) {
+      return response.status(200).json({
+        message,
+      });
+    }
+    return response.json({
+      message,
+    });
+  } catch (error) {
+    return response.json({
+      error,
+    });
+  }
+}
 
 if (helpers.isProductionEnvironment()) {
   setInterval(() => {
@@ -52,16 +134,6 @@ async function fbEndpoint(req, res) {
   });
 }
 
-twilioController.hears('.*', 'message_received', async (_, message) => {
-  const userPlatformId = message.user;
-  const userMessage = message.text;
-  await run({
-    platform: constants.SMS,
-    userPlatformId,
-    userMessage
-  });
-});
-
 async function getCoachResponse(req, res) {
   if (req.query && req.query.user_id) {
     const userId = req.query.user_id;
@@ -70,7 +142,6 @@ async function getCoachResponse(req, res) {
       const user = await api.getUserFromId(userId);
       const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
       const userPlatformId = user.platform === 'FBOOK' ? user.fb_id : user.phone;
-
       if (coachMessage.topic === 'directmessage') {
         await run({
           platform,

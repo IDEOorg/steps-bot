@@ -2,7 +2,7 @@ require('dotenv').config();
 const api = require('./api');
 const constants = require('./constants');
 const rp = require('request-promise');
-const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const twilio = require('twilio');
 
 module.exports = class Messenger {
   constructor(opts) {
@@ -33,14 +33,14 @@ module.exports = class Messenger {
       } else { // platform is sms
         formattedMsg = formatMsgForSMS(message);
         try {
-          await sendSMSMessage(this.userPlatformId, formattedMsg); // eslint-disable-line
+          await sendSMSMessage(this.userPlatformId, formattedMsg, this.client.org_id); // eslint-disable-line
           if (message.type === 'image') {
             await sleep(3100); // eslint-disable-line
           } else {
             await sleep(800); // eslint-disable-line
           }
         } catch (e) {
-          console.log(`There's been an error. sendSMSMessage did not send message ${formattedMsg.message} to ${this.userPlatformId}. This likely means the phone number is invalid`);
+          console.log(`There's been an error. sendSMSMessage did not send message: "${formattedMsg.body}" to ${this.userPlatformId}.This likely means the organisation's phone number is invalid`);
           continue; // eslint-disable-line
         }
       }
@@ -208,13 +208,38 @@ function sendFBMessage(userId, message, isMessageSentFromCheckIn) {
   });
 }
 
-function sendSMSMessage(userId, message) {
-  const twilioMessage = Object.assign({
-    from: process.env.TWILIO_NUMBER,
-    to: userId
-  }, message);
-  const twilioPromise = twilioClient.messages.create(twilioMessage);
-  return twilioPromise;
+/**
+ * This functions sends SMS to the client from the bot via twilio
+ * @param {number} userId the phone number of the user
+ * @param {object} message the message object
+ * @param {number} orgId The ID of the organization
+ * @returns twilio promise
+ */
+async function sendSMSMessage(userId, message, orgId) {
+  const {
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_NUMBER,
+    NODE_ENV,
+  } = process.env;
+  const orgCredentials = await api.getOrg(orgId);
+  let twilioAccountSid = orgCredentials.account_sid;
+  let twilioAuthToken = orgCredentials.auth_token;
+  let twilioPhoneNumber = orgCredentials.twilio_number;
+
+  if (NODE_ENV !== 'production') {
+    twilioAccountSid = TWILIO_ACCOUNT_SID;
+    twilioAuthToken = TWILIO_AUTH_TOKEN;
+    twilioPhoneNumber = TWILIO_NUMBER;
+  }
+
+  const twilioClient = twilio(twilioAccountSid, twilioAuthToken);
+  const twilioMessage = {
+    from: twilioPhoneNumber,
+    to: userId,
+    ...message,
+  };
+  return twilioClient.messages.create(twilioMessage);
 }
 
 function sleep(ms) {

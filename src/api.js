@@ -30,6 +30,11 @@ async function getAllClients() {
   return clients;
 }
 
+/**
+ * Fetches the details of an organization from the steps app database
+ * @param {number} id
+ * @returns {object | null} organization info or nothing
+ */
 async function getOrg(id) {
   const org = await rp({
     method: 'GET',
@@ -39,7 +44,7 @@ async function getOrg(id) {
     },
     json: true
   }).catch((e) => {
-    console.log('getOrgName api method failed for org id ' + id, e.message);
+    console.log('getOrg api method failed for org id ' + id, e.message);
     sendErrorToZendesk(e);
   });
   if (org) {
