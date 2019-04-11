@@ -2,7 +2,8 @@ require('dotenv').config();
 const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
-const pmEmail = require('./email_templates/PmEmail');
+
+const sendEMail = require('./services/Email');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -33,7 +34,19 @@ module.exports = class Updater {
       userAskedToStop,
       requestResolved,
       removeFollowup,
+      coachName,
+      coachEmail,
     } = this.variables;
+
+    /* eslint-disable */
+    const {
+      first_name,
+      last_name,
+      plan_url,
+      email,
+      phone,
+      id
+    } = this.client;
 
     if (removeFollowup) {
       this.client.follow_up_date = null;
@@ -59,6 +72,21 @@ module.exports = class Updater {
         return false;
       });
     }
+    
+  if (topic === TOPICS.ULTIMATE_DONE) {
+      const substitution = {
+        coach_name: coachName,
+        coach_email: coachEmail,
+        client_first_name: first_name,
+        client_last_name: last_name,
+        client_email: email,
+        client_phone: phone,
+        client_plan_url: `${process.env.BASE_URL}/clients/${id}/tasks`,
+        client_id: id
+      };
+      sendEMail.sendCoachEmail(substitution);
+    }
+
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
     if (nextCheckInDate) {
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
@@ -191,11 +219,6 @@ module.exports = class Updater {
       );
     }
     delete this.client.tasks;
-
-    // checks if user has received ultimatedone status
-    if (this.variables.topic === 'ultimatedone') {
-      sendUltimateDoneEmailToPm(this.client);
-    }
     // update user
     await api.updateUser(this.client.id, this.client).then(() => {
       console.log('updated client ' + this.client.id);
@@ -244,112 +267,22 @@ function sendHelpEmailToCoach(
   const taskTitle = currentTask.title;
   const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
   // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
-
-  const url = 'https://helloroo.org/clients';
+  const protocol = client.plan_url.split('/')[0];
+  const domain = client.plan_url.split('//')[1].split('/')[0];
+  const url = `${protocol}//${domain}/clients`;
   const steps = taskSteps.map((step) => {
     return `<li>${step.text}</li>`;
   });
-
-  const msg = {
-    to: coachEmail,
-    from: 'no-reply@helloroo.org',
-    subject: `[Roo] ${client.first_name} ${client.last_name} has requested assistance.`,
-    html: `<html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <meta http-equiv="X-UA-Compatible" content="ie=edge">
-              <title>Coach Help Request</title>
-            </head>
-
-            <body>
-              <div class="wrapper" style="background: #c4e6f7;margin: 0 auto; padding: 5px;text-align: center; min-width: 300px;max-width: 600px;">
-                <table style="border:none; width:100%">
-                  <tr style="height:200px">
-                    <td style="text-align:left">
-                      <h1 style="color: #333333;font-family: sans-serif;font-size: 24px;margin: 10px 25px 25px 25px;">
-                        ${clientFirstName} ${clientLastName} needs your help!
-                      </h1>
-                    </td>
-                  </tr>
-                  <tr class="bodyText" style="background: white;color: #333333;font-family: sans-serif;font-size: 18px;padding: 15px;text-align: left;">
-                    <td colspan="2" style="padding:15px">
-                        <p style="margin-top:0">
-                          ${coachFirstName},
-                        </p>
-
-                        <p style="margin-bottom:45px">Your client ${clientFirstName} ${clientLastName} has requested help from Roo the chatbot.
-                        </p>
-
-                        <div class="cta-button" style="background: #00bf8d;border-radius: 25px;-webkit-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);
-                        -moz-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);margin: 0 auto;
-                        padding: 15px;text-align: center;width: 50%;">
-                          <a style="color: white;text-decoration: none;"href="${url}/${clientId}/chat/help">
-                            REPLY NOW
-                          </a>
-                        </div>
-
-                        <p style="margin-top:45px"><strong>Help text</strong>
-                          <!-- <em>(${currentTask.updated || currentTask.timestamp})</em> -->
-                        </p>
-
-                        <p>${helpMessage}</p>
-
-                        <strong>Current Action Item</strong>
-                        <p>${taskTitle}</p>
-
-                        <strong>Action Item Steps</strong>
-                        <ul>
-                          ${steps}
-                        </ul>
-                    </td>
-                  </tr>
-                </table>
-              <div>
-            </body>
-            </html>`,
-  };
-
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log(`email sent to ${coachEmail}`);
-    })
-    .catch((err) => {
-      console.error(err.toString());
-      sgMail.send({
-        to: 'support@helloroo.zendesk.com',
-        from: 'no-reply@helloroo.org',
-        subject: `Coach notification email error - ${Date.now()}`,
-        text: `Unable to send help request notification email to ${coachEmail} on behalf of
-              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
-      });
-    });
-}
-
-function sendUltimateDoneEmailToPm(client) {
-  const title = `Your client <a href="${process.env.ADMIN_URL}/clients/${client.id}/tasks"><strong>
-  ${client.first_name} ${client.last_name}&nbsp;</strong></a> has completed all of their action items!`;
-
-  const msg = {
-    to: process.env.PM_EMAIL,
-    from: 'no-reply@helloroo.org',
-    subject: `[Roo] ${client.first_name} ${client.last_name} has received an ultimate done status.`,
-    html: pmEmail.emailBody(client, title)
-  };
-
-  sgMail.send(msg)
-    .then(() => {
-      console.log(`email sent to ${process.env.PM_EMAIL}`);
-    })
-    .catch((err) => {
-      console.error(err.toString());
-      sgMail.send({
-        to: process.env.PM_EMAIL,
-        from: 'no-reply@helloroo.org',
-        subject: `Ultimate done email error - ${Date.now()}`,
-        text: `Unable to send ultimate done email to
-              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
-      });
-    });
+  const userData = {
+    clientId,
+    clientFirstName,
+    clientLastName,
+    coachFirstName,
+    coachEmail,
+    taskTitle,
+    url,
+    steps,
+    helpMessage
+  }
+  sendEMail.sendHelpPMEmailToCoach(userData);
 }

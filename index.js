@@ -55,7 +55,7 @@ if (cluster.isMaster) {
  * @param {object} request
  * @param {object} response
  */
-async function twilioReceiveSmsController(request, response) {
+async function twilioReceiveSmsController(request) {
   const message = request.body;
   const userPlatformId = message.From;
   const userMessage = message.Body;
