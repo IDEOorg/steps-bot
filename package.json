@@ -26,7 +26,9 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "rivescript": "^2.0.0-alpha.6",
-    "twilio": "^3.17.2"
+    "swagger-ui-express": "^4.0.2",
+    "twilio": "^3.17.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
@@ -37,7 +39,8 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "jest": "^23.2.0",
-    "ngrok": "^3.1.1"
+    "ngrok": "^3.1.1",
+    "nodemon": "^1.18.9"
   },
   "jest": {
     "testURL": "http://localhost"
