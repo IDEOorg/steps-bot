@@ -96,6 +96,11 @@ module.exports = class Rivebot {
     );
     await this.rivebot.setUservar(
       userPlatformId,
+      'chatLink',
+      client.chat_url
+    );
+    await this.rivebot.setUservar(
+      userPlatformId,
       'introVideoLink',
       constants.INTRO_VIDEO_URL
     );

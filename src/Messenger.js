@@ -12,7 +12,7 @@ module.exports = class Messenger {
     this.isMessageSentFromCheckIn = opts.isMessageSentFromCheckIn;
     this.client = opts.client;
   }
-
+  
   // sends the message to the Facebook or SMS platform
   async sendReply() {
     if (this.messages === null) {
