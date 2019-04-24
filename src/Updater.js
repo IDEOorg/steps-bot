@@ -172,7 +172,7 @@ module.exports = class Updater {
         client_last_name: last_name,
         client_email: email,
         client_phone: phone,
-        client_plan_url: plan_url,
+        client_plan_url: `${process.env.BASE_URL}/clients/${id}/tasks`,
         client_id: id
       };
       sendEMail.emailCoachOnClientStop(substitution);
