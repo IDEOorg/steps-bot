@@ -29,6 +29,7 @@
     "request-promise": "^4.2.2",
     "rivescript": "^2.0.0-alpha.6",
     "swagger-ui-express": "^4.0.2",
+    "throng": "^4.0.0",
     "twilio": "^3.17.2",
     "yamljs": "^0.3.0"
   },

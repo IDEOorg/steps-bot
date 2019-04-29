@@ -65,7 +65,9 @@ module.exports = function server(
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use('/static', express.static(path.join(__dirname, 'static')));
   app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-  app.listen(process.env.PORT || 3002, null, () => { });
+  app.listen(process.env.PORT || 3002, null, () => {
+    console.log(`listening on server port ${process.env.PORT || 3002}`);
+  });
 
   // sets up webhook routes for Twilio and Facebook
   routes(app, fbEndpoint, twilioReceiveSmsController, getCoachResponse, testTwilioCredentials);

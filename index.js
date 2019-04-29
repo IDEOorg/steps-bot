@@ -1,4 +1,4 @@
-const cluster = require('cluster');
+const throng = require('throng');
 const twilio = require('twilio');
 require('dotenv').config();
 
@@ -11,34 +11,19 @@ const api = require('./src/api');
 const server = require('./server.js');
 const helpers = require('./helpers');
 
-const numCPUs = require('os').cpus().length;
-
-let workerCount = 0;
+const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
 /**
- * This creates node cluster workers for bot app
+ * @description This creates node cluster workers for bot app
  * Workers maximizes the CPU utility and ensure that the bot runs with less likelihood of a downtime
- * For more info, see: https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/
- * and https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
+ * For more info, see: https://devcenter.heroku.com/articles/node-concurrency
  */
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+throng({
+  workers: WORKERS,
+  lifetime: Infinity,
+}, start);
 
-  // Creates as many workers as the number of available CPUs
-  while (workerCount <= numCPUs) {
-    cluster.fork();
-    workerCount += 1;
-  }
-
-  // Starts a new worker when one worker exits/dies
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(
-      'worker %d died (%s). restarting...',
-      worker.process.pid, signal || code
-    );
-    cluster.fork();
-  });
-} else {
+function start() {
   // Set up an Express-powered webserver to webhook endpoints
   server(
     fbEndpoint,
@@ -46,8 +31,6 @@ if (cluster.isMaster) {
     getCoachResponse,
     testTwilioCredentialsController
   );
-  console.log(`Worker ${process.pid} started
-    listening on server port ${process.env.PORT || 3002}`);
 }
 
 /**
