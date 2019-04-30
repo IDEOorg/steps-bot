@@ -34,27 +34,11 @@ Depending on what you want to support you'll need:
 4. A [Sendgrid](https://www.sendgrid.com) account for sending emails.
 5. A [Bitly](dev.bitly.com) account for creating bit.ly links.
 
-### Step 2 - create the .env file
+### The .env file
 
-Create a .env file with the following values:
+Get a copy of the `.env` file from 1Password.
 
-```
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-TWILIO_NUMBER=
-FB_PAGE_ACCESS_TOKEN=
-FB_VERIFY_TOKEN=
-FB_REFERRAL_LINK=
-BITLY_TOKEN=
-OAUTH_ACCESS_TOKEN=
-API_URL=https://steps-staging.herokuapp.com/api
-BOT_URL=
-BOT_ID=116
-SENDGRID_API_KEY=
-PM_EMAIL=
-ADMIN_URL=
-NODE_ENV=
-```
+Make sure to get an up-to-date token from Auth0 for the `OAUTH_ACCESS_TOKEN` value.
 
 You'll need a Twilio account to provide the `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_NUMBER` credentials for SMS. [Follow these instructions in the slides to get set up with Twilio](https://docs.google.com/presentation/d/1TDnPto_Cl4piWOrG6cf-_XmdVNg-Aqdwp1QLzIyLqos/edit?usp=sharing) (see the Twilio Config section of the slides).
 
@@ -78,13 +62,6 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 - BITLY_TOKEN, this wraps any content url we send into a nice bit.ly url. Without this, an uglier redirect url (still operational though) is sent.
 - SENDGRID_API_KEY, any emails that are sent to the client or for error handling require this API key. Without this key no emails get sent.
 
-## Local Development
-
-```
-1) git clone https://github.com/IDEOorg/steps-bot
-2) npm install
-3) npm start
-```
 
 ## Running the bot on localhost
 
@@ -96,7 +73,7 @@ Follow the steps below to work with the bot on localhost:
 - Ensure you've cloned the repo by running `git clone https://github.com/IDEOorg/steps-bot`, and run `npm install`
 - Run `npm start` on the root directory to start the application
 - Open up another terminal and run `npm run start:live:dev` on the root directory to start [ngrok](https://www.npmjs.com/package/ngrok) which will tunnel through the running localhost server and expose it to the web via a returned url.
-- At this point, you should see two urls(http and https), copy the https url and paste it into the webhook space for either the Facebook app or the Twilio number linked to the bot.
+- At this point, you should see two urls(http and https), copy the https url and paste it into the webhook space for either the Facebook app or the Twilio number linked to the bot. Then add `/sms/receive` at the end of the link so requests hit the right endpoint. 
 
 NOTE: [ngrok](https://www.npmjs.com/package/ngrok) only exposes localhost to the web for just 8 hours, so you will need to restart the [ngrok](https://www.npmjs.com/package/ngrok) server every 8 hours.
 
