@@ -60,13 +60,15 @@ module.exports = function server(
   testTwilioCredentials
 ) {
   const app = express();
+  const PORT = process.env.PORT || 3002;
+
   app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use('/static', express.static(path.join(__dirname, 'static')));
   app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-  app.listen(process.env.PORT || 3002, null, () => {
-    console.log(`listening on server port ${process.env.PORT || 3002}`);
+  app.listen(PORT, null, () => {
+    console.log(`listening on server port ${PORT}`);
   });
 
   // sets up webhook routes for Twilio and Facebook
