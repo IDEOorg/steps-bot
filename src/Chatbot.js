@@ -462,6 +462,10 @@ module.exports = class Chatbot {
       this.client.tasks.length > 0 &&
       this.checkAllTasksCompleted(this.client.tasks)
     ) {
+      if (this.userMessage.includes('followup')) {
+        this.client.topic = 'checkin';
+        return true;
+      }
       console.log('setting topic to `ultimatedone`');
       this.client.topic = TOPICS.ULTIMATE_DONE;
       this.client.checkin_times = [];
