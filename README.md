@@ -65,6 +65,8 @@ If you elected to get sendgrid email support, fill in the `SENDGRID_API_KEY` var
 
 ## Running the bot on localhost
 
+[Here is a video](https://youtu.be/-OgDxm3J4a4) that shows how to get up and running with the bot on localhost. 
+
 As mentioned above, both Facebook and Twilio (the SMS service we use) require a non-localhost url for its webhook, but there is a workaround to this.
 
 Note: you will need access to the Twilio console or the Facebook account that is linked to the bot.
