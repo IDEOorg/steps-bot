@@ -19,6 +19,7 @@ const sendCoachEmail = async (userData) => {
     client_phone,
     client_plan_url
   } = userData;
+
   const message = {
     to: coach_email,
     from: 'support@helloroo.org',
@@ -164,12 +165,68 @@ const sendUltimateDoneEmailToPm = async (userData, adminUrl) => {
 };
 
 /**
+ * This function receives clients details and sends email to the Coach
+ * if the client has sent a stop message
+ * 
+ * @param {Object} userData - userData contains clients details.
+ * 
+ * @returns {void}
+ */
+const emailCoachOnClientStop = async (userData) => {
+  /* eslint-disable */
+  const {
+    coach_email,
+    coach_name,
+    client_email,
+    client_first_name,
+    client_last_name,
+    client_phone,
+    client_plan_url
+  } = userData;
+
+  const message = {
+    to: coach_email,
+    from: 'support@helloroo.org',
+    subject: 'Stop message from client',
+    templateId: '34bf6299-14fd-4e8d-b019-2bdda54a0fd1',
+    substitutions: {
+      clientFirstName: client_first_name,
+      clientLastName: client_last_name,
+      clientEmail: client_email,
+      clientPhone: client_phone,
+      clientPlanUrl: client_plan_url,
+      coachFirstName: coach_name
+    },
+  };
+
+  try {
+    await sendEmail(message);
+  } catch (error) {
+    const message = {
+      to: 'support@helloroo.zendesk.com',
+      from: 'no-reply@helloroo.org',
+      subject: `Stop message email notification error - ${Date.now()}`,
+      templateId: 'd-3c6b31897e0540418d2a202aa396b357',
+      substitutions: {
+        clientFirstName: client_first_name,
+        clientLastName: client_last_name,
+        coachEmail: coach_email,
+        error: error.response.body.errors[0].message
+      }
+    }
+    await sendgridClient.send(message);
+  }
+};
+
+
+/**
  * This function is responsible for sending email.
  * 
  * @param {Object} message - Receives message as a parameter and send email using Sendgrid.
  * 
  * @returns {void}
  */
+
 const sendEmail = async (message) => {
   try {
     await sendgridClient.setApiKey(process.env.SENDGRID_API_KEY);
@@ -192,3 +249,4 @@ const sendEmail = async (message) => {
 exports.sendCoachEmail = sendCoachEmail;
 exports.sendHelpPMEmailToCoach = sendHelpPMEmailToCoach;
 exports.sendUltimateDoneEmailToPm = sendUltimateDoneEmailToPm;
+exports.emailCoachOnClientStop = emailCoachOnClientStop;
