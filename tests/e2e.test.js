@@ -694,8 +694,9 @@ test('user receives proper response from coach', async () => {
   });
   await chatbot.getResponse();
   const variables = await rivebot.getVariables(userPlatformId);
-  expect(chatbot.messagesToSendToClient[1].message).toContain('This is the solution to your problem');
-  expect(chatbot.messagesToSendToClient[2].message).toContain("Does this resolve your problem? If not, text the letter A. If you're all set, text the letter G.");
+  expect(chatbot.messagesToSendToClient[1].message).toContain('Hi Deborah, your coach has left a new message for you:');
+  expect(chatbot.messagesToSendToClient[2].message).toContain('This is the solution to your problem');
+  expect(chatbot.messagesToSendToClient[3].message).toContain('To respond, you can visit the chat here: ');
   expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const u = new Updater({
@@ -705,7 +706,7 @@ test('user receives proper response from coach', async () => {
     variables,
   });
   await u.loadNewInfoToClient();
-  expect(chatbot.client.topic).toEqual('helpcoachresponse');
+  expect(chatbot.client.topic).toEqual('checkin');
   expect(chatbot.client.checkin_times.length).toEqual(1);
   expect(chatbot.client.status).toEqual('WORKING');
 });

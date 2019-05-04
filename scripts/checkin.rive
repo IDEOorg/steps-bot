@@ -72,14 +72,6 @@
   + setvars
   - <set days=2><set timeOfDay=morning><set nextTopic=content><set nextMessage=startprompt>
   + *
-  - Sorry <get username>. I didn't quite understand your message. Let's try this a different way.\s
-  ^ <fb>\n\nDo you need my assistance with action item <get taskNum>?</fb>
-  ^ <fb>^template(`quickreply`, `No, I'm okay`, `Have some questions`)</fb>
-  ^ <sms>\n\nIf you need my assistance with action item <get taskNum> text the letter A. 
-  ^ \n\nIf all is well, text the letter G.</sms>
-  + (g|no im okay)
-  - Sounds good. I'll be back in touch soon.
-  + (a|have some questions)
-  - {topic=help} {@ startprompt}
+  - Sorry <get username>. I didn't quite understand your message. To respond, you can visit the chat here: <get chatLink>
   ^ {@ setvars}
 < topic
