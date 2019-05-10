@@ -94,10 +94,11 @@ module.exports = class Rivebot {
       'workplanLink',
       client.plan_url
     );
+    const chatUrl = client.plan_url.replace('plan', 'clientChat');
     await this.rivebot.setUservar(
       userPlatformId,
       'chatLink',
-      client.chat_url
+      chatUrl
     );
     await this.rivebot.setUservar(
       userPlatformId,
