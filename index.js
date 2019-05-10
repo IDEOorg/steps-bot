@@ -21,13 +21,12 @@ const WORKERS = process.env.WEB_CONCURRENCY || 1;
  * Workers maximizes the CPU utility and ensure that the bot runs with less likelihood of a downtime
  * For more info, see: https://devcenter.heroku.com/articles/node-concurrency
  */
-throng(
-  {
-    workers: WORKERS,
-    lifetime: Infinity,
-  },
+throng({
+  workers: WORKERS,
+  lifetime: Infinity,
+  master: masterProcess,
   start,
-);
+});
 
 function start() {
   // Set up an Express-powered webserver to webhook endpoints
@@ -37,6 +36,19 @@ function start() {
     getCoachResponse,
     testTwilioCredentialsController,
   );
+}
+
+/**
+ * @description this function will only run on the master process.
+ * It is used to send followups to clients with due followup dates
+ * every 24 hours.
+ *
+ * @returns {void}
+ */
+function masterProcess() {
+  setInterval(() => {
+    messageAllClientsWithOverdueCheckinsOrFollowups();
+  }, 86400000);
 }
 
 /**
@@ -87,12 +99,6 @@ async function testTwilioCredentialsController(request, response) {
       error,
     });
   }
-}
-
-if (helpers.isProductionEnvironment()) {
-  setInterval(() => {
-    messageAllClientsWithOverdueCheckinsOrFollowups();
-  }, 5400000); // 5400000 check all clients for checkin messages every 90 minutes
 }
 
 // takes in the request FB sends and formats that data and passes it into the run() function.
@@ -185,67 +191,50 @@ async function getMostRecentUserMessage(userId) {
   return null;
 }
 
+/**
+ * @description Messages all clients with due checkins or followups
+ *
+ * @returns {void}
+ */
 async function messageAllClientsWithOverdueCheckinsOrFollowups() {
   const isMessageSentFromCheckIn = true;
-  const users = await api.getAllClients();
-  if (!users.length) {
+  const clients = await api.getClientsWithOverdueFollowups();
+
+  if (!clients.length) {
     return;
   }
-  for (let i = 0; i < users.length; i++) {
-    try {
-      const user = users[i];
-      const platform = user.platform === 'FBOOK' ? constants.FB : constants.SMS;
-      const userPlatformId =
-        user.platform === 'FBOOK' ? user.fb_id : user.phone;
-      if (userPlatformId) {
-        // this line is needed in case a user created a FB account but hasn't messaged on FB (meaning the user.fb_id would be null since the bot has no way of knowing the fb id)
-        if (userShouldReceiveFollowupMessage(user)) {
-          // send user a follow up message
-          // eslint-disable-next-line no-await-in-loop
+
+  await Promise.all(
+    clients.map(async (client) => {
+      const platform =
+        client.platform === 'FBOOK' ? constants.FB : constants.SMS;
+      const clientPlatformId =
+        client.platform === 'FBOOK' ? client.fb_id : client.phone;
+
+      await run({
+        platform,
+        userPlatformId: clientPlatformId,
+        userMessage: 'startprompt',
+        topic: 'followup',
+        isMessageSentFromCheckIn,
+      });
+
+      const eligibleCheckins = getAllCheckinMessagesUserShouldReceive(client);
+
+      await Promise.all(
+        eligibleCheckins.map(async (checkin) => {
           await run({
             platform,
-            userPlatformId,
-            userMessage: 'startprompt',
-            topic: 'followup',
+            userPlatformId: clientPlatformId,
+            userMessage: checkin.message,
+            topic: checkin.topic,
+            recurringTaskId: checkin.recurringTaskId,
             isMessageSentFromCheckIn,
           });
-          await sleep(2000); // eslint-disable-line
-        }
-        const eligibleCheckins = getAllCheckinMessagesUserShouldReceive(user);
-        if (platform !== null && userPlatformId !== null) {
-          for (let j = 0; j < eligibleCheckins.length; j++) {
-            const eligibleCheckin = eligibleCheckins[j];
-            await sleep(2000); // eslint-disable-line
-            // eslint-disable-next-line no-await-in-loop
-            await run({
-              // eslint-disable-line
-              platform,
-              userPlatformId,
-              userMessage: eligibleCheckin.message,
-              topic: eligibleCheckin.topic,
-              recurringTaskId: eligibleCheckin.recurringTaskId,
-              isMessageSentFromCheckIn,
-            });
-          }
-        }
-      }
-    } catch (e) {
-      console.log('error updating user ' + users[i].id, e);
-      console.log(users[i]);
-    }
-  }
-}
-
-// returns true if it's time for the user to receive a follow up message
-function userShouldReceiveFollowupMessage(user) {
-  const followUpAppointment = user.follow_up_date;
-  if (
-    followUpAppointment &&
-    new Date(followUpAppointment).valueOf() < Date.now()
-  ) {
-    return true;
-  }
-  return false;
+        }),
+      );
+    }),
+  );
 }
 
 // returns all check in messages that are overdue and will be sent to the user
@@ -342,9 +331,4 @@ async function run(opts) {
  */
 function getPhoneNumberFromFBLink(referral) {
   return '+1' + referral;
-}
-
-function sleep(ms) {
-  // eslint-disable-next-line arrow-parens
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
