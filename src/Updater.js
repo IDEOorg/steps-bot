@@ -4,6 +4,7 @@ const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 
 const sendEMail = require('./services/Email');
+const { MORNING_CHECKIN, AFTERNOON_CHECKIN } = require('./constants');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -41,7 +42,6 @@ module.exports = class Updater {
     const {
       first_name,
       last_name,
-      plan_url,
       email,
       phone,
       id
@@ -132,7 +132,7 @@ module.exports = class Updater {
                   checkInTime.time = getNextCheckInDate(
                     frequency || 1,
                     null,
-                    'AFTERNOON'
+                    AFTERNOON_CHECKIN.time
                   );
                 }
               }
@@ -252,15 +252,22 @@ function getNextCheckInDate(days, hours, timeOfDay) {
     checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
     return checkInDate.valueOf();
   }
+
   if (timeOfDay) {
-    if (timeOfDay.toUpperCase() === 'MORNING') {
-      checkInDate = checkInDate.hours(14).minutes(0).seconds(0);
-    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
-      checkInDate = checkInDate.hours(18).minutes(30).seconds(0);
-    } else {
-      checkInDate = checkInDate.hours(14).minutes(0).seconds(0); // this is if there's a mistake in the script and no time of day is indicated, default the text to be sent in the morning rather than 12am.
+    let { hour, minute, second } = MORNING_CHECKIN;
+
+    if (timeOfDay.toUpperCase() === AFTERNOON_CHECKIN.time) {
+      hour = AFTERNOON_CHECKIN.hour;
+      minute = AFTERNOON_CHECKIN.minute;
+      second = AFTERNOON_CHECKIN.second;
     }
+
+    checkInDate = checkInDate
+      .hours(hour)
+      .minutes(minute)
+      .seconds(second);
   }
+
   return checkInDate.valueOf();
 }
 
@@ -268,8 +275,6 @@ function sendHelpEmailToCoach(
   client,
   coach,
   helpMessage,
-  messageTimestamp,
-  request,
   currentTask
 ) {
   const clientId = client.id;
