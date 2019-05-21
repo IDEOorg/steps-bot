@@ -1,13 +1,13 @@
-const constants = require ('./constants');
-const rp = require ('request-promise');
-const sgMail = require ('@sendgrid/mail');
-const {trackMessageSent} = require ('./tracker');
-require ('dotenv').config ();
+const constants = require('./constants');
+const rp = require('request-promise');
+const sgMail = require('@sendgrid/mail');
+const { trackMessageSent } = require('./tracker');
+require('dotenv').config();
 
 const TOPICS = constants.TOPICS;
 const STATUS = constants.STATUS;
 
-sgMail.setApiKey (process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function getAllClients() {
   let clients = null;
@@ -27,6 +27,31 @@ async function getAllClients() {
     }
     sendErrorToZendesk(e);
   }
+  return clients;
+}
+
+/**
+ * @description Fetches all clients with due followups
+ *
+ * @returns {array}
+ */
+async function getClientsWithOverdueFollowups() {
+  let clients = [];
+
+  try {
+    clients = await rp({
+      method: 'GET',
+      url: `${process.env.API_URL}/follow-ups`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
+      },
+      json: true
+    });
+  } catch (error) {
+    sendErrorToZendesk(error);
+  }
+
   return clients;
 }
 
@@ -56,7 +81,7 @@ async function getOrg(id) {
 async function getCoach(id) {
   const coach = await rp({
     method: 'GET',
-    uri: `${process.env.API_URL}/users/${id.toString ()}`,
+    uri: `${process.env.API_URL}/users/${id.toString()}`,
     headers: {
       Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
     },
@@ -379,6 +404,7 @@ function sendErrorToZendesk(error) {
 
 module.exports = {
   getAllClients,
+  getClientsWithOverdueFollowups,
   getOrg,
   getCoach,
   getClientTasks,
