@@ -83,7 +83,7 @@ module.exports = class Chatbot {
     );
     const messages = this.rb.parseResponse(response, this.platform);
     this.messagesToSendToClient = messages;
-    await this.dontSendMessageIfNoWorkplan();
+    await this.stillSendMessagesIfNoWorkplan();
   }
 
   /* ***** HELPER FUNCTIONS FOR getResponse FUNCTION ****** */
@@ -241,7 +241,7 @@ module.exports = class Chatbot {
     }
   }
 
-  async dontSendMessageIfNoWorkplan() {
+  async stillSendMessagesIfNoWorkplan() {
     if (
       (!this.client.tasks || this.client.tasks.length === 0) &&
       this.client.topic !== TOPICS.SETUP_FB &&
@@ -250,16 +250,7 @@ module.exports = class Chatbot {
       this.client.topic !== TOPICS.WELCOME_WAIT &&
       this.client.topic !== TOPICS.FOLLOW_UP
     ) {
-      this.shouldMessageClient = false;
-      await this.rb.overrideVarsInRivebot(
-        {
-          days: 2,
-          nextTopic: this.client.topic,
-          nextMessage: 'startprompt',
-          timeOfDay: 'morning',
-        },
-        this.userPlatformId
-      );
+      this.shouldMessageClient = true;
     }
   }
 
