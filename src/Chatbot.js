@@ -22,6 +22,7 @@ module.exports = class Chatbot {
     this.messagesToSendToClient = null;
     this.shouldMessageClient = true;
     this.shouldUpdateClient = true;
+    this.chatURL = null;
   }
 
   async getResponse() {
@@ -71,6 +72,7 @@ module.exports = class Chatbot {
         userMessage: this.userMessage,
         userAskedToStop: this.userMessage === 'stop',
         userPlatformId: this.userPlatformId, // this is NOT the same as client.id (userPlatformId is either the fb id or the client's phone number)
+        chat_url: this.chatURL
       },
       remainingRivebotVars
     );
@@ -114,6 +116,8 @@ module.exports = class Chatbot {
         this.userPlatformId
       );
     }
+    const chatURL = userInfo ? await api.getChatURLfromPlanURL(userInfo.plan_url) : null;
+    this.chatURL = chatURL;
     this.client = userInfo;
   }
 

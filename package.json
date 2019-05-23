@@ -33,7 +33,8 @@
     "rivescript": "^2.0.0",
     "swagger-ui-express": "^4.0.2",
     "throng": "^4.0.0",
-    "twilio": "^3.30.3",
+    "twilio": "^3.17.2",
+    "url-unshort": "^5.0.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
