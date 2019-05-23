@@ -216,7 +216,7 @@ module.exports = class Rivebot {
 
   async getVariables(userPlatformId) {
     const variables = await this.rivebot.getUservars(userPlatformId);
-    return variables ? variables[userPlatformId] : null;
+    return variables;
   }
 
   // takes in the bot's message and platform and parses it into a more friendly message for Twilio + Facebook
