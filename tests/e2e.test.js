@@ -422,7 +422,7 @@ test("user is scheduled to receive a message, but doesn't have any tasks in thei
     topic: TOPICS.INTRO_TASK,
   });
   await chatbot.getResponse();
-  expect(chatbot.shouldMessageClient).toEqual(false);
+  expect(chatbot.shouldMessageClient).toEqual(true);
   expect(chatbot.shouldUpdateClient).toEqual(true);
   const variables = await rivebot.getVariables(userPlatformId);
   const u = new Updater({
@@ -433,7 +433,7 @@ test("user is scheduled to receive a message, but doesn't have any tasks in thei
   });
   await u.loadNewInfoToClient();
   expect(chatbot.client.topic).toEqual(TOPICS.INTRO_TASK);
-  expect(chatbot.client.checkin_times[0].topic).toEqual(TOPICS.INTRO_TASK);
+  expect(chatbot.client.checkin_times[0].topic).toEqual(TOPICS.CONTENT);
   expect(chatbot.client.checkin_times[0].time).toBeGreaterThan(10);
 });
 
