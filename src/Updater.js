@@ -188,12 +188,7 @@ module.exports = class Updater {
 
   async updateClientToDB() {
     if (this.variables.sendHelpMessage) {
-      const request = await api.createRequest(
-        this.client.id,
-        this.currentTask.id
-      );
       const requestMessage = await api.createMessage(
-        request.id,
         this.client.id,
         this.client.coach_id,
         this.client.temp_help_response,
@@ -205,7 +200,6 @@ module.exports = class Updater {
         coach,
         this.client.temp_help_response,
         requestMessage.timestamp,
-        request,
         this.currentTask
       );
       this.client.temp_help_response = null;
@@ -219,16 +213,6 @@ module.exports = class Updater {
       api.markMediaAsViewed(
         this.client.id,
         parseInt(this.variables.contentId, 10)
-      );
-    }
-    if (this.variables.requestResolved === 'true') {
-      // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(this.variables.helpRequestId, this.client.id, this.currentTask.id, 'RESOLVED');
-    } else if (this.variables.requestResolved === 'false') {
-      api.setRequestByTaskId(
-        this.client.id,
-        this.currentTask.id,
-        STATUS.NEEDS_ASSISTANCE
       );
     }
     delete this.client.tasks;

@@ -7,7 +7,6 @@ const unshortenURL = require('url-unshort')();
 const bitlyClient = require('./services/Bitly');
 
 const TOPICS = constants.TOPICS;
-const STATUS = constants.STATUS;
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -153,72 +152,6 @@ async function getViewedMediaIds(id) {
   });
 }
 
-async function createRequest(userId, taskId) {
-  const request = await rp({
-    method: 'POST',
-    uri: `${process.env.API_URL}/requests`,
-    body: {
-      status: STATUS.NEEDS_ASSISTANCE,
-      user_id: userId,
-      task_id: taskId,
-    },
-    headers: {
-      Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
-    },
-    json: true,
-  }).catch((e) => {
-    console.log(
-      'createRequest method failed with user id ' +
-        userId +
-        ' on task id ' +
-        taskId,
-      e.message
-    );
-    sendErrorToZendesk(e);
-  });
-  return request;
-}
-
-async function setRequestByTaskId(requestId, clientId, taskId, status) {
-  if (clientId) {
-    await rp({
-        // eslint-disable-line
-      method: 'PUT',
-      uri: `${process.env.API_URL}/requests/${requestId}`,
-      headers: {
-        Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`
-      },
-      body: {
-        status,
-        user_id: clientId,
-        task_id: taskId
-      },
-      json: true
-    }).catch((e) => {
-      console.log(
-        'setRequestByTaskId failed: issue in the for loop',
-        e.message
-      );
-      sendErrorToZendesk(e);
-    });
-  }
-}
-
-async function getUserRequests(userId) {
-  const requests = await rp({
-    method: 'GET',
-    uri: `${process.env.API_URL}/clients/${userId}/requests`,
-    headers: {
-      Authorization: `Bearer ${process.env.OAUTH_ACCESS_TOKEN}`,
-    },
-    json: true,
-  }).catch((e) => {
-    console.log('getUserRequests method failed for user ' + userId, e.message);
-    sendErrorToZendesk(e);
-  });
-  return requests;
-}
-
 async function getUserMessages(userId) {
   const messages = await rp({
     method: 'GET',
@@ -234,13 +167,12 @@ async function getUserMessages(userId) {
   return messages;
 }
 
-async function createMessage(requestId, fromId, toId, messageToSend, topic) {
+async function createMessage(fromId, toId, messageToSend, topic) {
   const body = {
     text: messageToSend,
     to_user: toId,
     from_user: fromId,
     media_id: null,
-    request_id: requestId,
     timestamp: new Date(),
     topic: topic || TOPICS.NO_TOPIC,
     responses: null
@@ -428,10 +360,7 @@ module.exports = {
   getClientTasks,
   getAllMedia,
   getViewedMediaIds,
-  createRequest,
   getUserFromId,
-  setRequestByTaskId,
-  getUserRequests,
   getUserMessages,
   createMessage,
   updateUser,
