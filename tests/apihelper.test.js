@@ -1,5 +1,20 @@
 const api = require('../src/api');
+const mockdata = require('./mockdata');
 
+const { mockTasks, orgs, mockCoach, media, viewedMediaIDs } = mockdata;
+
+// Mock funtions
+api.getAllClients = jest.fn(() => mockdata.clients);
+api.createMessage = jest.fn(() => Promise.resolve());
+api.getOrgName = jest.fn(orgID => Promise.resolve(orgs[0][orgID].name));
+api.getCoach = jest.fn(coachID => Promise.resolve(mockCoach));
+api.getViewedMediaIds = jest.fn(clientID => Promise.resolve(viewedMediaIDs));
+api.getAllMedia = jest.fn(() => Promise.resolve(media));
+api.getClientTasks = jest.fn(clientID =>
+  Promise.resolve(mockTasks[0][clientID])
+);
+
+// Test suites
 test('getAllClients works', async () => {
   const data = await api.getAllClients();
   expect(Array.isArray(data)).toBe(true);
@@ -19,7 +34,7 @@ test('getOrgName works', async () => {
   expect(data).toEqual('IDEO.org');
 });
 
-test('getClientTasks returns the client\'s tasks', async () => {
+test("getClientTasks returns the client's tasks", async () => {
   const data = await api.getClientTasks(717);
   expect(data.length).toBeGreaterThan(0);
   expect(data[0]).toHaveProperty('id');
