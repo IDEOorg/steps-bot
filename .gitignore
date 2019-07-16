@@ -4,4 +4,7 @@ db/seed.json
 utilstest.js
 analytics/*.csv
 coverage
+.vscode
 *~
+.vscode/
+.idea/

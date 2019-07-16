@@ -3,7 +3,12 @@ const api = require('./api');
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 
+const sendEMail = require('./services/Email');
+const { MORNING_CHECKIN, AFTERNOON_CHECKIN } = require('./constants');
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const { TOPICS, STATUS } = require('./constants');
 
 module.exports = class Updater {
   constructor(opts) {
@@ -29,9 +34,18 @@ module.exports = class Updater {
       taskComplete,
       userAskedToStop,
       requestResolved,
-      removeFollowup
+      removeFollowup,
+      coachName,
+      coachEmail,
     } = this.variables;
-
+    /* eslint-disable */
+    const {
+      first_name,
+      last_name,
+      email,
+      phone,
+      id
+    } = this.client;
     if (removeFollowup) {
       this.client.follow_up_date = null;
     }
@@ -43,11 +57,12 @@ module.exports = class Updater {
         this.client.temp_help_response = null;
       }
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
-        return checkInTime.topic !== 'help'; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
+        return checkInTime.topic !== TOPICS.HELP; // removes all checkins of topic help if the user no longer needs help (as indicated by resetHelp boolean)
       });
     }
 
-    if (taskComplete || topic === 'ultimatedone') { // removes all non-recurring checkins if the user has completed the task or is done with their workplan
+    if (taskComplete || topic === TOPICS.ULTIMATE_DONE) {
+      // removes all non-recurring checkins if the user has completed the task or is done with their workplan
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
         if (checkInTime.recurring) {
           return true;
@@ -55,6 +70,23 @@ module.exports = class Updater {
         return false;
       });
     }
+
+    if (topic === TOPICS.ULTIMATE_DONE) {
+      const substitution = {
+        coach_name: coachName,
+        coach_email: coachEmail,
+        client_first_name: first_name,
+        client_last_name: last_name,
+        client_email: email,
+        client_phone: phone,
+        client_plan_url: `${process.env.BASE_URL}/clients/${id}/tasks`,
+        client_id: id
+      };
+      const adminUrl = process.env.ADMIN_URL;
+      sendEMail.sendCoachEmail(substitution);
+      sendEMail.sendUltimateDoneEmailToPm(substitution, adminUrl);
+    }
+
     const nextCheckInDate = getNextCheckInDate(days, hours, timeOfDay);
     if (nextCheckInDate) {
       this.client.checkin_times = this.client.checkin_times.filter((checkInTime) => {
@@ -68,18 +100,18 @@ module.exports = class Updater {
       this.client.temp_help_response = helpMessage;
     }
     if (sendHelpMessage) {
-      this.client.status = 'AWAITING_HELP';
+      this.client.status = STATUS.AWAITING_HELP;
     }
     if (taskComplete) {
       if (this.currentTask) {
-        this.currentTask.status = 'COMPLETED';
+        this.currentTask.status = STATUS.COMPLETED;
         this.currentTask.date_completed = new Date();
       }
     }
     const recurringTasks = this.client.tasks.filter((task) => {
       return task.recurring;
     });
-    if (this.client.topic === 'recurring') {
+    if (this.client.topic === TOPICS.RECURRING) {
       for (let i = 0; i < this.client.checkin_times.length; i++) {
         const checkInTime = this.client.checkin_times[i];
         if (checkInTime.recurringTaskId) {
@@ -89,10 +121,19 @@ module.exports = class Updater {
               if (checkInTime.recurringTaskId === task.id) {
                 const duration = task.recurring.duration;
                 const frequency = task.recurring.frequency;
-                if (duration && getNextCheckInDate(-1 * duration, null, null) > checkInTime.createdDate) { // recurring task has ended
+                if (
+                  duration &&
+                  getNextCheckInDate(-1 * duration, null, null) >
+                  checkInTime.createdDate
+                ) {
+                  // recurring task has ended
                   this.client.checkin_times.splice(i, 1); // remove check in
                 } else {
-                  checkInTime.time = getNextCheckInDate(frequency || 1, null, 'AFTERNOON');
+                  checkInTime.time = getNextCheckInDate(
+                    frequency || 1,
+                    null,
+                    AFTERNOON_CHECKIN.time
+                  );
                 }
               }
             }
@@ -101,32 +142,72 @@ module.exports = class Updater {
         }
       }
     }
-    if (topic !== 'recurring' && topic !== 'random' && topic !== 'followup') {
+    if (
+      topic !== TOPICS.RECURRING &&
+      topic !== TOPICS.RANDOM &&
+      topic !== TOPICS.FOLLOW_UP
+    ) {
       this.client.topic = topic;
     }
-    if (nextTopic !== null && nextMessage !== null && nextCheckInDate !== null && nextCheckInDate !== undefined) {
+    if (
+      nextTopic !== null &&
+      nextMessage !== null &&
+      nextCheckInDate !== null &&
+      nextCheckInDate !== undefined
+    ) {
       this.client.checkin_times.push({
         topic: nextTopic,
         message: nextMessage,
-        time: nextCheckInDate
+        time: nextCheckInDate,
       });
     }
-    if (userAskedToStop) { // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
+
+    if (userAskedToStop) {
+      // important that this comes after all the other check in logic has been included. Otherwise it's possible that check in times will still be populated.
       this.client.checkin_times = [];
+      const substitution = {
+        coach_name: coachName,
+        coach_email: coachEmail,
+        client_first_name: first_name,
+        client_last_name: last_name,
+        client_email: email,
+        client_phone: phone,
+        client_plan_url: `${process.env.BASE_URL}/clients/${id}/tasks`,
+        client_id: id
+      };
+      sendEMail.emailCoachOnClientStop(substitution);
     }
-    if (requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
-      this.client.status = 'WORKING';
+
+    if (requestResolved === 'true') {
+      // rivebot converts text to strings, hence why these aren't booleans
+      this.client.status = STATUS.WORKING;
     } else if (requestResolved === 'false') {
-      this.client.status = 'AWAITING_HELP';
+      this.client.status = STATUS.AWAITING_HELP;
     }
   }
 
   async updateClientToDB() {
     if (this.variables.sendHelpMessage) {
-      const request = await api.createRequest(this.client.id, this.currentTask.id);
-      const requestMessage = await api.createMessage(request.id, this.client.id, this.client.coach_id, this.client.temp_help_response, this.client.topic);
+      const request = await api.createRequest(
+        this.client.id,
+        this.currentTask.id
+      );
+      const requestMessage = await api.createMessage(
+        request.id,
+        this.client.id,
+        this.client.coach_id,
+        this.client.temp_help_response,
+        this.client.topic
+      );
       const coach = await api.getCoach(this.client.coach_id);
-      sendHelpEmailToCoach(this.client, coach, this.client.temp_help_response, requestMessage.timestamp, request, this.currentTask);
+      sendHelpEmailToCoach(
+        this.client,
+        coach,
+        this.client.temp_help_response,
+        requestMessage.timestamp,
+        request,
+        this.currentTask
+      );
       this.client.temp_help_response = null;
     }
     if (this.variables.taskComplete) {
@@ -135,12 +216,20 @@ module.exports = class Updater {
       }
     }
     if (this.variables.contentViewed) {
-      api.markMediaAsViewed(this.client.id, parseInt(this.variables.contentId, 10));
+      api.markMediaAsViewed(
+        this.client.id,
+        parseInt(this.variables.contentId, 10)
+      );
     }
-    if (this.variables.requestResolved === 'true') { // rivebot converts text to strings, hence why these aren't booleans
-      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'RESOLVED');
+    if (this.variables.requestResolved === 'true') {
+      // rivebot converts text to strings, hence why these aren't booleans
+      api.setRequestByTaskId(this.variables.helpRequestId, this.client.id, this.currentTask.id, 'RESOLVED');
     } else if (this.variables.requestResolved === 'false') {
-      api.setRequestByTaskId(this.client.id, this.currentTask.id, 'NEEDS_ASSISTANCE');
+      api.setRequestByTaskId(
+        this.client.id,
+        this.currentTask.id,
+        STATUS.NEEDS_ASSISTANCE
+      );
     }
     delete this.client.tasks;
     // update user
@@ -163,19 +252,31 @@ function getNextCheckInDate(days, hours, timeOfDay) {
     checkInDate = checkInDate.add(parseInt(hours, 10), 'hours');
     return checkInDate.valueOf();
   }
+
   if (timeOfDay) {
-    if (timeOfDay.toUpperCase() === 'MORNING') {
-      checkInDate = checkInDate.hours(14).minutes(0).seconds(0);
-    } else if (timeOfDay.toUpperCase() === 'AFTERNOON') {
-      checkInDate = checkInDate.hours(18).minutes(30).seconds(0);
-    } else {
-      checkInDate = checkInDate.hours(14).minutes(0).seconds(0); // this is if there's a mistake in the script and no time of day is indicated, default the text to be sent in the morning rather than 12am.
+    let { hour, minute, second } = MORNING_CHECKIN;
+
+    if (timeOfDay.toUpperCase() === AFTERNOON_CHECKIN.time) {
+      hour = AFTERNOON_CHECKIN.hour;
+      minute = AFTERNOON_CHECKIN.minute;
+      second = AFTERNOON_CHECKIN.second;
     }
+
+    checkInDate = checkInDate
+      .hours(hour)
+      .minutes(minute)
+      .seconds(second);
   }
+
   return checkInDate.valueOf();
 }
 
-function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, request, currentTask) {
+function sendHelpEmailToCoach(
+  client,
+  coach,
+  helpMessage,
+  currentTask
+) {
   const clientId = client.id;
   const clientFirstName = client.first_name;
   const clientLastName = client.last_name;
@@ -184,84 +285,22 @@ function sendHelpEmailToCoach(client, coach, helpMessage, messageTimestamp, requ
   const taskTitle = currentTask.title;
   const taskSteps = currentTask.steps; // [{text: 'step', note: 'usually null'}]
   // TODO Optional: handle case where taskClientIsStuckOn is null (meaning user completed all tasks and is asking for help for something totally separate)
-
-  const url = 'https://helloroo.org/clients';
+  const protocol = client.plan_url.split('/')[0];
+  const domain = client.plan_url.split('//')[1].split('/')[0];
+  const url = `${protocol}//${domain}/clients`;
   const steps = taskSteps.map((step) => {
     return `<li>${step.text}</li>`;
   });
-
-  const msg = {
-    to: coachEmail,
-    from: 'no-reply@helloroo.org',
-    subject: `[Roo] ${client.first_name} ${client.last_name} has requested assistance.`,
-    html: `<html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <meta http-equiv="X-UA-Compatible" content="ie=edge">
-              <title>Coach Help Request</title>
-            </head>
-
-            <body>
-              <div class="wrapper" style="background: #c4e6f7;margin: 0 auto; padding: 5px;text-align: center; min-width: 300px;max-width: 600px;">
-                <table style="border:none; width:100%">
-                  <tr style="height:200px">
-                    <td style="text-align:left">
-                      <h1 style="color: #333333;font-family: sans-serif;font-size: 24px;margin: 10px 25px 25px 25px;">
-                        ${clientFirstName} ${clientLastName} needs your help!
-                      </h1>
-                    </td>
-                  </tr>
-                  <tr class="bodyText" style="background: white;color: #333333;font-family: sans-serif;font-size: 18px;padding: 15px;text-align: left;">
-                    <td colspan="2" style="padding:15px">
-                        <p style="margin-top:0">
-                          ${coachFirstName},
-                        </p>
-
-                        <p style="margin-bottom:45px">Your client ${clientFirstName} ${clientLastName} has requested help from Roo the chatbot.
-                        </p>
-
-                        <div class="cta-button" style="background: #00bf8d;border-radius: 25px;-webkit-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);
-                        -moz-box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);box-shadow: -3px 3px 6px -2px rgba(0,0,0,0.15);margin: 0 auto;
-                        padding: 15px;text-align: center;width: 50%;">
-                          <a style="color: white;text-decoration: none;"href="${url}/${clientId}/chat/help">
-                            REPLY NOW
-                          </a>
-                        </div>
-
-                        <p style="margin-top:45px"><strong>Help text</strong>
-                          <!-- <em>(${currentTask.updated || currentTask.timestamp})</em> -->
-                        </p>
-
-                        <p>${helpMessage}</p>
-
-                        <strong>Current Action Item</strong>
-                        <p>${taskTitle}</p>
-
-                        <strong>Action Item Steps</strong>
-                        <ul>
-                          ${steps}
-                        </ul>
-                    </td>
-                  </tr>
-                </table>
-              <div>
-            </body>
-            </html>`
-  };
-
-  sgMail.send(msg)
-    .then(() => {
-      console.log(`email sent to ${coachEmail}`);
-    })
-    .catch((err) => {
-      console.error(err.toString());
-      sgMail.send({
-        to: 'support@helloroo.zendesk.com',
-        from: 'no-reply@helloroo.org',
-        subject: `Coach notification email error - ${Date.now()}`,
-        text: `Unable to send help request notification email to ${coachEmail} on behalf of
-              ${client.first_name} ${client.last_name}\n Here is the error: ${err.toString()}`,
-      });
-    });
+  const userData = {
+    clientId,
+    clientFirstName,
+    clientLastName,
+    coachFirstName,
+    coachEmail,
+    taskTitle,
+    url,
+    steps,
+    helpMessage
+  }
+  sendEMail.sendHelpPMEmailToCoach(userData);
 }
