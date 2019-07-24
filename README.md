@@ -8,6 +8,13 @@ Documentation of how the chatbot works and a walkthough of this code can be foun
 
 Documentation of the chatbot API endpoints can be found [here](https://stepsroobotstaging.herokuapp.com/api-docs)
 
+# Known Issues
+1) Photo uploads are not working  in the coach and admin settings pages. The issue appears to be with AWS buckets and should be addressed by IDEO.org internally.
+
+2) Tokens are not updated in 1Password. To see up-to-date tokens you can either:
+  a) get them from the Heroku config vars where they are updated automatically by the bot
+  b) get fresh ones manually by logging into Auth0
+
 # Getting Started - Staging
 
 NOTE: Both Facebook and Twilio (the SMS service we use) require a non-localhost url for its webhook. Therefore any part of the code that uses `src/Messenger.js` (the code that sends the actual messages) will not work in local development. See `e2e.tests.js` for examples of how to play around with that limitation.
