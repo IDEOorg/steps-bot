@@ -40,7 +40,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
-    "acorn": "^6.1.1",
+    "acorn": "^6.4.1",
     "ajv": "^6.10.0",
     "babel-core": "^6.26.3",
     "eslint": "^4.19.1",
