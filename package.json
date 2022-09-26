@@ -27,7 +27,7 @@
     "keen-tracking": "^2.0.10",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
-    "pm2": "^3.3.1",
+    "pm2": "^5.2.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "rivescript": "^2.0.0",
